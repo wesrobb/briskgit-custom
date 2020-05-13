@@ -1667,19 +1667,20 @@ elseif(APPLE)
     if(VIDEO_VULKAN OR VIDEO_METAL OR RENDER_METAL)
       set(ORIG_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
       set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -x objective-c")
-      check_c_source_compiles("
-        #include <AvailabilityMacros.h>
-        #import <Metal/Metal.h>
-        #import <QuartzCore/CAMetalLayer.h>
+      # check_c_source_compiles("
+      #   #include <AvailabilityMacros.h>
+      #   #import <Metal/Metal.h>
+      #   #import <QuartzCore/CAMetalLayer.h>
 
-        #if TARGET_OS_SIMULATOR || (!TARGET_CPU_X86_64 && !TARGET_CPU_ARM64)
-        #error Metal doesn't work on this configuration
-        #endif
-        int main()
-        {
-            return 0;
-        }
-        " HAVE_FRAMEWORK_METAL)
+      #   #if TARGET_OS_SIMULATOR || (!TARGET_CPU_X86_64 && !TARGET_CPU_ARM64)
+      #   #error Metal doesn't work on this configuration
+      #   #endif
+      #   int main()
+      #   {
+      #       return 0;
+      #   }
+      #   " HAVE_FRAMEWORK_METAL)
+      set(HAVE_FRAMEWORK_METAL TRUE)
       set(CMAKE_REQUIRED_FLAGS ${ORIG_CMAKE_REQUIRED_FLAGS})
       if(HAVE_FRAMEWORK_METAL)
         set(SDL_FRAMEWORK_METAL 1)

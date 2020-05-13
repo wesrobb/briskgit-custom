@@ -1,18 +1,22 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(Briskgit C)
+project(Briskgit C OBJC)
 
-add_subdirectory(lib/sdl2)
+add_subdirectory(lib/SDL2-2.0.12)
 
-add_executable(briskgit src/main.c)
-target_link_libraries(briskgit LINK_PUBLIC SDL2)
+add_executable(briskgit 
+    src/app.h 
+    src/app.c
+    src/main.c
+    )
+target_link_libraries(briskgit LINK_PUBLIC SDL2-static)
 
 if (MSVC)
     # warning level 4 and all warnings as errors
     target_compile_options(briskgit PRIVATE /W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(briskgit PRIVATE -O2 -Wall -Wextra -pedantic -Werror)
+    target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror)
 endif()
 
 add_custom_target(
