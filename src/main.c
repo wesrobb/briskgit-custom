@@ -4,6 +4,10 @@
 
 #include <SDL.h>
 
+#include "SDL_events.h"
+#include "SDL_video.h"
+#include "app.h"
+
 static bool g_done;
 
 #define MAX_FRAME_TIMES 100
@@ -13,9 +17,20 @@ static int g_frameTimesIndex = 0;
 #define TARGET_FPS 60
 static float g_expectedFrameTimeMs = 1000.0f / TARGET_FPS;
 
-static void OnWindowResized(SDL_WindowEvent *windowEvent)
+static void OnWindowEvent(SDL_WindowEvent *e)
 {
-    (void)windowEvent;
+    switch (e->event)
+    {
+        case SDL_WINDOWEVENT_RESIZED:
+            {
+                int width = e->data1;
+                int height = e->data2;
+
+                printf("Window resized to %d x %d\n", width, height);
+                App_OnWindowResized(width, height);
+            }
+            break;
+    }
 }
 
 static void OnKeyReleased(SDL_Keysym *keysym)
@@ -41,8 +56,12 @@ static void ProcessEvents()
                 OnKeyReleased(&event.key.keysym);
                 break;
 
-            case SDL_WINDOWEVENT_RESIZED:
-                OnWindowResized(&event.window);
+            case SDL_WINDOWEVENT:
+                OnWindowEvent(&event.window);
+                break;
+
+            case SDL_MOUSEMOTION:
+                App_OnMouseMoved(&event.motion);
                 break;
         }
     }
@@ -127,7 +146,12 @@ int main()
     printf("Display height:  %d\n", dm.h);
     printf("Display refresh: %dhz\n", dm.refresh_rate);
 
-    SDL_Window *window = SDL_CreateWindow("briskgit", 0, 0, dm.w * 0.8, dm.h * 0.8, SDL_WINDOW_RESIZABLE);
+    SDL_Window *window = SDL_CreateWindow(
+        "briskgit", 
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        dm.w * 0.8, dm.h * 0.8, 
+        SDL_WINDOW_RESIZABLE);
+
     if (window)
     {
         Run(window);
