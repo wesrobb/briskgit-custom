@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.15)
 project(Briskgit C OBJC)
 
 add_subdirectory(lib/SDL2-2.0.12)
+add_subdirectory(lib/freetype2)
+
+set(FT_WITH_HARFBUZZ ON)
 
 add_executable(briskgit 
     src/main.c
@@ -11,7 +14,7 @@ add_executable(briskgit
     src/render.h 
     src/render.c
     )
-target_link_libraries(briskgit LINK_PUBLIC SDL2-static)
+target_link_libraries(briskgit LINK_PUBLIC SDL2-static freetype)
 
 if (MSVC)
     # warning level 4 and all warnings as errors

@@ -13,3 +13,4 @@ typedef Color Pixel;
 
 typedef struct SDL_Window SDL_Window;
 void Render_DrawRect(SDL_Window *, Rect, Color);
+void Render_DrawFont(SDL_Window *);

@@ -55,4 +55,5 @@ void App_Draw(SDL_Window *window)
     };
 
     Render_DrawRect(window, rect, color);  
+    Render_DrawFont(window);
 }
