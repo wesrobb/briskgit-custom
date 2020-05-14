@@ -5,9 +5,11 @@ project(Briskgit C OBJC)
 add_subdirectory(lib/SDL2-2.0.12)
 
 add_executable(briskgit 
+    src/main.c
     src/app.h 
     src/app.c
-    src/main.c
+    src/render.h 
+    src/render.c
     )
 target_link_libraries(briskgit LINK_PUBLIC SDL2-static)
 

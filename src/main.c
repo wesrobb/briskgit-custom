@@ -114,6 +114,9 @@ static void Run(SDL_Window *window)
         uint64_t frameStartTime = SDL_GetPerformanceCounter();
         ProcessEvents();
 
+        App_Draw(window);
+        SDL_UpdateWindowSurface(window);
+
         uint64_t currentTime = SDL_GetPerformanceCounter();
         float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
         LogFrameTime(frameTimeMs);
