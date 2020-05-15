@@ -11,21 +11,25 @@
 #include "SDL_video.h"
 #include "common.h"
 
-void DrawFreeTypeBitmap(SDL_Window *window, FT_Bitmap *bitmap, int x, int y)
+typedef struct RenderContext {
+    bool initialized;
+} RenderContext;
+
+static RenderContext g_renderContext;
+
+static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, int y)
 {
-    SDL_assert(window);
+    SDL_assert(surface);
     SDL_assert(bitmap);
 
-    SDL_Surface *s = SDL_GetWindowSurface(window);
+    int startX = max(surface->clip_rect.x, x);
+    int endX = min(surface->clip_rect.x + surface->clip_rect.w, x + (int)bitmap->width);
+    int startY = max(surface->clip_rect.y, y);
+    int endY = min(surface->clip_rect.y + surface->clip_rect.h, y + (int)bitmap->rows);
 
-    int startX = max(s->clip_rect.x, x);
-    int endX = min(s->clip_rect.x + s->clip_rect.w, x + (int)bitmap->width);
-    int startY = max(s->clip_rect.y, y);
-    int endY = min(s->clip_rect.y + s->clip_rect.h, y + (int)bitmap->rows);
-
-    Pixel *pixels = (Pixel*)s->pixels;
-    pixels += startX + startY * s->w;  // Move to the first pixel that resides in the rect
-    int nextRow = s->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
+    Pixel *pixels = (Pixel*)surface->pixels;
+    pixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
+    int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
     for (int y = startY, v = 0; y < endY; y++, v++)
     {
@@ -45,20 +49,24 @@ void DrawFreeTypeBitmap(SDL_Window *window, FT_Bitmap *bitmap, int x, int y)
     }
 }
 
-void Render_DrawRect(SDL_Window *window, Rect rect, Color color)
+void Render_Init()
 {
-    SDL_assert(window);
+    g_renderContext.initialized = true;
+}
 
-    SDL_Surface *s = SDL_GetWindowSurface(window);
+void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
+{
+    SDL_assert(surface);
+    SDL_assert(g_renderContext.initialized);
 
-    int startX = max(s->clip_rect.x, rect.x);
-    int endX = min(s->clip_rect.x + s->clip_rect.w, rect.x + rect.w);
-    int startY = max(s->clip_rect.y, rect.y);
-    int endY = min(s->clip_rect.y + s->clip_rect.h, rect.y + rect.h);
+    int startX = max(surface->clip_rect.x, rect.x);
+    int endX = min(surface->clip_rect.x + surface->clip_rect.w, rect.x + rect.w);
+    int startY = max(surface->clip_rect.y, rect.y);
+    int endY = min(surface->clip_rect.y + surface->clip_rect.h, rect.y + rect.h);
 
-    Pixel *pixels = (Pixel*)s->pixels;
-    pixels += startX + startY * s->w;  // Move to the first pixel that resides in the rect
-    int nextRow = s->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
+    Pixel *pixels = (Pixel*)surface->pixels;
+    pixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
+    int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
     for (int y = startY; y < endY; y++)
     {
@@ -72,9 +80,9 @@ void Render_DrawRect(SDL_Window *window, Rect rect, Color color)
     }
 }
 
-void Render_DrawFont(SDL_Window *window)
+void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
 {
-    (void)window;
+    SDL_assert(g_renderContext.initialized);
 
     FT_Library library;
 
@@ -105,8 +113,8 @@ void Render_DrawFont(SDL_Window *window)
           face,    /* handle to face object           */
           0,       /* char_width in 1/64th of points  */
           12*64,   /* char_height in 1/64th of points */
-          128,     /* horizontal device resolution    */
-          128);    /* vertical device resolution      */
+          dpiX,    /* horizontal dpi                  */
+          dpiY);   /* vertical dpi                    */
     if (error)
     {
         puts("Failed to set face size");
@@ -131,7 +139,7 @@ void Render_DrawFont(SDL_Window *window)
             continue;  /* ignore errors */
 
         /* now, draw to our target surface */
-        DrawFreeTypeBitmap(window, &slot->bitmap,
+        DrawFreeTypeBitmap(surface, &slot->bitmap,
                            pen_x + slot->bitmap_left,
                            pen_y - slot->bitmap_top);
 

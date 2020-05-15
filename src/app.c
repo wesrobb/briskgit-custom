@@ -4,9 +4,10 @@
 
 #include "render.h"
 
-typedef struct AppState {
-    int version;
-} AppState;
+void App_Init()
+{
+    Render_Init();
+}
 
 void App_OnKeyPressed(SDL_Keysym *e)
 {
@@ -39,7 +40,7 @@ void App_OnWindowResized(int width, int height)
     (void)height;
 }
 
-void App_Draw(SDL_Window *window)
+void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
 {
     Rect rect = {
         .x = 100,
@@ -54,6 +55,6 @@ void App_Draw(SDL_Window *window)
         .a = 255
     };
 
-    Render_DrawRect(window, rect, color);  
-    Render_DrawFont(window);
+    Render_DrawRect(surface, rect, color);  
+    Render_DrawFont(surface, dpiX, dpiY);
 }

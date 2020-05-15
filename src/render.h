@@ -11,6 +11,7 @@ typedef struct Color
 } Color;
 typedef Color Pixel;
 
-typedef struct SDL_Window SDL_Window;
-void Render_DrawRect(SDL_Window *, Rect, Color);
-void Render_DrawFont(SDL_Window *);
+typedef struct SDL_Surface SDL_Surface;
+void Render_Init();
+void Render_DrawRect(SDL_Surface *, Rect, Color);
+void Render_DrawFont(SDL_Surface *, float dpiX, float dpiY);

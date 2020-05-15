@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 
+#include "SDL_error.h"
 #include "SDL_events.h"
 #include "SDL_video.h"
 #include "app.h"
@@ -17,6 +18,45 @@ static int g_frameTimesIndex = 0;
 #define TARGET_FPS 60
 static float g_expectedFrameTimeMs = 1000.0f / TARGET_FPS;
 
+typedef struct Dpi {
+    float x, y;
+} Dpi;
+
+static Dpi g_dpi;
+
+static int GetDisplayDpiFromWindow(SDL_Window *window, Dpi *dpi)
+{
+    int displayIndex = SDL_GetWindowDisplayIndex(window);
+
+    float unused;
+    int error = SDL_GetDisplayDPI(displayIndex, &unused, &dpi->x, &dpi->y);
+    if (error)
+    {
+        printf("Error on window move %s\n", SDL_GetError());
+        return error;
+    }
+
+    printf("Window moved on display %d\n", displayIndex);
+    printf("dpiX is %f\n", dpi->x);
+    printf("dpiY is %f\n", dpi->y);
+
+    return 0;
+}
+
+// Returns the DPI of display on which the application window resides.
+static int GetDisplayDpiFromWindowId(unsigned int windowId, Dpi *dpi)
+{
+    SDL_assert(dpi);
+
+    SDL_Window *window = SDL_GetWindowFromID(windowId);
+    if (window)
+    {
+        return GetDisplayDpiFromWindow(window, dpi);
+    }
+
+    return 1;
+}
+
 static void OnWindowEvent(SDL_WindowEvent *e)
 {
     switch (e->event)
@@ -28,6 +68,12 @@ static void OnWindowEvent(SDL_WindowEvent *e)
 
                 printf("Window resized to %d x %d\n", width, height);
                 App_OnWindowResized(width, height);
+            }
+            break;
+
+        case SDL_WINDOWEVENT_MOVED:
+            {
+                GetDisplayDpiFromWindowId(e->windowID, &g_dpi);
             }
             break;
     }
@@ -109,12 +155,14 @@ static void LogFrameTime(float frameTimeMs)
 
 static void Run(SDL_Window *window)
 {
+    App_Init();
     while (!g_done)
     {
         uint64_t frameStartTime = SDL_GetPerformanceCounter();
         ProcessEvents();
 
-        App_Draw(window);
+        SDL_Surface *surface = SDL_GetWindowSurface(window);
+        App_Draw(surface, g_dpi.x, g_dpi.y);
         SDL_UpdateWindowSurface(window);
 
         uint64_t currentTime = SDL_GetPerformanceCounter();
@@ -123,7 +171,7 @@ static void Run(SDL_Window *window)
 
         if (g_expectedFrameTimeMs > frameTimeMs)
         {
-            float sleepMs = g_expectedFrameTimeMs - frameTimeMs; 
+            float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
             SDL_Delay((uint32_t)sleepMs);
         }
 
@@ -150,13 +198,14 @@ int main()
     printf("Display refresh: %dhz\n", dm.refresh_rate);
 
     SDL_Window *window = SDL_CreateWindow(
-        "briskgit", 
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        dm.w * 0.8, dm.h * 0.8, 
-        SDL_WINDOW_RESIZABLE);
+        "briskgit",
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        dm.w * 0.8, dm.h * 0.8,
+        SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
     if (window)
     {
+        GetDisplayDpiFromWindow(window, &g_dpi);
         Run(window);
         SDL_DestroyWindow(window);
     }
