@@ -49,10 +49,8 @@ void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
         .h = 200
     };
     Color color = {
-        .r = 255,
-        .g = 0,
-        .b = 0,
-        .a = 255
+        .r = 1.0f,
+        .a = 1.0f
     };
 
     Render_DrawRect(surface, rect, color);  

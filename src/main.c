@@ -200,8 +200,8 @@ int main()
     SDL_Window *window = SDL_CreateWindow(
         "briskgit",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        dm.w * 0.8, dm.h * 0.8,
-        SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+        (int)(dm.w * 0.8), (int)(dm.h * 0.8),
+        SDL_WINDOW_RESIZABLE);
 
     if (window)
     {

@@ -7,9 +7,8 @@ typedef struct Rect
 
 typedef struct Color
 {
-    unsigned char b, g, r, a;
+    float b, g, r, a;
 } Color;
-typedef Color Pixel;
 
 typedef struct SDL_Surface SDL_Surface;
 void Render_Init();

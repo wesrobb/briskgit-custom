@@ -1,8 +1,10 @@
 #include "render.h"
 
+#include <math.h>
+#include <string.h>
+
 #include "freetype/ftimage.h"
 #include "freetype/ftmodapi.h"
-#include "string.h"
 
 #include <SDL.h>
 #include <ft2build.h>
@@ -11,14 +13,83 @@
 #include "SDL_video.h"
 #include "common.h"
 
+typedef struct Pixel
+{
+    unsigned char b, g, r, a;
+} Pixel;
+
 typedef struct RenderContext {
     bool initialized;
 } RenderContext;
 
 static RenderContext g_renderContext;
 
+static Pixel ColorToPixel(Color c)
+{
+    Pixel result = {
+        .b = (unsigned char)(c.b * 255.999f),
+        .g = (unsigned char)(c.g * 255.999f),
+        .r = (unsigned char)(c.r * 255.999f),
+        .a = (unsigned char)(c.a * 255.999f),
+    };
+
+    return result;
+}
+
+static Color PixelToColor(Pixel p)
+{
+    Color result = {
+        .b = p.b / 255.0f,
+        .g = p.g / 255.0f,
+        .r = p.r / 255.0f,
+        .a = p.a / 255.0f,
+    };
+
+    return result;
+}
+
+static Color SRGBToLinear(Color x)
+{
+    // Exact gamma value would be 2.2 but we use 2
+    // to avoid expensive pow function and use the square of x instead.
+    Color result = {
+        .r = x.r * x.r,
+        .g = x.g * x.g,
+        .b = x.b * x.b,
+    };
+    return result;
+}
+
+static Color LinearToSRGB(Color x)
+{
+    Color result = {
+        .r = sqrtf(x.r),
+        .g = sqrtf(x.g),
+        .b = sqrtf(x.b),
+        .a = x.a
+    };
+    return result;
+}
+
+// Blends src onto dest assuming linear color space. Src must have pre-multiplied alpha.
+static Color LinearBlend(Color src, Color dest)
+{
+    Color result = {
+        .r = src.r - dest.r * (1.0f - src.a),
+        .g = src.g - dest.g * (1.0f - src.a),
+        .b = src.b - dest.b * (1.0f - src.a)
+    };
+
+    return result;
+}
+
 static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, int y)
 {
+    Color fontColorLinear = {
+        .g = 1.0f,
+        .b = 1.0f
+    }; // Assumes linear color space not sRGB
+
     SDL_assert(surface);
     SDL_assert(bitmap);
 
@@ -27,25 +98,33 @@ static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, i
     int startY = max(surface->clip_rect.y, y);
     int endY = min(surface->clip_rect.y + surface->clip_rect.h, y + (int)bitmap->rows);
 
-    Pixel *pixels = (Pixel*)surface->pixels;
-    pixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
+    Pixel *destPixels = (Pixel*)surface->pixels;
+    destPixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
     int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
     for (int y = startY, v = 0; y < endY; y++, v++)
     {
         for (int x = startX, u = 0; x < endX; x++, u++)
         {
-            unsigned char fontPx = bitmap->buffer[v * bitmap->width + u];
-            Pixel px = {
-                .g = fontPx,
-                .b = fontPx,
-                .a = 255
+            float fontAlphaLinear = bitmap->buffer[v * (int)bitmap->width + u] / 255.0f;
+            // Pre-multiply font alpha in linear space.
+            Color fontColorLinearPremultiplied = {
+                .r = fontColorLinear.r * fontAlphaLinear,
+                .g = fontColorLinear.g * fontAlphaLinear,
+                .b = fontColorLinear.b * fontAlphaLinear,
+                .a = fontAlphaLinear
             };
-            *pixels = px;
-            pixels++;
+
+            Color destColorSRGB = PixelToColor(*destPixels);
+            Color destColorLinear = SRGBToLinear(destColorSRGB);
+            Color blendedLinear = LinearBlend(fontColorLinearPremultiplied, destColorLinear);
+            Color finalColorSRGB = LinearToSRGB(blendedLinear);
+
+            *destPixels = ColorToPixel(finalColorSRGB);
+            destPixels++;
         }
 
-        pixels += nextRow;
+        destPixels += nextRow;
     }
 }
 
@@ -72,7 +151,13 @@ void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
     {
         for (int x = startX; x < endX; x++)
         {
-            *pixels = color;
+            //*pixels = ColorToPixel(color);
+            (void)color;
+            Pixel p = {
+                .r = 255,
+                .a = 255
+            };
+            *pixels = p;
             pixels++;
         }
 
@@ -113,8 +198,8 @@ void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
           face,    /* handle to face object           */
           0,       /* char_width in 1/64th of points  */
           12*64,   /* char_height in 1/64th of points */
-          dpiX,    /* horizontal dpi                  */
-          dpiY);   /* vertical dpi                    */
+          (unsigned int)dpiX,    /* horizontal dpi                  */
+          (unsigned int)dpiY);   /* vertical dpi                    */
     if (error)
     {
         puts("Failed to set face size");
@@ -122,19 +207,19 @@ void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
     }
 
     FT_GlyphSlot  slot = face->glyph;  /* a small shortcut */
-    int           pen_x, pen_y, n;
+    int           pen_x, pen_y;
 
 
     pen_x = 300;
     pen_y = 200;
 
     const char* text = "Hello, world!";
-    int num_chars = strlen(text);
+    size_t num_chars = strlen(text);
 
-    for ( n = 0; n < num_chars; n++ )
+    for (size_t n = 0; n < num_chars; n++)
     {
         /* load glyph image into the slot (erase previous one) */
-        error = FT_Load_Char(face, text[n], FT_LOAD_RENDER);
+        error = FT_Load_Char(face, (FT_ULong)text[n], FT_LOAD_RENDER);
         if ( error )
             continue;  /* ignore errors */
 
