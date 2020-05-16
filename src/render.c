@@ -56,6 +56,7 @@ static Color SRGBToLinear(Color x)
         .r = x.r * x.r,
         .g = x.g * x.g,
         .b = x.b * x.b,
+        .a = x.a
     };
     return result;
 }
@@ -75,9 +76,10 @@ static Color LinearToSRGB(Color x)
 static Color LinearBlend(Color src, Color dest)
 {
     Color result = {
-        .r = src.r - dest.r * (1.0f - src.a),
-        .g = src.g - dest.g * (1.0f - src.a),
-        .b = src.b - dest.b * (1.0f - src.a)
+        .r = src.r + dest.r * (1.0f - src.a),
+        .g = src.g + dest.g * (1.0f - src.a),
+        .b = src.b + dest.b * (1.0f - src.a),
+        .a = dest.a
     };
 
     return result;
@@ -133,6 +135,23 @@ void Render_Init()
     g_renderContext.initialized = true;
 }
 
+void Render_Clear(SDL_Surface *surface, Color color)
+{
+    SDL_assert(surface);
+    SDL_assert(g_renderContext.initialized);
+
+    Pixel *pixels = (Pixel*)surface->pixels;
+    Pixel coloredPixel = ColorToPixel(color);
+    for (int y = 0; y < surface->h; y++)
+    {
+        for (int x = 0; x < surface->w; x++)
+        {
+            *pixels = coloredPixel;
+            pixels++;
+        }
+    }
+}
+
 void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
 {
     SDL_assert(surface);
@@ -147,17 +166,12 @@ void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
     pixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
     int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
+    Pixel coloredPixel = ColorToPixel(color);
     for (int y = startY; y < endY; y++)
     {
         for (int x = startX; x < endX; x++)
         {
-            //*pixels = ColorToPixel(color);
-            (void)color;
-            Pixel p = {
-                .r = 255,
-                .a = 255
-            };
-            *pixels = p;
+            *pixels = coloredPixel;
             pixels++;
         }
 
@@ -210,10 +224,10 @@ void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
     int           pen_x, pen_y;
 
 
-    pen_x = 300;
-    pen_y = 200;
+    pen_x = 100;
+    pen_y = 150;
 
-    const char* text = "Hello, world!";
+    const char* text = "H";
     size_t num_chars = strlen(text);
 
     for (size_t n = 0; n < num_chars; n++)

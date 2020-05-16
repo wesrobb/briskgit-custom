@@ -48,11 +48,18 @@ void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
         .w = 200,
         .h = 200
     };
+    Color clearColor = {
+        .r = 0.1f,
+        .g = 0.1f,
+        .b = 0.1f,
+        .a = 1.0f
+    };
     Color color = {
         .r = 1.0f,
         .a = 1.0f
     };
 
+    Render_Clear(surface, clearColor); 
     Render_DrawRect(surface, rect, color);  
     Render_DrawFont(surface, dpiX, dpiY);
 }
