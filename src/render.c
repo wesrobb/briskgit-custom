@@ -3,12 +3,12 @@
 #include <math.h>
 #include <string.h>
 
-#include "freetype/ftimage.h"
-#include "freetype/ftmodapi.h"
-
 #include <SDL.h>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_MODULE_H
+#include <hb.h>
 
 #include "SDL_video.h"
 #include "common.h"

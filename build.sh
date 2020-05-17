@@ -1,4 +1,2 @@
 #!/bin/bash
-cd build
-cmake --build . --target briskgit
-cd ..
+cmake --build build
