@@ -1,8 +1,10 @@
 #pragma once
 
+#include "common.h"
+
 typedef struct Rect
 {
-    int x, y, w, h;
+    int32_t x, y, w, h;
 } Rect;
 
 typedef struct Color
@@ -11,7 +13,8 @@ typedef struct Color
 } Color;
 
 typedef struct SDL_Surface SDL_Surface;
-void Render_Init();
+bool Render_Init();
+void Render_Destroy();
 void Render_Clear(SDL_Surface *, Color);
 void Render_DrawRect(SDL_Surface *, Rect, Color);
-void Render_DrawFont(SDL_Surface *, float dpiX, float dpiY);
+void Render_DrawFont(SDL_Surface *, int32_t posX, int32_t posY, float dpiX, float dpiY, bool useKerning);

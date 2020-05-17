@@ -15,10 +15,13 @@
 
 typedef struct Pixel
 {
-    unsigned char b, g, r, a;
+    uint8_t b, g, r, a;
 } Pixel;
 
 typedef struct RenderContext {
+    FT_Library fontLibrary;
+    FT_Face currentFontFace;
+
     bool initialized;
 } RenderContext;
 
@@ -27,10 +30,10 @@ static RenderContext g_renderContext;
 static Pixel ColorToPixel(Color c)
 {
     Pixel result = {
-        .b = (unsigned char)(c.b * 255.999f),
-        .g = (unsigned char)(c.g * 255.999f),
-        .r = (unsigned char)(c.r * 255.999f),
-        .a = (unsigned char)(c.a * 255.999f),
+        .b = (uint8_t)(c.b * 255.999f),
+        .g = (uint8_t)(c.g * 255.999f),
+        .r = (uint8_t)(c.r * 255.999f),
+        .a = (uint8_t)(c.a * 255.999f),
     };
 
     return result;
@@ -85,7 +88,7 @@ static Color LinearBlend(Color src, Color dest)
     return result;
 }
 
-static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, int y)
+static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int32_t x, int32_t y)
 {
     Color fontColorLinear = {
         .g = 1.0f,
@@ -95,20 +98,20 @@ static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, i
     SDL_assert(surface);
     SDL_assert(bitmap);
 
-    int startX = max(surface->clip_rect.x, x);
-    int endX = min(surface->clip_rect.x + surface->clip_rect.w, x + (int)bitmap->width);
-    int startY = max(surface->clip_rect.y, y);
-    int endY = min(surface->clip_rect.y + surface->clip_rect.h, y + (int)bitmap->rows);
+    int32_t startX = max(surface->clip_rect.x, x);
+    int32_t endX = min(surface->clip_rect.x + surface->clip_rect.w, x + (int32_t)bitmap->width);
+    int32_t startY = max(surface->clip_rect.y, y);
+    int32_t endY = min(surface->clip_rect.y + surface->clip_rect.h, y + (int32_t)bitmap->rows);
 
     Pixel *destPixels = (Pixel*)surface->pixels;
     destPixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
-    int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
+    int32_t nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
-    for (int y = startY, v = 0; y < endY; y++, v++)
+    for (int32_t y = startY, v = 0; y < endY; y++, v++)
     {
-        for (int x = startX, u = 0; x < endX; x++, u++)
+        for (int32_t x = startX, u = 0; x < endX; x++, u++)
         {
-            float fontAlphaLinear = bitmap->buffer[v * (int)bitmap->width + u] / 255.0f;
+            float fontAlphaLinear = bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
             // Pre-multiply font alpha in linear space.
             Color fontColorLinearPremultiplied = {
                 .r = fontColorLinear.r * fontAlphaLinear,
@@ -130,9 +133,44 @@ static void DrawFreeTypeBitmap(SDL_Surface *surface, FT_Bitmap *bitmap, int x, i
     }
 }
 
-void Render_Init()
+bool Render_Init()
 {
     g_renderContext.initialized = true;
+
+    int32_t error = FT_Init_FreeType(&g_renderContext.fontLibrary);
+    if (error)
+    {
+        printf("Failed to init FreeType\n");
+        return false;
+    }
+
+    error = FT_New_Face(g_renderContext.fontLibrary,
+                     "data/Roboto-Regular.ttf",
+                     0,
+                     &g_renderContext.currentFontFace);
+    if (error == FT_Err_Unknown_File_Format)
+    {
+        puts("Unknown font format");
+        return false;
+    }
+    else if (error)
+    {
+        printf("Unknown error %d\n", error);
+        return false;
+    }
+
+    if (FT_HAS_KERNING(g_renderContext.currentFontFace))
+    {
+        printf("Font has kerning\n");
+    }
+
+    return true;
+}
+
+void Render_Destroy()
+{
+    FT_Done_Face(g_renderContext.currentFontFace);
+    FT_Done_Library(g_renderContext.fontLibrary);
 }
 
 void Render_Clear(SDL_Surface *surface, Color color)
@@ -142,9 +180,9 @@ void Render_Clear(SDL_Surface *surface, Color color)
 
     Pixel *pixels = (Pixel*)surface->pixels;
     Pixel coloredPixel = ColorToPixel(color);
-    for (int y = 0; y < surface->h; y++)
+    for (int32_t y = 0; y < surface->h; y++)
     {
-        for (int x = 0; x < surface->w; x++)
+        for (int32_t x = 0; x < surface->w; x++)
         {
             *pixels = coloredPixel;
             pixels++;
@@ -157,19 +195,19 @@ void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
     SDL_assert(surface);
     SDL_assert(g_renderContext.initialized);
 
-    int startX = max(surface->clip_rect.x, rect.x);
-    int endX = min(surface->clip_rect.x + surface->clip_rect.w, rect.x + rect.w);
-    int startY = max(surface->clip_rect.y, rect.y);
-    int endY = min(surface->clip_rect.y + surface->clip_rect.h, rect.y + rect.h);
+    int32_t startX = max(surface->clip_rect.x, rect.x);
+    int32_t endX = min(surface->clip_rect.x + surface->clip_rect.w, rect.x + rect.w);
+    int32_t startY = max(surface->clip_rect.y, rect.y);
+    int32_t endY = min(surface->clip_rect.y + surface->clip_rect.h, rect.y + rect.h);
 
     Pixel *pixels = (Pixel*)surface->pixels;
     pixels += startX + startY * surface->w;  // Move to the first pixel that resides in the rect
-    int nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
+    int32_t nextRow = surface->w - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
 
     Pixel coloredPixel = ColorToPixel(color);
-    for (int y = startY; y < endY; y++)
+    for (int32_t y = startY; y < endY; y++)
     {
-        for (int x = startX; x < endX; x++)
+        for (int32_t x = startX; x < endX; x++)
         {
             *pixels = coloredPixel;
             pixels++;
@@ -179,41 +217,18 @@ void Render_DrawRect(SDL_Surface *surface, Rect rect, Color color)
     }
 }
 
-void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
+void Render_DrawFont(SDL_Surface *surface, int32_t posX, int32_t posY, float dpiX, float dpiY, bool useKerning)
 {
     SDL_assert(g_renderContext.initialized);
 
-    FT_Library library;
+    FT_Face face = g_renderContext.currentFontFace;
 
-    int error = FT_Init_FreeType(&library);
-    if (error)
-    {
-        printf("Failed to init FreeType\n");
-        return;
-    }
-
-    FT_Face face;
-    error = FT_New_Face( library,
-                     "data/Mukta-Regular.ttf",
-                     0,
-                     &face );
-    if (error == FT_Err_Unknown_File_Format)
-    {
-        puts("Unknown font format");
-        return;
-    }
-    else if (error)
-    {
-        printf("Unknown error %d\n", error);
-        return;
-    }
-
-    error = FT_Set_Char_Size(
+    int32_t error = FT_Set_Char_Size(
           face,    /* handle to face object           */
           0,       /* char_width in 1/64th of points  */
           12*64,   /* char_height in 1/64th of points */
-          (unsigned int)dpiX,    /* horizontal dpi                  */
-          (unsigned int)dpiY);   /* vertical dpi                    */
+          (uint32_t)dpiX,    /* horizontal dpi                  */
+          (uint32_t)dpiY);   /* vertical dpi                    */
     if (error)
     {
         puts("Failed to set face size");
@@ -221,31 +236,41 @@ void Render_DrawFont(SDL_Surface *surface, float dpiX, float dpiY)
     }
 
     FT_GlyphSlot  slot = face->glyph;  /* a small shortcut */
-    int           pen_x, pen_y;
 
+    useKerning = FT_HAS_KERNING(face) && useKerning;
 
-    pen_x = 100;
-    pen_y = 150;
-
-    const char* text = "H";
+    const char* text = "Hello AV.";
     size_t num_chars = strlen(text);
+    FT_UInt previous = 0;
 
     for (size_t n = 0; n < num_chars; n++)
     {
+        /* convert character code to glyph index */
+        FT_UInt glyphIndex = FT_Get_Char_Index(face, (FT_ULong)text[n]);
+
+        /* retrieve kerning distance and move pen position */
+        if (useKerning && previous && glyphIndex)
+        {
+            FT_Vector delta;
+            FT_Get_Kerning(face, previous, glyphIndex, FT_KERNING_DEFAULT, &delta);
+            posX += delta.x >> 6;
+        }
+
         /* load glyph image into the slot (erase previous one) */
-        error = FT_Load_Char(face, (FT_ULong)text[n], FT_LOAD_RENDER);
-        if ( error )
+        error = FT_Load_Glyph(face, glyphIndex, FT_LOAD_RENDER);
+        if (error)
+        {
+            printf("Error loading font glyph %d\n - continuing", error);
             continue;  /* ignore errors */
+        }
 
         /* now, draw to our target surface */
         DrawFreeTypeBitmap(surface, &slot->bitmap,
-                           pen_x + slot->bitmap_left,
-                           pen_y - slot->bitmap_top);
+                           posX + slot->bitmap_left,
+                           posY - slot->bitmap_top);
 
         /* increment pen position */
-        pen_x += slot->advance.x >> 6;
+        posX += slot->advance.x >> 6;
+        previous = glyphIndex;
     }
-
-    FT_Done_Face(face);
-    FT_Done_Library(library);
 }

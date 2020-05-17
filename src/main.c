@@ -13,7 +13,7 @@ static bool g_done;
 
 #define MAX_FRAME_TIMES 100
 static float g_frameTimes[MAX_FRAME_TIMES] = {0};
-static int g_frameTimesIndex = 0;
+static int32_t g_frameTimesIndex = 0;
 
 #define TARGET_FPS 60
 static float g_expectedFrameTimeMs = 1000.0f / TARGET_FPS;
@@ -24,12 +24,12 @@ typedef struct Dpi {
 
 static Dpi g_dpi;
 
-static int GetDisplayDpiFromWindow(SDL_Window *window, Dpi *dpi)
+static int32_t GetDisplayDpiFromWindow(SDL_Window *window, Dpi *dpi)
 {
-    int displayIndex = SDL_GetWindowDisplayIndex(window);
+    int32_t displayIndex = SDL_GetWindowDisplayIndex(window);
 
     float unused;
-    int error = SDL_GetDisplayDPI(displayIndex, &unused, &dpi->x, &dpi->y);
+    int32_t error = SDL_GetDisplayDPI(displayIndex, &unused, &dpi->x, &dpi->y);
     if (error)
     {
         printf("Error on window move %s\n", SDL_GetError());
@@ -44,7 +44,7 @@ static int GetDisplayDpiFromWindow(SDL_Window *window, Dpi *dpi)
 }
 
 // Returns the DPI of display on which the application window resides.
-static int GetDisplayDpiFromWindowId(unsigned int windowId, Dpi *dpi)
+static int32_t GetDisplayDpiFromWindowId(uint32_t windowId, Dpi *dpi)
 {
     SDL_assert(dpi);
 
@@ -63,8 +63,8 @@ static void OnWindowEvent(SDL_WindowEvent *e)
     {
         case SDL_WINDOWEVENT_RESIZED:
             {
-                int width = e->data1;
-                int height = e->data2;
+                int32_t width = e->data1;
+                int32_t height = e->data2;
 
                 printf("Window resized to %d x %d\n", width, height);
                 App_OnWindowResized(width, height);
@@ -135,8 +135,8 @@ static void LogFrameTime(float frameTimeMs)
     if (elapsedMs > 2000.0f)
     {
         float sum = 0.0f;
-        int count = 0;
-        for (int i = 0; i < MAX_FRAME_TIMES; i++)
+        int32_t count = 0;
+        for (int32_t i = 0; i < MAX_FRAME_TIMES; i++)
         {
             float frameTimeMs = g_frameTimes[i];
             if (frameTimeMs == 0.0f) {
@@ -155,32 +155,36 @@ static void LogFrameTime(float frameTimeMs)
 
 static void Run(SDL_Window *window)
 {
-    App_Init();
-    while (!g_done)
+    if (App_Init())
     {
-        uint64_t frameStartTime = SDL_GetPerformanceCounter();
-        ProcessEvents();
-
-        SDL_Surface *surface = SDL_GetWindowSurface(window);
-        App_Draw(surface, g_dpi.x, g_dpi.y);
-        SDL_UpdateWindowSurface(window);
-
-        uint64_t currentTime = SDL_GetPerformanceCounter();
-        float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
-        LogFrameTime(frameTimeMs);
-
-        if (g_expectedFrameTimeMs > frameTimeMs)
+        while (!g_done)
         {
-            float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
-            SDL_Delay((uint32_t)sleepMs);
+            uint64_t frameStartTime = SDL_GetPerformanceCounter();
+            ProcessEvents();
+
+            SDL_Surface *surface = SDL_GetWindowSurface(window);
+            App_Draw(surface, g_dpi.x, g_dpi.y);
+            SDL_UpdateWindowSurface(window);
+
+            uint64_t currentTime = SDL_GetPerformanceCounter();
+            float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
+            LogFrameTime(frameTimeMs);
+
+            if (g_expectedFrameTimeMs > frameTimeMs)
+            {
+                float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
+                SDL_Delay((uint32_t)sleepMs);
+            }
+
+            unsigned windowFlags = SDL_GetWindowFlags(window);
+            bool windowHasFocus = windowFlags & SDL_WINDOW_INPUT_FOCUS;
+            if (!windowHasFocus)
+            {
+                SDL_Delay(100);
+            }
         }
 
-        unsigned windowFlags = SDL_GetWindowFlags(window);
-        bool windowHasFocus = windowFlags & SDL_WINDOW_INPUT_FOCUS;
-        if (!windowHasFocus)
-        {
-            SDL_Delay(100);
-        }
+        App_Destroy();
     }
 }
 
@@ -200,7 +204,7 @@ int main()
     SDL_Window *window = SDL_CreateWindow(
         "briskgit",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        (int)(dm.w * 0.8), (int)(dm.h * 0.8),
+        (int32_t)(dm.w * 0.8), (int32_t)(dm.h * 0.8),
         SDL_WINDOW_RESIZABLE);
 
     if (window)
