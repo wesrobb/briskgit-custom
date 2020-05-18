@@ -68,4 +68,5 @@ void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
     Render_DrawRect(surface, rect, color);  
     Render_DrawFont(surface, 100, 100, dpiX, dpiY, false);
     Render_DrawFont(surface, 100, 200, dpiX, dpiY, true);
+    Render_DrawFontHarfBuzz(surface, 100, 300, dpiX, dpiY);
 }

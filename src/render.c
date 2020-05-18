@@ -9,6 +9,7 @@
 #include FT_FREETYPE_H
 #include FT_MODULE_H
 #include <hb.h>
+#include <hb-ft.h>
 
 #include "SDL_video.h"
 #include "common.h"
@@ -273,4 +274,59 @@ void Render_DrawFont(SDL_Surface *surface, int32_t posX, int32_t posY, float dpi
         posX += slot->advance.x >> 6;
         previous = glyphIndex;
     }
+}
+
+void Render_DrawFontHarfBuzz(SDL_Surface *surface, int32_t posX, int32_t posY, float dpiX, float dpiY)
+{
+    const char *text = "Hello AV.";
+    hb_buffer_t *buf;
+    buf = hb_buffer_create();
+    hb_buffer_add_utf8(buf, text, -1, 0, -1);
+
+    hb_buffer_guess_segment_properties(buf);
+
+    FT_Face face = g_renderContext.currentFontFace;
+
+    int32_t error = FT_Set_Char_Size(
+          face,    /* handle to face object           */
+          0,       /* char_width in 1/64th of points  */
+          12*64,   /* char_height in 1/64th of points */
+          (uint32_t)dpiX,    /* horizontal dpi                  */
+          (uint32_t)dpiY);   /* vertical dpi                    */
+    if (error)
+    {
+        puts("Failed to set face size");
+        return;
+    }
+    hb_font_t *font = hb_ft_font_create(face, NULL);
+
+    hb_shape(font, buf, NULL, 0);
+    uint32_t glyphCount = 0;
+    hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
+    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
+
+    double cursor_x = posX;
+    double cursor_y = posY;
+    for (uint32_t i = 0; i < glyphCount; ++i) {
+          hb_codepoint_t glyphid = glyph_info[i].codepoint;
+          double x_offset = glyph_pos[i].x_offset / 64.0;
+          double y_offset = glyph_pos[i].y_offset / 64.0;
+          double x_advance = glyph_pos[i].x_advance / 64.0;
+          double y_advance = glyph_pos[i].y_advance / 64.0;
+          //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
+        /* load glyph image into the slot (erase previous one) */
+          error = FT_Load_Glyph(face, glyphid, FT_LOAD_RENDER);
+          if (error)
+          {
+              printf("Error loading font glyph %d\n - continuing", error);
+              continue;  /* ignore errors */
+          }
+
+          /* now, draw to our target surface */
+          DrawFreeTypeBitmap(surface, &face->glyph->bitmap,
+                  (int32_t)(cursor_x + x_offset),
+                  (int32_t)(cursor_y + y_offset - face->glyph->bitmap_top));
+          cursor_x += x_advance;
+          cursor_y += y_advance;
+      }
 }
