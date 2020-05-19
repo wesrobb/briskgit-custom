@@ -12,10 +12,25 @@ typedef struct Color
     float b, g, r, a;
 } Color;
 
-typedef struct SDL_Surface SDL_Surface;
-bool Render_Init();
+typedef struct Pixel
+{
+    uint8_t b, g, r, a;
+} Pixel;
+
+typedef struct FrameBuffer
+{
+    Pixel *pixels;
+    int32_t width, height;
+} FrameBuffer;
+
+bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY);
 void Render_Destroy();
-void Render_Clear(SDL_Surface *, Color);
-void Render_DrawRect(SDL_Surface *, Rect, Color);
-void Render_DrawFont(SDL_Surface *, int32_t posX, int32_t posY, float dpiX, float dpiY, bool useKerning);
-void Render_DrawFontHarfBuzz(SDL_Surface *, int32_t posX, int32_t posY, float dpiX, float dpiY);
+bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY);
+
+void Render_GetDimensions(int32_t *width, int32_t *height);
+FrameBuffer *Render_GetFrameBuffer();
+
+void Render_Clear(Color);
+void Render_DrawRect(Rect, Color);
+void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning);
+void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY);

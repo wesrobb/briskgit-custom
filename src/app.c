@@ -4,9 +4,8 @@
 
 #include "render.h"
 
-bool App_Init()
+void App_Init()
 {
-    return Render_Init();
 }
 
 void App_Destroy()
@@ -45,13 +44,16 @@ void App_OnWindowResized(int32_t width, int32_t height)
     (void)height;
 }
 
-void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
+void App_Draw()
 {
+    int32_t frameWidth, frameHeight;
+    Render_GetDimensions(&frameWidth, &frameHeight);
+
     Rect rect = {
-        .x = 100,
-        .y = 100,
-        .w = 200,
-        .h = 200
+        .x = 0,
+        .y = 0,
+        .w = 400,
+        .h = frameHeight
     };
     Color clearColor = {
         .r = 0.1f,
@@ -60,13 +62,15 @@ void App_Draw(SDL_Surface *surface, float dpiX, float dpiY)
         .a = 1.0f
     };
     Color color = {
-        .r = 1.0f,
+        .r = 0.3f,
+        .g = 0.3f,
+        .b = 0.3f,
         .a = 1.0f
     };
 
-    Render_Clear(surface, clearColor); 
-    Render_DrawRect(surface, rect, color);  
-    Render_DrawFont(surface, 100, 100, dpiX, dpiY, false);
-    Render_DrawFont(surface, 100, 200, dpiX, dpiY, true);
-    Render_DrawFontHarfBuzz(surface, 100, 300, dpiX, dpiY);
+    Render_Clear(clearColor); 
+    Render_DrawRect(rect, color);  
+    Render_DrawFont(100, 100, false);
+    Render_DrawFont(100, 200, true);
+    Render_DrawFontHarfBuzz(100, 300);
 }

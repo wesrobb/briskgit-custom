@@ -6,8 +6,10 @@
 
 #include "SDL_error.h"
 #include "SDL_events.h"
+#include "SDL_render.h"
 #include "SDL_video.h"
 #include "app.h"
+#include "render.h"
 
 static bool g_done;
 
@@ -18,62 +20,72 @@ static int32_t g_frameTimesIndex = 0;
 #define TARGET_FPS 60
 static float g_expectedFrameTimeMs = 1000.0f / TARGET_FPS;
 
-typedef struct Dpi {
-    float x, y;
-} Dpi;
-
-static Dpi g_dpi;
-
-static int32_t GetDisplayDpiFromWindow(SDL_Window *window, Dpi *dpi)
+static int32_t GetDisplayDpiFromWindow(SDL_Window *window, float *dpiX, float *dpiY)
 {
     int32_t displayIndex = SDL_GetWindowDisplayIndex(window);
 
     float unused;
-    int32_t error = SDL_GetDisplayDPI(displayIndex, &unused, &dpi->x, &dpi->y);
+    int32_t error = SDL_GetDisplayDPI(displayIndex, &unused, dpiX, dpiY);
     if (error)
     {
         printf("Error on window move %s\n", SDL_GetError());
         return error;
     }
 
-    printf("Window moved on display %d\n", displayIndex);
-    printf("dpiX is %f\n", dpi->x);
-    printf("dpiY is %f\n", dpi->y);
-
     return 0;
 }
 
 // Returns the DPI of display on which the application window resides.
-static int32_t GetDisplayDpiFromWindowId(uint32_t windowId, Dpi *dpi)
+static int32_t GetDisplayDpiFromWindowId(uint32_t windowId, float *dpiX, float *dpiY)
 {
-    SDL_assert(dpi);
+    SDL_assert(dpiX);
+    SDL_assert(dpiY);
 
     SDL_Window *window = SDL_GetWindowFromID(windowId);
     if (window)
     {
-        return GetDisplayDpiFromWindow(window, dpi);
+        return GetDisplayDpiFromWindow(window, dpiX, dpiY);
     }
 
     return 1;
 }
 
-static void OnWindowEvent(SDL_WindowEvent *e)
+static void OnWindowEvent(SDL_WindowEvent *e, SDL_Renderer *renderer, SDL_Texture *texture)
 {
     switch (e->event)
     {
         case SDL_WINDOWEVENT_RESIZED:
             {
-                int32_t width = e->data1;
-                int32_t height = e->data2;
+                int32_t windowWidth = e->data1;
+                int32_t windowHeight = e->data2;
+                printf("Window resized to %d x %d\n", windowWidth, windowHeight);
 
-                printf("Window resized to %d x %d\n", width, height);
-                App_OnWindowResized(width, height);
+                int32_t width, height;
+                SDL_GetRendererOutputSize(renderer, &width, &height);
+                printf("Renderer output size is %d x %d\n", width, height);
+
+
+                float dpiX, dpiY;
+                GetDisplayDpiFromWindowId(e->windowID, &dpiX, &dpiY);
+                SDL_DestroyTexture(texture);
+                texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+                Render_Update(width, height, dpiX, dpiY);
             }
             break;
-
         case SDL_WINDOWEVENT_MOVED:
             {
-                GetDisplayDpiFromWindowId(e->windowID, &g_dpi);
+                int32_t width, height;
+                SDL_GetRendererOutputSize(renderer, &width, &height);
+                printf("Renderer output size is %d x %d\n", width, height);
+
+                float dpiX, dpiY;
+                GetDisplayDpiFromWindowId(e->windowID, &dpiX, &dpiY);
+                SDL_DestroyTexture(texture);
+                texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+                Render_Update(width, height, dpiX, dpiY);
+                printf("Window moved\n");
+                printf("dpiX is %f\n", dpiX);
+                printf("dpiY is %f\n", dpiY);
             }
             break;
     }
@@ -87,7 +99,7 @@ static void OnKeyReleased(SDL_Keysym *keysym)
     }
 }
 
-static void ProcessEvents()
+static void ProcessEvents(SDL_Renderer *renderer, SDL_Texture *texture)
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -103,7 +115,7 @@ static void ProcessEvents()
                 break;
 
             case SDL_WINDOWEVENT:
-                OnWindowEvent(&event.window);
+                OnWindowEvent(&event.window, renderer, texture);
                 break;
 
             case SDL_MOUSEMOTION:
@@ -153,37 +165,55 @@ static void LogFrameTime(float frameTimeMs)
 }
 
 
-static void Run(SDL_Window *window)
+static void Run(SDL_Window *window, SDL_Renderer *renderer)
 {
-    if (App_Init())
+    int w, h;
+    SDL_GetRendererOutputSize(renderer, &w, &h);
+    printf("Renderer output size is %d x %d\n", w, h);
+
+    float dpiX, dpiY;
+    GetDisplayDpiFromWindow(window, &dpiX, &dpiY);
+
+    if (Render_Init(w, h, dpiX, dpiY))
     {
-        while (!g_done)
+        SDL_Texture *texture = SDL_CreateTexture(renderer,
+                SDL_PIXELFORMAT_ARGB8888,
+                SDL_TEXTUREACCESS_STREAMING,
+                w, h);
+        if (texture)
         {
-            uint64_t frameStartTime = SDL_GetPerformanceCounter();
-            ProcessEvents();
-
-            SDL_Surface *surface = SDL_GetWindowSurface(window);
-            App_Draw(surface, g_dpi.x, g_dpi.y);
-            SDL_UpdateWindowSurface(window);
-
-            uint64_t currentTime = SDL_GetPerformanceCounter();
-            float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
-            LogFrameTime(frameTimeMs);
-
-            if (g_expectedFrameTimeMs > frameTimeMs)
+            while (!g_done)
             {
-                float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
-                SDL_Delay((uint32_t)sleepMs);
-            }
+                uint64_t frameStartTime = SDL_GetPerformanceCounter();
+                ProcessEvents(renderer, texture);
 
-            unsigned windowFlags = SDL_GetWindowFlags(window);
-            bool windowHasFocus = windowFlags & SDL_WINDOW_INPUT_FOCUS;
-            if (!windowHasFocus)
-            {
-                SDL_Delay(100);
+                App_Draw();
+
+                FrameBuffer *fb = Render_GetFrameBuffer();
+                int32_t pitchBytes = fb->width * (int32_t)sizeof(Pixel);
+                SDL_UpdateTexture(texture, NULL, fb->pixels, pitchBytes);
+                SDL_RenderCopy(renderer, texture, 0, 0);
+                SDL_RenderPresent(renderer);
+
+                uint64_t currentTime = SDL_GetPerformanceCounter();
+                float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
+                LogFrameTime(frameTimeMs);
+
+                if (g_expectedFrameTimeMs > frameTimeMs)
+                {
+                    float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
+                    SDL_Delay((uint32_t)sleepMs);
+                }
+
+                unsigned windowFlags = SDL_GetWindowFlags(window);
+                bool windowHasFocus = windowFlags & SDL_WINDOW_INPUT_FOCUS;
+                if (!windowHasFocus)
+                {
+                    SDL_Delay(100);
+                }
             }
+            SDL_DestroyTexture(texture);
         }
-
         App_Destroy();
     }
 }
@@ -191,6 +221,8 @@ static void Run(SDL_Window *window)
 int main()
 {
     printf("Hello briskgit!\n");
+
+    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     SDL_EnableScreenSaver();
@@ -205,12 +237,16 @@ int main()
         "briskgit",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         (int32_t)(dm.w * 0.8), (int32_t)(dm.h * 0.8),
-        SDL_WINDOW_RESIZABLE);
+        SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
     if (window)
     {
-        GetDisplayDpiFromWindow(window, &g_dpi);
-        Run(window);
+        SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (renderer)
+        {
+            Run(window, renderer);
+            SDL_DestroyRenderer(renderer);
+        }
         SDL_DestroyWindow(window);
     }
 

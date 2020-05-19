@@ -27,6 +27,8 @@ else()
     target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)
 endif()
 
+configure_file(Info.plist Info.plist COPYONLY)
+
 add_custom_target(
     copy-compile-commands ALL
     ${CMAKE_COMMAND} -E copy_if_different
