@@ -64,12 +64,11 @@ static void OnWindowEvent(SDL_WindowEvent *e, SDL_Renderer *renderer, SDL_Textur
                 SDL_GetRendererOutputSize(renderer, &width, &height);
                 printf("Renderer output size is %d x %d\n", width, height);
 
-
                 float dpiX, dpiY;
                 GetDisplayDpiFromWindowId(e->windowID, &dpiX, &dpiY);
                 SDL_DestroyTexture(texture);
                 texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-                Render_Update(width, height, dpiX, dpiY);
+                Render_Update(width, height, dpiX, dpiY, 2.0f, 2.0f);
             }
             break;
         case SDL_WINDOWEVENT_MOVED:
@@ -82,7 +81,7 @@ static void OnWindowEvent(SDL_WindowEvent *e, SDL_Renderer *renderer, SDL_Textur
                 GetDisplayDpiFromWindowId(e->windowID, &dpiX, &dpiY);
                 SDL_DestroyTexture(texture);
                 texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-                Render_Update(width, height, dpiX, dpiY);
+                Render_Update(width, height, dpiX, dpiY, 2.0f, 2.0f);
                 printf("Window moved\n");
                 printf("dpiX is %f\n", dpiX);
                 printf("dpiY is %f\n", dpiY);
@@ -167,19 +166,28 @@ static void LogFrameTime(float frameTimeMs)
 
 static void Run(SDL_Window *window, SDL_Renderer *renderer)
 {
-    int w, h;
-    SDL_GetRendererOutputSize(renderer, &w, &h);
-    printf("Renderer output size is %d x %d\n", w, h);
+    int32_t renderWidth, renderHeight;
+    SDL_GetRendererOutputSize(renderer, &renderWidth, &renderHeight);
+    printf("Renderer output size is %d x %d\n", renderWidth, renderHeight);
+
+    int32_t windowWidth, windowHeight;
+    SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+    printf("Window size is %d x %d\n", windowWidth, windowHeight);
+
+    float scaleFactorX = (float)renderWidth / (float)windowWidth;
+    float scaleFactorY = (float)renderHeight / (float)windowHeight;
+    printf("Width scaling %.2f\n", scaleFactorX);
+    printf("Height scaling %.2f\n", scaleFactorY);
 
     float dpiX, dpiY;
     GetDisplayDpiFromWindow(window, &dpiX, &dpiY);
 
-    if (Render_Init(w, h, dpiX, dpiY))
+    if (Render_Init(renderWidth, renderHeight, dpiX, dpiY, scaleFactorX, scaleFactorY))
     {
         SDL_Texture *texture = SDL_CreateTexture(renderer,
                 SDL_PIXELFORMAT_ARGB8888,
                 SDL_TEXTUREACCESS_STREAMING,
-                w, h);
+                renderWidth, renderHeight);
         if (texture)
         {
             while (!g_done)

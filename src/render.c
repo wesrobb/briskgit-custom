@@ -18,6 +18,7 @@ typedef struct RenderContext {
     FT_Face currentFontFace;
     FrameBuffer frameBuffer;
     float dpiX, dpiY;
+    float scaleFactorX, scaleFactorY;
 
     bool initialized;
 } RenderContext;
@@ -85,7 +86,7 @@ static Color LinearBlend(Color src, Color dest)
     return result;
 }
 
-static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, int32_t x, int32_t y)
+static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y)
 {
     Color fontColorLinear = {
         .g = 1.0f,
@@ -96,11 +97,11 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, int32_t x, int32_t y)
 
     FrameBuffer *fb = &g_renderContext.frameBuffer;
 
-    int32_t startX = max(0, x);
-    int32_t endX = min(fb->width, x + (int32_t)bitmap->width);
+    int32_t startX = max(0, (int32_t)(x + 0.5));
+    int32_t endX = min(fb->width, (int32_t)(x + bitmap->width + 0.5));
 
-    int32_t startY = max(0, y);
-    int32_t endY = min(fb->height, y + (int32_t)bitmap->rows);
+    int32_t startY = max(0, (int32_t)(y + 0.5));
+    int32_t endY = min(fb->height, (int32_t)(y + bitmap->rows + 0.5));
 
     Pixel *destPixels = (Pixel*)fb->pixels;
     destPixels += startX + startY * fb->width;  // Move to the first pixel that resides in the rect
@@ -132,7 +133,7 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, int32_t x, int32_t y)
     }
 }
 
-bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY)
+bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY)
 {
     g_renderContext.initialized = true;
 
@@ -163,7 +164,7 @@ bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY)
         printf("Font has kerning\n");
     }
 
-    Render_Update(width, height, dpiX, dpiY);
+    Render_Update(width, height, dpiX, dpiY, scaleFactorX, scaleFactorY);
 
     return true;
 }
@@ -174,7 +175,7 @@ void Render_Destroy()
     FT_Done_Library(g_renderContext.fontLibrary);
 }
 
-bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY)
+bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY)
 {
     if (g_renderContext.frameBuffer.pixels)
     {
@@ -193,6 +194,8 @@ bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY)
     g_renderContext.frameBuffer.height = height;
     g_renderContext.dpiX = dpiX;
     g_renderContext.dpiY = dpiY;
+    g_renderContext.scaleFactorX = scaleFactorX;
+    g_renderContext.scaleFactorY = scaleFactorY;
 
     return true;
 }
@@ -256,15 +259,16 @@ void Render_DrawRect(Rect rect, Color color)
 void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning)
 {
     SDL_assert(g_renderContext.initialized);
+    const char *text = "feature/rendering Hello AV.!";
 
     FT_Face face = g_renderContext.currentFontFace;
 
     int32_t error = FT_Set_Char_Size(
           face,    // handle to face object
           0,       // char_width in 1/64th of points
-          12*64,   // char_height in 1/64th of points
-          (uint32_t)g_renderContext.dpiX,    // horizontal dpi
-          (uint32_t)g_renderContext.dpiY);   // vertical dpi
+          14*64,   // char_height in 1/64th of points
+          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
+          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
     if (error)
     {
         puts("Failed to set face size");
@@ -275,7 +279,6 @@ void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning)
 
     useKerning = FT_HAS_KERNING(face) && useKerning;
 
-    const char* text = "Hello AV.";
     size_t num_chars = strlen(text);
     FT_UInt previous = 0;
 
@@ -311,9 +314,17 @@ void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning)
     }
 }
 
-void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY)
+void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning)
 {
-    const char *text = "master";
+    const hb_feature_t features[3] = {
+
+        { HB_TAG('k','e','r','n'), !!useKerning, 0, (uint32_t)(-1) },
+        { HB_TAG('l','i','g','a'), 1, 0, (uint32_t)(-1) },
+        { HB_TAG('c','l','i','g'), 1, 0, (uint32_t)(-1) }
+    };
+    const int num_features = 3;
+
+    const char *text = "feature/rendering Hello AV.!";
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, text, -1, 0, -1);
@@ -325,17 +336,18 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY)
     int32_t error = FT_Set_Char_Size(
           face,    // handle to face object
           0,       // char_width in 1/64th of points
-          12*64,   // char_height in 1/64th of points
-          (uint32_t)g_renderContext.dpiX,    // horizontal dpi
-          (uint32_t)g_renderContext.dpiY);   // vertical dpi
+          14*64,   // char_height in 1/64th of points
+          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
+          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
     if (error)
     {
         puts("Failed to set face size");
         return;
     }
     hb_font_t *font = hb_ft_font_create(face, NULL);
+    hb_ft_font_set_load_flags(font, FT_LOAD_NO_HINTING);
 
-    hb_shape(font, buf, NULL, 0);
+    hb_shape(font, buf, features, num_features);
     uint32_t glyphCount = 0;
     hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
     hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
@@ -350,7 +362,8 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY)
           double y_advance = glyph_pos[i].y_advance / 64.0;
           //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
           // load glyph image into the slot (erase previous one)
-          error = FT_Load_Glyph(face, glyphid, FT_LOAD_RENDER);
+          error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
+          error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
           if (error)
           {
               printf("Error loading font glyph %d\n - continuing", error);
@@ -359,8 +372,8 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY)
 
           // now, draw to our target surface
           DrawFreeTypeBitmap(&face->glyph->bitmap,
-                  (int32_t)(cursor_x + x_offset),
-                  (int32_t)(cursor_y + y_offset - face->glyph->bitmap_top));
+                  cursor_x + x_offset + face->glyph->bitmap_left,
+                  cursor_y + y_offset - face->glyph->bitmap_top);
           cursor_x += x_advance;
           cursor_y += y_advance;
     }

@@ -23,9 +23,9 @@ typedef struct FrameBuffer
     int32_t width, height;
 } FrameBuffer;
 
-bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY);
+bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY);
 void Render_Destroy();
-bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY);
+bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY);
 
 void Render_GetDimensions(int32_t *width, int32_t *height);
 FrameBuffer *Render_GetFrameBuffer();
@@ -33,4 +33,4 @@ FrameBuffer *Render_GetFrameBuffer();
 void Render_Clear(Color);
 void Render_DrawRect(Rect, Color);
 void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning);
-void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY);
+void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning);

@@ -72,5 +72,6 @@ void App_Draw()
     Render_DrawRect(rect, color);  
     Render_DrawFont(100, 100, false);
     Render_DrawFont(100, 200, true);
-    Render_DrawFontHarfBuzz(100, 300);
+    Render_DrawFontHarfBuzz(100, 300, false);
+    Render_DrawFontHarfBuzz(100, 400, true);
 }
