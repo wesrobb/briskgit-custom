@@ -128,6 +128,14 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y, Color c)
     }
 }
 
+static void ScaleRect(Rect *r)
+{
+    r->x = (int32_t)(r->x * g_renderContext.scaleFactorX);
+    r->w = (int32_t)(r->w * g_renderContext.scaleFactorX);
+    r->y = (int32_t)(r->y * g_renderContext.scaleFactorY);
+    r->h = (int32_t)(r->h * g_renderContext.scaleFactorY);
+}
+
 bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY)
 {
     g_renderContext.initialized = true;
@@ -195,11 +203,13 @@ bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float 
     return true;
 }
 
-void Render_GetDimensions(int32_t *width, int32_t *height)
+void Render_GetDimensions(int32_t *width, int32_t *height, float *scaleFactorX, float *scaleFactorY)
 {
     SDL_assert(g_renderContext.initialized);
     *width = g_renderContext.frameBuffer.width;
     *height = g_renderContext.frameBuffer.height;
+    *scaleFactorX = g_renderContext.scaleFactorX;
+    *scaleFactorY = g_renderContext.scaleFactorY;
 }
 
 FrameBuffer *Render_GetFrameBuffer()
@@ -223,8 +233,10 @@ void Render_Clear(Color color)
     }
 }
 
-void Render_DrawRect(Rect rect, Color color)
+void Render_DrawRect(Rect rect, Color color) // TODO: These should be passed by pointer
 {
+    ScaleRect(&rect);
+
     SDL_assert(g_renderContext.initialized);
 
     int32_t startX = max(0, rect.x);
@@ -253,6 +265,8 @@ void Render_DrawRect(Rect rect, Color color)
 
 void Render_DrawFont(const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
+    posX = (int32_t)(posX * g_renderContext.scaleFactorX);
+    posY = (int32_t)(posY * g_renderContext.scaleFactorY);
     const hb_feature_t features[3] = {
 
         { HB_TAG('k','e','r','n'), 1, 0, (uint32_t)(-1) },

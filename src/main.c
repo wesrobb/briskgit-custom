@@ -120,6 +120,14 @@ static void ProcessEvents(SDL_Renderer *renderer, SDL_Texture *texture)
             case SDL_MOUSEMOTION:
                 App_OnMouseMoved(&event.motion);
                 break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                App_OnMousePressed(&event.button);
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                App_OnMouseReleased(&event.button);
+                break;
         }
     }
 }
@@ -184,6 +192,8 @@ static void Run(SDL_Window *window, SDL_Renderer *renderer)
 
     if (Render_Init(renderWidth, renderHeight, dpiX, dpiY, scaleFactorX, scaleFactorY))
     {
+        App_Init();
+
         SDL_Texture *texture = SDL_CreateTexture(renderer,
                 SDL_PIXELFORMAT_ARGB8888,
                 SDL_TEXTUREACCESS_STREAMING,
@@ -249,7 +259,7 @@ int main()
 
     if (window)
     {
-        SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         if (renderer)
         {
             Run(window, renderer);
