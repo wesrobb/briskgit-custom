@@ -86,13 +86,8 @@ static Color LinearBlend(Color src, Color dest)
     return result;
 }
 
-static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y)
+static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y, Color c)
 {
-    Color fontColorLinear = {
-        .g = 1.0f,
-        .b = 1.0f
-    }; // Assumes linear color space not sRGB
-
     SDL_assert(bitmap);
 
     FrameBuffer *fb = &g_renderContext.frameBuffer;
@@ -114,9 +109,9 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y)
             float fontAlphaLinear = bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
             // Pre-multiply font alpha in linear space.
             Color fontColorLinearPremultiplied = {
-                .r = fontColorLinear.r * fontAlphaLinear,
-                .g = fontColorLinear.g * fontAlphaLinear,
-                .b = fontColorLinear.b * fontAlphaLinear,
+                .r = c.r * fontAlphaLinear,
+                .g = c.g * fontAlphaLinear,
+                .b = c.b * fontAlphaLinear,
                 .a = fontAlphaLinear
             };
 
@@ -256,75 +251,16 @@ void Render_DrawRect(Rect rect, Color color)
     }
 }
 
-void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning)
-{
-    SDL_assert(g_renderContext.initialized);
-    const char *text = "feature/rendering Hello AV.!";
-
-    FT_Face face = g_renderContext.currentFontFace;
-
-    int32_t error = FT_Set_Char_Size(
-          face,    // handle to face object
-          0,       // char_width in 1/64th of points
-          14*64,   // char_height in 1/64th of points
-          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
-          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
-    if (error)
-    {
-        puts("Failed to set face size");
-        return;
-    }
-
-    FT_GlyphSlot  slot = face->glyph;  // a small shortcut
-
-    useKerning = FT_HAS_KERNING(face) && useKerning;
-
-    size_t num_chars = strlen(text);
-    FT_UInt previous = 0;
-
-    for (size_t n = 0; n < num_chars; n++)
-    {
-        // convert character code to glyph index
-        FT_UInt glyphIndex = FT_Get_Char_Index(face, (FT_ULong)text[n]);
-
-        // retrieve kerning distance and move pen position
-        if (useKerning && previous && glyphIndex)
-        {
-            FT_Vector delta;
-            FT_Get_Kerning(face, previous, glyphIndex, FT_KERNING_DEFAULT, &delta);
-            posX += delta.x >> 6;
-        }
-
-        // load glyph image into the slot (erase previous one)
-        error = FT_Load_Glyph(face, glyphIndex, FT_LOAD_RENDER);
-        if (error)
-        {
-            printf("Error loading font glyph %d\n - continuing", error);
-            continue;  // ignore errors
-        }
-
-        // now, draw to our target surface
-        DrawFreeTypeBitmap(&slot->bitmap,
-                           posX + slot->bitmap_left,
-                           posY - slot->bitmap_top);
-
-        // increment pen position
-        posX += slot->advance.x >> 6;
-        previous = glyphIndex;
-    }
-}
-
-void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning)
+void Render_DrawFont(const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
     const hb_feature_t features[3] = {
 
-        { HB_TAG('k','e','r','n'), !!useKerning, 0, (uint32_t)(-1) },
+        { HB_TAG('k','e','r','n'), 1, 0, (uint32_t)(-1) },
         { HB_TAG('l','i','g','a'), 1, 0, (uint32_t)(-1) },
         { HB_TAG('c','l','i','g'), 1, 0, (uint32_t)(-1) }
     };
     const int num_features = 3;
 
-    const char *text = "feature/rendering Hello AV.!";
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, text, -1, 0, -1);
@@ -336,7 +272,7 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning)
     int32_t error = FT_Set_Char_Size(
           face,    // handle to face object
           0,       // char_width in 1/64th of points
-          14*64,   // char_height in 1/64th of points
+          ptSize*64,   // char_height in 1/64th of points
           (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
           (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
     if (error)
@@ -344,7 +280,7 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning)
         puts("Failed to set face size");
         return;
     }
-    hb_font_t *font = hb_ft_font_create(face, NULL);
+    hb_font_t *font = hb_ft_font_create_referenced(face);
     hb_ft_font_set_load_flags(font, FT_LOAD_NO_HINTING);
 
     hb_shape(font, buf, features, num_features);
@@ -363,18 +299,24 @@ void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning)
           //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
           // load glyph image into the slot (erase previous one)
           error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
-          error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
           if (error)
           {
               printf("Error loading font glyph %d\n - continuing", error);
+              continue;  // ignore errors
+          }
+          error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
+          if (error)
+          {
+              printf("Error rendering font glyph %d\n - continuing", error);
               continue;  // ignore errors
           }
 
           // now, draw to our target surface
           DrawFreeTypeBitmap(&face->glyph->bitmap,
                   cursor_x + x_offset + face->glyph->bitmap_left,
-                  cursor_y + y_offset - face->glyph->bitmap_top);
+                  cursor_y + y_offset - face->glyph->bitmap_top, c);
           cursor_x += x_advance;
           cursor_y += y_advance;
     }
+    hb_buffer_destroy(buf);
 }

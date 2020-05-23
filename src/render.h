@@ -32,5 +32,4 @@ FrameBuffer *Render_GetFrameBuffer();
 
 void Render_Clear(Color);
 void Render_DrawRect(Rect, Color);
-void Render_DrawFont(int32_t posX, int32_t posY, bool useKerning);
-void Render_DrawFontHarfBuzz(int32_t posX, int32_t posY, bool useKerning);
+void Render_DrawFont(const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c);

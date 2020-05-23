@@ -68,10 +68,16 @@ void App_Draw()
         .a = 1.0f
     };
 
+    Color white = {
+        .r = 1.0f,
+        .g = 1.0f,
+        .b = 1.0f,
+        .a = 1.0f,
+    };
+
     Render_Clear(clearColor); 
     Render_DrawRect(rect, color);  
-    Render_DrawFont(100, 100, false);
-    Render_DrawFont(100, 200, true);
-    Render_DrawFontHarfBuzz(100, 300, false);
-    Render_DrawFontHarfBuzz(100, 400, true);
+    Render_DrawFont("master", 10, 20, 14, white);
+    Render_DrawFont("develop", 10, 50, 14, white);
+    Render_DrawFont("feature/AV", 10, 80, 14, white);
 }
