@@ -148,9 +148,9 @@ bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float sc
     }
 
     error = FT_New_Face(g_renderContext.fontLibrary,
-                     "data/Roboto-Regular.ttf",
-                     0,
-                     &g_renderContext.currentFontFace);
+            "data/MenloPowerline.ttf",
+            0,
+            &g_renderContext.currentFontFace);
     if (error == FT_Err_Unknown_File_Format)
     {
         puts("Unknown font format");

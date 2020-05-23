@@ -11,6 +11,7 @@ typedef struct AppContext
     int32_t branchDrawerResizeRange;
     Rect branchDrawerRect;
     bool branchDrawerResizing;
+    int32_t branchDrawerMinSize;
 
     SDL_Cursor *defaultCursor;
     SDL_Cursor *horizontalResizeCursor;
@@ -35,6 +36,7 @@ void App_Init()
     g_appContext.branchDrawerResizeRange = (int32_t)(5 * scaleFactorX);
     g_appContext.branchDrawerRect.w = 400;
     g_appContext.branchDrawerRect.h = frameHeight;
+    g_appContext.branchDrawerMinSize = 200;
 
     g_appContext.defaultCursor = SDL_GetCursor(); // Store this switching back and forth between other cursors.
     g_appContext.horizontalResizeCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
@@ -60,7 +62,7 @@ void App_OnMouseMoved(SDL_MouseMotionEvent *e)
 {
     if (g_appContext.branchDrawerResizing)
     {
-        g_appContext.branchDrawerRect.w = e->x;
+        g_appContext.branchDrawerRect.w = max(e->x, g_appContext.branchDrawerMinSize);
     }
 
     Rect resizeHandle = {
