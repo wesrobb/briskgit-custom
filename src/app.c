@@ -150,7 +150,21 @@ void App_Draw()
     Render_Clear(clearColor);
     Render_DrawRect(g_appContext.branchDrawerRect, color);
     Render_DrawHollowRect(testRect, white, 4);
-    Render_DrawFont(FONT_ROBOTO_REGULAR, "master", 10, 20, 14, white);
-    Render_DrawFont(FONT_ROBOTO_REGULAR, "develop", 10, 50, 14, white);
-    Render_DrawFont(FONT_ROBOTO_REGULAR, "feature/AV", 10, 80, 14, white);
+
+    int32_t fontSizePt = 18;
+    int32_t ascent, descent;
+    Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
+
+    const char* textLines[] = {
+        "master",
+        "develop",
+        "feature/AV",
+        "pppppppppp",
+        "ffffffffff"
+    };
+
+    for (int32_t i = 0; (unsigned long)i < sizeof(textLines) / sizeof(textLines[0]); i++)
+    {
+        Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], 10, 20 + (i * (ascent - descent)), fontSizePt, white);
+    }
 }

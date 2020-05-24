@@ -508,10 +508,31 @@ int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
     return 0;
 }
 
-int32_t Render_GetTextHeight(Font font, const char* text, int32_t ptSize)
+void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *descent)
 {
-    (void)font;
-    (void)text;
-    (void)ptSize;
-    return 0;
+    FT_Face face = g_fontCache.faceCache[font];
+
+    int32_t error = FT_Set_Char_Size(
+          face,    // handle to face object
+          0,       // char_width in 1/64th of points
+          ptSize*64,   // char_height in 1/64th of points
+          (uint32_t)(72.0f),    // horizontal dpi
+          (uint32_t)(72.0f));   // vertical dpi
+    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
+
+    if (error)
+    {
+        puts("Failed to set face size");
+        return;
+    }
+    hb_font_t *hbFont = hb_ft_font_create_referenced(face);
+    hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+
+    hb_font_extents_t extents;
+    hb_font_get_h_extents(hbFont, &extents);
+
+    *ascent = extents.ascender / 64;
+    *descent = extents.descender / 64;
+
+    hb_font_destroy(hbFont);
 }
