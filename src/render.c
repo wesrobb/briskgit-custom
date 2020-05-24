@@ -152,7 +152,7 @@ static Color LinearBlend(Color src, Color dest)
     return result;
 }
 
-static void DrawHollowRect(Rect rect, Color color, int32_t borderThickness)
+static void DrawHollowRectUnscaled(Rect rect, Color color, int32_t borderThickness)
 {
     int32_t startX = max(0, rect.x);
     int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);
@@ -197,14 +197,6 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y, Color c)
     Pixel *destPixels = (Pixel*)fb->pixels;
     destPixels += startX + startY * fb->width;  // Move to the first pixel that resides in the rect
     int32_t nextRow = fb->width - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
-
-    Rect r = {
-        .x = startX,
-        .y = startY,
-        .w = endX - startX,
-        .h = endY - startY
-    };
-    DrawHollowRect(r, c, 1);
 
     for (int32_t y = startY, v = 0; y < endY; y++, v++)
     {
@@ -411,11 +403,12 @@ void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness) // T
     SDL_assert(g_renderContext.initialized);
 
     ScaleRect(&rect);
-    DrawHollowRect(rect, color, borderThickness);
+    DrawHollowRectUnscaled(rect, color, borderThickness);
 }
 
 void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
+    (void)ptSize;
     posX = (int32_t)(posX * g_renderContext.scaleFactorX);
     posY = (int32_t)(posY * g_renderContext.scaleFactorY);
 
@@ -433,6 +426,7 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
           ptSize*64,   // char_height in 1/64th of points
           (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
           (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
+    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
 
     if (error)
     {
@@ -442,42 +436,66 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
     hb_font_t *hbFont = hb_ft_font_create_referenced(face);
     hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
 
+    hb_font_extents_t extents;
+    hb_font_get_h_extents(hbFont, &extents);
+
     hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
     hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
     hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
+    Rect boundingBox = {
+        .x = posX,
+        .y = posY - ((extents.ascender - extents.descender) / 64),
+        .w = 100,
+        .h = ((extents.ascender - extents.descender) / 64)
+    };
+
+    DrawHollowRectUnscaled(boundingBox, c, 2);
+
     double cursor_x = posX;
     double cursor_y = posY;
 
     for (uint32_t i = 0; i < glyphCount; ++i) {
-          hb_codepoint_t glyphid = glyph_info[i].codepoint;
-          double x_offset = glyph_pos[i].x_offset / 64.0;
-          double y_offset = glyph_pos[i].y_offset / 64.0;
-          double x_advance = glyph_pos[i].x_advance / 64.0;
-          double y_advance = glyph_pos[i].y_advance / 64.0;
-          //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
-          // load glyph image into the slot (erase previous one)
-          error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
-          if (error)
-          {
-              printf("Error loading font glyph %d\n - continuing", error);
-              continue;  // ignore errors
-          }
-          error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-          if (error)
-          {
-              printf("Error rendering font glyph %d\n - continuing", error);
-              continue;  // ignore errors
-          }
+        hb_codepoint_t glyphid = glyph_info[i].codepoint;
+        double x_offset = glyph_pos[i].x_offset / 64.0;
+        double y_offset = glyph_pos[i].y_offset / 64.0;
+        double x_advance = glyph_pos[i].x_advance / 64.0;
+        double y_advance = glyph_pos[i].y_advance / 64.0;
+        //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
+        // load glyph image into the slot (erase previous one)
+        error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
+        if (error)
+        {
+            printf("Error loading font glyph %d\n - continuing", error);
+            continue;  // ignore errors
+        }
+        error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
+        if (error)
+        {
+            printf("Error rendering font glyph %d\n - continuing", error);
+            continue;  // ignore errors
+        }
 
-          // now, draw to our target surface
-          double x = cursor_x + x_offset + face->glyph->bitmap_left;
-          double y = cursor_y + y_offset - face->glyph->bitmap_top;
-          DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, c);
-          cursor_x += x_advance;
-          cursor_y += y_advance;
+        // now, draw to our target surface
+        double x = cursor_x + x_offset + face->glyph->bitmap_left;
+        double y = cursor_y + y_offset - face->glyph->bitmap_top;
+        DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, c);
+        cursor_x += x_advance;
+        cursor_y += y_advance;
+
+        int32_t startX = max(0, (int32_t)(x + 0.5));
+        int32_t endX = min(g_renderContext.frameBuffer.width, (int32_t)(x + face->glyph->bitmap.width + 0.5));
+
+        int32_t startY = max(0, (int32_t)(y + 0.5));
+        int32_t endY = min(g_renderContext.frameBuffer.height, (int32_t)(y + face->glyph->bitmap.rows + 0.5));
+
+        boundingBox.x = min(boundingBox.x, startX);
+        boundingBox.y = min(boundingBox.y, startY);
+        boundingBox.w = max(boundingBox.w, endX - boundingBox.x);
+        boundingBox.h = max(boundingBox.h, endY - boundingBox.y);
     }
+    //DrawHollowRectUnscaled(boundingBox, c, 4);
 
     hb_buffer_destroy(buf);
 }
