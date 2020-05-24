@@ -23,9 +23,9 @@ typedef struct FrameBuffer
     int32_t width, height;
 } FrameBuffer;
 
-bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY);
+bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY);
 void Render_Destroy();
-bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY);
+bool Render_Update(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY);
 
 void Render_GetDimensions(int32_t *width, int32_t *height, float *scaleFactorX, float *scaleFactorY);
 FrameBuffer *Render_GetFrameBuffer();

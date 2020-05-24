@@ -17,7 +17,6 @@ typedef struct RenderContext {
     FT_Library fontLibrary;
     FT_Face currentFontFace;
     FrameBuffer frameBuffer;
-    float dpiX, dpiY;
     float scaleFactorX, scaleFactorY;
 
     bool initialized;
@@ -136,7 +135,7 @@ static void ScaleRect(Rect *r)
     r->h = (int32_t)(r->h * g_renderContext.scaleFactorY);
 }
 
-bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY)
+bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY)
 {
     g_renderContext.initialized = true;
 
@@ -167,19 +166,29 @@ bool Render_Init(int32_t width, int32_t height, float dpiX, float dpiY, float sc
         printf("Font has kerning\n");
     }
 
-    Render_Update(width, height, dpiX, dpiY, scaleFactorX, scaleFactorY);
+    Render_Update(width, height, scaleFactorX, scaleFactorY);
 
     return true;
 }
 
 void Render_Destroy()
 {
+    SDL_assert(g_renderContext.initialized);
+
+    if (g_renderContext.frameBuffer.pixels)
+    {
+        free(g_renderContext.frameBuffer.pixels);
+        g_renderContext.frameBuffer.pixels = NULL;
+    }
+
     FT_Done_Face(g_renderContext.currentFontFace);
     FT_Done_Library(g_renderContext.fontLibrary);
 }
 
-bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float scaleFactorX, float scaleFactorY)
+bool Render_Update(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY)
 {
+    SDL_assert(g_renderContext.initialized);
+
     if (g_renderContext.frameBuffer.pixels)
     {
         free(g_renderContext.frameBuffer.pixels);
@@ -195,8 +204,6 @@ bool Render_Update(int32_t width, int32_t height, float dpiX, float dpiY, float 
 
     g_renderContext.frameBuffer.width = width;
     g_renderContext.frameBuffer.height = height;
-    g_renderContext.dpiX = dpiX;
-    g_renderContext.dpiY = dpiY;
     g_renderContext.scaleFactorX = scaleFactorX;
     g_renderContext.scaleFactorY = scaleFactorY;
 
@@ -235,9 +242,9 @@ void Render_Clear(Color color)
 
 void Render_DrawRect(Rect rect, Color color) // TODO: These should be passed by pointer
 {
-    ScaleRect(&rect);
-
     SDL_assert(g_renderContext.initialized);
+
+    ScaleRect(&rect);
 
     int32_t startX = max(0, rect.x);
     int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);

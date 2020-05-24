@@ -45,7 +45,6 @@ void App_Init()
 void App_Destroy()
 {
     SDL_FreeCursor(g_appContext.horizontalResizeCursor);
-    Render_Destroy();
 }
 
 void App_OnKeyPressed(SDL_Keysym *e)
