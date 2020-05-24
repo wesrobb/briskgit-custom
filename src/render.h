@@ -23,13 +23,25 @@ typedef struct FrameBuffer
     int32_t width, height;
 } FrameBuffer;
 
+typedef enum Font
+{
+    FONT_ROBOTO_REGULAR,
+    FONT_MENLO_REGULAR,
+    FONT_COUNT
+} Font;
+
 bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY);
 void Render_Destroy();
 bool Render_Update(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY);
 
 void Render_GetDimensions(int32_t *width, int32_t *height, float *scaleFactorX, float *scaleFactorY);
-FrameBuffer *Render_GetFrameBuffer();
+
+void Render_BeginFrame();
+FrameBuffer *Render_EndFrame();
 
 void Render_Clear(Color);
 void Render_DrawRect(Rect, Color);
-void Render_DrawFont(const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c);
+void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness);
+void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color color);
+int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize);
+int32_t Render_GetTextHeight(Font font, const char* text, int32_t ptSize);

@@ -4,11 +4,6 @@
 
 #include <SDL.h>
 
-#include "SDL_assert.h"
-#include "SDL_error.h"
-#include "SDL_events.h"
-#include "SDL_render.h"
-#include "SDL_video.h"
 #include "app.h"
 #include "render.h"
 
@@ -114,9 +109,11 @@ static int WindowEventWatcher(void* data, SDL_Event* event) {
             Render_Update(
                     renderContext->renderWidth, renderContext->renderHeight,
                     renderContext->scaleFactorX, renderContext->scaleFactorY);
-            App_Draw();
 
-            FrameBuffer *fb = Render_GetFrameBuffer();
+            Render_BeginFrame();
+            App_Draw();
+            FrameBuffer *fb = Render_EndFrame();
+
             int32_t pitchBytes = fb->width * (int32_t)sizeof(Pixel);
             SDL_UpdateTexture(renderContext->texture, NULL, fb->pixels, pitchBytes);
             SDL_RenderCopy(renderContext->renderer, renderContext->texture, 0, 0);
@@ -212,18 +209,24 @@ static void Run(SDL_Window *window, RenderContext *renderContext)
         while (!g_done)
         {
             uint64_t frameStartTime = SDL_GetPerformanceCounter();
-            ProcessEvents();
-            App_Draw();
 
-            FrameBuffer *fb = Render_GetFrameBuffer();
+            ProcessEvents();
+
+            Render_BeginFrame();
+            App_Draw();
+            FrameBuffer *fb = Render_EndFrame();
+
             int32_t pitchBytes = fb->width * (int32_t)sizeof(Pixel);
             SDL_UpdateTexture(renderContext->texture, NULL, fb->pixels, pitchBytes);
             SDL_RenderCopy(renderContext->renderer, renderContext->texture, 0, 0);
-            SDL_RenderPresent(renderContext->renderer);
 
             uint64_t currentTime = SDL_GetPerformanceCounter();
             float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
             LogFrameTime(frameTimeMs);
+
+            // Don't time this since we wait for v-sync which means it blocks
+            // till the next display refresh.
+            SDL_RenderPresent(renderContext->renderer);
 
             if (g_expectedFrameTimeMs > frameTimeMs)
             {

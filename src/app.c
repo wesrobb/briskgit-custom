@@ -140,9 +140,17 @@ void App_Draw()
         .a = 1.0f,
     };
 
+    Rect testRect = {
+        .x = 500,
+        .y = 500,
+        .w = 100,
+        .h = 100
+    };
+
     Render_Clear(clearColor);
     Render_DrawRect(g_appContext.branchDrawerRect, color);
-    Render_DrawFont("master", 10, 20, 14, white);
-    Render_DrawFont("develop", 10, 50, 14, white);
-    Render_DrawFont("feature/AV", 10, 80, 14, white);
+    Render_DrawHollowRect(testRect, white, 4);
+    Render_DrawFont(FONT_ROBOTO_REGULAR, "master", 10, 20, 14, white);
+    Render_DrawFont(FONT_ROBOTO_REGULAR, "develop", 10, 50, 14, white);
+    Render_DrawFont(FONT_ROBOTO_REGULAR, "feature/AV", 10, 80, 14, white);
 }

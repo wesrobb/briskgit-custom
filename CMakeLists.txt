@@ -7,8 +7,7 @@ add_executable(briskgit
     src/app.h 
     src/app.c
     src/render.h 
-    src/render.c
-    )
+    src/render.c)
 
 target_include_directories(briskgit PRIVATE 
     ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/include
@@ -33,7 +32,6 @@ add_custom_target(
     copy-compile-commands ALL
     ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_BINARY_DIR}/compile_commands.json
-        ${CMAKE_CURRENT_LIST_DIR}
-    )
+        ${CMAKE_CURRENT_LIST_DIR})
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
