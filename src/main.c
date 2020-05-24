@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 
+#include "SDL_assert.h"
 #include "SDL_error.h"
 #include "SDL_events.h"
 #include "SDL_render.h"
@@ -38,6 +39,7 @@ static void CreateRenderContext(RenderContext *renderContext, SDL_Window *window
     SDL_assert(window);
 
     puts("Creating render context");
+    renderContext->window = window;
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer)
@@ -98,30 +100,30 @@ static void DestroyRenderContext(RenderContext *renderContext)
     renderContext->scaleFactorY = 0.0f;
 }
 
-static void OnWindowEvent(SDL_WindowEvent *e, RenderContext *renderContext)
-{
-    SDL_assert(e);
-    SDL_assert(renderContext);
+// This enables support for redrawing the window resizes.
+static int WindowEventWatcher(void* data, SDL_Event* event) {
+    RenderContext *renderContext = (RenderContext*)data;
 
-    switch (e->event)
+    if (event->type == SDL_WINDOWEVENT)
     {
-        case SDL_WINDOWEVENT_RESIZED:
-        case SDL_WINDOWEVENT_MOVED:
-            {
-                SDL_Window *window = SDL_GetWindowFromID(e->windowID);
-                if (window)
-                {
-                    DestroyRenderContext(renderContext);
-                    CreateRenderContext(renderContext, window);
-                    Render_Update(
-                            renderContext->renderWidth, renderContext->renderHeight,
-                            renderContext->scaleFactorX, renderContext->scaleFactorY);
-                    SDL_RenderCopy(renderContext->renderer, renderContext->texture, 0, 0);
-                    SDL_RenderPresent(renderContext->renderer);
-                }
-            }
-            break;
+        if (event->window.event == SDL_WINDOWEVENT_RESIZED ||
+            event->window.event == SDL_WINDOWEVENT_MOVED) 
+        {
+            DestroyRenderContext(renderContext);
+            CreateRenderContext(renderContext, renderContext->window);
+            Render_Update(
+                    renderContext->renderWidth, renderContext->renderHeight,
+                    renderContext->scaleFactorX, renderContext->scaleFactorY);
+            App_Draw();
+
+            FrameBuffer *fb = Render_GetFrameBuffer();
+            int32_t pitchBytes = fb->width * (int32_t)sizeof(Pixel);
+            SDL_UpdateTexture(renderContext->texture, NULL, fb->pixels, pitchBytes);
+            SDL_RenderCopy(renderContext->renderer, renderContext->texture, 0, 0);
+            SDL_RenderPresent(renderContext->renderer);
+        }
     }
+    return 0;
 }
 
 static void OnKeyReleased(SDL_Keysym *keysym)
@@ -132,7 +134,7 @@ static void OnKeyReleased(SDL_Keysym *keysym)
     }
 }
 
-static void ProcessEvents(RenderContext *renderContext)
+static void ProcessEvents()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -145,10 +147,6 @@ static void ProcessEvents(RenderContext *renderContext)
 
             case SDL_KEYUP:
                 OnKeyReleased(&event.key.keysym);
-                break;
-
-            case SDL_WINDOWEVENT:
-                OnWindowEvent(&event.window, renderContext);
                 break;
 
             case SDL_MOUSEMOTION:
@@ -214,8 +212,7 @@ static void Run(SDL_Window *window, RenderContext *renderContext)
         while (!g_done)
         {
             uint64_t frameStartTime = SDL_GetPerformanceCounter();
-            ProcessEvents(renderContext);
-
+            ProcessEvents();
             App_Draw();
 
             FrameBuffer *fb = Render_GetFrameBuffer();
@@ -246,9 +243,26 @@ static void Run(SDL_Window *window, RenderContext *renderContext)
     }
 }
 
+SDL_AssertState AssertionHandler(const SDL_AssertData* data,
+                                 void*                 userdata)
+{
+    (void)userdata;
+
+    printf("SDL assertion triggered\n");
+    printf("\tfilename: %s\n", data->filename);
+    printf("\tlinenum: %d\n", data->linenum);
+    printf("\tfunction: %s\n", data->function);
+    printf("\tcondition: %s\n", data->condition);
+    printf("SDL assertion triggered\n");
+
+    return SDL_ASSERTION_ABORT;
+}
+
 int main()
 {
     printf("Hello briskgit!\n");
+
+    SDL_SetAssertionHandler(AssertionHandler, 0);
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     SDL_EnableScreenSaver();
@@ -269,6 +283,12 @@ int main()
     {
         RenderContext renderContext;
         CreateRenderContext(&renderContext, window);
+
+        // Watch for window events outside the main loop
+        // to allow continuous drawing as the window is
+        // resized.
+        SDL_AddEventWatch(WindowEventWatcher, &renderContext);
+
         Run(window, &renderContext);
         DestroyRenderContext(&renderContext);
         SDL_DestroyWindow(window);
