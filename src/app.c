@@ -165,6 +165,17 @@ void App_Draw()
 
     for (int32_t i = 0; (unsigned long)i < sizeof(textLines) / sizeof(textLines[0]); i++)
     {
-        Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], 10, 20 + (i * (ascent - descent)), fontSizePt, white);
+        int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR, textLines[i], fontSizePt);
+        int32_t x = 10;
+        int32_t y = 20 + (i * (ascent - descent));
+        Rect r = {
+            .x = x,
+            .y = y - ascent,
+            .w = width,
+            .h = ascent - descent
+        };
+
+        Render_DrawHollowRect(r, white, 2);
+        Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], x, y, fontSizePt, white);
     }
 }

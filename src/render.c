@@ -408,7 +408,6 @@ void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness) // T
 
 void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
-    (void)ptSize;
     posX = (int32_t)(posX * g_renderContext.scaleFactorX);
     posY = (int32_t)(posY * g_renderContext.scaleFactorY);
 
@@ -444,15 +443,6 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
     hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
     hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
-    Rect boundingBox = {
-        .x = posX,
-        .y = posY - ((extents.ascender - extents.descender) / 64),
-        .w = 100,
-        .h = ((extents.ascender - extents.descender) / 64)
-    };
-
-    DrawHollowRectUnscaled(boundingBox, c, 2);
-
     double cursor_x = posX;
     double cursor_y = posY;
 
@@ -483,29 +473,53 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
         DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, c);
         cursor_x += x_advance;
         cursor_y += y_advance;
-
-        int32_t startX = max(0, (int32_t)(x + 0.5));
-        int32_t endX = min(g_renderContext.frameBuffer.width, (int32_t)(x + face->glyph->bitmap.width + 0.5));
-
-        int32_t startY = max(0, (int32_t)(y + 0.5));
-        int32_t endY = min(g_renderContext.frameBuffer.height, (int32_t)(y + face->glyph->bitmap.rows + 0.5));
-
-        boundingBox.x = min(boundingBox.x, startX);
-        boundingBox.y = min(boundingBox.y, startY);
-        boundingBox.w = max(boundingBox.w, endX - boundingBox.x);
-        boundingBox.h = max(boundingBox.h, endY - boundingBox.y);
     }
-    //DrawHollowRectUnscaled(boundingBox, c, 4);
 
     hb_buffer_destroy(buf);
 }
 
 int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
 {
-    (void)font;
-    (void)text;
-    (void)ptSize;
-    return 0;
+    hb_buffer_t *buf;
+    buf = hb_buffer_create();
+    hb_buffer_add_utf8(buf, text, -1, 0, -1);
+
+    hb_buffer_guess_segment_properties(buf);
+
+    FT_Face face = g_fontCache.faceCache[font];
+
+    int32_t error = FT_Set_Char_Size(
+          face,    // handle to face object
+          0,       // char_width in 1/64th of points
+          ptSize*64,   // char_height in 1/64th of points
+          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
+          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
+    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
+
+    if (error)
+    {
+        puts("Failed to set face size");
+        return 0;
+    }
+    hb_font_t *hbFont = hb_ft_font_create_referenced(face);
+    hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+
+    hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
+    uint32_t glyphCount = 0;
+    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
+
+    double cursorX = 0;
+
+    // TODO: Make a reusable buffer here.
+    for (uint32_t i = 0; i < glyphCount; ++i) {
+        double xAdvance = glyph_pos[i].x_advance / 64.0;
+
+        cursorX += xAdvance;
+    }
+
+    hb_buffer_destroy(buf);
+
+    return (int32_t)(cursorX / g_renderContext.scaleFactorX);
 }
 
 void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *descent)
