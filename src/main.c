@@ -11,13 +11,6 @@
 
 static bool g_done;
 
-//#define MAX_FRAME_TIMES 100
-//static float g_frameTimes[MAX_FRAME_TIMES] = {0};
-//static int32_t g_frameTimesIndex = 0;
-//
-//#define TARGET_FPS 60
-//static float g_expectedFrameTimeMs = 1000.0f / TARGET_FPS;
-
 typedef struct RenderContext
 {
     int32_t windowHeight, windowWidth;
@@ -163,50 +156,9 @@ static void ProcessEvents()
     }
 }
 
-//static float ElapsedMs(uint64_t start, uint64_t end)
-//{
-//    SDL_assert(end >= start);
-//    return (float)((end - start)*1000) / SDL_GetPerformanceFrequency();
-//}
-
-//static void PushFrameTime(float frameTimeMs)
-//{
-//    g_frameTimes[g_frameTimesIndex] = frameTimeMs;
-//    g_frameTimesIndex = (g_frameTimesIndex + 1) % MAX_FRAME_TIMES;
-//}
-//
-//static void LogFrameTime(float frameTimeMs)
-//{
-//    PushFrameTime(frameTimeMs);
-//
-//    static uint64_t lastLoggedAt = 0;
-//    uint64_t currentTime = SDL_GetPerformanceCounter();
-//    float elapsedMs = ElapsedMs(lastLoggedAt, currentTime);
-//    if (elapsedMs > 2000.0f)
-//    {
-//        float sum = 0.0f;
-//        int32_t count = 0;
-//        for (int32_t i = 0; i < MAX_FRAME_TIMES; i++)
-//        {
-//            float frameTimeMs = g_frameTimes[i];
-//            if (frameTimeMs == 0.0f) {
-//                break;
-//            }
-//            sum += frameTimeMs;
-//            count++;
-//        }
-//
-//        float averageFrameTimeMs = sum / (float)count;
-//        printf("Frame time: %.1f\n", averageFrameTimeMs);
-//        lastLoggedAt = currentTime;
-//    }
-//}
-
 static void MainLoop(SDL_Window *window, RenderContext *renderContext)
 {
     Profiler_Begin;
-
-    //uint64_t frameStartTime = SDL_GetPerformanceCounter();
 
     ProcessEvents();
 
@@ -227,19 +179,6 @@ static void MainLoop(SDL_Window *window, RenderContext *renderContext)
         Profiler_End;
     }
 
-    //uint64_t currentTime = SDL_GetPerformanceCounter();
-    //float frameTimeMs = ElapsedMs(frameStartTime, currentTime);
-    //LogFrameTime(frameTimeMs);
-
-    // Don't time this since we wait for v-sync which means it blocks
-    // till the next display refresh.
-
-    //if (g_expectedFrameTimeMs > frameTimeMs)
-    //{
-    //    float sleepMs = g_expectedFrameTimeMs - frameTimeMs;
-    //    SDL_Delay((uint32_t)sleepMs);
-    //}
-
     unsigned windowFlags = SDL_GetWindowFlags(window);
     bool windowHasFocus = windowFlags & SDL_WINDOW_INPUT_FOCUS;
     if (!windowHasFocus)
@@ -248,7 +187,7 @@ static void MainLoop(SDL_Window *window, RenderContext *renderContext)
     }
 
     Profiler_End;
-    Profiler_Log();
+    Profiler_Log(3);
 }
 
 static void Run(SDL_Window *window, RenderContext *renderContext)

@@ -1,5 +1,6 @@
 #include "profiler.h"
 
+#include <limits.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -16,10 +17,10 @@ typedef struct ProfilerZone {
 
     struct ProfilerZone *parent;
 
-    // The layer at which the zone is in the hierarchy.
+    // The level at which the zone is in the hierarchy.
     // This is used to draw the zones in the UI at the right level
     // without requiring explicit parent/child pointers.
-    uint32_t layer;
+    uint32_t level;
 
     int32_t lineNum;
     const char *name;
@@ -64,7 +65,7 @@ static ProfilerZone * ActivateNextZone()
     memset(zone, 0, sizeof(ProfilerZone));
 
     if (g_profilerContext.activeZone != 0) {
-        zone->layer = g_profilerContext.activeZone->layer + 1;
+        zone->level = g_profilerContext.activeZone->level + 1;
         zone->parent = g_profilerContext.activeZone;
     }
 
@@ -83,9 +84,14 @@ void Profiler_Init()
     g_profilerContext.initialized = true;
 }
 
-void Profiler_Log()
+void Profiler_Log(uint32_t maxLevel)
 {
     SDL_assert(g_profilerContext.initialized);
+
+    if (maxLevel == 0)
+    {
+        maxLevel = UINT_MAX;
+    }
 
     uint64_t currentTime = SDL_GetPerformanceCounter();
 
@@ -94,7 +100,11 @@ void Profiler_Log()
         for (uint32_t i = 0; i < g_profilerContext.zonesIndex; i++)
         {
             ProfilerZone *zone = &g_profilerContext.zones[i];
-            for (uint32_t j = 0; j < zone->layer; ++j) {
+            if (zone->level >= maxLevel)
+            {
+                continue;
+            }
+            for (uint32_t j = 0; j < zone->level; ++j) {
                 printf("  ");
             }
             printf("%s: %f ms\n", zone->name, ElapsedMs(zone->startTime, zone->endTime));
