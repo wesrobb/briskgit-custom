@@ -12,6 +12,7 @@
 #include "SDL_assert.h"
 
 #include "common.h"
+#include "profiler.h"
 
 typedef enum RenderCommandType
 {
@@ -154,6 +155,8 @@ static Color LinearBlend(Color src, Color dest)
 
 static void DrawHollowRectUnscaled(Rect rect, Color color, int32_t borderThickness)
 {
+    Profiler_Begin;
+
     int32_t startX = max(0, rect.x);
     int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);
 
@@ -180,10 +183,14 @@ static void DrawHollowRectUnscaled(Rect rect, Color color, int32_t borderThickne
 
         pixels += nextRow;
     }
+
+    Profiler_End;
 }
 
 static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y, Color c)
 {
+    Profiler_Begin;
+
     SDL_assert(bitmap);
 
     FrameBuffer *fb = &g_renderContext.frameBuffer;
@@ -222,6 +229,8 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap, double x, double y, Color c)
 
         destPixels += nextRow;
     }
+
+    Profiler_End;
 }
 
 static void ScaleRect(Rect *r)
@@ -356,6 +365,8 @@ FrameBuffer *Render_EndFrame()
 
 void Render_Clear(Color color)
 {
+    Profiler_Begin;
+
     SDL_assert(g_renderContext.initialized);
 
     Pixel coloredPixel = ColorToPixel(color);
@@ -366,10 +377,14 @@ void Render_Clear(Color color)
         *pixels = coloredPixel;
         pixels++;
     }
+
+    Profiler_End;
 }
 
 void Render_DrawRect(Rect rect, Color color) // TODO: These should be passed by pointer
 {
+    Profiler_Begin;
+
     SDL_assert(g_renderContext.initialized);
 
     ScaleRect(&rect);
@@ -396,18 +411,26 @@ void Render_DrawRect(Rect rect, Color color) // TODO: These should be passed by 
 
         pixels += nextRow;
     }
+
+    Profiler_End;
 }
 
 void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness) // TODO: These should be passed by pointer
 {
+    Profiler_Begin;
+
     SDL_assert(g_renderContext.initialized);
 
     ScaleRect(&rect);
     DrawHollowRectUnscaled(rect, color, borderThickness);
+
+    Profiler_End;
 }
 
 void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
+    Profiler_Begin;
+
     posX = (int32_t)(posX * g_renderContext.scaleFactorX);
     posY = (int32_t)(posY * g_renderContext.scaleFactorY);
 
@@ -476,10 +499,14 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
     }
 
     hb_buffer_destroy(buf);
+
+    Profiler_End;
 }
 
 int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
 {
+    Profiler_Begin;
+
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, text, -1, 0, -1);
@@ -519,11 +546,15 @@ int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
 
     hb_buffer_destroy(buf);
 
+    Profiler_End;
+
     return (int32_t)(cursorX / g_renderContext.scaleFactorX);
 }
 
 void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *descent)
 {
+    Profiler_Begin;
+
     FT_Face face = g_fontCache.faceCache[font];
 
     int32_t error = FT_Set_Char_Size(
@@ -549,4 +580,6 @@ void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *d
     *descent = extents.descender / 64;
 
     hb_font_destroy(hbFont);
+
+    Profiler_End;
 }

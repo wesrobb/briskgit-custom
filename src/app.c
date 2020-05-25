@@ -2,8 +2,7 @@
 
 #include <SDL.h>
 
-#include "SDL_events.h"
-#include "SDL_mouse.h"
+#include "profiler.h"
 #include "render.h"
 
 typedef struct AppContext
@@ -120,6 +119,7 @@ void App_OnWindowResized(int32_t width, int32_t height)
 
 void App_Draw()
 {
+    Profiler_Begin;
     Color clearColor = {
         .r = 0.1f,
         .g = 0.1f,
@@ -178,4 +178,6 @@ void App_Draw()
         Render_DrawHollowRect(r, white, 2);
         Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], x, y, fontSizePt, white);
     }
+
+    Profiler_End;
 }
