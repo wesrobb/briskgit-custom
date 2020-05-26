@@ -2,7 +2,6 @@
 
 #include "common.h"
 
-void Profiler_Init();
 void Profiler_Log(uint32_t maxLevel);
 
 int Profiler_BeginZone(const char *name, int32_t line_number, const char *file_name);

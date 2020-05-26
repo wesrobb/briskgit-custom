@@ -92,10 +92,12 @@ static void DestroyRenderContext(RenderContext *renderContext)
 
 // This enables support for redrawing the window resizes.
 static int WindowEventWatcher(void* data, SDL_Event* event) {
+
     RenderContext *renderContext = (RenderContext*)data;
 
     if (event->type == SDL_WINDOWEVENT)
     {
+        Profiler_Begin;
         if (event->window.event == SDL_WINDOWEVENT_RESIZED ||
             event->window.event == SDL_WINDOWEVENT_MOVED) 
         {
@@ -114,7 +116,9 @@ static int WindowEventWatcher(void* data, SDL_Event* event) {
             SDL_RenderCopy(renderContext->renderer, renderContext->texture, 0, 0);
             SDL_RenderPresent(renderContext->renderer);
         }
+        Profiler_End;
     }
+
     return 0;
 }
 
@@ -192,8 +196,6 @@ static void MainLoop(SDL_Window *window, RenderContext *renderContext)
 
 static void Run(SDL_Window *window, RenderContext *renderContext)
 {
-    Profiler_Init();
-
     if (Render_Init(renderContext->renderWidth, renderContext->renderHeight, renderContext->scaleFactorX, renderContext->scaleFactorY))
     {
         App_Init();
