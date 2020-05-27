@@ -140,20 +140,13 @@ void App_Draw()
         .a = 1.0f,
     };
 
-    Rect testRect = {
-        .x = 500,
-        .y = 500,
-        .w = 100,
-        .h = 100
-    };
-
     Render_Clear(clearColor);
     Render_DrawRect(g_appContext.branchDrawerRect, color);
-    Render_DrawHollowRect(testRect, white, 4);
+    //Render_DrawHollowRect(testRect, white, 4);
 
     int32_t fontSizePt = 18;
-    int32_t ascent, descent;
-    Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
+    //int32_t ascent, descent;
+    //Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
 
     const char* textLines[] = {
         "master",
@@ -165,17 +158,17 @@ void App_Draw()
 
     for (int32_t i = 0; (unsigned long)i < sizeof(textLines) / sizeof(textLines[0]); i++)
     {
-        int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR, textLines[i], fontSizePt);
+        //int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR, textLines[i], fontSizePt);
         int32_t x = 10;
-        int32_t y = 20 + (i * (ascent - descent));
-        Rect r = {
-            .x = x,
-            .y = y - ascent,
-            .w = width,
-            .h = ascent - descent
-        };
+        int32_t y = 20 + (i * (22));
+        //Rect r = {
+        //    .x = x,
+        //    .y = y - ascent,
+        //    .w = width,
+        //    .h = ascent - descent
+        //};
 
-        Render_DrawHollowRect(r, white, 2);
+        //Render_DrawHollowRect(r, white, 2);
         Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], x, y, fontSizePt, white);
     }
 

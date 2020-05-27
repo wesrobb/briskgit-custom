@@ -27,9 +27,11 @@ typedef struct RenderCommandRect
 
 typedef struct RenderCommandFont
 {
+    Font font;
     const char *text;
     Color color;
     int32_t ptSize;
+    int32_t x,y;
 } RenderCommandFont;
 
 typedef struct RenderCommand
@@ -66,32 +68,95 @@ static RenderContext g_renderContext;
 static FontCache g_fontCache;
 
 #define RENDER_COMMAND_QUEUE_SIZE 1000
-// static RenderCommand g_renderCommandQueue[RENDER_COMMAND_QUEUE_SIZE];
-// static int32_t g_renderCommandQueueIndex;
-
-/*
-#define MAX_TILE_CACHE_X 100
-#define MAX_TILE_CACHE_Y 100
-static uint32_t g_tileCache1[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
-static uint32_t g_tileCache2[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
-
-static uint32_t g_fnv1aInitial = 2166136261;
-
-// See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
-static uint32_t FNV1A(uint32_t initial, unsigned char* buffer, size_t bufferLength)
+typedef struct RenderCommands
 {
-    SDL_assert(buffer);
+    RenderCommand commands1[RENDER_COMMAND_QUEUE_SIZE];
+    RenderCommand commands2[RENDER_COMMAND_QUEUE_SIZE];
+    int32_t commandsIndex1;
+    int32_t commandsIndex2;
 
-    uint32_t hash = initial;
-    for (size_t i = 0; i < bufferLength; i++)
+    RenderCommand *current;
+    RenderCommand *previous;
+    int32_t *currentIndex;
+    int32_t *previousIndex;
+} RenderCommands;
+static RenderCommands g_renderCommands;
+
+
+//#define MAX_TILE_CACHE_X 100
+//#define MAX_TILE_CACHE_Y 100
+//static uint32_t g_tileCache1[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
+//static uint32_t g_tileCache2[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
+//static uint32_t *g_currentTileCache;
+//
+//static uint32_t g_fnv1aInitial = 2166136261;
+//
+//// See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
+//static uint32_t FNV1A(uint32_t initial, unsigned char* buffer, size_t bufferLength)
+//{
+//    SDL_assert(buffer);
+//
+//    uint32_t hash = initial;
+//    for (size_t i = 0; i < bufferLength; i++)
+//    {
+//        hash ^= buffer[i];
+//        hash *= 16777619;
+//    }
+//
+//    return hash;
+//}
+
+static bool TextEquals(const char *a, const char *b)
+{
+    uint64_t lenA = strlen(a);
+    uint64_t lenB = strlen(b);
+    if (lenA == lenB)
     {
-        hash ^= buffer[i];
-        hash *= 16777619;
+        for (uint64_t i = 0; i < lenA; i++)
+        {
+            if (a[i] != b[i])
+            {
+                return false;
+            }
+        }
     }
 
-    return hash;
+    return true;
 }
-*/
+
+static bool RenderCommandsEqual(RenderCommand *a, RenderCommand *b)
+{
+    // TODO: Compare performance with memcmp.
+    // It is more likely the rect changes than the type changes
+    // since rendering order is unlikely to vary much.
+    // So check the rect first.
+    if (a->rect.x == b->rect.x &&
+        a->rect.y == b->rect.y &&
+        a->rect.w == b->rect.w &&
+        a->rect.h == b->rect.h)
+    {
+        if (a->type == b->type)
+        {
+            switch (a->type)
+            {
+                case RENDER_COMMAND_RECT:
+                    return a->rectCommand.color.a == b->rectCommand.color.a &&
+                           a->rectCommand.color.b == b->rectCommand.color.b &&
+                           a->rectCommand.color.g == b->rectCommand.color.g &&
+                           a->rectCommand.color.r == b->rectCommand.color.r;
+                case RENDER_COMMAND_FONT:
+                    return a->fontCommand.color.a == b->fontCommand.color.a &&
+                           a->fontCommand.color.b == b->fontCommand.color.b &&
+                           a->fontCommand.color.g == b->fontCommand.color.g &&
+                           a->fontCommand.color.r == b->fontCommand.color.r &&
+                           a->fontCommand.ptSize == b->fontCommand.ptSize &&
+                           TextEquals(a->fontCommand.text, b->fontCommand.text);
+            }
+        }
+    }
+
+    return false;
+}
 
 static Pixel ColorToPixel(Color c)
 {
@@ -282,6 +347,121 @@ static void LoadCachedFont(Font font, FT_Face *face, hb_font_t **hbFont, int32_t
 
 }
 
+void DrawRect(Rect rect, RenderCommandRect *cmd) // TODO: These should be passed by pointer
+{
+    Profiler_Begin;
+
+    SDL_assert(g_renderContext.initialized);
+
+    ScaleRect(&rect);
+
+    int32_t startX = max(0, rect.x);
+    int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);
+
+    // Invert y cos our coordinates are y up but SDL surface is y down.
+    int32_t startY = max(0, rect.y);
+    int32_t endY = min(g_renderContext.frameBuffer.height, rect.y + rect.h);
+
+    Pixel *pixels = (Pixel*)g_renderContext.frameBuffer.pixels;
+    pixels += startX + startY * g_renderContext.frameBuffer.width;  // Move to the first pixel that resides in the rect
+    int32_t nextRow = g_renderContext.frameBuffer.width - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
+
+    Pixel coloredPixel = ColorToPixel(cmd->color);
+    for (int32_t y = startY; y < endY; y++)
+    {
+        for (int32_t x = startX; x < endX; x++)
+        {
+            *pixels = coloredPixel;
+            pixels++;
+        }
+
+        pixels += nextRow;
+    }
+
+    Profiler_End;
+}
+
+void DrawFont(Rect rect, RenderCommandFont *cmd)
+{
+    (void)rect;
+
+    Profiler_Begin;
+
+    cmd->x = (int32_t)(cmd->x * g_renderContext.scaleFactorX);
+    cmd->y = (int32_t)(cmd->y * g_renderContext.scaleFactorY);
+
+    hb_buffer_t *buf;
+    buf = hb_buffer_create();
+    hb_buffer_add_utf8(buf, cmd->text, -1, 0, -1);
+    hb_buffer_guess_segment_properties(buf);
+
+    FT_Face face;
+    hb_font_t *hbFont;
+    LoadCachedFont(cmd->font, &face, &hbFont, cmd->ptSize);
+
+    hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
+    uint32_t glyphCount = 0;
+    hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
+    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
+
+    double cursor_x = cmd->x;
+    double cursor_y = cmd->y;
+
+    for (uint32_t i = 0; i < glyphCount; ++i) {
+        hb_codepoint_t glyphid = glyph_info[i].codepoint;
+        double x_offset = glyph_pos[i].x_offset / 64.0;
+        double y_offset = glyph_pos[i].y_offset / 64.0;
+        double x_advance = glyph_pos[i].x_advance / 64.0;
+        double y_advance = glyph_pos[i].y_advance / 64.0;
+        //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
+        // load glyph image into the slot (erase previous one)
+        int32_t error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
+        if (error)
+        {
+            printf("Error loading font glyph %d\n - continuing", error);
+            continue;  // ignore errors
+        }
+        error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
+        if (error)
+        {
+            printf("Error rendering font glyph %d\n - continuing", error);
+            continue;  // ignore errors
+        }
+
+        // now, draw to our target surface
+        double x = cursor_x + x_offset + face->glyph->bitmap_left;
+        double y = cursor_y + y_offset - face->glyph->bitmap_top;
+        DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, cmd->color);
+        cursor_x += x_advance;
+        cursor_y += y_advance;
+    }
+
+    hb_buffer_destroy(buf);
+
+    Profiler_End;
+}
+
+static bool RenderCommandsChanged()
+{
+    if (*g_renderCommands.currentIndex != *g_renderCommands.previousIndex)
+    {
+        return true;
+    }
+
+    int32_t numCommands = *g_renderCommands.currentIndex;
+    for (int32_t i = 0; i < numCommands; i++)
+    {
+        RenderCommand *current = &g_renderCommands.current[i];
+        RenderCommand *previous = &g_renderCommands.previous[i];
+        if (!RenderCommandsEqual(current, previous))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY)
 {
     g_renderContext.initialized = true;
@@ -336,6 +516,11 @@ bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleF
     }
 
     Render_Update(width, height, scaleFactorX, scaleFactorY);
+
+    g_renderCommands.current = g_renderCommands.commands1;
+    g_renderCommands.previous = g_renderCommands.commands2;
+    g_renderCommands.currentIndex = &g_renderCommands.commandsIndex1;
+    g_renderCommands.previousIndex = &g_renderCommands.commandsIndex2;
 
     return true;
 }
@@ -395,65 +580,119 @@ void Render_GetDimensions(int32_t *width, int32_t *height, float *scaleFactorX, 
 void Render_BeginFrame()
 {
     SDL_assert(g_renderContext.initialized);
+
+    // Swap the current render queue.
+    RenderCommand *tmpCommands = g_renderCommands.current;
+    g_renderCommands.current = g_renderCommands.previous;
+    g_renderCommands.previous = tmpCommands;
+
+    int32_t *tmpIndex = g_renderCommands.currentIndex;
+    g_renderCommands.currentIndex = g_renderCommands.previousIndex;
+    g_renderCommands.previousIndex = tmpIndex;
+
+    // Reset the new current render queue
+    *g_renderCommands.currentIndex = 0;
 }
 
 FrameBuffer *Render_EndFrame()
 {
+    Profiler_Begin;
+
     SDL_assert(g_renderContext.initialized);
+
+    if (RenderCommandsChanged())
+    {
+        // Process current queue.
+        int32_t numCommands = *g_renderCommands.currentIndex;
+        for (int32_t i = 0; i < numCommands; i++)
+        {
+            RenderCommand *cmd = &g_renderCommands.current[i];
+            switch (cmd->type)
+            {
+                case RENDER_COMMAND_RECT:
+                    DrawRect(cmd->rect, &cmd->rectCommand);
+                    break;
+                case RENDER_COMMAND_FONT:
+                    DrawFont(cmd->rect, &cmd->fontCommand);
+                    break;
+            }
+        }
+    }
+
+    Profiler_End;
 
     return &g_renderContext.frameBuffer;
 }
 
+static void AddRenderRectCommand(Rect r, Color c)
+{
+    int32_t index = (*g_renderCommands.currentIndex)++;
+    RenderCommand *cmd = &g_renderCommands.current[index];
+    cmd->type = RENDER_COMMAND_RECT;
+    cmd->rect.x = r.x;
+    cmd->rect.y = r.y;
+    cmd->rect.w = r.w;
+    cmd->rect.h = r.h;
+    cmd->rectCommand.color.a = c.a;
+    cmd->rectCommand.color.b = c.b;
+    cmd->rectCommand.color.g = c.g;
+    cmd->rectCommand.color.r = c.r;
+}
+
+static void AddRenderFontCommand(Font font, const char *text, int32_t x, int32_t y, int32_t ptSize, Color c)
+{
+    int32_t index = (*g_renderCommands.currentIndex)++;
+    RenderCommand *cmd = &g_renderCommands.current[index];
+    cmd->type = RENDER_COMMAND_FONT;
+    //cmd->rect.x = r.x;
+    //cmd->rect.y = r.y;
+    //cmd->rect.w = r.w;
+    //cmd->rect.h = r.h;
+    cmd->fontCommand.font = font;
+    cmd->fontCommand.text = text;
+    cmd->fontCommand.x = x;
+    cmd->fontCommand.y = y;
+    cmd->fontCommand.ptSize = ptSize;
+    cmd->fontCommand.color.a = c.a;
+    cmd->fontCommand.color.b = c.b;
+    cmd->fontCommand.color.g = c.g;
+    cmd->fontCommand.color.r = c.r;
+}
+
+// TODO: Might be worth adding RENDER_CLEAR_COMMAND as a special
+//       case since it is CPU heavy but easy to optimise.
+//static void DrawClear(Color color)
+//{
+//    Profiler_Begin;
+//
+//    SDL_assert(g_renderContext.initialized);
+//
+//    Pixel coloredPixel = ColorToPixel(color);
+//    int32_t size = g_renderContext.frameBuffer.height * g_renderContext.frameBuffer.width;
+//    Pixel *pixels = (Pixel*)g_renderContext.frameBuffer.pixels;
+//    for (int32_t y = 0; y < size; y++)
+//    {
+//        *pixels = coloredPixel;
+//        pixels++;
+//    }
+//
+//    Profiler_End;
+//}
+//
 void Render_Clear(Color color)
 {
-    Profiler_Begin;
-
-    SDL_assert(g_renderContext.initialized);
-
-    Pixel coloredPixel = ColorToPixel(color);
-    int32_t size = g_renderContext.frameBuffer.height * g_renderContext.frameBuffer.width;
-    Pixel *pixels = (Pixel*)g_renderContext.frameBuffer.pixels;
-    for (int32_t y = 0; y < size; y++)
-    {
-        *pixels = coloredPixel;
-        pixels++;
-    }
-
-    Profiler_End;
+    Rect r = {
+        .x = 0,
+        .y = 0,
+        .w = g_renderContext.frameBuffer.width,
+        .h = g_renderContext.frameBuffer.width
+    };
+    AddRenderRectCommand(r, color);
 }
 
 void Render_DrawRect(Rect rect, Color color) // TODO: These should be passed by pointer
 {
-    Profiler_Begin;
-
-    SDL_assert(g_renderContext.initialized);
-
-    ScaleRect(&rect);
-
-    int32_t startX = max(0, rect.x);
-    int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);
-
-    // Invert y cos our coordinates are y up but SDL surface is y down.
-    int32_t startY = max(0, rect.y);
-    int32_t endY = min(g_renderContext.frameBuffer.height, rect.y + rect.h);
-
-    Pixel *pixels = (Pixel*)g_renderContext.frameBuffer.pixels;
-    pixels += startX + startY * g_renderContext.frameBuffer.width;  // Move to the first pixel that resides in the rect
-    int32_t nextRow = g_renderContext.frameBuffer.width - (endX - startX); // Calculate how many pixels to jump over at the end of each row in the rect.
-
-    Pixel coloredPixel = ColorToPixel(color);
-    for (int32_t y = startY; y < endY; y++)
-    {
-        for (int32_t x = startX; x < endX; x++)
-        {
-            *pixels = coloredPixel;
-            pixels++;
-        }
-
-        pixels += nextRow;
-    }
-
-    Profiler_End;
+    AddRenderRectCommand(rect, color);
 }
 
 void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness) // TODO: These should be passed by pointer
@@ -470,60 +709,7 @@ void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness) // T
 
 void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
 {
-    Profiler_Begin;
-
-    posX = (int32_t)(posX * g_renderContext.scaleFactorX);
-    posY = (int32_t)(posY * g_renderContext.scaleFactorY);
-
-    hb_buffer_t *buf;
-    buf = hb_buffer_create();
-    hb_buffer_add_utf8(buf, text, -1, 0, -1);
-    hb_buffer_guess_segment_properties(buf);
-
-    FT_Face face;
-    hb_font_t *hbFont;
-    LoadCachedFont(font, &face, &hbFont, ptSize);
-
-    hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
-    uint32_t glyphCount = 0;
-    hb_glyph_info_t *glyph_info    = hb_buffer_get_glyph_infos(buf, &glyphCount);
-    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
-
-    double cursor_x = posX;
-    double cursor_y = posY;
-
-    for (uint32_t i = 0; i < glyphCount; ++i) {
-        hb_codepoint_t glyphid = glyph_info[i].codepoint;
-        double x_offset = glyph_pos[i].x_offset / 64.0;
-        double y_offset = glyph_pos[i].y_offset / 64.0;
-        double x_advance = glyph_pos[i].x_advance / 64.0;
-        double y_advance = glyph_pos[i].y_advance / 64.0;
-        //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
-        // load glyph image into the slot (erase previous one)
-        int32_t error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
-        if (error)
-        {
-            printf("Error loading font glyph %d\n - continuing", error);
-            continue;  // ignore errors
-        }
-        error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-        if (error)
-        {
-            printf("Error rendering font glyph %d\n - continuing", error);
-            continue;  // ignore errors
-        }
-
-        // now, draw to our target surface
-        double x = cursor_x + x_offset + face->glyph->bitmap_left;
-        double y = cursor_y + y_offset - face->glyph->bitmap_top;
-        DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, c);
-        cursor_x += x_advance;
-        cursor_y += y_advance;
-    }
-
-    hb_buffer_destroy(buf);
-
-    Profiler_End;
+    AddRenderFontCommand(font, text, posX, posY, ptSize, c);
 }
 
 int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
