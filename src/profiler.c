@@ -97,14 +97,6 @@ static ProfilerContext *GetContext()
         }
     }
 
-    // TODO: Remove this limit that sticks us on the main thread only.
-    // This is done because the profiler does not support multi-threading
-    // ... yet.
-    if (g_profilerContextsIndex == 1)
-    {
-        return NULL;
-    }
-
     // No context found - make one.
     int32_t index = g_profilerContextsIndex++;
     SDL_assert(index < PROFILER_MAX_CONTEXTS);
@@ -115,7 +107,7 @@ static ProfilerContext *GetContext()
     return ctx;
 }
 
-void Profiler_Log(uint32_t maxLevel)
+void _Profiler_Log(uint32_t maxLevel)
 {
     ProfilerContext *ctx = GetContext();
     if (!ctx) return;
@@ -127,7 +119,7 @@ void Profiler_Log(uint32_t maxLevel)
 
     uint64_t currentTime = SDL_GetPerformanceCounter();
 
-    if (ElapsedMs(ctx->lastLoggedAt, currentTime) > 1000.0f)
+    if (ElapsedMs(ctx->lastLoggedAt, currentTime) > 3000.0f)
     {
         for (uint32_t i = 0; i < ctx->zonesIndex; i++)
         {
@@ -149,7 +141,7 @@ void Profiler_Log(uint32_t maxLevel)
 }
 
 
-int32_t Profiler_BeginZone(const char *name, int32_t lineNum, const char *fileName)
+int32_t _Profiler_BeginZone(const char *name, int32_t lineNum, const char *fileName)
 {
     ProfilerContext *ctx = GetContext();
     if (!ctx) return 0;
@@ -164,7 +156,7 @@ int32_t Profiler_BeginZone(const char *name, int32_t lineNum, const char *fileNa
     return 0;
 }
 
-void Profiler_EndZone(int32_t profilerSentinel)
+void _Profiler_EndZone(int32_t profilerSentinel)
 {
     ProfilerContext *ctx = GetContext();
     if (!ctx) return;

@@ -191,7 +191,7 @@ static void MainLoop(SDL_Window *window, RenderContext *renderContext)
     }
 
     Profiler_End;
-    Profiler_Log(3);
+    Profiler_Log(4);
 }
 
 static void Run(SDL_Window *window, RenderContext *renderContext)
