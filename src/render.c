@@ -56,7 +56,8 @@ typedef struct FontCache
 {
     FT_Library fontLibrary;
     FT_Face faceCache[FONT_COUNT];
-    int32_t faceCacheIndex;
+    hb_font_t *hbFontCache[FONT_COUNT];
+    int32_t ptSizes[FONT_COUNT];
 
     hb_feature_t harfBuzzFeatures[HARFBUZZ_NUM_FEATURES];
 } FontCache;
@@ -255,6 +256,32 @@ static const char *GetFontFile(Font font)
     }
 }
 
+static void LoadCachedFont(Font font, FT_Face *face, hb_font_t **hbFont, int32_t ptSize)
+{
+    // Load cached font data and only set size if it wasn't set already.
+    *face = g_fontCache.faceCache[font];
+    *hbFont = g_fontCache.hbFontCache[font];
+    if (ptSize != g_fontCache.ptSizes[font])
+    {
+        int32_t error = FT_Set_Char_Size(
+              *face,    // handle to face object
+              0,       // char_width in 1/64th of points
+              ptSize*64,   // char_height in 1/64th of points
+              (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
+              (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
+        //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
+
+        if (error)
+        {
+            puts("Failed to set face size");
+            return;
+        }
+        hb_ft_font_changed(*hbFont);
+        g_fontCache.ptSizes[font] = ptSize;
+    }
+
+}
+
 bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY)
 {
     g_renderContext.initialized = true;
@@ -282,9 +309,11 @@ bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleF
     for (int32_t i = 0; i < FONT_COUNT; i++)
     {
         const char* fontFile = GetFontFile((Font)i);
-        error = FT_New_Face(g_fontCache.fontLibrary, fontFile, 0, &g_fontCache.faceCache[i]);
+        FT_Face face;
+        error = FT_New_Face(g_fontCache.fontLibrary, fontFile, 0, &face);
         if (error == FT_Err_Unknown_File_Format)
         {
+            // TODO: Proper cleanup of faces and ft library
             puts("Unknown font format");
             return false;
         }
@@ -293,6 +322,17 @@ bool Render_Init(int32_t width, int32_t height, float scaleFactorX, float scaleF
             printf("Unknown error %d\n", error);
             return false;
         }
+
+        hb_font_t *hbFont = hb_ft_font_create_referenced(face);
+        if (hbFont == NULL)
+        {
+            printf("Failed to create hb_font\n");
+            return false;
+        }
+        hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+
+        g_fontCache.faceCache[i] = face;
+        g_fontCache.hbFontCache[i] = hbFont;
     }
 
     Render_Update(width, height, scaleFactorX, scaleFactorY);
@@ -312,6 +352,7 @@ void Render_Destroy()
 
     for (int32_t i = 0; i < FONT_COUNT; i++)
     {
+        hb_font_destroy(g_fontCache.hbFontCache[i]);
         FT_Done_Face(g_fontCache.faceCache[i]);
     }
     FT_Done_Library(g_fontCache.fontLibrary);
@@ -437,29 +478,11 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, text, -1, 0, -1);
-
     hb_buffer_guess_segment_properties(buf);
 
-    FT_Face face = g_fontCache.faceCache[font];
-
-    int32_t error = FT_Set_Char_Size(
-          face,    // handle to face object
-          0,       // char_width in 1/64th of points
-          ptSize*64,   // char_height in 1/64th of points
-          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
-          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
-    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
-
-    if (error)
-    {
-        puts("Failed to set face size");
-        return;
-    }
-    hb_font_t *hbFont = hb_ft_font_create_referenced(face);
-    hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
-
-    hb_font_extents_t extents;
-    hb_font_get_h_extents(hbFont, &extents);
+    FT_Face face;
+    hb_font_t *hbFont;
+    LoadCachedFont(font, &face, &hbFont, ptSize);
 
     hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
@@ -477,7 +500,7 @@ void Render_DrawFont(Font font, const char *text, int32_t posX, int32_t posY, in
         double y_advance = glyph_pos[i].y_advance / 64.0;
         //draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
         // load glyph image into the slot (erase previous one)
-        error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
+        int32_t error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
         if (error)
         {
             printf("Error loading font glyph %d\n - continuing", error);
@@ -510,26 +533,11 @@ int32_t Render_GetTextWidth(Font font, const char* text, int32_t ptSize)
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, text, -1, 0, -1);
-
     hb_buffer_guess_segment_properties(buf);
 
-    FT_Face face = g_fontCache.faceCache[font];
-
-    int32_t error = FT_Set_Char_Size(
-          face,    // handle to face object
-          0,       // char_width in 1/64th of points
-          ptSize*64,   // char_height in 1/64th of points
-          (uint32_t)(72.0f * g_renderContext.scaleFactorX),    // horizontal dpi
-          (uint32_t)(72.0f * g_renderContext.scaleFactorY));   // vertical dpi
-    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
-
-    if (error)
-    {
-        puts("Failed to set face size");
-        return 0;
-    }
-    hb_font_t *hbFont = hb_ft_font_create_referenced(face);
-    hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+    FT_Face face;
+    hb_font_t *hbFont;
+    LoadCachedFont(font, &face, &hbFont, ptSize);
 
     hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
@@ -555,31 +563,15 @@ void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *d
 {
     Profiler_Begin;
 
-    FT_Face face = g_fontCache.faceCache[font];
-
-    int32_t error = FT_Set_Char_Size(
-          face,    // handle to face object
-          0,       // char_width in 1/64th of points
-          ptSize*64,   // char_height in 1/64th of points
-          (uint32_t)(72.0f),    // horizontal dpi
-          (uint32_t)(72.0f));   // vertical dpi
-    //int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
-
-    if (error)
-    {
-        puts("Failed to set face size");
-        return;
-    }
-    hb_font_t *hbFont = hb_ft_font_create_referenced(face);
-    hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+    FT_Face face;
+    hb_font_t *hbFont;
+    LoadCachedFont(font, &face, &hbFont, ptSize);
 
     hb_font_extents_t extents;
     hb_font_get_h_extents(hbFont, &extents);
 
     *ascent = extents.ascender / 64;
     *descent = extents.descender / 64;
-
-    hb_font_destroy(hbFont);
 
     Profiler_End;
 }
