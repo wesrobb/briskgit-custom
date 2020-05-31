@@ -1,0 +1,3 @@
+[submodule "src/eva"]
+	path = src/eva
+	url = git@github.com:wesrobb/eva.git
