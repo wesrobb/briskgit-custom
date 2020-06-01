@@ -9,17 +9,18 @@ add_executable(briskgit
     src/profiler.h 
     src/profiler.c
     src/render.h 
-    src/render.c)
+    src/render.c
+    src/eva/eva.h
+    src/eva/eva_macos.m)
 
-target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+#target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 target_include_directories(briskgit PRIVATE 
     ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/include
-    ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/include/harfbuzz
-    ${PROJECT_SOURCE_DIR}/lib/sdl2/macos/2.0.12/include/SDL2)
+    ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/include/harfbuzz)
 target_link_libraries(briskgit LINK_PUBLIC
     ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/lib/libfreetype.a
     ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/lib/libharfbuzz.a
-    ${PROJECT_SOURCE_DIR}/lib/sdl2/macos/2.0.12/lib/libSDL2.a -lm -liconv -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,CoreVideo -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-weak_framework,QuartzCore -Wl,-weak_framework,Metal)
+    "-framework Cocoa")
 
 if (MSVC)
     # warning level 4 and all warnings as errors
