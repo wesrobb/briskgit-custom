@@ -5,6 +5,8 @@
 #include "profiler.h"
 #include "render.h"
 
+#include <stdio.h>
+
 typedef struct AppContext {
     int32_t branchDrawerResizeRange;
     Rect branchDrawerRect;
@@ -15,10 +17,10 @@ typedef struct AppContext {
 
 AppContext g_appContext;
 
-// static bool PointInRect(int32_t x, int32_t y, Rect *r)
-//{
-//    return x >= r->x && x <= (r->x + r->w) && y >= r->y && y <= (r->y + r->h);
-//}
+static bool point_in_rect(int32_t x, int32_t y, Rect *r)
+{
+    return x >= r->x && x <= (r->x + r->w) && y >= r->y && y <= (r->y + r->h);
+}
 
 void App_Init()
 {
@@ -42,6 +44,7 @@ void App_OnMouseMoved(eva_mouse_event *e)
 {
     if (g_appContext.branchDrawerResizing) {
         g_appContext.branchDrawerRect.w = max(e->x, g_appContext.branchDrawerMinSize);
+        eva_request_frame();
     }
 
     Rect resizeHandle = {
@@ -63,39 +66,36 @@ void App_OnMouseMoved(eva_mouse_event *e)
 void App_OnMousePressed(eva_mouse_event *e)
 {
     (void)e;
-    // if (e->button & SDL_BUTTON_LEFT) {
-    //    printf("Left mouse button pressed\n");
-    //    Rect resizeHandle = {
-    //        .x = g_appContext.branchDrawerRect.x +
-    //             g_appContext.branchDrawerRect.w -
-    //             g_appContext.branchDrawerResizeRange,
-    //        .y = g_appContext.branchDrawerRect.y,
-    //        .w = g_appContext.branchDrawerResizeRange * 2,
-    //        .h = g_appContext.branchDrawerRect.y +
-    //             g_appContext.branchDrawerRect.h,
-    //    };
+    if (e->left_button_pressed) {
+        Rect resizeHandle = {
+            .x = g_appContext.branchDrawerRect.x + g_appContext.branchDrawerRect.w -
+                 g_appContext.branchDrawerResizeRange,
+            .y = g_appContext.branchDrawerRect.y,
+            .w = g_appContext.branchDrawerResizeRange * 2,
+            .h = g_appContext.branchDrawerRect.y + g_appContext.branchDrawerRect.h,
+        };
 
-    //    if (PointInRect(e->x, e->y, &resizeHandle)) {
-    //        g_appContext.branchDrawerResizing = true;
-    //    }
-    //}
+        if (point_in_rect(e->x, e->y, &resizeHandle)) {
+            g_appContext.branchDrawerResizing = true;
+        }
+    }
 }
 
 void App_OnMouseReleased(eva_mouse_event *e)
 {
     (void)e;
-    // if (e->button & SDL_BUTTON_LEFT) {
-    //    printf("Left mouse button released\n");
-    //    if (g_appContext.branchDrawerResizing) {
-    //        g_appContext.branchDrawerResizing = false;
-    //    }
-    //}
+    if (e->left_button_released) {
+        if (g_appContext.branchDrawerResizing) {
+            g_appContext.branchDrawerResizing = false;
+        }
+    }
 }
 
 void App_OnWindowResized(int32_t width, int32_t height)
 {
     (void)width;
     (void)height;
+    g_appContext.branchDrawerRect.h = eva_get_window_height();
 }
 
 void App_Draw()

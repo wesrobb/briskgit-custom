@@ -30,6 +30,21 @@ void frame(eva_pixel *framebuffer,
     Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y);
 }
 
+void handle_mouse_event(eva_mouse_event *e)
+{
+    switch (e->type) {
+    case EVA_MOUSE_EVENTTYPE_MOUSE_MOVED:
+        App_OnMouseMoved(e);
+        break;
+    case EVA_MOUSE_EVENTTYPE_MOUSE_PRESSED:
+        App_OnMousePressed(e);
+        break;
+    case EVA_MOUSE_EVENTTYPE_MOUSE_RELEASED:
+        App_OnMouseReleased(e);
+        break;
+    }
+}
+
 void event(eva_event *e)
 {
     switch (e->type) {
@@ -37,8 +52,7 @@ void event(eva_event *e)
         puts("Received eva window event");
         break;
     case EVA_EVENTTYPE_MOUSE:
-        puts("Received eva mouse event");
-        App_OnMouseMoved(&e->mouse);
+        handle_mouse_event(&e->mouse);
         break;
     case EVA_EVENTTYPE_KEYBOARD:
         puts("Received eva keyboard event");
