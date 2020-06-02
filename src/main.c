@@ -21,7 +21,8 @@ void frame(eva_pixel *framebuffer,
            int32_t framebuffer_width,
            int32_t framebuffer_height,
            float scale_x,
-           float scale_y)
+           float scale_y,
+           eva_rect *dirty_rect)
 {
     Render_BeginFrame();
     {
@@ -32,6 +33,12 @@ void frame(eva_pixel *framebuffer,
     Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y);
 
     Profiler_Log(2);
+
+    // TEST
+    dirty_rect->x = 0;
+    dirty_rect->y = 0;
+    dirty_rect->w = framebuffer_width / 2;
+    dirty_rect->h = framebuffer_height;
 }
 
 void handle_mouse_event(eva_mouse_event *e)

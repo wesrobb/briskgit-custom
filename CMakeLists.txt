@@ -27,7 +27,7 @@ if (MSVC)
     target_compile_options(briskgit PRIVATE /W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)
+    target_compile_options(briskgit PRIVATE -g -O3 -Wall -Wextra -pedantic -Werror -Wconversion)
 endif()
 
 configure_file(Info.plist Info.plist COPYONLY)
