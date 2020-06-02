@@ -1,16 +1,20 @@
 #include "profiler.h"
-/*
+
+#include "eva/eva.h"
+
+#include <assert.h>
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define PROFILER_MAX_ZONES 5096
 
-typedef struct ProfilerZone {
-    uint64_t startTime;
-    uint64_t endTime;
+typedef struct profiler_zone {
+    uint64_t start;
+    uint64_t end;
 
-    struct ProfilerZone *parent;
+    struct profiler_zone *parent;
 
     // The level at which the zone is in the hierarchy.
     // This is used to draw the zones in the UI at the right level
@@ -20,91 +24,62 @@ typedef struct ProfilerZone {
     int32_t     lineNum;
     const char *name;
     const char *file;
-} ProfilerZone;
+} profiler_zone;
 
-typedef struct ProfilerContext {
+typedef struct profiler_ctx {
     // Stores a pointer to the currently active zone.
-    ProfilerZone *activeZone;
+    profiler_zone *active;
 
     // Ring buffer of zones.
-    ProfilerZone *zones;
-    uint32_t      zonesIndex;
+    profiler_zone *zones;
+    uint32_t      zones_index;
 
-    uint64_t lastLoggedAt;
-} ProfilerContext;
+    uint64_t last_logged_at;
+} profiler_ctx;
 
-// Profiler contexts are created per thread so this allows 16 different threads
-// to have profiler contexts.
-#define PROFILER_MAX_CONTEXTS 16
-static SDL_threadID    g_profilerContextThreadIds[PROFILER_MAX_CONTEXTS];
-static ProfilerContext g_profilerContexts[PROFILER_MAX_CONTEXTS];
-static int32_t         g_profilerContextsIndex;
+static profiler_ctx g_profiler_ctx;
 
-static double ElapsedMs(uint64_t start, uint64_t end)
+static void reset_zones(profiler_ctx *ctx)
 {
-    SDL_assert(end >= start);
-    double result =
-        (double)((end - start) * 1000) / SDL_GetPerformanceFrequency();
-    return result;
+    ctx->active = 0;
+    ctx->zones_index = 0;
+    memset(ctx->zones, 0, sizeof(profiler_zone) * PROFILER_MAX_ZONES);
 }
 
-static void ResetZones(ProfilerContext *ctx)
+static profiler_zone *activate_next_zone(profiler_ctx *ctx)
 {
-    ctx->activeZone = 0;
-    ctx->zonesIndex = 0;
-    memset(ctx->zones, 0, sizeof(ProfilerZone) * PROFILER_MAX_ZONES);
-}
+    uint32_t index = ctx->zones_index++;
+    assert(index < PROFILER_MAX_ZONES);
 
-static ProfilerZone *ActivateNextZone(ProfilerContext *ctx)
-{
-    uint32_t index = ctx->zonesIndex++;
-    SDL_assert(index < PROFILER_MAX_ZONES);
+    profiler_zone *zone = &ctx->zones[index];
+    memset(zone, 0, sizeof(profiler_zone));
 
-    ProfilerZone *zone = &ctx->zones[index];
-    memset(zone, 0, sizeof(ProfilerZone));
-
-    if (ctx->activeZone != 0) {
-        zone->level  = ctx->activeZone->level + 1;
-        zone->parent = ctx->activeZone;
+    if (ctx->active != 0) {
+        zone->level  = ctx->active->level + 1;
+        zone->parent = ctx->active;
     }
 
-    ctx->activeZone = zone;
+    ctx->active = zone;
 
     return zone;
 }
 
-void Init(ProfilerContext *ctx)
+static profiler_ctx *get_ctx()
 {
-    ctx->zones = malloc(sizeof(ProfilerZone) * PROFILER_MAX_ZONES);
-    SDL_assert(ctx->zones);
+    return &g_profiler_ctx;
+}
+
+void _profiler_init()
+{
+    profiler_ctx *ctx = get_ctx();
+    ctx->zones = malloc(sizeof(profiler_zone) * PROFILER_MAX_ZONES);
+    assert(ctx->zones);
     memset(ctx->zones, 0, PROFILER_MAX_ZONES);
 }
 
-static ProfilerContext *GetContext()
+void _profiler_log(uint32_t maxLevel)
 {
-    // TODO: Use TLS for this.
-    SDL_threadID currentThreadId = SDL_GetThreadID(NULL);
-
-    // See if we have an existing ID that matches.
-    for (int32_t i = 0; i < g_profilerContextsIndex; i++) {
-        if (g_profilerContextThreadIds[i] == currentThreadId) {
-            return &g_profilerContexts[i];
-        }
-    }
-
-    // No context found - make one.
-    int32_t index = g_profilerContextsIndex++;
-    SDL_assert(index < PROFILER_MAX_CONTEXTS);
-    g_profilerContextThreadIds[index] = currentThreadId;
-    ProfilerContext *ctx              = &g_profilerContexts[index];
-
-    Init(ctx);
-    return ctx;
-}
-
-void _Profiler_Log(uint32_t maxLevel)
-{
-    ProfilerContext *ctx = GetContext();
+    profiler_ctx *ctx = get_ctx();
     if (!ctx)
         return;
 
@@ -112,11 +87,11 @@ void _Profiler_Log(uint32_t maxLevel)
         maxLevel = UINT_MAX;
     }
 
-    uint64_t currentTime = SDL_GetPerformanceCounter();
+    uint64_t currentTime = eva_time_now();
 
-    if (ElapsedMs(ctx->lastLoggedAt, currentTime) > 3000.0f) {
-        for (uint32_t i = 0; i < ctx->zonesIndex; i++) {
-            ProfilerZone *zone = &ctx->zones[i];
+    if (eva_time_since_ms(ctx->last_logged_at) > 3000.0f) {
+        for (uint32_t i = 0; i < ctx->zones_index; i++) {
+            profiler_zone *zone = &ctx->zones[i];
             if (zone->level >= maxLevel) {
                 continue;
             }
@@ -125,43 +100,44 @@ void _Profiler_Log(uint32_t maxLevel)
             }
             printf("%s: %f ms\n",
                    zone->name,
-                   ElapsedMs(zone->startTime, zone->endTime));
+                   eva_time_elapsed_ms(zone->start, zone->end));
         }
-        ctx->lastLoggedAt = currentTime;
+        ctx->last_logged_at = currentTime;
     }
 
-    ResetZones(ctx);
+    reset_zones(ctx);
 }
 
-int32_t
-_Profiler_BeginZone(const char *name, int32_t lineNum, const char *fileName)
+int8_t
+_profiler_begin_zone(const char *name, int32_t lineNum, const char *fileName)
 {
-    ProfilerContext *ctx = GetContext();
+    profiler_ctx *ctx = get_ctx();
     if (!ctx)
         return 0;
 
-    ProfilerZone *zone = ActivateNextZone(ctx);
-    zone->name         = name;
-    zone->lineNum      = lineNum;
-    zone->file         = fileName;
-    zone->startTime    = SDL_GetPerformanceCounter();
-    zone->endTime      = 0;
+    profiler_zone *zone = activate_next_zone(ctx);
+
+    zone->name    = name;
+    zone->lineNum = lineNum;
+    zone->file    = fileName;
+    zone->start   = eva_time_now();
+    zone->end     = 0;
 
     return 0;
 }
 
-void _Profiler_EndZone(int32_t profilerSentinel)
+void _profiler_end_zone(int8_t profilerSentinel)
 {
-    ProfilerContext *ctx = GetContext();
+    profiler_ctx *ctx = get_ctx();
     if (!ctx)
         return;
 
-    SDL_assert(ctx->activeZone);
+    assert(ctx->active);
 
     (void)profilerSentinel;
 
-    uint64_t currentTime = SDL_GetPerformanceCounter();
+    uint64_t currentTime = eva_time_now();
 
-    ctx->activeZone->endTime = currentTime;
-    ctx->activeZone          = ctx->activeZone->parent;
-}*/
+    ctx->active->end = currentTime;
+    ctx->active      = ctx->active->parent;
+}

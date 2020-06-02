@@ -11,6 +11,8 @@
 
 void init()
 {
+    profiler_init;
+
     Render_Init();
     App_Init();
 }
@@ -28,6 +30,8 @@ void frame(eva_pixel *framebuffer,
         Profiler_End;
     }
     Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y);
+
+    Profiler_Log(2);
 }
 
 void handle_mouse_event(eva_mouse_event *e)
@@ -50,6 +54,7 @@ void event(eva_event *e)
     switch (e->type) {
     case EVA_EVENTTYPE_WINDOW:
         puts("Received eva window event");
+        App_OnWindowResized(e->window.window_width, e->window.window_height);
         break;
     case EVA_EVENTTYPE_MOUSE:
         handle_mouse_event(&e->mouse);

@@ -162,13 +162,22 @@ static Color SRGBToLinear(Color x)
 {
     // Exact gamma value would be 2.2 but we use 2
     // to avoid expensive pow function and use the square of x instead.
-    Color result = { .r = x.r * x.r, .g = x.g * x.g, .b = x.b * x.b, .a = x.a };
+    Color result = {
+        .r = x.r * x.r,
+        .g = x.g * x.g,
+        .b = x.b * x.b,
+        .a = x.a
+    };
     return result;
 }
 
 static Color LinearToSRGB(Color x)
 {
-    Color result = { .r = sqrtf(x.r), .g = sqrtf(x.g), .b = sqrtf(x.b), .a = x.a };
+    Color result = {
+        .r = sqrtf(x.r),
+        .g = sqrtf(x.g),
+        .b = sqrtf(x.b),
+        .a = x.a };
     return result;
 }
 
@@ -176,10 +185,12 @@ static Color LinearToSRGB(Color x)
 // pre-multiplied alpha.
 static Color LinearBlend(Color src, Color dest)
 {
-    Color result = { .r = src.r + dest.r * (1.0f - src.a),
-                     .g = src.g + dest.g * (1.0f - src.a),
-                     .b = src.b + dest.b * (1.0f - src.a),
-                     .a = dest.a };
+    Color result = {
+        .r = src.r + dest.r * (1.0f - src.a),
+        .g = src.g + dest.g * (1.0f - src.a),
+        .b = src.b + dest.b * (1.0f - src.a),
+        .a = dest.a
+    };
 
     return result;
 }

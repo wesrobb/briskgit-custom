@@ -96,13 +96,26 @@ void App_OnWindowResized(int32_t width, int32_t height)
     (void)width;
     (void)height;
     g_appContext.branchDrawerRect.h = eva_get_window_height();
+
+    eva_request_frame();
 }
 
 void App_Draw()
 {
     Profiler_Begin;
-    Color clearColor = { .r = 0.1f, .g = 0.1f, .b = 0.1f, .a = 1.0f };
-    Color color = { .r = 0.3f, .g = 0.3f, .b = 0.3f, .a = 1.0f };
+
+    Color clearColor = {
+        .r = 0.1f,
+        .g = 0.1f,
+        .b = 0.1f,
+        .a = 1.0f
+    };
+    Color color = {
+        .r = 0.3f,
+        .g = 0.3f,
+        .b = 0.3f,
+        .a = 1.0f
+    };
 
     Color white = {
         .r = 1.0f,
@@ -119,7 +132,13 @@ void App_Draw()
     // int32_t ascent, descent;
     // Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
 
-    const char *textLines[] = { "master", "develop", "feature/AV", "pppppppppp", "ffffffffff" };
+    const char *textLines[] = {
+        "master",
+        "develop",
+        "feature/AV",
+        "pppppppppp",
+        "ffffffffff"
+    };
 
     for (int32_t i = 0; (unsigned long)i < sizeof(textLines) / sizeof(textLines[0]); i++) {
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
