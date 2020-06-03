@@ -31,7 +31,7 @@ typedef struct RenderCommandFont {
 
 typedef struct RenderCommand {
     RenderCommandType type;
-    Rect rect;
+    eva_rect rect;
     union {
         RenderCommandRect rectCommand;
         RenderCommandFont fontCommand;
@@ -280,7 +280,7 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap,
     Profiler_End;
 }
 
-static void ScaleRect(Rect *r, float scale_x, float scale_y)
+static void ScaleRect(eva_rect *r, float scale_x, float scale_y)
 {
     r->x = (int32_t)(r->x * scale_x);
     r->w = (int32_t)(r->w * scale_x);
@@ -333,7 +333,7 @@ static void LoadCachedFont(
     }
 }
 
-void DrawRect(Rect rect,
+void DrawRect(eva_rect rect,
               RenderCommandRect *cmd,
               eva_pixel *framebuffer,
               int32_t framebuffer_width,
@@ -372,7 +372,7 @@ void DrawRect(Rect rect,
     Profiler_End;
 }
 
-void DrawFont(Rect rect,
+void DrawFont(eva_rect rect,
               RenderCommandFont *cmd,
               eva_pixel *framebuffer,
               int32_t framebuffer_width,
@@ -542,15 +542,19 @@ void Render_EndFrame(eva_pixel *framebuffer,
                      int32_t framebuffer_width,
                      int32_t framebuffer_height,
                      float scale_x,
-                     float scale_y)
+                     float scale_y,
+                     eva_rect *dirty_rect)
 {
     Profiler_Begin;
+
+    memset(dirty_rect, 0, sizeof(eva_rect));
 
     if (RenderCommandsChanged()) {
         // Process current queue.
         int32_t numCommands = *g_renderCommands.currentIndex;
         for (int32_t i = 0; i < numCommands; i++) {
             RenderCommand *cmd = &g_renderCommands.current[i];
+            *dirty_rect = eva_rect_union(dirty_rect, &cmd->rect);
             switch (cmd->type) {
             case RENDER_COMMAND_RECT:
                 DrawRect(cmd->rect,
@@ -577,12 +581,12 @@ void Render_EndFrame(eva_pixel *framebuffer,
     Profiler_End;
 }
 
-static void AddRenderRectCommand(Rect r, Color c)
+static void AddRenderRectCommand(eva_rect *r, Color c)
 {
     int32_t index = (*g_renderCommands.currentIndex)++;
     RenderCommand *cmd = &g_renderCommands.current[index];
     cmd->type = RENDER_COMMAND_RECT;
-    cmd->rect = r;
+    cmd->rect = *r;
     cmd->rectCommand.color = c;
 }
 
@@ -623,13 +627,13 @@ AddRenderFontCommand(Font font, const char *text, int32_t x, int32_t y, int32_t 
 //
 void Render_Clear(Color color)
 {
-    Rect r = {
+    eva_rect r = {
         .x = 0, .y = 0, .w = eva_get_framebuffer_width(), .h = eva_get_framebuffer_height()
     };
-    AddRenderRectCommand(r, color);
+    AddRenderRectCommand(&r, color);
 }
 
-void Render_DrawRect(Rect rect,
+void Render_DrawRect(eva_rect *rect,
                      Color color) // TODO: These should be passed by pointer
 {
     AddRenderRectCommand(rect, color);

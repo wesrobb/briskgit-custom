@@ -9,7 +9,7 @@
 
 typedef struct AppContext {
     int32_t branchDrawerResizeRange;
-    Rect branchDrawerRect;
+    eva_rect branchDrawerRect;
     bool branchDrawerResizing;
     int32_t branchDrawerMinSize;
 
@@ -17,7 +17,7 @@ typedef struct AppContext {
 
 AppContext g_appContext;
 
-static bool point_in_rect(int32_t x, int32_t y, Rect *r)
+static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
 {
     return x >= r->x && x <= (r->x + r->w) && y >= r->y && y <= (r->y + r->h);
 }
@@ -44,10 +44,9 @@ void App_OnMouseMoved(eva_mouse_event *e)
 {
     if (g_appContext.branchDrawerResizing) {
         g_appContext.branchDrawerRect.w = max(e->x, g_appContext.branchDrawerMinSize);
-        eva_request_frame();
     }
 
-    Rect resizeHandle = {
+    eva_rect resizeHandle = {
         .x = g_appContext.branchDrawerRect.x + g_appContext.branchDrawerRect.w -
              g_appContext.branchDrawerResizeRange,
         .y = g_appContext.branchDrawerRect.y,
@@ -67,7 +66,7 @@ void App_OnMousePressed(eva_mouse_event *e)
 {
     (void)e;
     if (e->left_button_pressed) {
-        Rect resizeHandle = {
+        eva_rect resizeHandle = {
             .x = g_appContext.branchDrawerRect.x + g_appContext.branchDrawerRect.w -
                  g_appContext.branchDrawerResizeRange,
             .y = g_appContext.branchDrawerRect.y,
@@ -96,8 +95,6 @@ void App_OnWindowResized(int32_t width, int32_t height)
     (void)width;
     (void)height;
     g_appContext.branchDrawerRect.h = eva_get_window_height();
-
-    eva_request_frame();
 }
 
 void App_Draw()
@@ -125,7 +122,7 @@ void App_Draw()
     };
 
     Render_Clear(clearColor);
-    Render_DrawRect(g_appContext.branchDrawerRect, color);
+    Render_DrawRect(&g_appContext.branchDrawerRect, color);
     // Render_DrawHollowRect(testRect, white, 4);
 
     int32_t fontSizePt = 18;

@@ -22,7 +22,7 @@ void frame(eva_pixel *framebuffer,
            int32_t framebuffer_height,
            float scale_x,
            float scale_y,
-           eva_rect *dirty_rect)
+           eva_rect dirty_rect)
 {
     Render_BeginFrame();
     {
@@ -30,15 +30,11 @@ void frame(eva_pixel *framebuffer,
         App_Draw();
         Profiler_End;
     }
-    Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y);
+    eva_rect dirty_rect2;
+    Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y, &dirty_rect2);
 
     Profiler_Log(2);
-
-    // TEST
-    dirty_rect->x = 0;
-    dirty_rect->y = 0;
-    dirty_rect->w = framebuffer_width / 2;
-    dirty_rect->h = framebuffer_height;
+    (void)(dirty_rect);
 }
 
 void handle_mouse_event(eva_mouse_event *e)
@@ -73,6 +69,26 @@ void event(eva_event *e)
         puts("Received eva quit requested");
         break;
     }
+
+    Render_BeginFrame();
+    {
+        Profiler_BeginName("App_Draw");
+        App_Draw();
+        Profiler_End;
+    }
+
+    eva_rect dirty_rect;
+    Render_EndFrame(
+            eva_get_framebuffer(),
+            eva_get_framebuffer_width(),
+            eva_get_framebuffer_height(),
+            eva_get_framebuffer_scale_x(),
+            eva_get_framebuffer_scale_y(),
+            &dirty_rect);
+
+    eva_request_frame_rect(&dirty_rect);
+
+    Profiler_Log(2);
 }
 
 void cleanup()

@@ -3,10 +3,7 @@
 #include "common.h"
 
 typedef struct eva_pixel eva_pixel;
-
-typedef struct Rect {
-    int32_t x, y, w, h;
-} Rect;
+typedef struct eva_rect  eva_rect;
 
 typedef struct Color {
     float b, g, r, a;
@@ -28,11 +25,12 @@ void Render_EndFrame(eva_pixel *framebuffer,
                      int32_t framebuffer_width,
                      int32_t framebuffer_height,
                      float scale_x,
-                     float scale_y);
+                     float scale_y,
+                     eva_rect *dirty_rect);
 
 void Render_Clear(Color);
-void Render_DrawRect(Rect, Color);
-void Render_DrawHollowRect(Rect rect, Color color, int32_t borderThickness);
+void Render_DrawRect(eva_rect *, Color);
+void Render_DrawHollowRect(eva_rect *rect, Color color, int32_t borderThickness);
 void Render_DrawFont(
     Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color color);
 
