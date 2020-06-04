@@ -17,26 +17,6 @@ void init()
     App_Init();
 }
 
-void frame(eva_pixel *framebuffer,
-           int32_t framebuffer_width,
-           int32_t framebuffer_height,
-           float scale_x,
-           float scale_y,
-           eva_rect dirty_rect)
-{
-    Render_BeginFrame();
-    {
-        Profiler_BeginName("App_Draw");
-        App_Draw();
-        Profiler_End;
-    }
-    eva_rect dirty_rect2;
-    Render_EndFrame(framebuffer, framebuffer_width, framebuffer_height, scale_x, scale_y, &dirty_rect2);
-
-    Profiler_Log(2);
-    (void)(dirty_rect);
-}
-
 void handle_mouse_event(eva_mouse_event *e)
 {
     switch (e->type) {
@@ -54,6 +34,8 @@ void handle_mouse_event(eva_mouse_event *e)
 
 void event(eva_event *e)
 {
+    bool full_redraw = false;
+
     switch (e->type) {
     case EVA_EVENTTYPE_WINDOW:
         puts("Received eva window event");
@@ -67,6 +49,9 @@ void event(eva_event *e)
         break;
     case EVA_EVENTTYPE_QUITREQUESTED:
         puts("Received eva quit requested");
+        break;
+    case EVA_EVENTTYPE_FULLFRAME:
+        full_redraw = true;
         break;
     }
 
@@ -86,7 +71,12 @@ void event(eva_event *e)
             eva_get_framebuffer_scale_y(),
             &dirty_rect);
 
-    eva_request_frame_rect(&dirty_rect);
+    if (full_redraw) {
+        eva_request_frame(NULL);
+    }
+    else {
+        eva_request_frame(&dirty_rect);
+    }
 
     Profiler_Log(2);
 }
@@ -107,7 +97,7 @@ int main()
 {
     printf("Hello briskgit!\n");
 
-    eva_run("Briskgit", init, frame, event, cleanup, fail);
+    eva_run("Briskgit", init, event, cleanup, fail);
 
     return 0;
 }
