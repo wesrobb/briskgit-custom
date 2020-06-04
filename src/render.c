@@ -66,73 +66,71 @@ typedef struct RenderCommands {
 } RenderCommands;
 static RenderCommands g_renderCommands;
 
-//#define MAX_TILE_CACHE_X 100
-//#define MAX_TILE_CACHE_Y 100
-// static uint32_t g_tileCache1[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
-// static uint32_t g_tileCache2[MAX_TILE_CACHE_X][MAX_TILE_CACHE_Y];
-// static uint32_t *g_currentTileCache;
-//
-// static uint32_t g_fnv1aInitial = 2166136261;
-//
-//// See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
-// static uint32_t FNV1A(uint32_t initial, unsigned char* buffer, size_t
-// bufferLength)
+#define MAX_TILE_CACHE_X 80
+#define MAX_TILE_CACHE_Y 50
+#define TILE_SIZE 96
+static uint32_t g_tileCache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
+static uint32_t g_tileCache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
+static uint32_t *g_currentTileCache;
+static uint32_t *g_previousTileCache;
+
+#define HASH_INITIAL 2166136261
+
+// See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
+static void Hash(uint32_t *v, uint8_t *buffer, size_t bufferLength)
+{
+    assert(buffer);
+
+    for (size_t i = 0; i < bufferLength; i++)
+    {
+        *v ^= buffer[i];
+        *v *= 16777619;
+    }
+}
+
+//static bool TextEquals(const char *a, const char *b)
 //{
-//    SDL_assert(buffer);
-//
-//    uint32_t hash = initial;
-//    for (size_t i = 0; i < bufferLength; i++)
-//    {
-//        hash ^= buffer[i];
-//        hash *= 16777619;
+//    uint64_t lenA = strlen(a);
+//    uint64_t lenB = strlen(b);
+//    if (lenA == lenB) {
+//        for (uint64_t i = 0; i < lenA; i++) {
+//            if (a[i] != b[i]) {
+//                return false;
+//            }
+//        }
 //    }
 //
-//    return hash;
+//    return true;
 //}
 
-static bool TextEquals(const char *a, const char *b)
-{
-    uint64_t lenA = strlen(a);
-    uint64_t lenB = strlen(b);
-    if (lenA == lenB) {
-        for (uint64_t i = 0; i < lenA; i++) {
-            if (a[i] != b[i]) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-static bool RenderCommandsEqual(RenderCommand *a, RenderCommand *b)
-{
-    // TODO: Compare performance with memcmp.
-    // It is more likely the rect changes than the type changes
-    // since rendering order is unlikely to vary much.
-    // So check the rect first.
-    if (a->rect.x == b->rect.x && a->rect.y == b->rect.y && a->rect.w == b->rect.w &&
-        a->rect.h == b->rect.h) {
-        if (a->type == b->type) {
-            switch (a->type) {
-            case RENDER_COMMAND_RECT:
-                return a->rectCommand.color.a == b->rectCommand.color.a &&
-                       a->rectCommand.color.b == b->rectCommand.color.b &&
-                       a->rectCommand.color.g == b->rectCommand.color.g &&
-                       a->rectCommand.color.r == b->rectCommand.color.r;
-            case RENDER_COMMAND_FONT:
-                return a->fontCommand.color.a == b->fontCommand.color.a &&
-                       a->fontCommand.color.b == b->fontCommand.color.b &&
-                       a->fontCommand.color.g == b->fontCommand.color.g &&
-                       a->fontCommand.color.r == b->fontCommand.color.r &&
-                       a->fontCommand.ptSize == b->fontCommand.ptSize &&
-                       TextEquals(a->fontCommand.text, b->fontCommand.text);
-            }
-        }
-    }
-
-    return false;
-}
+//static bool RenderCommandsEqual(RenderCommand *a, RenderCommand *b)
+//{
+//    // TODO: Compare performance with memcmp.
+//    // It is more likely the rect changes than the type changes
+//    // since rendering order is unlikely to vary much.
+//    // So check the rect first.
+//    if (a->rect.x == b->rect.x && a->rect.y == b->rect.y && a->rect.w == b->rect.w &&
+//        a->rect.h == b->rect.h) {
+//        if (a->type == b->type) {
+//            switch (a->type) {
+//            case RENDER_COMMAND_RECT:
+//                return a->rectCommand.color.a == b->rectCommand.color.a &&
+//                       a->rectCommand.color.b == b->rectCommand.color.b &&
+//                       a->rectCommand.color.g == b->rectCommand.color.g &&
+//                       a->rectCommand.color.r == b->rectCommand.color.r;
+//            case RENDER_COMMAND_FONT:
+//                return a->fontCommand.color.a == b->fontCommand.color.a &&
+//                       a->fontCommand.color.b == b->fontCommand.color.b &&
+//                       a->fontCommand.color.g == b->fontCommand.color.g &&
+//                       a->fontCommand.color.r == b->fontCommand.color.r &&
+//                       a->fontCommand.ptSize == b->fontCommand.ptSize &&
+//                       TextEquals(a->fontCommand.text, b->fontCommand.text);
+//            }
+//        }
+//    }
+//
+//    return false;
+//}
 
 static eva_pixel ColorToPixel(Color c)
 {
@@ -236,21 +234,26 @@ static void DrawFreeTypeBitmap(FT_Bitmap *bitmap,
                                double x,
                                double y,
                                Color c,
-                               eva_pixel *framebuffer,
-                               int32_t framebuffer_width,
-                               int32_t framebuffer_height)
+                               eva_rect clipRect)
 {
     Profiler_Begin;
 
     assert(bitmap);
 
-    int32_t startX = max(0, (int32_t)(x + 0.5));
-    int32_t endX = min(framebuffer_width, (int32_t)(x + bitmap->width + 0.5));
+    int32_t framebuffer_width = eva_get_framebuffer_width();
+    int32_t framebuffer_height = eva_get_framebuffer_height();
 
-    int32_t startY = max(0, (int32_t)(y + 0.5));
-    int32_t endY = min(framebuffer_height, (int32_t)(y + bitmap->rows + 0.5));
+    int32_t startX = max(clipRect.x, (int32_t)(x + 0.5));
+    int32_t endX = min(clipRect.x + clipRect.w, (int32_t)(x + bitmap->width + 0.5));
+
+    int32_t startY = max(clipRect.y, (int32_t)(y + 0.5));
+    int32_t endY = min(clipRect.y + clipRect.h, (int32_t)(y + bitmap->rows + 0.5));
+
+    endX = min(endX, framebuffer_width);
+    endY = min(endY, framebuffer_height);
 
     // Move to the first pixel that resides in the rect
+    eva_pixel *framebuffer = eva_get_framebuffer();
     framebuffer += startX + startY * framebuffer_width;
     // Calculate how many pixels to jump over at
     // the end of each row in the rect.
@@ -335,24 +338,25 @@ static void LoadCachedFont(
 
 void DrawRect(eva_rect rect,
               RenderCommandRect *cmd,
-              eva_pixel *framebuffer,
-              int32_t framebuffer_width,
-              int32_t framebuffer_height,
-              float scale_x,
-              float scale_y)
+              eva_rect clipRect)
 {
     Profiler_Begin;
 
-    ScaleRect(&rect, scale_x, scale_y);
+    int32_t framebuffer_width = eva_get_framebuffer_width();
+    int32_t framebuffer_height = eva_get_framebuffer_height();
 
-    int32_t startX = max(0, rect.x);
-    int32_t endX = min(framebuffer_width, rect.x + rect.w);
+    int32_t startX = max(clipRect.x, rect.x);
+    int32_t endX = min(clipRect.x + clipRect.w, rect.x + rect.w);
 
     // Invert y cos our coordinates are y up but SDL surface is y down.
-    int32_t startY = max(0, rect.y);
-    int32_t endY = min(framebuffer_height, rect.y + rect.h);
+    int32_t startY = max(clipRect.y, rect.y);
+    int32_t endY = min(clipRect.y + clipRect.h, rect.y + rect.h);
+
+    endX = min(endX, framebuffer_width);
+    endY = min(endY, framebuffer_height);
 
     // Move to the first pixel that resides in the rect
+    eva_pixel *framebuffer = eva_get_framebuffer();
     framebuffer += startX + startY * framebuffer_width;
 
     /// Calculate how many pixels to jump over
@@ -374,15 +378,14 @@ void DrawRect(eva_rect rect,
 
 void DrawFont(eva_rect rect,
               RenderCommandFont *cmd,
-              eva_pixel *framebuffer,
-              int32_t framebuffer_width,
-              int32_t framebuffer_height,
-              float scale_x,
-              float scale_y)
+              eva_rect clipRect)
 {
     (void)rect;
 
     Profiler_Begin;
+
+    float scale_x = eva_get_framebuffer_scale_x();
+    float scale_y = eva_get_framebuffer_scale_y();
 
     cmd->x = (int32_t)(cmd->x * scale_x);
     cmd->y = (int32_t)(cmd->y * scale_y);
@@ -426,13 +429,7 @@ void DrawFont(eva_rect rect,
         // now, draw to our target surface
         double x = cursor_x + x_offset + face->glyph->bitmap_left;
         double y = cursor_y + y_offset - face->glyph->bitmap_top;
-        DrawFreeTypeBitmap(&face->glyph->bitmap,
-                           x,
-                           y,
-                           cmd->color,
-                           framebuffer,
-                           framebuffer_width,
-                           framebuffer_height);
+        DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, cmd->color, clipRect);
         cursor_x += x_advance;
         cursor_y += y_advance;
     }
@@ -442,23 +439,23 @@ void DrawFont(eva_rect rect,
     Profiler_End;
 }
 
-static bool RenderCommandsChanged()
-{
-    if (*g_renderCommands.currentIndex != *g_renderCommands.previousIndex) {
-        return true;
-    }
-
-    int32_t numCommands = *g_renderCommands.currentIndex;
-    for (int32_t i = 0; i < numCommands; i++) {
-        RenderCommand *current = &g_renderCommands.current[i];
-        RenderCommand *previous = &g_renderCommands.previous[i];
-        if (!RenderCommandsEqual(current, previous)) {
-            return true;
-        }
-    }
-
-    return false;
-}
+//static bool RenderCommandsChanged()
+//{
+//    if (*g_renderCommands.currentIndex != *g_renderCommands.previousIndex) {
+//        return true;
+//    }
+//
+//    int32_t numCommands = *g_renderCommands.currentIndex;
+//    for (int32_t i = 0; i < numCommands; i++) {
+//        RenderCommand *current = &g_renderCommands.current[i];
+//        RenderCommand *previous = &g_renderCommands.previous[i];
+//        if (!RenderCommandsEqual(current, previous)) {
+//            return true;
+//        }
+//    }
+//
+//    return false;
+//}
 
 bool Render_Init()
 {
@@ -510,6 +507,20 @@ bool Render_Init()
     g_renderCommands.currentIndex = &g_renderCommands.commandsIndex1;
     g_renderCommands.previousIndex = &g_renderCommands.commandsIndex2;
 
+    g_currentTileCache = g_tileCache1;
+    g_previousTileCache = g_tileCache2;
+
+    // Initialize the tile caches.
+    for (uint32_t y = 0; y < MAX_TILE_CACHE_Y; y++)
+    {
+        for (uint32_t x = 0; x < MAX_TILE_CACHE_X; x++)
+        {
+            uint32_t tileIndex = x + y * MAX_TILE_CACHE_X;
+            g_currentTileCache[tileIndex] = HASH_INITIAL;
+            g_previousTileCache[tileIndex] = HASH_INITIAL;
+        }
+    }
+
     return true;
 }
 
@@ -524,7 +535,6 @@ void Render_Destroy()
 
 void Render_BeginFrame()
 {
-
     // Swap the current render queue.
     RenderCommand *tmpCommands = g_renderCommands.current;
     g_renderCommands.current = g_renderCommands.previous;
@@ -534,46 +544,94 @@ void Render_BeginFrame()
     g_renderCommands.currentIndex = g_renderCommands.previousIndex;
     g_renderCommands.previousIndex = tmpIndex;
 
-    // Reset the new current render queue
+    // Reset the new current render queue.
     *g_renderCommands.currentIndex = 0;
+
+    // Swap tile caches.
+    uint32_t *tmpTileCache = g_currentTileCache;
+    g_currentTileCache = g_previousTileCache;
+    g_previousTileCache = tmpTileCache;
 }
 
-void Render_EndFrame(eva_pixel *framebuffer,
-                     int32_t framebuffer_width,
-                     int32_t framebuffer_height,
-                     float scale_x,
-                     float scale_y,
-                     eva_rect *dirty_rect)
+static void UpdateTileCache(eva_rect *r, uint32_t hash)
+{
+    int32_t x1 = r->x / TILE_SIZE;
+    int32_t y1 = r->y / TILE_SIZE;
+    int32_t x2 = (r->x + r->w) / TILE_SIZE;
+    int32_t y2 = (r->y + r->h) / TILE_SIZE;
+    for (int y = y1; y <= y2; y++) {
+        for (int x = x1; x <= x2; x++) {
+            Hash(&g_currentTileCache[x + y * MAX_TILE_CACHE_X], (uint8_t*)&hash, sizeof(hash));
+        }
+    }
+}
+
+void Render_EndFrame(eva_rect *dirty_rect)
 {
     Profiler_Begin;
 
     memset(dirty_rect, 0, sizeof(eva_rect));
 
-    if (RenderCommandsChanged()) {
+    //if (RenderCommandsChanged())
+    {
         // Process current queue.
         int32_t numCommands = *g_renderCommands.currentIndex;
-        for (int32_t i = 0; i < numCommands; i++) {
+        for (int32_t i = 0; i < numCommands; i++)
+        {
             RenderCommand *cmd = &g_renderCommands.current[i];
-            *dirty_rect = eva_rect_union(dirty_rect, &cmd->rect);
-            switch (cmd->type) {
-            case RENDER_COMMAND_RECT:
-                DrawRect(cmd->rect,
-                         &cmd->rectCommand,
-                         framebuffer,
-                         framebuffer_width,
-                         framebuffer_height,
-                         scale_x,
-                         scale_y);
-                break;
-            case RENDER_COMMAND_FONT:
-                DrawFont(cmd->rect,
-                         &cmd->fontCommand,
-                         framebuffer,
-                         framebuffer_width,
-                         framebuffer_height,
-                         scale_x,
-                         scale_y);
-                break;
+            uint32_t cmdHash = HASH_INITIAL;
+            Hash(&cmdHash, (uint8_t*)cmd, sizeof(*cmd));
+            UpdateTileCache(&cmd->rect, cmdHash);
+        }
+
+        // Merge all the dirty rects into 1 rect.
+        // This can be dangerous if we have pixels
+        // that are frequently changing on opposite
+        // corners of the screen.
+        // TODO: Consider only merging adjacent rects.
+        for (uint32_t y = 0; y < MAX_TILE_CACHE_Y; y++)
+        {
+            for (uint32_t x = 0; x < MAX_TILE_CACHE_X; x++)
+            {
+                uint32_t tileIndex = x + y * MAX_TILE_CACHE_X;
+                if (g_currentTileCache[tileIndex] != g_previousTileCache[tileIndex])
+                {
+                    eva_rect region = {
+                        .x = (int32_t)x * TILE_SIZE,
+                        .y = (int32_t)y * TILE_SIZE,
+                        .w = TILE_SIZE,
+                        .h = TILE_SIZE,
+                    };
+
+                    if (eva_rect_empty(dirty_rect))
+                    {
+                        *dirty_rect = region;
+                    }
+                    else
+                    {
+                        *dirty_rect = eva_rect_union(dirty_rect, &region);
+                    }
+                }
+
+                g_previousTileCache[tileIndex] = HASH_INITIAL;
+            }
+        }
+
+
+        if (!eva_rect_empty(dirty_rect))
+        {
+            for (int32_t i = 0; i < numCommands; i++)
+            {
+                RenderCommand *cmd = &g_renderCommands.current[i];
+                switch (cmd->type)
+                {
+                    case RENDER_COMMAND_RECT:
+                        DrawRect(cmd->rect, &cmd->rectCommand, *dirty_rect);
+                        break;
+                    case RENDER_COMMAND_FONT:
+                        DrawFont(cmd->rect, &cmd->fontCommand, *dirty_rect);
+                        break;
+                }
             }
         }
     }
@@ -588,6 +646,7 @@ static void AddRenderRectCommand(eva_rect *r, Color c)
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
     cmd->rectCommand.color = c;
+    ScaleRect(&cmd->rect, eva_get_framebuffer_scale_x(), eva_get_framebuffer_scale_y());
 }
 
 static void
@@ -628,7 +687,7 @@ AddRenderFontCommand(Font font, const char *text, int32_t x, int32_t y, int32_t 
 void Render_Clear(Color color)
 {
     eva_rect r = {
-        .x = 0, .y = 0, .w = eva_get_framebuffer_width(), .h = eva_get_framebuffer_height()
+        .x = 0, .y = 0, .w = eva_get_window_width(), .h = eva_get_window_height()
     };
     AddRenderRectCommand(&r, color);
 }

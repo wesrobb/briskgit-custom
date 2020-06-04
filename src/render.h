@@ -21,12 +21,7 @@ void Render_GetDimensions(int32_t *width,
                           float *scaleFactorY);
 
 void Render_BeginFrame();
-void Render_EndFrame(eva_pixel *framebuffer,
-                     int32_t framebuffer_width,
-                     int32_t framebuffer_height,
-                     float scale_x,
-                     float scale_y,
-                     eva_rect *dirty_rect);
+void Render_EndFrame(eva_rect *dirty_rect);
 
 void Render_Clear(Color);
 void Render_DrawRect(eva_rect *, Color);

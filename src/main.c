@@ -63,13 +63,7 @@ void event(eva_event *e)
     }
 
     eva_rect dirty_rect;
-    Render_EndFrame(
-            eva_get_framebuffer(),
-            eva_get_framebuffer_width(),
-            eva_get_framebuffer_height(),
-            eva_get_framebuffer_scale_x(),
-            eva_get_framebuffer_scale_y(),
-            &dirty_rect);
+    Render_EndFrame(&dirty_rect);
 
     if (full_redraw) {
         eva_request_frame(NULL);

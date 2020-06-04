@@ -13,7 +13,7 @@ add_executable(briskgit
     src/eva/eva.h
     src/eva/eva_macos.m)
 
-target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+#target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 target_include_directories(briskgit PRIVATE 
     ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/include
     ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/include/harfbuzz)
@@ -27,7 +27,7 @@ if (MSVC)
     target_compile_options(briskgit PRIVATE /W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(briskgit PRIVATE -g -O3 -Wall -Wextra -pedantic -Werror -Wconversion)
+    target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)
 endif()
 
 configure_file(Info.plist Info.plist COPYONLY)
