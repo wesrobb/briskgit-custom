@@ -13,7 +13,7 @@ add_executable(briskgit
     src/eva/eva.h
     src/eva/eva_macos.m)
 
-#target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 target_include_directories(briskgit PRIVATE 
     ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/include
     ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/include/harfbuzz)

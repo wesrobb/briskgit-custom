@@ -29,6 +29,12 @@ void handle_mouse_event(eva_mouse_event *e)
     case EVA_MOUSE_EVENTTYPE_MOUSE_RELEASED:
         App_OnMouseReleased(e);
         break;
+    case EVA_MOUSE_EVENTTYPE_MOUSE_ENTERED:
+        puts("Mouse entered");
+        break;
+    case EVA_MOUSE_EVENTTYPE_MOUSE_EXITED:
+        puts("Mouse exited");
+        break;
     }
 }
 
@@ -50,7 +56,7 @@ void event(eva_event *e)
     case EVA_EVENTTYPE_QUITREQUESTED:
         puts("Received eva quit requested");
         break;
-    case EVA_EVENTTYPE_FULLFRAME:
+    case EVA_EVENTTYPE_REDRAWFRAME:
         full_redraw = true;
         break;
     }

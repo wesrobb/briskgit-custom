@@ -43,7 +43,7 @@ void App_Destroy()
 void App_OnMouseMoved(eva_mouse_event *e)
 {
     if (g_appContext.branchDrawerResizing) {
-        g_appContext.branchDrawerRect.w = max(e->x, g_appContext.branchDrawerMinSize);
+        g_appContext.branchDrawerRect.w = max(e->mouse_x, g_appContext.branchDrawerMinSize);
     }
 
     eva_rect resizeHandle = {
@@ -74,7 +74,7 @@ void App_OnMousePressed(eva_mouse_event *e)
             .h = g_appContext.branchDrawerRect.y + g_appContext.branchDrawerRect.h,
         };
 
-        if (point_in_rect(e->x, e->y, &resizeHandle)) {
+        if (point_in_rect(e->mouse_x, e->mouse_y, &resizeHandle)) {
             g_appContext.branchDrawerResizing = true;
         }
     }
