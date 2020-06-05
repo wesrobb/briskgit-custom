@@ -5,29 +5,29 @@
 typedef struct eva_pixel eva_pixel;
 typedef struct eva_rect  eva_rect;
 
-typedef struct Color {
+typedef struct color {
     float b, g, r, a;
-} Color;
+} color;
 
-typedef enum Font { FONT_ROBOTO_REGULAR, FONT_MENLO_REGULAR, FONT_COUNT } Font;
+typedef enum font {
+    FONT_ROBOTO_REGULAR,
+    FONT_MENLO_REGULAR,
+    FONT_COUNT
+} font;
 
-bool Render_Init();
-void Render_Destroy();
-bool Render_Update(int32_t width, int32_t height, float scaleFactorX, float scaleFactorY);
+bool render_init();
+void render_shutdown();
 
-void Render_GetDimensions(int32_t *width,
-                          int32_t *height,
-                          float *scaleFactorX,
-                          float *scaleFactorY);
+void render_begin_frame();
+void render_end_frame(eva_rect *dirty_rect);
 
-void Render_BeginFrame();
-void Render_EndFrame(eva_rect *dirty_rect);
+void render_clear(color);
+void render_draw_rect(eva_rect *, color);
+void render_draw_hollow_rect(eva_rect *rect, color, int32_t border_thickness);
+void render_draw_font(font font, const char *text,
+                      int32_t pos_x, int32_t pos_y,
+                      int32_t pt_size, color);
 
-void Render_Clear(Color);
-void Render_DrawRect(eva_rect *, Color);
-void Render_DrawHollowRect(eva_rect *rect, Color color, int32_t borderThickness);
-void Render_DrawFont(
-    Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color color);
-
-int32_t Render_GetTextWidth(Font font, const char *text, int32_t ptSize);
-void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *descent);
+int32_t render_get_text_width(font font, const char *text, int32_t pt_size);
+void    render_get_font_height(font font, int32_t pt_size,
+                               int32_t *ascent, int32_t *descent);

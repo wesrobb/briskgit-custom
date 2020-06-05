@@ -7,129 +7,122 @@
 
 #include <stdio.h>
 
-typedef struct AppContext {
-    int32_t branchDrawerResizeRange;
-    eva_rect branchDrawerRect;
-    bool branchDrawerResizing;
-    int32_t branchDrawerMinSize;
+typedef struct app_ctx {
+    int32_t branch_pane_resize_range;
+    eva_rect branch_pane_rect;
+    bool branch_pane_resizing;
+    int32_t branch_pane_min_size;
 
-} AppContext;
+} app_ctx;
 
-AppContext g_appContext;
+static app_ctx _app_ctx;
 
 static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
 {
-    return x >= r->x && x <= (r->x + r->w) && y >= r->y && y <= (r->y + r->h);
+    return x >= r->x          &&
+           x <= (r->x + r->w) &&
+           y >= r->y          &&
+           y <= (r->y + r->h);
 }
 
-void App_Init()
+void app_init()
 {
     float scale_x = eva_get_framebuffer_scale_x();
 
-    g_appContext.branchDrawerResizeRange = (int32_t)(5 * scale_x);
-    g_appContext.branchDrawerRect.w = 400;
-    g_appContext.branchDrawerRect.h = eva_get_window_height();
-    g_appContext.branchDrawerMinSize = 200;
+    _app_ctx.branch_pane_resize_range = (int32_t)(5 * scale_x);
+    _app_ctx.branch_pane_rect.w = 400;
+    _app_ctx.branch_pane_rect.h = eva_get_window_height();
+    _app_ctx.branch_pane_min_size = 200;
 }
 
-void App_Destroy()
+void app_shutdown()
 {
 }
 
-// void App_OnKeyPressed(SDL_Keysym *e) { (void)e; }
-//
-// void App_OnKeyReleased(SDL_Keysym *e) { (void)e; }
-
-void App_OnMouseMoved(eva_mouse_event *e)
+void app_mouse_moved(eva_mouse_event *e)
 {
-    if (g_appContext.branchDrawerResizing) {
-        g_appContext.branchDrawerRect.w = max(e->mouse_x, g_appContext.branchDrawerMinSize);
+    if (_app_ctx.branch_pane_resizing) {
+        _app_ctx.branch_pane_rect.w =
+            max(e->mouse_x, _app_ctx.branch_pane_min_size);
     }
 
     eva_rect resizeHandle = {
-        .x = g_appContext.branchDrawerRect.x + g_appContext.branchDrawerRect.w -
-             g_appContext.branchDrawerResizeRange,
-        .y = g_appContext.branchDrawerRect.y,
-        .w = g_appContext.branchDrawerResizeRange * 2,
-        .h = g_appContext.branchDrawerRect.y + g_appContext.branchDrawerRect.h,
+        .x = _app_ctx.branch_pane_rect.x + _app_ctx.branch_pane_rect.w -
+             _app_ctx.branch_pane_resize_range,
+        .y = _app_ctx.branch_pane_rect.y,
+        .w = _app_ctx.branch_pane_resize_range * 2,
+        .h = _app_ctx.branch_pane_rect.y + _app_ctx.branch_pane_rect.h,
     };
     (void)resizeHandle;
-
-    // if (PointInRect(e->x, e->y, &resizeHandle)) {
-    //  SDL_SetCursor(g_appContext.horizontalResizeCursor);
-    //} else {
-    //  SDL_SetCursor(g_appContext.defaultCursor);
-    //}
 }
 
-void App_OnMousePressed(eva_mouse_event *e)
+void app_mouse_pressed(eva_mouse_event *e)
 {
     (void)e;
     if (e->left_button_pressed) {
         eva_rect resizeHandle = {
-            .x = g_appContext.branchDrawerRect.x + g_appContext.branchDrawerRect.w -
-                 g_appContext.branchDrawerResizeRange,
-            .y = g_appContext.branchDrawerRect.y,
-            .w = g_appContext.branchDrawerResizeRange * 2,
-            .h = g_appContext.branchDrawerRect.y + g_appContext.branchDrawerRect.h,
+            .x = _app_ctx.branch_pane_rect.x + _app_ctx.branch_pane_rect.w -
+                 _app_ctx.branch_pane_resize_range,
+            .y = _app_ctx.branch_pane_rect.y,
+            .w = _app_ctx.branch_pane_resize_range * 2,
+            .h = _app_ctx.branch_pane_rect.y + _app_ctx.branch_pane_rect.h,
         };
 
         if (point_in_rect(e->mouse_x, e->mouse_y, &resizeHandle)) {
-            g_appContext.branchDrawerResizing = true;
+            _app_ctx.branch_pane_resizing = true;
         }
     }
 }
 
-void App_OnMouseReleased(eva_mouse_event *e)
+void app_mouse_released(eva_mouse_event *e)
 {
     (void)e;
     if (e->left_button_released) {
-        if (g_appContext.branchDrawerResizing) {
-            g_appContext.branchDrawerResizing = false;
+        if (_app_ctx.branch_pane_resizing) {
+            _app_ctx.branch_pane_resizing = false;
         }
     }
 }
 
-void App_OnWindowResized(int32_t width, int32_t height)
+void app_window_resized(int32_t width, int32_t height)
 {
     (void)width;
-    (void)height;
-    g_appContext.branchDrawerRect.h = eva_get_window_height();
+    _app_ctx.branch_pane_rect.h = height;
 }
 
-void App_Draw()
+void app_draw()
 {
-    Profiler_Begin;
+    profiler_begin;
 
-    Color clearColor = {
+    color light_grey = {
         .r = 0.1f,
         .g = 0.1f,
         .b = 0.1f,
         .a = 1.0f
     };
-    Color color = {
+    color grey = {
         .r = 0.3f,
         .g = 0.3f,
         .b = 0.3f,
         .a = 1.0f
     };
 
-    Color white = {
+    color white = {
         .r = 1.0f,
         .g = 1.0f,
         .b = 1.0f,
         .a = 1.0f,
     };
 
-    Render_Clear(clearColor);
-    Render_DrawRect(&g_appContext.branchDrawerRect, color);
+    render_clear(light_grey);
+    render_draw_rect(&_app_ctx.branch_pane_rect, grey);
     // Render_DrawHollowRect(testRect, white, 4);
 
-    int32_t fontSizePt = 18;
+    int32_t font_size_pt = 18;
     // int32_t ascent, descent;
     // Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
 
-    const char *textLines[] = {
+    const char *text_lines[] = {
         "master",
         "develop",
         "feature/AV",
@@ -137,11 +130,12 @@ void App_Draw()
         "ffffffffff"
     };
 
-    for (int32_t i = 0; (unsigned long)i < sizeof(textLines) / sizeof(textLines[0]); i++) {
+    uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
+    for (uint32_t i = 0; i < num_text_lines; i++) {
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
         // textLines[i], fontSizePt);
         int32_t x = 10;
-        int32_t y = 20 + (i * (22));
+        int32_t y = (int32_t)(20 + (i * (22)));
         // Rect r = {
         //    .x = x,
         //    .y = y - ascent,
@@ -150,8 +144,10 @@ void App_Draw()
         //};
 
         // Render_DrawHollowRect(r, white, 2);
-        Render_DrawFont(FONT_ROBOTO_REGULAR, textLines[i], x, y, fontSizePt, white);
+        render_draw_font(FONT_ROBOTO_REGULAR,
+                         text_lines[i], 
+                         x, y, font_size_pt, white);
     }
 
-    Profiler_End;
+    profiler_end;
 }

@@ -13,21 +13,21 @@ void init()
 {
     profiler_init;
 
-    Render_Init();
-    App_Init();
+    render_init();
+    app_init();
 }
 
 void handle_mouse_event(eva_mouse_event *e)
 {
     switch (e->type) {
     case EVA_MOUSE_EVENTTYPE_MOUSE_MOVED:
-        App_OnMouseMoved(e);
+        app_mouse_moved(e);
         break;
     case EVA_MOUSE_EVENTTYPE_MOUSE_PRESSED:
-        App_OnMousePressed(e);
+        app_mouse_pressed(e);
         break;
     case EVA_MOUSE_EVENTTYPE_MOUSE_RELEASED:
-        App_OnMouseReleased(e);
+        app_mouse_released(e);
         break;
     case EVA_MOUSE_EVENTTYPE_MOUSE_ENTERED:
         puts("Mouse entered");
@@ -45,7 +45,7 @@ void event(eva_event *e)
     switch (e->type) {
     case EVA_EVENTTYPE_WINDOW:
         puts("Received eva window event");
-        App_OnWindowResized(e->window.window_width, e->window.window_height);
+        app_window_resized(e->window.window_width, e->window.window_height);
         break;
     case EVA_EVENTTYPE_MOUSE:
         handle_mouse_event(&e->mouse);
@@ -61,15 +61,15 @@ void event(eva_event *e)
         break;
     }
 
-    Render_BeginFrame();
+    render_begin_frame();
     {
-        Profiler_BeginName("App_Draw");
-        App_Draw();
-        Profiler_End;
+        profiler_begin_name("App_Draw");
+        app_draw();
+        profiler_end;
     }
 
     eva_rect dirty_rect;
-    Render_EndFrame(&dirty_rect);
+    render_end_frame(&dirty_rect);
 
     if (full_redraw) {
         eva_request_frame(NULL);
@@ -78,14 +78,14 @@ void event(eva_event *e)
         eva_request_frame(&dirty_rect);
     }
 
-    Profiler_Log(2);
+    profiler_log(2);
 }
 
 void cleanup()
 {
     puts("Cleaning up");
-    App_Destroy();
-    Render_Destroy();
+    app_shutdown();
+    render_shutdown();
 }
 
 void fail(int error_code, const char *error_message)

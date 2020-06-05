@@ -4,14 +4,14 @@
 
 typedef struct eva_mouse_event eva_mouse_event;
 
-void App_Init();
-void App_Destroy();
+void app_init();
+void app_shutdown();
 
 // void App_OnKeyPressed(SDL_Keysym *);
 // void App_OnKeyReleased(SDL_Keysym *);
-void App_OnMouseMoved(eva_mouse_event *);
-void App_OnMousePressed(eva_mouse_event *);
-void App_OnMouseReleased(eva_mouse_event *);
-void App_OnWindowResized(int32_t width, int32_t height);
+void app_mouse_moved(eva_mouse_event *);
+void app_mouse_pressed(eva_mouse_event *);
+void app_mouse_released(eva_mouse_event *);
+void app_window_resized(int32_t width, int32_t height);
 
-void App_Draw();
+void app_draw();

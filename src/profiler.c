@@ -21,7 +21,7 @@ typedef struct profiler_zone {
     // without requiring explicit parent/child pointers.
     uint32_t level;
 
-    int32_t     lineNum;
+    int32_t line_num;
     const char *name;
     const char *file;
 } profiler_zone;
@@ -77,22 +77,22 @@ void _profiler_init()
     memset(ctx->zones, 0, PROFILER_MAX_ZONES);
 }
 
-void _profiler_log(uint32_t maxLevel)
+void _profiler_log(uint32_t depth)
 {
     profiler_ctx *ctx = get_ctx();
     if (!ctx)
         return;
 
-    if (maxLevel == 0) {
-        maxLevel = UINT_MAX;
+    if (depth == 0) {
+        depth = UINT_MAX;
     }
 
-    uint64_t currentTime = eva_time_now();
+    uint64_t now = eva_time_now();
 
     if (eva_time_since_ms(ctx->last_logged_at) > 3000.0f) {
         for (uint32_t i = 0; i < ctx->zones_index; i++) {
             profiler_zone *zone = &ctx->zones[i];
-            if (zone->level >= maxLevel) {
+            if (zone->level >= depth) {
                 continue;
             }
             for (uint32_t j = 0; j < zone->level; ++j) {
@@ -102,14 +102,14 @@ void _profiler_log(uint32_t maxLevel)
                    zone->name,
                    eva_time_elapsed_ms(zone->start, zone->end));
         }
-        ctx->last_logged_at = currentTime;
+        ctx->last_logged_at = now;
     }
 
     reset_zones(ctx);
 }
 
 int8_t
-_profiler_begin_zone(const char *name, int32_t lineNum, const char *fileName)
+_profiler_begin_zone(const char *name, int32_t line_num, const char *fileName)
 {
     profiler_ctx *ctx = get_ctx();
     if (!ctx)
@@ -117,11 +117,11 @@ _profiler_begin_zone(const char *name, int32_t lineNum, const char *fileName)
 
     profiler_zone *zone = activate_next_zone(ctx);
 
-    zone->name    = name;
-    zone->lineNum = lineNum;
-    zone->file    = fileName;
-    zone->start   = eva_time_now();
-    zone->end     = 0;
+    zone->name     = name;
+    zone->line_num = line_num;
+    zone->file     = fileName;
+    zone->start    = eva_time_now();
+    zone->end      = 0;
 
     return 0;
 }
@@ -136,8 +136,8 @@ void _profiler_end_zone(int8_t profilerSentinel)
 
     (void)profilerSentinel;
 
-    uint64_t currentTime = eva_time_now();
+    uint64_t no= eva_time_now();
 
-    ctx->active->end = currentTime;
-    ctx->active      = ctx->active->parent;
+    ctx->active->end = no;
+    ctx->active = ctx->active->parent;
 }

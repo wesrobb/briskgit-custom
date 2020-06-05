@@ -15,124 +15,129 @@
 #include "common.h"
 #include "profiler.h"
 
-typedef enum RenderCommandType { RENDER_COMMAND_RECT, RENDER_COMMAND_FONT } RenderCommandType;
+typedef enum render_cmd_type {
+    RENDER_COMMAND_RECT,
+    RENDER_COMMAND_FONT
+} render_cmd_type;
 
-typedef struct RenderCommandRect {
-    Color color;
-} RenderCommandRect;
+typedef struct render_cmd_rect {
+    color color;
+} render_cmd_rect;
 
-typedef struct RenderCommandFont {
-    Font font;
+typedef struct render_cmd_font {
+    font font;
     const char *text;
-    Color color;
-    int32_t ptSize;
+    color color;
+    int32_t pt_size;
     int32_t x, y;
-} RenderCommandFont;
+} render_cmd_font;
 
-typedef struct RenderCommand {
-    RenderCommandType type;
+typedef struct render_cmd {
+    render_cmd_type type;
     eva_rect rect;
     union {
-        RenderCommandRect rectCommand;
-        RenderCommandFont fontCommand;
+        render_cmd_rect rect_cmd;
+        render_cmd_font font_cmd;
     };
-} RenderCommand;
+} render_cmd;
 
 #define HARFBUZZ_NUM_FEATURES 3
-typedef struct FontCache {
-    FT_Library fontLibrary;
-    FT_Face faceCache[FONT_COUNT];
-    hb_font_t *hbFontCache[FONT_COUNT];
-    int32_t ptSizes[FONT_COUNT];
+typedef struct font_cache {
+    FT_Library font_library;
+
+    FT_Face face_cache[FONT_COUNT];
+    hb_font_t *hb_font_cache[FONT_COUNT];
+    int32_t pt_sizes[FONT_COUNT];
+
     float scale_x[FONT_COUNT];
     float scale_y[FONT_COUNT];
 
-    hb_feature_t harfBuzzFeatures[HARFBUZZ_NUM_FEATURES];
-} FontCache;
+    hb_feature_t hb_features[HARFBUZZ_NUM_FEATURES];
+} font_cache;
 
-static FontCache g_fontCache;
+static font_cache _font_cache;
 
 #define RENDER_COMMAND_QUEUE_SIZE 1000
-typedef struct RenderCommands {
-    RenderCommand commands1[RENDER_COMMAND_QUEUE_SIZE];
-    RenderCommand commands2[RENDER_COMMAND_QUEUE_SIZE];
-    int32_t commandsIndex1;
-    int32_t commandsIndex2;
+typedef struct render_cmd_ctx {
+    render_cmd cmds1[RENDER_COMMAND_QUEUE_SIZE];
+    render_cmd cmds2[RENDER_COMMAND_QUEUE_SIZE];
+    int32_t cmds_index1;
+    int32_t cmds_index2;
 
-    RenderCommand *current;
-    RenderCommand *previous;
-    int32_t *currentIndex;
-    int32_t *previousIndex;
-} RenderCommands;
-static RenderCommands g_renderCommands;
+    render_cmd *current;
+    render_cmd *previous;
+    int32_t *curr_index;
+    int32_t *prev_index;
+} render_cmd_ctx;
+static render_cmd_ctx _render_cmd_ctx;
 
 #define MAX_TILE_CACHE_X 80
 #define MAX_TILE_CACHE_Y 50
 #define TILE_SIZE 96
-static uint32_t g_tileCache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
-static uint32_t g_tileCache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
-static uint32_t *g_currentTileCache;
-static uint32_t *g_previousTileCache;
+static uint32_t _tile_cache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
+static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
+static uint32_t *_tile_cache;
+static uint32_t *_prev_tile_cache;
 
 #define HASH_INITIAL 2166136261
 
 // See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
-static void Hash(uint32_t *v, uint8_t *buffer, size_t bufferLength)
+static void hash(uint32_t *v, uint8_t *buf, size_t len)
 {
-    assert(buffer);
+    assert(buf);
 
-    for (size_t i = 0; i < bufferLength; i++)
+    for (size_t i = 0; i < len; i++)
     {
-        *v ^= buffer[i];
+        *v ^= buf[i];
         *v *= 16777619;
     }
 }
 
-//static bool TextEquals(const char *a, const char *b)
-//{
-//    uint64_t lenA = strlen(a);
-//    uint64_t lenB = strlen(b);
-//    if (lenA == lenB) {
-//        for (uint64_t i = 0; i < lenA; i++) {
-//            if (a[i] != b[i]) {
-//                return false;
-//            }
-//        }
-//    }
-//
-//    return true;
-//}
+static bool text_equals(const char *a, const char *b)
+{
+    uint64_t len_a = strlen(a);
+    uint64_t len_b = strlen(b);
+    if (len_a == len_b) {
+        for (uint64_t i = 0; i < len_a; i++) {
+            if (a[i] != b[i]) {
+                return false;
+            }
+        }
+    }
 
-//static bool RenderCommandsEqual(RenderCommand *a, RenderCommand *b)
-//{
-//    // TODO: Compare performance with memcmp.
-//    // It is more likely the rect changes than the type changes
-//    // since rendering order is unlikely to vary much.
-//    // So check the rect first.
-//    if (a->rect.x == b->rect.x && a->rect.y == b->rect.y && a->rect.w == b->rect.w &&
-//        a->rect.h == b->rect.h) {
-//        if (a->type == b->type) {
-//            switch (a->type) {
-//            case RENDER_COMMAND_RECT:
-//                return a->rectCommand.color.a == b->rectCommand.color.a &&
-//                       a->rectCommand.color.b == b->rectCommand.color.b &&
-//                       a->rectCommand.color.g == b->rectCommand.color.g &&
-//                       a->rectCommand.color.r == b->rectCommand.color.r;
-//            case RENDER_COMMAND_FONT:
-//                return a->fontCommand.color.a == b->fontCommand.color.a &&
-//                       a->fontCommand.color.b == b->fontCommand.color.b &&
-//                       a->fontCommand.color.g == b->fontCommand.color.g &&
-//                       a->fontCommand.color.r == b->fontCommand.color.r &&
-//                       a->fontCommand.ptSize == b->fontCommand.ptSize &&
-//                       TextEquals(a->fontCommand.text, b->fontCommand.text);
-//            }
-//        }
-//    }
-//
-//    return false;
-//}
+    return true;
+}
 
-static eva_pixel ColorToPixel(Color c)
+static bool render_cmds_equal(render_cmd *a, render_cmd *b)
+{
+    // TODO: Compare performance with memcmp.
+    // It is more likely the rect changes than the type changes
+    // since rendering order is unlikely to vary much.
+    // So check the rect first.
+    if (a->rect.x == b->rect.x && a->rect.y == b->rect.y && a->rect.w == b->rect.w &&
+        a->rect.h == b->rect.h) {
+        if (a->type == b->type) {
+            switch (a->type) {
+            case RENDER_COMMAND_RECT:
+                return a->rect_cmd.color.a == b->rect_cmd.color.a &&
+                       a->rect_cmd.color.b == b->rect_cmd.color.b &&
+                       a->rect_cmd.color.g == b->rect_cmd.color.g &&
+                       a->rect_cmd.color.r == b->rect_cmd.color.r;
+            case RENDER_COMMAND_FONT:
+                return a->font_cmd.color.a == b->font_cmd.color.a &&
+                       a->font_cmd.color.b == b->font_cmd.color.b &&
+                       a->font_cmd.color.g == b->font_cmd.color.g &&
+                       a->font_cmd.color.r == b->font_cmd.color.r &&
+                       a->font_cmd.pt_size == b->font_cmd.pt_size &&
+                       text_equals(a->font_cmd.text, b->font_cmd.text);
+            }
+        }
+    }
+
+    return false;
+}
+
+static eva_pixel color_to_pixel(color c)
 {
     eva_pixel result = {
         .b = (uint8_t)(c.b * 255.999f),
@@ -144,9 +149,9 @@ static eva_pixel ColorToPixel(Color c)
     return result;
 }
 
-static Color PixelToColor(eva_pixel *p)
+static color pixel_to_color(eva_pixel *p)
 {
-    Color result = {
+    color result = {
         .b = p->b / 255.0f,
         .g = p->g / 255.0f,
         .r = p->r / 255.0f,
@@ -156,11 +161,11 @@ static Color PixelToColor(eva_pixel *p)
     return result;
 }
 
-static Color SRGBToLinear(Color x)
+static color srgb_to_linear(color x)
 {
     // Exact gamma value would be 2.2 but we use 2
     // to avoid expensive pow function and use the square of x instead.
-    Color result = {
+    color result = {
         .r = x.r * x.r,
         .g = x.g * x.g,
         .b = x.b * x.b,
@@ -169,9 +174,9 @@ static Color SRGBToLinear(Color x)
     return result;
 }
 
-static Color LinearToSRGB(Color x)
+static color linear_to_srgb(color x)
 {
-    Color result = {
+    color result = {
         .r = sqrtf(x.r),
         .g = sqrtf(x.g),
         .b = sqrtf(x.b),
@@ -181,9 +186,9 @@ static Color LinearToSRGB(Color x)
 
 // Blends src onto dest assuming linear color space. Src must have
 // pre-multiplied alpha.
-static Color LinearBlend(Color src, Color dest)
+static color linear_blend(color src, color dest)
 {
-    Color result = {
+    color result = {
         .r = src.r + dest.r * (1.0f - src.a),
         .g = src.g + dest.g * (1.0f - src.a),
         .b = src.b + dest.b * (1.0f - src.a),
@@ -193,97 +198,67 @@ static Color LinearBlend(Color src, Color dest)
     return result;
 }
 
-/*
-static void DrawHollowRectUnscaled(Rect rect, Color color,
-                                   int32_t borderThickness) {
-  Profiler_Begin;
-
-  int32_t startX = max(0, rect.x);
-  int32_t endX = min(g_renderContext.frameBuffer.width, rect.x + rect.w);
-
-  // Invert y cos our coordinates are y up but SDL surface is y down.
-  int32_t startY = max(0, rect.y);
-  int32_t endY = min(g_renderContext.frameBuffer.height, rect.y + rect.h);
-
-  Pixel *pixels = (Pixel *)g_renderContext.frameBuffer.pixels;
-  pixels +=
-      startX +
-      startY * g_renderContext.frameBuffer
-                   .width; // Move to the first pixel that resides in the rect
-  int32_t nextRow = g_renderContext.frameBuffer.width -
-                    (endX - startX); // Calculate how many pixels to jump over
-                                     // at the end of each row in the rect.
-
-  Pixel coloredPixel = ColorToPixel(color);
-  for (int32_t y = startY; y < endY; y++) {
-    for (int32_t x = startX; x < endX; x++) {
-      if ((x < startX + borderThickness || x > endX - borderThickness) ||
-          (y < startY + borderThickness || y > endY - borderThickness)) {
-        *pixels = coloredPixel;
-      }
-      pixels++;
-    }
-
-    pixels += nextRow;
-  }
-
-  Profiler_End;
-} */
-
-static void DrawFreeTypeBitmap(FT_Bitmap *bitmap,
-                               double x,
-                               double y,
-                               Color c,
-                               eva_rect clipRect)
+static void draw_ft_bitmap(FT_Bitmap *bitmap,
+                           double x,
+                           double y,
+                           color c,
+                           eva_rect clip_rect)
 {
-    Profiler_Begin;
+    profiler_begin;
 
     assert(bitmap);
 
     int32_t framebuffer_width = eva_get_framebuffer_width();
     int32_t framebuffer_height = eva_get_framebuffer_height();
 
-    int32_t startX = max(clipRect.x, (int32_t)(x + 0.5));
-    int32_t endX = min(clipRect.x + clipRect.w, (int32_t)(x + bitmap->width + 0.5));
+    int32_t start_x = max(clip_rect.x, (int32_t)(x + 0.5));
+    int32_t end_x = min(clip_rect.x + clip_rect.w,
+                        (int32_t)(x + bitmap->width + 0.5));
 
-    int32_t startY = max(clipRect.y, (int32_t)(y + 0.5));
-    int32_t endY = min(clipRect.y + clipRect.h, (int32_t)(y + bitmap->rows + 0.5));
+    int32_t start_y = max(clip_rect.y, (int32_t)(y + 0.5));
+    int32_t end_y = min(clip_rect.y + clip_rect.h,
+                        (int32_t)(y + bitmap->rows + 0.5));
 
-    endX = min(endX, framebuffer_width);
-    endY = min(endY, framebuffer_height);
+    end_x = min(end_x, framebuffer_width);
+    end_y = min(end_y, framebuffer_height);
 
     // Move to the first pixel that resides in the rect
     eva_pixel *framebuffer = eva_get_framebuffer();
-    framebuffer += startX + startY * framebuffer_width;
+    framebuffer += start_x + start_y * framebuffer_width;
     // Calculate how many pixels to jump over at
     // the end of each row in the rect.
-    int32_t nextRow = framebuffer_width - (endX - startX);
+    int32_t next_row = framebuffer_width - (end_x - start_x);
 
-    for (int32_t y = startY, v = 0; y < endY; y++, v++) {
-        for (int32_t x = startX, u = 0; x < endX; x++, u++) {
-            float fontAlphaLinear = bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
+    for (int32_t y = start_y, v = 0; y < end_y; y++, v++) {
+        for (int32_t x = start_x, u = 0; x < end_x; x++, u++) {
+            float font_alpha_linear = bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
             // Pre-multiply font alpha in linear space.
-            Color fontColorLinearPremultiplied = { .r = c.r * fontAlphaLinear,
-                                                   .g = c.g * fontAlphaLinear,
-                                                   .b = c.b * fontAlphaLinear,
-                                                   .a = fontAlphaLinear };
+            color font_linear_premultiplied_alpha = {
+                .r = c.r * font_alpha_linear,
+                .g = c.g * font_alpha_linear,
+                .b = c.b * font_alpha_linear,
+                .a = font_alpha_linear
+            };
 
-            Color destColorSRGB = PixelToColor(framebuffer);
-            Color destColorLinear = SRGBToLinear(destColorSRGB);
-            Color blendedLinear = LinearBlend(fontColorLinearPremultiplied, destColorLinear);
-            Color finalColorSRGB = LinearToSRGB(blendedLinear);
+            color dest_color_srgb = pixel_to_color(framebuffer);
+            color dest_color_linear = srgb_to_linear(dest_color_srgb);
+            color blended_linear = linear_blend(
+                    font_linear_premultiplied_alpha,
+                    dest_color_linear
+            );
+            color blended_srgb = linear_to_srgb(blended_linear);
 
-            *framebuffer = ColorToPixel(finalColorSRGB);
+            *framebuffer = color_to_pixel(blended_srgb);
             framebuffer++;
         }
 
-        framebuffer += nextRow;
+        framebuffer += next_row;
     }
 
-    Profiler_End;
+    profiler_end;
 }
 
-static void ScaleRect(eva_rect *r, float scale_x, float scale_y)
+static void scale_rect(eva_rect *r, float scale_x, float scale_y)
 {
     r->x = (int32_t)(r->x * scale_x);
     r->w = (int32_t)(r->w * scale_x);
@@ -291,7 +266,7 @@ static void ScaleRect(eva_rect *r, float scale_x, float scale_y)
     r->h = (int32_t)(r->h * scale_y);
 }
 
-static const char *GetFontFile(Font font)
+static const char *get_font_file(font font)
 {
     // TODO: Bake these files into the exe.
     switch (font) {
@@ -309,80 +284,82 @@ bool float_eq(float a, float b, float epsilon)
     return fabsf(a - b) < epsilon;
 }
 
-static void LoadCachedFont(
-    Font font, FT_Face *face, hb_font_t **hbFont, int32_t ptSize, float scale_x, float scale_y)
+static void load_cached_font(font font,
+                             FT_Face *face,
+                             hb_font_t **hb_font,
+                             int32_t pt_size, float scale_x, float scale_y)
 {
     // Load cached font data and only set size if it wasn't set already.
-    *face = g_fontCache.faceCache[font];
-    *hbFont = g_fontCache.hbFontCache[font];
-    if (ptSize != g_fontCache.ptSizes[font] ||
-        !float_eq(scale_x, g_fontCache.scale_x[font], 0.1f) ||
-        !float_eq(scale_y, g_fontCache.scale_y[font], 0.1f)) {
-        int32_t error = FT_Set_Char_Size(*face,       // handle to face object
-                                         0,           // char_width in 1/64th of points
-                                         ptSize * 64, // char_height in 1/64th of points
-                                         (uint32_t)(72.0f * scale_x),  // horizontal dpi
-                                         (uint32_t)(72.0f * scale_y)); // vertical dpi
-        // int32_t error = FT_Set_Pixel_Sizes(face, 20, 20);
+    *face = _font_cache.face_cache[font];
+    *hb_font = _font_cache.hb_font_cache[font];
+    if (pt_size != _font_cache.pt_sizes[font] ||
+        !float_eq(scale_x, _font_cache.scale_x[font], 0.1f) ||
+        !float_eq(scale_y, _font_cache.scale_y[font], 0.1f)) {
+        int32_t error = FT_Set_Char_Size(
+                *face,       // handle to face object
+                0,           // char_width in 1/64th of points
+                pt_size * 64, // char_height in 1/64th of points
+                (uint32_t)(72.0f * scale_x),  // horizontal dpi
+                (uint32_t)(72.0f * scale_y)); // vertical dpi
 
         if (error) {
             puts("Failed to set face size");
             return;
         }
-        hb_ft_font_changed(*hbFont);
-        g_fontCache.ptSizes[font] = ptSize;
-        g_fontCache.scale_x[font] = scale_x;
-        g_fontCache.scale_y[font] = scale_y;
+        hb_ft_font_changed(*hb_font);
+        _font_cache.pt_sizes[font] = pt_size;
+        _font_cache.scale_x[font] = scale_x;
+        _font_cache.scale_y[font] = scale_y;
     }
 }
 
-void DrawRect(eva_rect rect,
-              RenderCommandRect *cmd,
-              eva_rect clipRect)
+void draw_rect(eva_rect rect,
+              render_cmd_rect *cmd,
+              eva_rect clip_rect)
 {
-    Profiler_Begin;
+    profiler_begin;
 
     int32_t framebuffer_width = eva_get_framebuffer_width();
     int32_t framebuffer_height = eva_get_framebuffer_height();
 
-    int32_t startX = max(clipRect.x, rect.x);
-    int32_t endX = min(clipRect.x + clipRect.w, rect.x + rect.w);
+    int32_t start_x = max(clip_rect.x, rect.x);
+    int32_t end_x = min(clip_rect.x + clip_rect.w, rect.x + rect.w);
 
     // Invert y cos our coordinates are y up but SDL surface is y down.
-    int32_t startY = max(clipRect.y, rect.y);
-    int32_t endY = min(clipRect.y + clipRect.h, rect.y + rect.h);
+    int32_t start_y = max(clip_rect.y, rect.y);
+    int32_t end_y = min(clip_rect.y + clip_rect.h, rect.y + rect.h);
 
-    endX = min(endX, framebuffer_width);
-    endY = min(endY, framebuffer_height);
+    end_x = min(end_x, framebuffer_width);
+    end_y = min(end_y, framebuffer_height);
 
     // Move to the first pixel that resides in the rect
     eva_pixel *framebuffer = eva_get_framebuffer();
-    framebuffer += startX + startY * framebuffer_width;
+    framebuffer += start_x + start_y * framebuffer_width;
 
     /// Calculate how many pixels to jump over
     // at the end of each row in the rect.
-    int32_t nextRow = framebuffer_width - (endX - startX);
+    int32_t next_row = framebuffer_width - (end_x - start_x);
 
-    eva_pixel coloredPixel = ColorToPixel(cmd->color);
-    for (int32_t y = startY; y < endY; y++) {
-        for (int32_t x = startX; x < endX; x++) {
-            *framebuffer = coloredPixel;
+    eva_pixel colored_pixel = color_to_pixel(cmd->color);
+    for (int32_t y = start_y; y < end_y; y++) {
+        for (int32_t x = start_x; x < end_x; x++) {
+            *framebuffer = colored_pixel;
             framebuffer++;
         }
 
-        framebuffer += nextRow;
+        framebuffer += next_row;
     }
 
-    Profiler_End;
+    profiler_end;
 }
 
-void DrawFont(eva_rect rect,
-              RenderCommandFont *cmd,
-              eva_rect clipRect)
+void draw_font(eva_rect rect,
+              render_cmd_font *cmd,
+              eva_rect clip_rect)
 {
     (void)rect;
 
-    Profiler_Begin;
+    profiler_begin;
 
     float scale_x = eva_get_framebuffer_scale_x();
     float scale_y = eva_get_framebuffer_scale_y();
@@ -396,10 +373,10 @@ void DrawFont(eva_rect rect,
     hb_buffer_guess_segment_properties(buf);
 
     FT_Face face;
-    hb_font_t *hbFont;
-    LoadCachedFont(cmd->font, &face, &hbFont, cmd->ptSize, scale_x, scale_y);
+    hb_font_t *hb_font;
+    load_cached_font(cmd->font, &face, &hb_font, cmd->pt_size, scale_x, scale_y);
 
-    hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
+    hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
     hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buf, &glyphCount);
     hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
@@ -429,59 +406,59 @@ void DrawFont(eva_rect rect,
         // now, draw to our target surface
         double x = cursor_x + x_offset + face->glyph->bitmap_left;
         double y = cursor_y + y_offset - face->glyph->bitmap_top;
-        DrawFreeTypeBitmap(&face->glyph->bitmap, x, y, cmd->color, clipRect);
+        draw_ft_bitmap(&face->glyph->bitmap, x, y, cmd->color, clip_rect);
         cursor_x += x_advance;
         cursor_y += y_advance;
     }
 
     hb_buffer_destroy(buf);
 
-    Profiler_End;
+    profiler_end;
 }
 
-//static bool RenderCommandsChanged()
-//{
-//    if (*g_renderCommands.currentIndex != *g_renderCommands.previousIndex) {
-//        return true;
-//    }
-//
-//    int32_t numCommands = *g_renderCommands.currentIndex;
-//    for (int32_t i = 0; i < numCommands; i++) {
-//        RenderCommand *current = &g_renderCommands.current[i];
-//        RenderCommand *previous = &g_renderCommands.previous[i];
-//        if (!RenderCommandsEqual(current, previous)) {
-//            return true;
-//        }
-//    }
-//
-//    return false;
-//}
-
-bool Render_Init()
+static bool render_cmds_differ()
 {
-    g_fontCache.harfBuzzFeatures[0].tag = HB_TAG('k', 'e', 'r', 'n');
-    g_fontCache.harfBuzzFeatures[0].value = 1;
-    g_fontCache.harfBuzzFeatures[0].start = 0;
-    g_fontCache.harfBuzzFeatures[0].end = (uint32_t)-1;
-    g_fontCache.harfBuzzFeatures[1].tag = HB_TAG('l', 'i', 'g', 'a');
-    g_fontCache.harfBuzzFeatures[1].value = 1;
-    g_fontCache.harfBuzzFeatures[1].start = 0;
-    g_fontCache.harfBuzzFeatures[1].end = (uint32_t)-1;
-    g_fontCache.harfBuzzFeatures[2].tag = HB_TAG('c', 'l', 'i', 'g');
-    g_fontCache.harfBuzzFeatures[2].value = 1;
-    g_fontCache.harfBuzzFeatures[2].start = 0;
-    g_fontCache.harfBuzzFeatures[2].end = (uint32_t)-1;
+    if (*_render_cmd_ctx.curr_index != *_render_cmd_ctx.prev_index) {
+        return true;
+    }
 
-    int32_t error = FT_Init_FreeType(&g_fontCache.fontLibrary);
+    int32_t num_cmds = *_render_cmd_ctx.curr_index;
+    for (int32_t i = 0; i < num_cmds; i++) {
+        render_cmd *current = &_render_cmd_ctx.current[i];
+        render_cmd *previous = &_render_cmd_ctx.previous[i];
+        if (!render_cmds_equal(current, previous)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool render_init()
+{
+    _font_cache.hb_features[0].tag = HB_TAG('k', 'e', 'r', 'n');
+    _font_cache.hb_features[0].value = 1;
+    _font_cache.hb_features[0].start = 0;
+    _font_cache.hb_features[0].end = (uint32_t)-1;
+    _font_cache.hb_features[1].tag = HB_TAG('l', 'i', 'g', 'a');
+    _font_cache.hb_features[1].value = 1;
+    _font_cache.hb_features[1].start = 0;
+    _font_cache.hb_features[1].end = (uint32_t)-1;
+    _font_cache.hb_features[2].tag = HB_TAG('c', 'l', 'i', 'g');
+    _font_cache.hb_features[2].value = 1;
+    _font_cache.hb_features[2].start = 0;
+    _font_cache.hb_features[2].end = (uint32_t)-1;
+
+    int32_t error = FT_Init_FreeType(&_font_cache.font_library);
     if (error) {
         printf("Failed to init FreeType\n");
         return false;
     }
 
     for (int32_t i = 0; i < FONT_COUNT; i++) {
-        const char *fontFile = GetFontFile((Font)i);
+        const char *fontFile = get_font_file((font)i);
         FT_Face face;
-        error = FT_New_Face(g_fontCache.fontLibrary, fontFile, 0, &face);
+        error = FT_New_Face(_font_cache.font_library, fontFile, 0, &face);
         if (error == FT_Err_Unknown_File_Format) {
             // TODO: Proper cleanup of faces and ft library
             puts("Unknown font format");
@@ -491,69 +468,69 @@ bool Render_Init()
             return false;
         }
 
-        hb_font_t *hbFont = hb_ft_font_create_referenced(face);
-        if (hbFont == NULL) {
+        hb_font_t *hb_font = hb_ft_font_create_referenced(face);
+        if (hb_font == NULL) {
             printf("Failed to create hb_font\n");
             return false;
         }
-        hb_ft_font_set_load_flags(hbFont, FT_LOAD_NO_HINTING);
+        hb_ft_font_set_load_flags(hb_font, FT_LOAD_NO_HINTING);
 
-        g_fontCache.faceCache[i] = face;
-        g_fontCache.hbFontCache[i] = hbFont;
+        _font_cache.face_cache[i] = face;
+        _font_cache.hb_font_cache[i] = hb_font;
     }
 
-    g_renderCommands.current = g_renderCommands.commands1;
-    g_renderCommands.previous = g_renderCommands.commands2;
-    g_renderCommands.currentIndex = &g_renderCommands.commandsIndex1;
-    g_renderCommands.previousIndex = &g_renderCommands.commandsIndex2;
+    _render_cmd_ctx.current = _render_cmd_ctx.cmds1;
+    _render_cmd_ctx.previous = _render_cmd_ctx.cmds2;
+    _render_cmd_ctx.curr_index = &_render_cmd_ctx.cmds_index1;
+    _render_cmd_ctx.prev_index = &_render_cmd_ctx.cmds_index2;
 
-    g_currentTileCache = g_tileCache1;
-    g_previousTileCache = g_tileCache2;
+    _tile_cache = _tile_cache1;
+    _prev_tile_cache = _tile_cache2;
 
     // Initialize the tile caches.
     for (uint32_t y = 0; y < MAX_TILE_CACHE_Y; y++)
     {
         for (uint32_t x = 0; x < MAX_TILE_CACHE_X; x++)
         {
-            uint32_t tileIndex = x + y * MAX_TILE_CACHE_X;
-            g_currentTileCache[tileIndex] = HASH_INITIAL;
-            g_previousTileCache[tileIndex] = HASH_INITIAL;
+            uint32_t tile_index = x + y * MAX_TILE_CACHE_X;
+            _tile_cache[tile_index] = HASH_INITIAL;
+            _prev_tile_cache[tile_index] = HASH_INITIAL;
         }
     }
 
     return true;
 }
 
-void Render_Destroy()
+void render_shutdown()
 {
     for (int32_t i = 0; i < FONT_COUNT; i++) {
-        hb_font_destroy(g_fontCache.hbFontCache[i]);
-        FT_Done_Face(g_fontCache.faceCache[i]);
+        hb_font_destroy(_font_cache.hb_font_cache[i]);
+        FT_Done_Face(_font_cache.face_cache[i]);
     }
-    FT_Done_Library(g_fontCache.fontLibrary);
+    FT_Done_Library(_font_cache.font_library);
 }
 
-void Render_BeginFrame()
+void render_begin_frame()
 {
     // Swap the current render queue.
-    RenderCommand *tmpCommands = g_renderCommands.current;
-    g_renderCommands.current = g_renderCommands.previous;
-    g_renderCommands.previous = tmpCommands;
+    render_cmd *tmp_cmds = _render_cmd_ctx.current;
+    _render_cmd_ctx.current = _render_cmd_ctx.previous;
+    _render_cmd_ctx.previous = tmp_cmds;
 
-    int32_t *tmpIndex = g_renderCommands.currentIndex;
-    g_renderCommands.currentIndex = g_renderCommands.previousIndex;
-    g_renderCommands.previousIndex = tmpIndex;
+    int32_t *tmp_index = _render_cmd_ctx.curr_index;
+    _render_cmd_ctx.curr_index = _render_cmd_ctx.prev_index;
+    _render_cmd_ctx.prev_index = tmp_index;
 
     // Reset the new current render queue.
-    *g_renderCommands.currentIndex = 0;
+    *_render_cmd_ctx.curr_index = 0;
 
     // Swap tile caches.
-    uint32_t *tmpTileCache = g_currentTileCache;
-    g_currentTileCache = g_previousTileCache;
-    g_previousTileCache = tmpTileCache;
+    uint32_t *tmp_tile_cache = _tile_cache;
+    _tile_cache = _prev_tile_cache;
+    _prev_tile_cache = tmp_tile_cache;
 }
 
-static void UpdateTileCache(eva_rect *r, uint32_t hash)
+static void update_tile_cache(eva_rect *r, uint32_t hash_value)
 {
     int32_t x1 = r->x / TILE_SIZE;
     int32_t y1 = r->y / TILE_SIZE;
@@ -561,27 +538,28 @@ static void UpdateTileCache(eva_rect *r, uint32_t hash)
     int32_t y2 = (r->y + r->h) / TILE_SIZE;
     for (int y = y1; y <= y2; y++) {
         for (int x = x1; x <= x2; x++) {
-            Hash(&g_currentTileCache[x + y * MAX_TILE_CACHE_X], (uint8_t*)&hash, sizeof(hash));
+            hash(&_tile_cache[x + y * MAX_TILE_CACHE_X],
+                 (uint8_t*)&hash_value, sizeof(hash_value));
         }
     }
 }
 
-void Render_EndFrame(eva_rect *dirty_rect)
+void render_end_frame(eva_rect *dirty_rect)
 {
-    Profiler_Begin;
+    profiler_begin;
 
     memset(dirty_rect, 0, sizeof(eva_rect));
 
-    //if (RenderCommandsChanged())
+    if (render_cmds_differ())
     {
         // Process current queue.
-        int32_t numCommands = *g_renderCommands.currentIndex;
-        for (int32_t i = 0; i < numCommands; i++)
+        int32_t num_cmds = *_render_cmd_ctx.curr_index;
+        for (int32_t i = 0; i < num_cmds; i++)
         {
-            RenderCommand *cmd = &g_renderCommands.current[i];
-            uint32_t cmdHash = HASH_INITIAL;
-            Hash(&cmdHash, (uint8_t*)cmd, sizeof(*cmd));
-            UpdateTileCache(&cmd->rect, cmdHash);
+            render_cmd *cmd = &_render_cmd_ctx.current[i];
+            uint32_t cmd_hash = HASH_INITIAL;
+            hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
+            update_tile_cache(&cmd->rect, cmd_hash);
         }
 
         // Merge all the dirty rects into 1 rect.
@@ -593,8 +571,8 @@ void Render_EndFrame(eva_rect *dirty_rect)
         {
             for (uint32_t x = 0; x < MAX_TILE_CACHE_X; x++)
             {
-                uint32_t tileIndex = x + y * MAX_TILE_CACHE_X;
-                if (g_currentTileCache[tileIndex] != g_previousTileCache[tileIndex])
+                uint32_t tile_index = x + y * MAX_TILE_CACHE_X;
+                if (_tile_cache[tile_index] != _prev_tile_cache[tile_index])
                 {
                     eva_rect region = {
                         .x = (int32_t)x * TILE_SIZE,
@@ -613,115 +591,117 @@ void Render_EndFrame(eva_rect *dirty_rect)
                     }
                 }
 
-                g_previousTileCache[tileIndex] = HASH_INITIAL;
+                _prev_tile_cache[tile_index] = HASH_INITIAL;
             }
         }
 
 
         if (!eva_rect_empty(dirty_rect))
         {
-            for (int32_t i = 0; i < numCommands; i++)
+            for (int32_t i = 0; i < num_cmds; i++)
             {
-                RenderCommand *cmd = &g_renderCommands.current[i];
+                render_cmd *cmd = &_render_cmd_ctx.current[i];
                 switch (cmd->type)
                 {
                     case RENDER_COMMAND_RECT:
-                        DrawRect(cmd->rect, &cmd->rectCommand, *dirty_rect);
+                        draw_rect(cmd->rect, &cmd->rect_cmd, *dirty_rect);
                         break;
                     case RENDER_COMMAND_FONT:
-                        DrawFont(cmd->rect, &cmd->fontCommand, *dirty_rect);
+                        draw_font(cmd->rect, &cmd->font_cmd, *dirty_rect);
                         break;
                 }
             }
         }
     }
 
-    Profiler_End;
+    profiler_end;
 }
 
-static void AddRenderRectCommand(eva_rect *r, Color c)
+static void add_render_rect_cmd(eva_rect *r, color c)
 {
-    int32_t index = (*g_renderCommands.currentIndex)++;
-    RenderCommand *cmd = &g_renderCommands.current[index];
+    int32_t index = (*_render_cmd_ctx.curr_index)++;
+    render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
-    cmd->rectCommand.color = c;
-    ScaleRect(&cmd->rect, eva_get_framebuffer_scale_x(), eva_get_framebuffer_scale_y());
+    cmd->rect_cmd.color = c;
+    scale_rect(&cmd->rect, eva_get_framebuffer_scale_x(), eva_get_framebuffer_scale_y());
 }
 
-static void
-AddRenderFontCommand(Font font, const char *text, int32_t x, int32_t y, int32_t ptSize, Color c)
+static void add_render_font_cmd(font font,
+                                const char *text,
+                                int32_t x, int32_t y,
+                                int32_t pt_size, color c)
 {
-    int32_t index = (*g_renderCommands.currentIndex)++;
-    RenderCommand *cmd = &g_renderCommands.current[index];
+    int32_t index = (*_render_cmd_ctx.curr_index)++;
+    render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_FONT;
-    cmd->fontCommand.font = font;
-    cmd->fontCommand.text = text;
-    cmd->fontCommand.x = x;
-    cmd->fontCommand.y = y;
-    cmd->fontCommand.ptSize = ptSize;
-    cmd->fontCommand.color = c;
+    cmd->font_cmd.font = font;
+    cmd->font_cmd.text = text;
+    cmd->font_cmd.x = x;
+    cmd->font_cmd.y = y;
+    cmd->font_cmd.pt_size = pt_size;
+    cmd->font_cmd.color = c;
 }
 
 // TODO: Might be worth adding RENDER_CLEAR_COMMAND as a special
 //       case since it is CPU heavy but easy to optimise.
-// static void DrawClear(Color color)
+// static void DrawClear(color color)
 //{
-//    Profiler_Begin;
+//    profiler_begin;
 //
-//    assert(g_renderContext.initialized);
+//    assert(_render_ctx.initialized);
 //
-//    Pixel coloredPixel = ColorToPixel(color);
-//    int32_t size = g_renderContext.frameBuffer.height *
-//    g_renderContext.frameBuffer.width; Pixel *pixels =
-//    (Pixel*)g_renderContext.frameBuffer.pixels; for (int32_t y = 0; y < size;
+//    Pixel colored_pixel = color_to_pixel(color);
+//    int32_t size = _render_ctx.frameBuffer.height *
+//    _render_ctx.frameBuffer.width; Pixel *pixels =
+//    (Pixel*)_render_ctx.frameBuffer.pixels; for (int32_t y = 0; y < size;
 //    y++)
 //    {
-//        *pixels = coloredPixel;
+//        *pixels = colored_pixel;
 //        pixels++;
 //    }
 //
-//    Profiler_End;
+//    profiler_end;
 //}
 //
-void Render_Clear(Color color)
+void render_clear(color color)
 {
     eva_rect r = {
         .x = 0, .y = 0, .w = eva_get_window_width(), .h = eva_get_window_height()
     };
-    AddRenderRectCommand(&r, color);
+    add_render_rect_cmd(&r, color);
 }
 
-void Render_DrawRect(eva_rect *rect,
-                     Color color) // TODO: These should be passed by pointer
+void render_draw_rect(eva_rect *rect,
+                     color color) // TODO: These should be passed by pointer
 {
-    AddRenderRectCommand(rect, color);
+    add_render_rect_cmd(rect, color);
 }
 
 // void Render_DrawHollowRect(
-//    Rect    rect,
-//    Color   color,
+//    eva_rect    rect,
+//    color   color,
 //    int32_t borderThickness) // TODO: These should be passed by pointer
 //{
-//    Profiler_Begin;
+//    profiler_begin;
 //
-//    assert(g_renderContext.initialized);
+//    assert(_render_ctx.initialized);
 //
-//    ScaleRect(&rect);
+//    scale_rect(&rect);
 //    DrawHollowRectUnscaled(rect, color, borderThickness);
 //
-//    Profiler_End;
+//    profiler_end;
 //}
 
-void Render_DrawFont(
-    Font font, const char *text, int32_t posX, int32_t posY, int32_t ptSize, Color c)
+void render_draw_font(
+    font font, const char *text, int32_t posX, int32_t posY, int32_t pt_size, color c)
 {
-    AddRenderFontCommand(font, text, posX, posY, ptSize, c);
+    add_render_font_cmd(font, text, posX, posY, pt_size, c);
 }
 
-int32_t Render_GetTextWidth(Font font, const char *text, int32_t ptSize)
+int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
 {
-    Profiler_Begin;
+    profiler_begin;
 
     hb_buffer_t *buf;
     buf = hb_buffer_create();
@@ -729,46 +709,46 @@ int32_t Render_GetTextWidth(Font font, const char *text, int32_t ptSize)
     hb_buffer_guess_segment_properties(buf);
 
     FT_Face face;
-    hb_font_t *hbFont;
+    hb_font_t *hb_font;
     float scale_x = eva_get_framebuffer_scale_x();
     float scale_y = eva_get_framebuffer_scale_y();
-    LoadCachedFont(font, &face, &hbFont, ptSize, scale_x, scale_y);
+    load_cached_font(font, &face, &hb_font, pt_size, scale_x, scale_y);
 
-    hb_shape(hbFont, buf, g_fontCache.harfBuzzFeatures, HARFBUZZ_NUM_FEATURES);
+    hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
-    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
+    hb_glyph_position_t *glyph_pos = 
+        hb_buffer_get_glyph_positions(buf, &glyphCount);
 
-    double cursorX = 0;
-
-    // TODO: Make a reusable buffer here.
+    double cursor_x = 0;
     for (uint32_t i = 0; i < glyphCount; ++i) {
-        double xAdvance = glyph_pos[i].x_advance / 64.0;
+        double x_advance = glyph_pos[i].x_advance / 64.0;
 
-        cursorX += xAdvance;
+        cursor_x += x_advance;
     }
 
     hb_buffer_destroy(buf);
 
-    Profiler_End;
+    profiler_end;
 
-    return (int32_t)(cursorX / scale_x);
+    return (int32_t)(cursor_x / scale_x);
 }
 
-void Render_GetFontHeight(Font font, int32_t ptSize, int32_t *ascent, int32_t *descent)
+void render_get_font_height(font font, int32_t pt_size,
+                            int32_t *ascent, int32_t *descent)
 {
-    Profiler_Begin;
+    profiler_begin;
 
     FT_Face face;
-    hb_font_t *hbFont;
+    hb_font_t *hb_font;
     float scale_x = eva_get_framebuffer_scale_x();
     float scale_y = eva_get_framebuffer_scale_y();
-    LoadCachedFont(font, &face, &hbFont, ptSize, scale_x, scale_y);
+    load_cached_font(font, &face, &hb_font, pt_size, scale_x, scale_y);
 
     hb_font_extents_t extents;
-    hb_font_get_h_extents(hbFont, &extents);
+    hb_font_get_h_extents(hb_font, &extents);
 
     *ascent = extents.ascender / 64;
     *descent = extents.descender / 64;
 
-    Profiler_End;
+    profiler_end;
 }
