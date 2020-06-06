@@ -9,7 +9,7 @@
 #include "profiler.h"
 #include "render.h"
 
-void init()
+void init(void)
 {
     profiler_init;
 
@@ -55,7 +55,7 @@ void event(eva_event *e)
         break;
     case EVA_EVENTTYPE_QUITREQUESTED:
         puts("Received eva quit requested");
-        break;
+        return;
     case EVA_EVENTTYPE_REDRAWFRAME:
         full_redraw = true;
         break;
@@ -81,7 +81,7 @@ void event(eva_event *e)
     profiler_log(2);
 }
 
-void cleanup()
+void cleanup(void)
 {
     puts("Cleaning up");
     app_shutdown();

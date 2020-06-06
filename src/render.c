@@ -7,8 +7,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_MODULE_H
-#include <hb-ft.h>
-#include <hb.h>
+#include <harfbuzz/hb-ft.h>
+#include <harfbuzz/hb.h>
 
 #include "eva/eva.h"
 
@@ -199,8 +199,8 @@ static color linear_blend(color src, color dest)
 }
 
 static void draw_ft_bitmap(FT_Bitmap *bitmap,
-                           double x,
-                           double y,
+                           double x_pos,
+                           double y_pos,
                            color c,
                            eva_rect clip_rect)
 {
@@ -211,13 +211,13 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
     int32_t framebuffer_width = eva_get_framebuffer_width();
     int32_t framebuffer_height = eva_get_framebuffer_height();
 
-    int32_t start_x = max(clip_rect.x, (int32_t)(x + 0.5));
+    int32_t start_x = max(clip_rect.x, (int32_t)(x_pos + 0.5));
     int32_t end_x = min(clip_rect.x + clip_rect.w,
-                        (int32_t)(x + bitmap->width + 0.5));
+                        (int32_t)(x_pos + bitmap->width + 0.5));
 
-    int32_t start_y = max(clip_rect.y, (int32_t)(y + 0.5));
+    int32_t start_y = max(clip_rect.y, (int32_t)(y_pos + 0.5));
     int32_t end_y = min(clip_rect.y + clip_rect.h,
-                        (int32_t)(y + bitmap->rows + 0.5));
+                        (int32_t)(y_pos + bitmap->rows + 0.5));
 
     end_x = min(end_x, framebuffer_width);
     end_y = min(end_y, framebuffer_height);
@@ -231,7 +231,8 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
 
     for (int32_t y = start_y, v = 0; y < end_y; y++, v++) {
         for (int32_t x = start_x, u = 0; x < end_x; x++, u++) {
-            float font_alpha_linear = bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
+            float font_alpha_linear = 
+                bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
             // Pre-multiply font alpha in linear space.
             color font_linear_premultiplied_alpha = {
                 .r = c.r * font_alpha_linear,
@@ -374,7 +375,8 @@ void draw_font(eva_rect rect,
 
     FT_Face face;
     hb_font_t *hb_font;
-    load_cached_font(cmd->font, &face, &hb_font, cmd->pt_size, scale_x, scale_y);
+    load_cached_font(cmd->font, &face, &hb_font,
+                     cmd->pt_size, scale_x, scale_y);
 
     hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
