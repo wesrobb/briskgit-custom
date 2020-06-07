@@ -24,12 +24,12 @@ typedef struct render_cmd_rect {
     color color;
 } render_cmd_rect;
 
+#define MAX_TEXT_LEN 1000
 typedef struct render_cmd_font {
     font font;
-    const char *text;
+    char text[MAX_TEXT_LEN];
     color color;
     int32_t pt_size;
-    int32_t x, y;
 } render_cmd_font;
 
 typedef struct render_cmd {
@@ -365,9 +365,6 @@ void draw_font(eva_rect rect,
     float scale_x = eva_get_framebuffer_scale_x();
     float scale_y = eva_get_framebuffer_scale_y();
 
-    cmd->x = (int32_t)(cmd->x * scale_x);
-    cmd->y = (int32_t)(cmd->y * scale_y);
-
     hb_buffer_t *buf;
     buf = hb_buffer_create();
     hb_buffer_add_utf8(buf, cmd->text, -1, 0, -1);
@@ -383,13 +380,13 @@ void draw_font(eva_rect rect,
     hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buf, &glyphCount);
     hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
-    double cursor_x = cmd->x;
-    double cursor_y = cmd->y;
+    double cursor_x = rect.x;
+    double cursor_y = rect.y;
 
     for (uint32_t i = 0; i < glyphCount; ++i) {
         hb_codepoint_t glyphid = glyph_info[i].codepoint;
-        double x_offset = glyph_pos[i].x_offset / 64.0;
-        double y_offset = glyph_pos[i].y_offset / 64.0;
+        double x_offset  = glyph_pos[i].x_offset  / 64.0;
+        double y_offset  = glyph_pos[i].y_offset  / 64.0;
         double x_advance = glyph_pos[i].x_advance / 64.0;
         double y_advance = glyph_pos[i].y_advance / 64.0;
         // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
@@ -552,7 +549,7 @@ void render_end_frame(eva_rect *dirty_rect)
 
     memset(dirty_rect, 0, sizeof(eva_rect));
 
-    if (render_cmds_differ())
+    if (true || render_cmds_differ())
     {
         // Process current queue.
         int32_t num_cmds = *_render_cmd_ctx.curr_index;
@@ -613,6 +610,10 @@ void render_end_frame(eva_rect *dirty_rect)
                         break;
                 }
             }
+
+            scale_rect(dirty_rect,
+                       1.0f / eva_get_framebuffer_scale_x(),
+                       1.0f / eva_get_framebuffer_scale_y());
         }
     }
 
@@ -626,7 +627,9 @@ static void add_render_rect_cmd(eva_rect *r, color c)
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
     cmd->rect_cmd.color = c;
-    scale_rect(&cmd->rect, eva_get_framebuffer_scale_x(), eva_get_framebuffer_scale_y());
+    scale_rect(&cmd->rect,
+               eva_get_framebuffer_scale_x(),
+               eva_get_framebuffer_scale_y());
 }
 
 static void add_render_font_cmd(font font,
@@ -638,38 +641,34 @@ static void add_render_font_cmd(font font,
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_FONT;
     cmd->font_cmd.font = font;
-    cmd->font_cmd.text = text;
-    cmd->font_cmd.x = x;
-    cmd->font_cmd.y = y;
     cmd->font_cmd.pt_size = pt_size;
     cmd->font_cmd.color = c;
+
+    int32_t width = render_get_text_width(font, text, pt_size);
+    int32_t ascent, descent;
+    render_get_font_height(font, pt_size, &ascent, &descent);
+    int32_t height = ascent - descent;
+
+    // Only scale x and y since width and height are already scaled.
+    cmd->rect.x = (int32_t)(x * eva_get_framebuffer_scale_x());
+    cmd->rect.y = (int32_t)(y * eva_get_framebuffer_scale_y());
+    cmd->rect.w = width;
+    cmd->rect.h = height;
+
+    size_t len = strlen(text);
+    memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
+    if (len < MAX_TEXT_LEN) {
+        memcpy(cmd->font_cmd.text, text, len);
+    }
 }
 
-// TODO: Might be worth adding RENDER_CLEAR_COMMAND as a special
-//       case since it is CPU heavy but easy to optimise.
-// static void DrawClear(color color)
-//{
-//    profiler_begin;
-//
-//    assert(_render_ctx.initialized);
-//
-//    Pixel colored_pixel = color_to_pixel(color);
-//    int32_t size = _render_ctx.frameBuffer.height *
-//    _render_ctx.frameBuffer.width; Pixel *pixels =
-//    (Pixel*)_render_ctx.frameBuffer.pixels; for (int32_t y = 0; y < size;
-//    y++)
-//    {
-//        *pixels = colored_pixel;
-//        pixels++;
-//    }
-//
-//    profiler_end;
-//}
-//
 void render_clear(color color)
 {
     eva_rect r = {
-        .x = 0, .y = 0, .w = eva_get_window_width(), .h = eva_get_window_height()
+        .x = 0,
+        .y = 0,
+        .w = eva_get_window_width(),
+        .h = eva_get_window_height()
     };
     add_render_rect_cmd(&r, color);
 }

@@ -17,7 +17,16 @@ void init(void)
     app_init();
 }
 
-void handle_mouse_event(eva_mouse_event *e)
+static void handle_kb_event(eva_kb_event *e)
+{
+    switch (e->type) {
+        case EVA_KB_EVENTTYPE_KEYDOWN:
+            app_keydown(e->utf8_codepoint);
+            break;
+    }
+}
+
+static void handle_mouse_event(eva_mouse_event *e)
 {
     switch (e->type) {
     case EVA_MOUSE_EVENTTYPE_MOUSE_MOVED:
@@ -38,7 +47,7 @@ void handle_mouse_event(eva_mouse_event *e)
     }
 }
 
-void event(eva_event *e)
+static void event(eva_event *e)
 {
     bool full_redraw = false;
 
@@ -50,8 +59,9 @@ void event(eva_event *e)
     case EVA_EVENTTYPE_MOUSE:
         handle_mouse_event(&e->mouse);
         break;
-    case EVA_EVENTTYPE_KEYBOARD:
-        puts("Received eva keyboard event");
+    case EVA_EVENTTYPE_KB:
+        puts("Received eva kb event");
+        handle_kb_event(&e->kb);
         break;
     case EVA_EVENTTYPE_QUITREQUESTED:
         puts("Received eva quit requested");
@@ -62,11 +72,7 @@ void event(eva_event *e)
     }
 
     render_begin_frame();
-    {
-        profiler_begin_name("App_Draw");
-        app_draw();
-        profiler_end;
-    }
+    app_draw();
 
     eva_rect dirty_rect;
     render_end_frame(&dirty_rect);
@@ -81,14 +87,14 @@ void event(eva_event *e)
     profiler_log(2);
 }
 
-void cleanup(void)
+static void cleanup(void)
 {
     puts("Cleaning up");
     app_shutdown();
     render_shutdown();
 }
 
-void fail(int error_code, const char *error_message)
+static void fail(int error_code, const char *error_message)
 {
     printf("Error %d: %s\n", error_code, error_message);
 }

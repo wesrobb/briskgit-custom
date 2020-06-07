@@ -7,8 +7,7 @@ typedef struct eva_mouse_event eva_mouse_event;
 void app_init();
 void app_shutdown();
 
-// void App_OnKeyPressed(SDL_Keysym *);
-// void App_OnKeyReleased(SDL_Keysym *);
+void app_keydown(const char* utf8_codepoint);
 void app_mouse_moved(eva_mouse_event *);
 void app_mouse_pressed(eva_mouse_event *);
 void app_mouse_released(eva_mouse_event *);

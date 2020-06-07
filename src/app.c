@@ -1,11 +1,14 @@
 #include "app.h"
 
+#include <stdio.h>
+#include <string.h>
+
 #include "eva/eva.h"
 
 #include "profiler.h"
 #include "render.h"
 
-#include <stdio.h>
+#define TEXT_MAX_LEN 1000
 
 typedef struct app_ctx {
     int32_t branch_pane_resize_range;
@@ -13,9 +16,11 @@ typedef struct app_ctx {
     bool branch_pane_resizing;
     int32_t branch_pane_min_size;
 
+    char text[TEXT_MAX_LEN];
+    size_t text_index;
 } app_ctx;
 
-static app_ctx _app_ctx;
+static app_ctx _ctx;
 
 static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
 {
@@ -29,29 +34,38 @@ void app_init()
 {
     float scale_x = eva_get_framebuffer_scale_x();
 
-    _app_ctx.branch_pane_resize_range = (int32_t)(5 * scale_x);
-    _app_ctx.branch_pane_rect.w = 400;
-    _app_ctx.branch_pane_rect.h = eva_get_window_height();
-    _app_ctx.branch_pane_min_size = 200;
+    _ctx.branch_pane_resize_range = (int32_t)(5 * scale_x);
+    _ctx.branch_pane_rect.w = 400;
+    _ctx.branch_pane_rect.h = eva_get_window_height();
+    _ctx.branch_pane_min_size = 200;
 }
 
 void app_shutdown()
 {
 }
 
+void app_keydown(const char* utf8_codepoint)
+{
+    size_t len = strlen(utf8_codepoint);
+    if (_ctx.text_index + len < TEXT_MAX_LEN) {
+        memcpy(&_ctx.text[_ctx.text_index], utf8_codepoint, len);
+        _ctx.text_index += len;
+    }
+}
+
 void app_mouse_moved(eva_mouse_event *e)
 {
-    if (_app_ctx.branch_pane_resizing) {
-        _app_ctx.branch_pane_rect.w =
-            max(e->mouse_x, _app_ctx.branch_pane_min_size);
+    if (_ctx.branch_pane_resizing) {
+        _ctx.branch_pane_rect.w =
+            max(e->mouse_x, _ctx.branch_pane_min_size);
     }
 
     eva_rect resizeHandle = {
-        .x = _app_ctx.branch_pane_rect.x + _app_ctx.branch_pane_rect.w -
-             _app_ctx.branch_pane_resize_range,
-        .y = _app_ctx.branch_pane_rect.y,
-        .w = _app_ctx.branch_pane_resize_range * 2,
-        .h = _app_ctx.branch_pane_rect.y + _app_ctx.branch_pane_rect.h,
+        .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
+             _ctx.branch_pane_resize_range,
+        .y = _ctx.branch_pane_rect.y,
+        .w = _ctx.branch_pane_resize_range * 2,
+        .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
     };
     (void)resizeHandle;
 }
@@ -61,15 +75,15 @@ void app_mouse_pressed(eva_mouse_event *e)
     (void)e;
     if (e->left_btn_pressed) {
         eva_rect resizeHandle = {
-            .x = _app_ctx.branch_pane_rect.x + _app_ctx.branch_pane_rect.w -
-                 _app_ctx.branch_pane_resize_range,
-            .y = _app_ctx.branch_pane_rect.y,
-            .w = _app_ctx.branch_pane_resize_range * 2,
-            .h = _app_ctx.branch_pane_rect.y + _app_ctx.branch_pane_rect.h,
+            .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
+                 _ctx.branch_pane_resize_range,
+            .y = _ctx.branch_pane_rect.y,
+            .w = _ctx.branch_pane_resize_range * 2,
+            .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
         };
 
         if (point_in_rect(e->mouse_x, e->mouse_y, &resizeHandle)) {
-            _app_ctx.branch_pane_resizing = true;
+            _ctx.branch_pane_resizing = true;
             puts("pane resizing");
         }
     }
@@ -79,8 +93,8 @@ void app_mouse_released(eva_mouse_event *e)
 {
     (void)e;
     if (e->left_btn_released) {
-        if (_app_ctx.branch_pane_resizing) {
-            _app_ctx.branch_pane_resizing = false;
+        if (_ctx.branch_pane_resizing) {
+            _ctx.branch_pane_resizing = false;
             puts("pane stopped resizing");
         }
     }
@@ -90,7 +104,7 @@ void app_window_resized(int32_t width, int32_t height)
 {
     (void)width;
     (void)height;
-    _app_ctx.branch_pane_rect.h = eva_get_framebuffer_height();;
+    _ctx.branch_pane_rect.h = eva_get_framebuffer_height();;
 }
 
 void app_draw()
@@ -118,7 +132,7 @@ void app_draw()
     };
 
     render_clear(light_grey);
-    render_draw_rect(&_app_ctx.branch_pane_rect, grey);
+    render_draw_rect(&_ctx.branch_pane_rect, grey);
     // Render_DrawHollowRect(testRect, white, 4);
 
     int32_t font_size_pt = 18;
@@ -151,6 +165,10 @@ void app_draw()
                          text_lines[i], 
                          x, y, font_size_pt, white);
     }
+
+    render_draw_font(FONT_ROBOTO_REGULAR,
+                     _ctx.text, 
+                     20, 500, font_size_pt, white);
 
     profiler_end;
 }
