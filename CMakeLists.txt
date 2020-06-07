@@ -44,6 +44,12 @@ if (MSVC)
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     # warning level 4 and all warnings as errors
     target_compile_options(briskgit PRIVATE /W4 /WX /wd4201 /wd4204)
+
+    # The MSVC generator puts the built exe in build/Debug (or build/Release).
+    # This post build step copies the latest built exe to the root of the 
+    # build folder in order to make it easy to run via a shortcut.
+    add_custom_command(TARGET briskgit POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:briskgit> ${CMAKE_BINARY_DIR})
 else()
     # lots of warnings and all warnings as errors
     target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)

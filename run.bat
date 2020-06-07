@@ -1,1 +1,1 @@
-./build/briskgit
+build\briskgit.exe
