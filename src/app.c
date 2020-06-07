@@ -59,7 +59,7 @@ void app_mouse_moved(eva_mouse_event *e)
 void app_mouse_pressed(eva_mouse_event *e)
 {
     (void)e;
-    if (e->left_button_pressed) {
+    if (e->left_btn_pressed) {
         eva_rect resizeHandle = {
             .x = _app_ctx.branch_pane_rect.x + _app_ctx.branch_pane_rect.w -
                  _app_ctx.branch_pane_resize_range,
@@ -70,6 +70,7 @@ void app_mouse_pressed(eva_mouse_event *e)
 
         if (point_in_rect(e->mouse_x, e->mouse_y, &resizeHandle)) {
             _app_ctx.branch_pane_resizing = true;
+            puts("pane resizing");
         }
     }
 }
@@ -77,9 +78,10 @@ void app_mouse_pressed(eva_mouse_event *e)
 void app_mouse_released(eva_mouse_event *e)
 {
     (void)e;
-    if (e->left_button_released) {
+    if (e->left_btn_released) {
         if (_app_ctx.branch_pane_resizing) {
             _app_ctx.branch_pane_resizing = false;
+            puts("pane stopped resizing");
         }
     }
 }
@@ -87,7 +89,8 @@ void app_mouse_released(eva_mouse_event *e)
 void app_window_resized(int32_t width, int32_t height)
 {
     (void)width;
-    _app_ctx.branch_pane_rect.h = height;
+    (void)height;
+    _app_ctx.branch_pane_rect.h = eva_get_framebuffer_height();;
 }
 
 void app_draw()
