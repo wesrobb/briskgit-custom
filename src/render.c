@@ -650,10 +650,14 @@ static void add_render_font_cmd(font font,
     int32_t height = ascent - descent;
 
     // Only scale x and y since width and height are already scaled.
-    cmd->rect.x = (int32_t)(x * eva_get_framebuffer_scale_x());
-    cmd->rect.y = (int32_t)(y * eva_get_framebuffer_scale_y());
+    cmd->rect.x = x;
+    cmd->rect.y = y;
     cmd->rect.w = width;
     cmd->rect.h = height;
+
+    scale_rect(&cmd->rect,
+               eva_get_framebuffer_scale_x(),
+               eva_get_framebuffer_scale_y());
 
     size_t len = strlen(text);
     memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
