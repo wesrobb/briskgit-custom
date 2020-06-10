@@ -25,7 +25,7 @@ if (APPLE)
     target_link_libraries(briskgit LINK_PUBLIC
         ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/lib/libfreetype.a
         ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/lib/libharfbuzz.a
-        "-framework Cocoa")
+        "-framework Cocoa -framework Metal -framework MetalKit")
 
     configure_file(Info.plist Info.plist COPYONLY)
 elseif(WIN32)

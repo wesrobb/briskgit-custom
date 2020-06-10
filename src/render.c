@@ -49,6 +49,7 @@ typedef struct font_cache {
     hb_font_t *hb_font_cache[FONT_COUNT];
     int32_t pt_sizes[FONT_COUNT];
 
+    // TODO: Recache these on DPI change.
     float scale_x[FONT_COUNT];
     float scale_y[FONT_COUNT];
 
@@ -208,8 +209,8 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
 
     assert(bitmap);
 
-    int32_t framebuffer_width = eva_get_framebuffer_width();
-    int32_t framebuffer_height = eva_get_framebuffer_height();
+    int32_t framebuffer_width = (int32_t)eva_get_framebuffer_width();
+    int32_t framebuffer_height = (int32_t)eva_get_framebuffer_height();
 
     int32_t start_x = max(clip_rect.x, (int32_t)(x_pos + 0.5));
     int32_t end_x = min(clip_rect.x + clip_rect.w,
@@ -320,8 +321,8 @@ void draw_rect(eva_rect rect,
 {
     profiler_begin;
 
-    int32_t framebuffer_width = eva_get_framebuffer_width();
-    int32_t framebuffer_height = eva_get_framebuffer_height();
+    int32_t framebuffer_width = (int32_t)eva_get_framebuffer_width();
+    int32_t framebuffer_height = (int32_t)eva_get_framebuffer_height();
 
     int32_t start_x = max(clip_rect.x, rect.x);
     int32_t end_x = min(clip_rect.x + clip_rect.w, rect.x + rect.w);
@@ -415,7 +416,7 @@ void draw_font(eva_rect rect,
     profiler_end;
 }
 
-static bool render_cmds_differ()
+static bool render_cmd_queues_differ()
 {
     if (*_render_cmd_ctx.curr_index != *_render_cmd_ctx.prev_index) {
         return true;
@@ -511,22 +512,6 @@ void render_shutdown()
 
 void render_begin_frame()
 {
-    // Swap the current render queue.
-    render_cmd *tmp_cmds = _render_cmd_ctx.current;
-    _render_cmd_ctx.current = _render_cmd_ctx.previous;
-    _render_cmd_ctx.previous = tmp_cmds;
-
-    int32_t *tmp_index = _render_cmd_ctx.curr_index;
-    _render_cmd_ctx.curr_index = _render_cmd_ctx.prev_index;
-    _render_cmd_ctx.prev_index = tmp_index;
-
-    // Reset the new current render queue.
-    *_render_cmd_ctx.curr_index = 0;
-
-    // Swap tile caches.
-    uint32_t *tmp_tile_cache = _tile_cache;
-    _tile_cache = _prev_tile_cache;
-    _prev_tile_cache = tmp_tile_cache;
 }
 
 static void update_tile_cache(eva_rect *r, uint32_t hash_value)
@@ -549,7 +534,7 @@ void render_end_frame(eva_rect *dirty_rect)
 
     memset(dirty_rect, 0, sizeof(eva_rect));
 
-    if (true || render_cmds_differ())
+    if (true || render_cmd_queues_differ())
     {
         // Process current queue.
         int32_t num_cmds = *_render_cmd_ctx.curr_index;
@@ -566,12 +551,17 @@ void render_end_frame(eva_rect *dirty_rect)
         // that are frequently changing on opposite
         // corners of the screen.
         // TODO: Consider only merging adjacent rects.
-        for (uint32_t y = 0; y < MAX_TILE_CACHE_Y; y++)
+        uint32_t max_x = (uint32_t)eva_get_framebuffer_width() / TILE_SIZE + 1;
+        uint32_t max_y = (uint32_t)eva_get_framebuffer_height() / TILE_SIZE + 1;
+        bool first_difference = true;
+        for (uint32_t y = 0; y < max_y; y++)
         {
-            for (uint32_t x = 0; x < MAX_TILE_CACHE_X; x++)
+            for (uint32_t x = 0; x < max_x; x++)
             {
                 uint32_t tile_index = x + y * MAX_TILE_CACHE_X;
-                if (_tile_cache[tile_index] != _prev_tile_cache[tile_index])
+                uint32_t curr = _tile_cache[tile_index];
+                uint32_t prev = _prev_tile_cache[tile_index];
+                if (curr != prev)
                 {
                     eva_rect region = {
                         .x = (int32_t)x * TILE_SIZE,
@@ -580,9 +570,10 @@ void render_end_frame(eva_rect *dirty_rect)
                         .h = TILE_SIZE,
                     };
 
-                    if (eva_rect_empty(dirty_rect))
+                    if (first_difference)
                     {
                         *dirty_rect = region;
+                        first_difference = false;
                     }
                     else
                     {
@@ -615,7 +606,25 @@ void render_end_frame(eva_rect *dirty_rect)
                        1.0f / eva_get_framebuffer_scale_x(),
                        1.0f / eva_get_framebuffer_scale_y());
         }
+
+        // Swap tile caches.
+        uint32_t *tmp_tile_cache = _tile_cache;
+        _tile_cache = _prev_tile_cache;
+        _prev_tile_cache = tmp_tile_cache;
+
+        // Swap the current render queue.
+        render_cmd *tmp_cmds = _render_cmd_ctx.current;
+        _render_cmd_ctx.current = _render_cmd_ctx.previous;
+        _render_cmd_ctx.previous = tmp_cmds;
+
+        int32_t *tmp_index = _render_cmd_ctx.curr_index;
+        _render_cmd_ctx.curr_index = _render_cmd_ctx.prev_index;
+        _render_cmd_ctx.prev_index = tmp_index;
     }
+
+    // Always reset the current render queue regardless
+    *_render_cmd_ctx.curr_index = 0;
+
 
     profiler_end;
 }
@@ -671,8 +680,8 @@ void render_clear(color color)
     eva_rect r = {
         .x = 0,
         .y = 0,
-        .w = eva_get_window_width(),
-        .h = eva_get_window_height()
+        .w = (int32_t)eva_get_window_width(),
+        .h = (int32_t)eva_get_window_height()
     };
     add_render_rect_cmd(&r, color);
 }
@@ -752,8 +761,8 @@ void render_get_font_height(font font, int32_t pt_size,
     hb_font_extents_t extents;
     hb_font_get_h_extents(hb_font, &extents);
 
-    *ascent = extents.ascender / 64;
-    *descent = extents.descender / 64;
+    *ascent = extents.ascender / 64 / (int32_t)scale_y;
+    *descent = extents.descender / 64 / (int32_t)scale_y;
 
     profiler_end;
 }

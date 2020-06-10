@@ -36,7 +36,7 @@ void app_init()
 
     _ctx.branch_pane_resize_range = (int32_t)(5 * scale_x);
     _ctx.branch_pane_rect.w = 400;
-    _ctx.branch_pane_rect.h = eva_get_window_height();
+    _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
     _ctx.branch_pane_min_size = 200;
 }
 
@@ -100,17 +100,25 @@ void app_mouse_released(eva_mouse_event *e)
     }
 }
 
-void app_window_resized(int32_t width, int32_t height)
+void app_window_resized(uint32_t width, uint32_t height)
 {
     (void)width;
     (void)height;
-    _ctx.branch_pane_rect.h = eva_get_framebuffer_height();;
+    _ctx.branch_pane_rect.h = eva_get_window_height() / 2;
 }
 
 void app_draw()
 {
     profiler_begin;
 
+    int32_t font_size_pt = 18;
+
+    color white = {
+        .r = 1.0f,
+        .g = 1.0f,
+        .b = 1.0f,
+        .a = 1.0f,
+    };
     color light_grey = {
         .r = 0.1f,
         .g = 0.1f,
@@ -124,18 +132,10 @@ void app_draw()
         .a = 1.0f
     };
 
-    color white = {
-        .r = 1.0f,
-        .g = 1.0f,
-        .b = 1.0f,
-        .a = 1.0f,
-    };
-
     render_clear(light_grey);
     render_draw_rect(&_ctx.branch_pane_rect, grey);
     // Render_DrawHollowRect(testRect, white, 4);
 
-    int32_t font_size_pt = 18;
     // int32_t ascent, descent;
     // Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
 
@@ -144,7 +144,8 @@ void app_draw()
         "develop",
         "feature/AV",
         "pppppppppp",
-        "ffffffffff"
+        "ffffffffff",
+        _ctx.text
     };
 
     uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
@@ -160,15 +161,10 @@ void app_draw()
         //    .h = ascent - descent
         //};
 
-        // Render_DrawHollowRect(r, white, 2);
         render_draw_font(FONT_ROBOTO_REGULAR,
                          text_lines[i], 
                          x, y, font_size_pt, white);
     }
-
-    render_draw_font(FONT_ROBOTO_REGULAR,
-                     _ctx.text, 
-                     20, 500, font_size_pt, white);
 
     profiler_end;
 }
