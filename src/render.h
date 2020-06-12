@@ -15,11 +15,11 @@ typedef enum font {
     FONT_COUNT
 } font;
 
-bool render_init();
-void render_shutdown();
+bool render_init(void);
+void render_shutdown(void);
 
-void render_begin_frame();
-void render_end_frame(eva_rect *dirty_rect);
+void render_begin_frame(void);
+void render_end_frame(void);
 
 void render_clear(color);
 void render_draw_rect(eva_rect *, color);

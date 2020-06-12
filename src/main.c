@@ -53,7 +53,6 @@ static void event(eva_event *e)
 
     switch (e->type) {
     case EVA_EVENTTYPE_WINDOW:
-        puts("Received eva window event");
         app_window_resized(e->window.window_width, e->window.window_height);
         break;
     case EVA_EVENTTYPE_MOUSE:
@@ -73,16 +72,9 @@ static void event(eva_event *e)
 
     render_begin_frame();
     app_draw();
+    render_end_frame();
 
-    eva_rect dirty_rect;
-    render_end_frame(&dirty_rect);
-
-    if (full_redraw) {
-        eva_request_frame(NULL);
-    }
-    else {
-        eva_request_frame(&dirty_rect);
-    }
+    eva_request_frame();
 
     profiler_log(2);
 }

@@ -32,9 +32,9 @@ static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
 
 void app_init()
 {
-    float scale_x = eva_get_framebuffer_scale_x();
+    eva_framebuffer fb = eva_get_framebuffer();
 
-    _ctx.branch_pane_resize_range = (int32_t)(5 * scale_x);
+    _ctx.branch_pane_resize_range = (int32_t)(5 * fb.scale_x);
     _ctx.branch_pane_rect.w = 400;
     _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
     _ctx.branch_pane_min_size = 200;
@@ -104,7 +104,7 @@ void app_window_resized(uint32_t width, uint32_t height)
 {
     (void)width;
     (void)height;
-    _ctx.branch_pane_rect.h = eva_get_window_height() / 2;
+    _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
 }
 
 void app_draw()

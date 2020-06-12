@@ -209,31 +209,30 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
 
     assert(bitmap);
 
-    int32_t framebuffer_width = (int32_t)eva_get_framebuffer_width();
-    int32_t framebuffer_height = (int32_t)eva_get_framebuffer_height();
+    eva_framebuffer fb = eva_get_framebuffer();
 
-    int32_t start_x = max(clip_rect.x, (int32_t)(x_pos + 0.5));
-    int32_t end_x = min(clip_rect.x + clip_rect.w,
-                        (int32_t)(x_pos + bitmap->width + 0.5));
+    uint32_t start_x = (uint32_t)max(clip_rect.x, (int32_t)(x_pos + 0.5));
+    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w,
+                                     (int32_t)(x_pos + bitmap->width + 0.5));
 
-    int32_t start_y = max(clip_rect.y, (int32_t)(y_pos + 0.5));
-    int32_t end_y = min(clip_rect.y + clip_rect.h,
-                        (int32_t)(y_pos + bitmap->rows + 0.5));
+    uint32_t start_y = (uint32_t)max(clip_rect.y, (int32_t)(y_pos + 0.5));
+    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h,
+                                     (int32_t)(y_pos + bitmap->rows + 0.5));
 
-    end_x = min(end_x, framebuffer_width);
-    end_y = min(end_y, framebuffer_height);
+    end_x = min(end_x, fb.w);
+    end_y = min(end_y, fb.h);
 
     // Move to the first pixel that resides in the rect
-    eva_pixel *framebuffer = eva_get_framebuffer();
-    framebuffer += start_x + start_y * framebuffer_width;
+    eva_pixel *framebuffer = fb.pixels;
+    framebuffer += start_x + start_y * fb.pitch;
     // Calculate how many pixels to jump over at
     // the end of each row in the rect.
-    int32_t next_row = framebuffer_width - (end_x - start_x);
+    uint32_t next_row = fb.pitch - (end_x - start_x);
 
-    for (int32_t y = start_y, v = 0; y < end_y; y++, v++) {
-        for (int32_t x = start_x, u = 0; x < end_x; x++, u++) {
+    for (uint32_t y = start_y, v = 0; y < end_y; y++, v++) {
+        for (uint32_t x = start_x, u = 0; x < end_x; x++, u++) {
             float font_alpha_linear = 
-                bitmap->buffer[v * (int32_t)bitmap->width + u] / 255.0f;
+                bitmap->buffer[v * bitmap->width + u] / 255.0f;
             // Pre-multiply font alpha in linear space.
             color font_linear_premultiplied_alpha = {
                 .r = c.r * font_alpha_linear,
@@ -321,30 +320,28 @@ void draw_rect(eva_rect rect,
 {
     profiler_begin;
 
-    int32_t framebuffer_width = (int32_t)eva_get_framebuffer_width();
-    int32_t framebuffer_height = (int32_t)eva_get_framebuffer_height();
+    eva_framebuffer fb = eva_get_framebuffer();
 
-    int32_t start_x = max(clip_rect.x, rect.x);
-    int32_t end_x = min(clip_rect.x + clip_rect.w, rect.x + rect.w);
+    uint32_t start_x = (uint32_t)max(clip_rect.x, rect.x);
+    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w, rect.x + rect.w);
 
-    // Invert y cos our coordinates are y up but SDL surface is y down.
-    int32_t start_y = max(clip_rect.y, rect.y);
-    int32_t end_y = min(clip_rect.y + clip_rect.h, rect.y + rect.h);
+    uint32_t start_y = (uint32_t)max(clip_rect.y, rect.y);
+    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h, rect.y + rect.h);
 
-    end_x = min(end_x, framebuffer_width);
-    end_y = min(end_y, framebuffer_height);
+    end_x = min(end_x, fb.w);
+    end_y = min(end_y, fb.h);
 
     // Move to the first pixel that resides in the rect
-    eva_pixel *framebuffer = eva_get_framebuffer();
-    framebuffer += start_x + start_y * framebuffer_width;
+    eva_pixel *framebuffer = fb.pixels;
+    framebuffer += start_x + start_y * fb.pitch;
 
     /// Calculate how many pixels to jump over
     // at the end of each row in the rect.
-    int32_t next_row = framebuffer_width - (end_x - start_x);
+    uint32_t next_row = fb.pitch - (end_x - start_x);
 
     eva_pixel colored_pixel = color_to_pixel(cmd->color);
-    for (int32_t y = start_y; y < end_y; y++) {
-        for (int32_t x = start_x; x < end_x; x++) {
+    for (uint32_t y = start_y; y < end_y; y++) {
+        for (uint32_t x = start_x; x < end_x; x++) {
             *framebuffer = colored_pixel;
             framebuffer++;
         }
@@ -363,8 +360,7 @@ void draw_font(eva_rect rect,
 
     profiler_begin;
 
-    float scale_x = eva_get_framebuffer_scale_x();
-    float scale_y = eva_get_framebuffer_scale_y();
+    eva_framebuffer fb = eva_get_framebuffer();
 
     hb_buffer_t *buf;
     buf = hb_buffer_create();
@@ -374,7 +370,7 @@ void draw_font(eva_rect rect,
     FT_Face face;
     hb_font_t *hb_font;
     load_cached_font(cmd->font, &face, &hb_font,
-                     cmd->pt_size, scale_x, scale_y);
+                     cmd->pt_size, fb.scale_x, fb.scale_y);
 
     hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
@@ -434,7 +430,7 @@ static bool render_cmd_queues_differ()
     return false;
 }
 
-bool render_init()
+bool render_init(void)
 {
     _font_cache.hb_features[0].tag = HB_TAG('k', 'e', 'r', 'n');
     _font_cache.hb_features[0].value = 1;
@@ -501,7 +497,7 @@ bool render_init()
     return true;
 }
 
-void render_shutdown()
+void render_shutdown(void)
 {
     for (int32_t i = 0; i < FONT_COUNT; i++) {
         hb_font_destroy(_font_cache.hb_font_cache[i]);
@@ -510,7 +506,7 @@ void render_shutdown()
     FT_Done_Library(_font_cache.font_library);
 }
 
-void render_begin_frame()
+void render_begin_frame(void)
 {
 }
 
@@ -528,14 +524,16 @@ static void update_tile_cache(eva_rect *r, uint32_t hash_value)
     }
 }
 
-void render_end_frame(eva_rect *dirty_rect)
+void render_end_frame(void)
 {
     profiler_begin;
 
-    memset(dirty_rect, 0, sizeof(eva_rect));
+    eva_framebuffer fb = eva_get_framebuffer();
 
     if (true || render_cmd_queues_differ())
     {
+        eva_rect dirty_rect = {0};
+
         // Process current queue.
         int32_t num_cmds = *_render_cmd_ctx.curr_index;
         for (int32_t i = 0; i < num_cmds; i++)
@@ -551,8 +549,8 @@ void render_end_frame(eva_rect *dirty_rect)
         // that are frequently changing on opposite
         // corners of the screen.
         // TODO: Consider only merging adjacent rects.
-        uint32_t max_x = (uint32_t)eva_get_framebuffer_width() / TILE_SIZE + 1;
-        uint32_t max_y = (uint32_t)eva_get_framebuffer_height() / TILE_SIZE + 1;
+        uint32_t max_x = fb.w / TILE_SIZE + 1;
+        uint32_t max_y = fb.h / TILE_SIZE + 1;
         bool first_difference = true;
         for (uint32_t y = 0; y < max_y; y++)
         {
@@ -572,12 +570,12 @@ void render_end_frame(eva_rect *dirty_rect)
 
                     if (first_difference)
                     {
-                        *dirty_rect = region;
                         first_difference = false;
+                        dirty_rect = region;
                     }
                     else
                     {
-                        *dirty_rect = eva_rect_union(dirty_rect, &region);
+                        dirty_rect = eva_rect_union(&dirty_rect, &region);
                     }
                 }
 
@@ -586,7 +584,7 @@ void render_end_frame(eva_rect *dirty_rect)
         }
 
 
-        if (!eva_rect_empty(dirty_rect))
+        if (!eva_rect_empty(&dirty_rect))
         {
             for (int32_t i = 0; i < num_cmds; i++)
             {
@@ -594,17 +592,13 @@ void render_end_frame(eva_rect *dirty_rect)
                 switch (cmd->type)
                 {
                     case RENDER_COMMAND_RECT:
-                        draw_rect(cmd->rect, &cmd->rect_cmd, *dirty_rect);
+                        draw_rect(cmd->rect, &cmd->rect_cmd, dirty_rect);
                         break;
                     case RENDER_COMMAND_FONT:
-                        draw_font(cmd->rect, &cmd->font_cmd, *dirty_rect);
+                        draw_font(cmd->rect, &cmd->font_cmd, dirty_rect);
                         break;
                 }
             }
-
-            scale_rect(dirty_rect,
-                       1.0f / eva_get_framebuffer_scale_x(),
-                       1.0f / eva_get_framebuffer_scale_y());
         }
 
         // Swap tile caches.
@@ -625,7 +619,6 @@ void render_end_frame(eva_rect *dirty_rect)
     // Always reset the current render queue regardless
     *_render_cmd_ctx.curr_index = 0;
 
-
     profiler_end;
 }
 
@@ -636,9 +629,9 @@ static void add_render_rect_cmd(eva_rect *r, color c)
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
     cmd->rect_cmd.color = c;
-    scale_rect(&cmd->rect,
-               eva_get_framebuffer_scale_x(),
-               eva_get_framebuffer_scale_y());
+
+    eva_framebuffer fb = eva_get_framebuffer();
+    scale_rect(&cmd->rect, fb.scale_x, fb.scale_y);
 }
 
 static void add_render_font_cmd(font font,
@@ -664,9 +657,8 @@ static void add_render_font_cmd(font font,
     cmd->rect.w = width;
     cmd->rect.h = height;
 
-    scale_rect(&cmd->rect,
-               eva_get_framebuffer_scale_x(),
-               eva_get_framebuffer_scale_y());
+    eva_framebuffer fb = eva_get_framebuffer();
+    scale_rect(&cmd->rect, fb.scale_x, fb.scale_y);
 
     size_t len = strlen(text);
     memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
@@ -724,9 +716,8 @@ int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
 
     FT_Face face;
     hb_font_t *hb_font;
-    float scale_x = eva_get_framebuffer_scale_x();
-    float scale_y = eva_get_framebuffer_scale_y();
-    load_cached_font(font, &face, &hb_font, pt_size, scale_x, scale_y);
+    eva_framebuffer fb = eva_get_framebuffer();
+    load_cached_font(font, &face, &hb_font, pt_size, fb.scale_x, fb.scale_y);
 
     hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
     uint32_t glyphCount = 0;
@@ -744,7 +735,7 @@ int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
 
     profiler_end;
 
-    return (int32_t)(cursor_x / scale_x);
+    return (int32_t)(cursor_x / fb.scale_x);
 }
 
 void render_get_font_height(font font, int32_t pt_size,
@@ -754,15 +745,14 @@ void render_get_font_height(font font, int32_t pt_size,
 
     FT_Face face;
     hb_font_t *hb_font;
-    float scale_x = eva_get_framebuffer_scale_x();
-    float scale_y = eva_get_framebuffer_scale_y();
-    load_cached_font(font, &face, &hb_font, pt_size, scale_x, scale_y);
+    eva_framebuffer fb = eva_get_framebuffer();
+    load_cached_font(font, &face, &hb_font, pt_size, fb.scale_x, fb.scale_y);
 
     hb_font_extents_t extents;
     hb_font_get_h_extents(hb_font, &extents);
 
-    *ascent = extents.ascender / 64 / (int32_t)scale_y;
-    *descent = extents.descender / 64 / (int32_t)scale_y;
+    *ascent = extents.ascender / 64 / (int32_t)fb.scale_y;
+    *descent = extents.descender / 64 / (int32_t)fb.scale_y;
 
     profiler_end;
 }
