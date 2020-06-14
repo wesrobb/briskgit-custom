@@ -13,29 +13,21 @@ add_executable(briskgit
                src/eva/eva.h)
 
 #target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+    find_package(harfbuzz CONFIG REQUIRED)
+    find_package(freetype CONFIG REQUIRED)
+    target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
 
 if (APPLE)
     enable_language(OBJC)
     target_sources(briskgit PRIVATE src/eva/eva_macos.m)
 
-    target_include_directories(briskgit PRIVATE 
-        ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/include
-        ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/include)
-
-    target_link_libraries(briskgit LINK_PUBLIC
-        ${PROJECT_SOURCE_DIR}/lib/freetype/macos/2.10.1/lib/libfreetype.a
-        ${PROJECT_SOURCE_DIR}/lib/harfbuzz/macos/2.6.6/lib/libharfbuzz.a
+    target_link_libraries(briskgit PRIVATE
         "-framework Cocoa -framework Metal -framework MetalKit")
 
     configure_file(Info.plist Info.plist COPYONLY)
 elseif(WIN32)
     target_sources(briskgit PRIVATE src/eva/eva_windows.c)
 
-    # Install these via vcpkg. Install the x64-windows-static triplet and
-    # pass it to cmake with -DVCPKG_TARGET_TRIPLET=x64-windows-static
-    find_package(harfbuzz CONFIG REQUIRED)
-    find_package(freetype CONFIG REQUIRED)
-    target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
 endif()
 
 if (MSVC)
