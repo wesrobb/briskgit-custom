@@ -53,11 +53,12 @@ void app_keydown(const char* utf8_codepoint)
     }
 }
 
-void app_mouse_moved(eva_mouse_event *e)
+void app_mouse_moved(int32_t x, int32_t y)
 {
+    (void)y;
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_rect.w =
-            max(e->mouse_x, _ctx.branch_pane_min_size);
+            max(x, _ctx.branch_pane_min_size);
     }
 
     eva_rect resizeHandle = {
@@ -70,33 +71,29 @@ void app_mouse_moved(eva_mouse_event *e)
     (void)resizeHandle;
 }
 
-void app_mouse_pressed(eva_mouse_event *e)
+void app_mouse_pressed(int32_t x, int32_t y)
 {
-    (void)e;
-    if (e->left_btn_pressed) {
-        eva_rect resizeHandle = {
-            .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
-                 _ctx.branch_pane_resize_range,
-            .y = _ctx.branch_pane_rect.y,
-            .w = _ctx.branch_pane_resize_range * 2,
-            .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
-        };
+    eva_rect resizeHandle = {
+        .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
+            _ctx.branch_pane_resize_range,
+        .y = _ctx.branch_pane_rect.y,
+        .w = _ctx.branch_pane_resize_range * 2,
+        .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
+    };
 
-        if (point_in_rect(e->mouse_x, e->mouse_y, &resizeHandle)) {
-            _ctx.branch_pane_resizing = true;
-            puts("pane resizing");
-        }
+    if (point_in_rect(x, y, &resizeHandle)) {
+        _ctx.branch_pane_resizing = true;
+        puts("pane resizing");
     }
 }
 
-void app_mouse_released(eva_mouse_event *e)
+void app_mouse_released(int32_t x, int32_t y)
 {
-    (void)e;
-    if (e->left_btn_released) {
-        if (_ctx.branch_pane_resizing) {
-            _ctx.branch_pane_resizing = false;
-            puts("pane stopped resizing");
-        }
+    (void)x;
+    (void)y;
+    if (_ctx.branch_pane_resizing) {
+        _ctx.branch_pane_resizing = false;
+        puts("pane stopped resizing");
     }
 }
 
