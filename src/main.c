@@ -40,13 +40,13 @@ static void event(eva_event *e)
         puts("Received eva quit requested");
         return;
     case EVA_EVENTTYPE_REDRAWFRAME:
+        render_begin_frame();
+        app_draw();
+        render_end_frame();
+        eva_request_frame();
         break;
     }
 
-    render_begin_frame();
-    app_draw();
-    render_end_frame();
-    eva_request_frame();
 
     profiler_log(2);
 }
@@ -92,13 +92,21 @@ static void frame(const eva_framebuffer *fb)
     render_end_frame();
 }
 
+static bool cancel_quit(void)
+{
+    return false;
+}
+
 int main()
 {
     printf("Hello briskgit!\n");
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
-    eva_run("Briskgit", init, event, frame, cleanup, fail);
+    eva_set_cancel_quit_fn(cancel_quit);
+    eva_set_init_fn(init);
+    eva_set_cleanup_fn(cleanup);
+    eva_run("Briskgit", event, frame, fail);
 
     return 0;
 }
