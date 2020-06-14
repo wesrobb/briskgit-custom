@@ -59,6 +59,7 @@ void app_mouse_moved(int32_t x, int32_t y)
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_rect.w =
             max(x, _ctx.branch_pane_min_size);
+        eva_request_frame();
     }
 
     eva_rect resizeHandle = {
