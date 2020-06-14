@@ -66,11 +66,6 @@ static void fail(int error_code, const char *error_message)
 static void mouse_moved(int32_t x, int32_t y)
 {
     app_mouse_moved(x, y);
-
-    render_begin_frame();
-    app_draw();
-    render_end_frame();
-    eva_request_frame();
 }
 
 static void mouse_btn(int32_t x, int32_t y,
@@ -85,10 +80,16 @@ static void mouse_btn(int32_t x, int32_t y,
         }
     }
 
+    eva_request_frame();
+}
+
+static void frame(const eva_framebuffer *fb)
+{
+    (void)fb;
+
     render_begin_frame();
     app_draw();
     render_end_frame();
-    eva_request_frame();
 }
 
 int main()
@@ -97,7 +98,7 @@ int main()
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
-    eva_run("Briskgit", init, event, cleanup, fail);
+    eva_run("Briskgit", init, event, frame, cleanup, fail);
 
     return 0;
 }
