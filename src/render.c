@@ -259,14 +259,6 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
     profiler_end;
 }
 
-static void scale_rect(eva_rect *r, float scale_x, float scale_y)
-{
-    r->x = (int32_t)(r->x * scale_x);
-    r->w = (int32_t)(r->w * scale_x);
-    r->y = (int32_t)(r->y * scale_y);
-    r->h = (int32_t)(r->h * scale_y);
-}
-
 static const char *get_font_file(font font)
 {
     // TODO: Bake these files into the exe.
@@ -300,8 +292,8 @@ static void load_cached_font(font font,
                 *face,       // handle to face object
                 0,           // char_width in 1/64th of points
                 pt_size * 64, // char_height in 1/64th of points
-                (uint32_t)(72.0f * scale_x),  // horizontal dpi
-                (uint32_t)(72.0f * scale_y)); // vertical dpi
+                (uint32_t)(96.0f * scale_x),  // horizontal dpi // TODO get the actual DPI from eva
+                (uint32_t)(96.0f * scale_y)); // vertical dpi
 
         if (error) {
             puts("Failed to set face size");
@@ -629,9 +621,6 @@ static void add_render_rect_cmd(eva_rect *r, color c)
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
     cmd->rect_cmd.color = c;
-
-    eva_framebuffer fb = eva_get_framebuffer();
-    scale_rect(&cmd->rect, fb.scale_x, fb.scale_y);
 }
 
 static void add_render_font_cmd(font font,
@@ -657,9 +646,6 @@ static void add_render_font_cmd(font font,
     cmd->rect.w = width;
     cmd->rect.h = height;
 
-    eva_framebuffer fb = eva_get_framebuffer();
-    scale_rect(&cmd->rect, fb.scale_x, fb.scale_y);
-
     size_t len = strlen(text);
     memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
     if (len < MAX_TEXT_LEN) {
@@ -678,8 +664,7 @@ void render_clear(color color)
     add_render_rect_cmd(&r, color);
 }
 
-void render_draw_rect(eva_rect *rect,
-                     color color) // TODO: These should be passed by pointer
+void render_draw_rect(eva_rect *rect, color color) // TODO: These should be passed by pointer
 {
     add_render_rect_cmd(rect, color);
 }
@@ -735,7 +720,7 @@ int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
 
     profiler_end;
 
-    return (int32_t)(cursor_x / fb.scale_x);
+    return (int32_t)(cursor_x);
 }
 
 void render_get_font_height(font font, int32_t pt_size,
@@ -751,8 +736,8 @@ void render_get_font_height(font font, int32_t pt_size,
     hb_font_extents_t extents;
     hb_font_get_h_extents(hb_font, &extents);
 
-    *ascent = extents.ascender / 64 / (int32_t)fb.scale_y;
-    *descent = extents.descender / 64 / (int32_t)fb.scale_y;
+    *ascent = extents.ascender / 64;
+    *descent = extents.descender / 64;
 
     profiler_end;
 }

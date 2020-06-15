@@ -109,7 +109,7 @@ void app_draw()
 {
     profiler_begin;
 
-    int32_t font_size_pt = 18;
+    int32_t font_size_pt = 14;
 
     color white = {
         .r = 1.0f,
