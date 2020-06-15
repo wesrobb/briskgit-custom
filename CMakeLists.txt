@@ -13,9 +13,9 @@ add_executable(briskgit
                src/eva/eva.h)
 
 #target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
-    find_package(harfbuzz CONFIG REQUIRED)
-    find_package(freetype CONFIG REQUIRED)
-    target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
+find_package(harfbuzz CONFIG REQUIRED)
+find_package(freetype CONFIG REQUIRED)
+target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
 
 if (APPLE)
     enable_language(OBJC)
@@ -46,14 +46,5 @@ else()
     # lots of warnings and all warnings as errors
     target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)
 endif()
-
-if (APPLE)
-endif()
-
-add_custom_target(
-    copy-compile-commands ALL
-    ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_BINARY_DIR}/compile_commands.json
-        ${CMAKE_CURRENT_LIST_DIR})
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

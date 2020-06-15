@@ -530,7 +530,7 @@ void render_end_frame(void)
 
     eva_framebuffer fb = eva_get_framebuffer();
 
-    if (true || render_cmd_queues_differ())
+    if (render_cmd_queues_differ())
     {
         eva_rect dirty_rect = {0};
 
