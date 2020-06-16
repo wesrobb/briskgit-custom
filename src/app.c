@@ -51,6 +51,7 @@ void app_keydown(const char* utf8_codepoint)
         memcpy(&_ctx.text[_ctx.text_index], utf8_codepoint, len);
         _ctx.text_index += len;
     }
+        eva_request_frame();
 }
 
 void app_mouse_moved(int32_t x, int32_t y)
@@ -109,7 +110,7 @@ void app_draw()
 {
     profiler_begin;
 
-    int32_t font_size_pt = 14;
+    int32_t font_size_pt = 26;
 
     color white = {
         .r = 1.0f,
@@ -129,6 +130,8 @@ void app_draw()
         .b = 0.3f,
         .a = 1.0f
     };
+    (void)light_grey;
+    (void)grey;
 
     render_clear(light_grey);
     render_draw_rect(&_ctx.branch_pane_rect, grey);
@@ -144,6 +147,16 @@ void app_draw()
         "feature/AV",
         "pppppppppp",
         "ffffffffff",
+        "mmastermastermastermasteraster",
+        "dmastermastermastermastermastermasterevelop",
+        "feature/mastermastermastermastermastermastermasterAV",
+        "ppppppppmastermastermastermastermastermastermastermasterpp",
+        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "mffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaster",
+        "dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffevelop",
+        "fffffffffffffffffffffffffffffffffffffffffffffffffffeature/AV",
+        "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+        "fppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppfffffffff",
         _ctx.text
     };
 
@@ -152,7 +165,7 @@ void app_draw()
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
         // textLines[i], fontSizePt);
         int32_t x = 40;
-        int32_t y = (int32_t)(40 + (i * (ascent - descent)));
+        int32_t y = (int32_t)(100 + (i * (ascent - descent)));
         // Rect r = {
         //    .x = x,
         //    .y = y - ascent,
@@ -163,6 +176,14 @@ void app_draw()
         render_draw_font(FONT_ROBOTO_REGULAR,
                          text_lines[i], 
                          x, y, font_size_pt, white);
+
+        eva_rect test = {
+            .x = 0,
+            .y = y,
+            .w = 900,
+            .h = 2
+        };
+        render_draw_rect(&test, grey);
     }
 
     profiler_end;

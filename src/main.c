@@ -33,7 +33,6 @@ static void event(eva_event *e)
         app_window_resized(e->window.window_width, e->window.window_height);
         break;
     case EVA_EVENTTYPE_KB:
-        puts("Received eva kb event");
         handle_kb_event(&e->kb);
         break;
     case EVA_EVENTTYPE_REDRAWFRAME:
@@ -43,9 +42,6 @@ static void event(eva_event *e)
         eva_request_frame();
         break;
     }
-
-
-    profiler_log(2);
 }
 
 static void cleanup(void)
@@ -87,6 +83,8 @@ static void frame(const eva_framebuffer *fb)
     render_begin_frame();
     app_draw();
     render_end_frame();
+
+    profiler_log(0);
 }
 
 static bool cancel_quit(void)

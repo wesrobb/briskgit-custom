@@ -30,6 +30,7 @@ typedef struct render_cmd_font {
     char text[MAX_TEXT_LEN];
     color color;
     int32_t pt_size;
+    int32_t baseline_y;
 } render_cmd_font;
 
 typedef struct render_cmd {
@@ -79,6 +80,8 @@ static uint32_t _tile_cache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
+
+static void clip_to_framebuffer(eva_rect *r);
 
 #define HASH_INITIAL 2166136261
 
@@ -205,11 +208,23 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
                            color c,
                            eva_rect clip_rect)
 {
+    // TODO: Clean this function up. At least do the preamble.
+    // TODO: This is on the hot path and it is pretty slow. Make it fast!
     profiler_begin;
 
     assert(bitmap);
 
     eva_framebuffer fb = eva_get_framebuffer();
+
+    // Start drawing from the bitmap depending on how much of it is clipped.
+    int32_t x_clipped = (int32_t)(clip_rect.x - x_pos);
+    if (x_clipped <= 0) {
+        x_clipped = 0;
+    }
+    int32_t y_clipped = (int32_t)(clip_rect.y - y_pos);
+    if (y_clipped <= 0) {
+        y_clipped = 0;
+    }
 
     uint32_t start_x = (uint32_t)max(clip_rect.x, (int32_t)(x_pos + 0.5));
     uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w,
@@ -229,27 +244,29 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
     // the end of each row in the rect.
     uint32_t next_row = fb.pitch - (end_x - start_x);
 
-    for (uint32_t y = start_y, v = 0; y < end_y; y++, v++) {
-        for (uint32_t x = start_x, u = 0; x < end_x; x++, u++) {
+    for (uint32_t y = start_y, v = (uint32_t)y_clipped; y < end_y; y++, v++) {
+        for (uint32_t x = start_x, u = (uint32_t)x_clipped; x < end_x; x++, u++) {
             float font_alpha_linear = 
                 bitmap->buffer[v * bitmap->width + u] / 255.0f;
-            // Pre-multiply font alpha in linear space.
-            color font_linear_premultiplied_alpha = {
-                .r = c.r * font_alpha_linear,
-                .g = c.g * font_alpha_linear,
-                .b = c.b * font_alpha_linear,
-                .a = font_alpha_linear
-            };
+            if (font_alpha_linear != 0.0f) {
+                // Pre-multiply font alpha in linear space.
+                color font_linear_premultiplied_alpha = {
+                    .r = c.r * font_alpha_linear,
+                    .g = c.g * font_alpha_linear,
+                    .b = c.b * font_alpha_linear,
+                    .a = font_alpha_linear
+                };
 
-            color dest_color_srgb = pixel_to_color(framebuffer);
-            color dest_color_linear = srgb_to_linear(dest_color_srgb);
-            color blended_linear = linear_blend(
-                    font_linear_premultiplied_alpha,
-                    dest_color_linear
-            );
-            color blended_srgb = linear_to_srgb(blended_linear);
+                color dest_color_srgb = pixel_to_color(framebuffer);
+                color dest_color_linear = srgb_to_linear(dest_color_srgb);
+                color blended_linear = linear_blend(
+                        font_linear_premultiplied_alpha,
+                        dest_color_linear
+                        );
+                color blended_srgb = linear_to_srgb(blended_linear);
 
-            *framebuffer = color_to_pixel(blended_srgb);
+                *framebuffer = color_to_pixel(blended_srgb);
+            }
             framebuffer++;
         }
 
@@ -282,6 +299,8 @@ static void load_cached_font(font font,
                              hb_font_t **hb_font,
                              int32_t pt_size, float scale_x, float scale_y)
 {
+    profiler_begin;
+
     // Load cached font data and only set size if it wasn't set already.
     *face = _font_cache.face_cache[font];
     *hb_font = _font_cache.hb_font_cache[font];
@@ -304,6 +323,8 @@ static void load_cached_font(font font,
         _font_cache.scale_x[font] = scale_x;
         _font_cache.scale_y[font] = scale_y;
     }
+
+    profiler_end;
 }
 
 void draw_rect(eva_rect rect,
@@ -344,6 +365,12 @@ void draw_rect(eva_rect rect,
     profiler_end;
 }
 
+bool rect_intersect(eva_rect a, eva_rect b)
+{
+    return !((a.x > b.x + b.w || b.x > a.x + a.w) ||
+             (a.y > b.y + b.h || b.y > a.y + a.h));
+}
+
 void draw_font(eva_rect rect,
               render_cmd_font *cmd,
               eva_rect clip_rect)
@@ -352,61 +379,68 @@ void draw_font(eva_rect rect,
 
     profiler_begin;
 
-    eva_framebuffer fb = eva_get_framebuffer();
+    if (rect_intersect(clip_rect, rect)) {
+        profiler_begin_name("draw_font_rect_intersect");
+        eva_framebuffer fb = eva_get_framebuffer();
 
-    hb_buffer_t *buf;
-    buf = hb_buffer_create();
-    hb_buffer_add_utf8(buf, cmd->text, -1, 0, -1);
-    hb_buffer_guess_segment_properties(buf);
+        hb_buffer_t *buf;
+        buf = hb_buffer_create();
+        hb_buffer_add_utf8(buf, cmd->text, -1, 0, -1);
+        hb_buffer_guess_segment_properties(buf);
 
-    FT_Face face;
-    hb_font_t *hb_font;
-    load_cached_font(cmd->font, &face, &hb_font,
-                     cmd->pt_size, fb.scale_x, fb.scale_y);
+        FT_Face face;
+        hb_font_t *hb_font;
+        load_cached_font(cmd->font, &face, &hb_font,
+                cmd->pt_size, fb.scale_x, fb.scale_y);
 
-    hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
-    uint32_t glyphCount = 0;
-    hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buf, &glyphCount);
-    hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
+        hb_shape(hb_font, buf, _font_cache.hb_features, HARFBUZZ_NUM_FEATURES);
+        uint32_t glyphCount = 0;
+        hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buf, &glyphCount);
+        hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
-    double cursor_x = rect.x;
-    double cursor_y = rect.y;
+        double cursor_x = rect.x;
+        double cursor_y = cmd->baseline_y;
 
-    for (uint32_t i = 0; i < glyphCount; ++i) {
-        hb_codepoint_t glyphid = glyph_info[i].codepoint;
-        double x_offset  = glyph_pos[i].x_offset  / 64.0;
-        double y_offset  = glyph_pos[i].y_offset  / 64.0;
-        double x_advance = glyph_pos[i].x_advance / 64.0;
-        double y_advance = glyph_pos[i].y_advance / 64.0;
-        // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
-        // load glyph image into the slot (erase previous one)
-        int32_t error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
-        if (error) {
-            printf("Error loading font glyph %d\n - continuing", error);
-            continue; // ignore errors
+        for (uint32_t i = 0; i < glyphCount; ++i) {
+            hb_codepoint_t glyphid = glyph_info[i].codepoint;
+            double x_offset  = glyph_pos[i].x_offset  / 64.0;
+            double y_offset  = glyph_pos[i].y_offset  / 64.0;
+            double x_advance = glyph_pos[i].x_advance / 64.0;
+            double y_advance = glyph_pos[i].y_advance / 64.0;
+            // draw_glyph(glyphid, cursor_x + x_offset, cursor_y + y_offset);
+            // load glyph image into the slot (erase previous one)
+            int32_t error = FT_Load_Glyph(face, glyphid, FT_LOAD_NO_HINTING);
+            if (error) {
+                printf("Error loading font glyph %d\n - continuing", error);
+                continue; // ignore errors
+            }
+            error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
+            if (error) {
+                printf("Error rendering font glyph %d\n - continuing", error);
+                continue; // ignore errors
+            }
+
+            // now, draw to our target surface
+            double x = cursor_x + x_offset + face->glyph->bitmap_left;
+            double y = cursor_y + y_offset - face->glyph->bitmap_top;
+            draw_ft_bitmap(&face->glyph->bitmap, x, y, cmd->color, clip_rect);
+            cursor_x += x_advance;
+            cursor_y += y_advance;
         }
-        error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-        if (error) {
-            printf("Error rendering font glyph %d\n - continuing", error);
-            continue; // ignore errors
-        }
 
-        // now, draw to our target surface
-        double x = cursor_x + x_offset + face->glyph->bitmap_left;
-        double y = cursor_y + y_offset - face->glyph->bitmap_top;
-        draw_ft_bitmap(&face->glyph->bitmap, x, y, cmd->color, clip_rect);
-        cursor_x += x_advance;
-        cursor_y += y_advance;
+        hb_buffer_destroy(buf);
+        profiler_end;
     }
-
-    hb_buffer_destroy(buf);
 
     profiler_end;
 }
 
 static bool render_cmd_queues_differ()
 {
+    profiler_begin;
+
     if (*_render_cmd_ctx.curr_index != *_render_cmd_ctx.prev_index) {
+        profiler_end;
         return true;
     }
 
@@ -415,10 +449,12 @@ static bool render_cmd_queues_differ()
         render_cmd *current = &_render_cmd_ctx.current[i];
         render_cmd *previous = &_render_cmd_ctx.previous[i];
         if (!render_cmds_equal(current, previous)) {
+            profiler_end;
             return true;
         }
     }
 
+    profiler_end;
     return false;
 }
 
@@ -578,6 +614,8 @@ void render_end_frame(void)
 
         if (!eva_rect_empty(&dirty_rect))
         {
+            printf("dirty rect x=%d, y=%d, w=%d, h=%d\n",
+                    dirty_rect.x, dirty_rect.y, dirty_rect.w, dirty_rect.h);
             for (int32_t i = 0; i < num_cmds; i++)
             {
                 render_cmd *cmd = &_render_cmd_ctx.current[i];
@@ -616,6 +654,8 @@ void render_end_frame(void)
 
 static void add_render_rect_cmd(eva_rect *r, color c)
 {
+    clip_to_framebuffer(r);
+
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
@@ -628,23 +668,47 @@ static void add_render_font_cmd(font font,
                                 int32_t x, int32_t y,
                                 int32_t pt_size, color c)
 {
-    int32_t index = (*_render_cmd_ctx.curr_index)++;
-    render_cmd *cmd = &_render_cmd_ctx.current[index];
-    cmd->type = RENDER_COMMAND_FONT;
-    cmd->font_cmd.font = font;
-    cmd->font_cmd.pt_size = pt_size;
-    cmd->font_cmd.color = c;
+    assert(text);
+    if (text[0] == 0) {
+        return;
+    }
 
     int32_t width = render_get_text_width(font, text, pt_size);
     int32_t ascent, descent;
     render_get_font_height(font, pt_size, &ascent, &descent);
     int32_t height = ascent - descent;
 
-    // Only scale x and y since width and height are already scaled.
-    cmd->rect.x = x;
-    cmd->rect.y = y;
-    cmd->rect.w = width;
-    cmd->rect.h = height;
+    // The y coordinate is the baseline of the font but we need a rect
+    // that covers the glyphs entirely.
+    // Also, add 2 pixels of padding since the reported font metrics are not
+    // always 100% correct. This results in a tiny bit of overdraw which may
+    // slightly affect perf but actual font rendering is not clipped anywhere.
+    int32_t padding = 0;
+    eva_rect bounding_rect = {
+        .x = x - padding,
+        .y = y - ascent - padding,
+        .w = width + padding,
+        .h = height + padding
+    };
+
+    clip_to_framebuffer(&bounding_rect);
+
+    color blue = {
+        0.7f,
+        0.1f,
+        0.1f,
+        1.0f
+    };
+    add_render_rect_cmd(&bounding_rect, blue);
+
+    int32_t index = (*_render_cmd_ctx.curr_index)++;
+    render_cmd *cmd = &_render_cmd_ctx.current[index];
+    cmd->type = RENDER_COMMAND_FONT;
+    cmd->font_cmd.font = font;
+    cmd->font_cmd.pt_size = pt_size;
+    cmd->font_cmd.color = c;
+    cmd->font_cmd.baseline_y = y;
+    cmd->rect = bounding_rect;
 
     size_t len = strlen(text);
     memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
@@ -693,6 +757,7 @@ void render_draw_font(
 
 int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
 {
+    // TODO: This is too and it is called before render caching. Optimize.
     profiler_begin;
 
     hb_buffer_t *buf;
@@ -741,4 +806,16 @@ void render_get_font_height(font font, int32_t pt_size,
     *descent = extents.descender / 64;
 
     profiler_end;
+}
+
+static void clip_to_framebuffer(eva_rect *r)
+{
+    assert(r);
+
+    eva_framebuffer fb = eva_get_framebuffer();
+
+    r->x = r->x > 0 ? r->x : 0;
+    r->y = r->y > 0 ? r->y : 0;
+    r->w = r->w < (int32_t)fb.w ? r->w : (int32_t)fb.w;
+    r->h = r->h < (int32_t)fb.h ? r->h : (int32_t)fb.h;
 }
