@@ -36,7 +36,7 @@ void app_init()
 
     _ctx.branch_pane_resize_range = (int32_t)(5 * fb.scale_x);
     _ctx.branch_pane_rect.w = 400;
-    _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
+    _ctx.branch_pane_rect.h = (int32_t)fb.h;
     _ctx.branch_pane_min_size = 200;
 }
 
@@ -134,8 +134,9 @@ void app_draw()
     render_draw_rect(&_ctx.branch_pane_rect, grey);
     // Render_DrawHollowRect(testRect, white, 4);
 
-    // int32_t ascent, descent;
-    // Render_GetFontHeight(FONT_ROBOTO_REGULAR, fontSizePt, &ascent, &descent);
+    int32_t ascent, descent;
+    render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
+                           &ascent, &descent);
 
     const char *text_lines[] = {
         "master",
@@ -147,11 +148,11 @@ void app_draw()
     };
 
     uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
-    for (uint32_t i = 0; i < num_text_lines; i++) {
+    for (int32_t i = 0; i < (int32_t)num_text_lines; i++) {
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
         // textLines[i], fontSizePt);
-        int32_t x = 10;
-        int32_t y = (int32_t)(20 + (i * (22)));
+        int32_t x = 40;
+        int32_t y = (int32_t)(40 + (i * (ascent - descent)));
         // Rect r = {
         //    .x = x,
         //    .y = y - ascent,

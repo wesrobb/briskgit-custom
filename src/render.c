@@ -655,11 +655,12 @@ static void add_render_font_cmd(font font,
 
 void render_clear(color color)
 {
+    eva_framebuffer fb = eva_get_framebuffer();
     eva_rect r = {
         .x = 0,
         .y = 0,
-        .w = (int32_t)eva_get_window_width(),
-        .h = (int32_t)eva_get_window_height()
+        .w = (int32_t)fb.w,
+        .h = (int32_t)fb.h
     };
     add_render_rect_cmd(&r, color);
 }
