@@ -36,9 +36,6 @@ static void event(eva_event *e)
         puts("Received eva kb event");
         handle_kb_event(&e->kb);
         break;
-    case EVA_EVENTTYPE_QUITREQUESTED:
-        puts("Received eva quit requested");
-        return;
     case EVA_EVENTTYPE_REDRAWFRAME:
         render_begin_frame();
         app_draw();
