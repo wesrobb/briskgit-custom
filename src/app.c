@@ -44,14 +44,18 @@ void app_shutdown()
 {
 }
 
-void app_keydown(const char* utf8_codepoint)
+void app_keydown(int32_t key)
 {
-    size_t len = strlen(utf8_codepoint);
-    if (_ctx.text_index + len < TEXT_MAX_LEN) {
-        memcpy(&_ctx.text[_ctx.text_index], utf8_codepoint, len);
-        _ctx.text_index += len;
-    }
+    // TODO: This is not the right way to handle text input. Just testing.
+    if (key == EVA_KEY_BACKSPACE) {
+        _ctx.text[--_ctx.text_index] = 0;
         eva_request_frame();
+    }
+
+    if (key >= 32 && key <= 96) {
+        _ctx.text[_ctx.text_index++] = (char)key;
+        eva_request_frame();
+    }
 }
 
 void app_mouse_moved(int32_t x, int32_t y)

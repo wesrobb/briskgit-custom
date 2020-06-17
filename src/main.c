@@ -17,13 +17,12 @@ void init(void)
     app_init();
 }
 
-static void handle_kb_event(eva_kb_event *e)
+static void handle_key(eva_key key, eva_input_action action,
+                       eva_mod_flags mods)
 {
-    switch (e->type) {
-        case EVA_KB_EVENTTYPE_KEYDOWN:
-            app_keydown(e->utf8_codepoint);
-            break;
-    }
+    (void)action;
+    (void)mods;
+    app_keydown(key);
 }
 
 static void event(eva_event *e)
@@ -31,9 +30,6 @@ static void event(eva_event *e)
     switch (e->type) {
     case EVA_EVENTTYPE_WINDOW:
         app_window_resized(e->window.window_width, e->window.window_height);
-        break;
-    case EVA_EVENTTYPE_KB:
-        handle_kb_event(&e->kb);
         break;
     case EVA_EVENTTYPE_REDRAWFRAME:
         render_begin_frame();
@@ -62,13 +58,13 @@ static void mouse_moved(int32_t x, int32_t y)
 }
 
 static void mouse_btn(int32_t x, int32_t y,
-                      eva_mouse_btn btn, eva_mouse_action action)
+                      eva_mouse_btn btn, eva_input_action action)
 {
     if (btn == EVA_MOUSE_BTN_LEFT) {
-        if (action == EVA_MOUSE_PRESSED) {
+        if (action == EVA_INPUT_PRESSED) {
             app_mouse_pressed(x, y);
         }
-        if (action == EVA_MOUSE_RELEASED) {
+        if (action == EVA_INPUT_RELEASED) {
             app_mouse_released(x, y);
         }
     }
@@ -98,6 +94,7 @@ int main()
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
+    eva_set_key_fn(handle_key);
     eva_set_cancel_quit_fn(cancel_quit);
     eva_set_init_fn(init);
     eva_set_cleanup_fn(cleanup);
