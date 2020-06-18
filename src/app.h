@@ -8,6 +8,7 @@ void app_init();
 void app_shutdown();
 
 void app_keydown(int32_t key);
+void app_text_input(const char *text, uint32_t len);
 void app_mouse_moved(int32_t x, int32_t y);
 void app_mouse_pressed(int32_t x, int32_t y);
 void app_mouse_released(int32_t x, int32_t y);

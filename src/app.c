@@ -46,14 +46,17 @@ void app_shutdown()
 
 void app_keydown(int32_t key)
 {
-    // TODO: This is not the right way to handle text input. Just testing.
     if (key == EVA_KEY_BACKSPACE) {
         _ctx.text[--_ctx.text_index] = 0;
         eva_request_frame();
     }
+}
 
-    if (key >= 32 && key <= 96) {
-        _ctx.text[_ctx.text_index++] = (char)key;
+void app_text_input(const char *text, uint32_t len)
+{
+    if (_ctx.text_index + len < TEXT_MAX_LEN) {
+        memcpy(_ctx.text + _ctx.text_index, text, len);
+        _ctx.text_index += len;
         eva_request_frame();
     }
 }

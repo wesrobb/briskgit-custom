@@ -12,7 +12,7 @@ add_executable(briskgit
                src/render.c
                src/eva/eva.h)
 
-target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+#target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)

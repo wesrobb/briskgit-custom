@@ -22,7 +22,16 @@ static void handle_key(eva_key key, eva_input_action action,
 {
     (void)action;
     (void)mods;
-    app_keydown(key);
+    if (action == EVA_INPUT_PRESSED) {
+        app_keydown(key);
+    }
+}
+
+static void handle_text(const char *utf8_text, uint32_t len, eva_mod_flags mods)
+{
+    (void)mods;
+
+    app_text_input(utf8_text, len);
 }
 
 static void event(eva_event *e)
@@ -95,6 +104,7 @@ int main()
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
     eva_set_key_fn(handle_key);
+    eva_set_text_input_fn(handle_text);
     eva_set_cancel_quit_fn(cancel_quit);
     eva_set_init_fn(init);
     eva_set_cleanup_fn(cleanup);
