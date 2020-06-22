@@ -34,21 +34,6 @@ static void handle_text(const char *utf8_text, uint32_t len, eva_mod_flags mods)
     app_text_input(utf8_text, len);
 }
 
-static void event(eva_event *e)
-{
-    switch (e->type) {
-    case EVA_EVENTTYPE_WINDOW:
-        app_window_resized(e->window.window_width, e->window.window_height);
-        break;
-    case EVA_EVENTTYPE_REDRAWFRAME:
-        render_begin_frame();
-        app_draw();
-        render_end_frame();
-        eva_request_frame();
-        break;
-    }
-}
-
 static void cleanup(void)
 {
     puts("Cleaning up");
@@ -89,12 +74,19 @@ static void frame(const eva_framebuffer *fb)
     app_draw();
     render_end_frame();
 
-    profiler_log(0);
+    profiler_log(1);
 }
 
 static bool cancel_quit(void)
 {
     return false;
+}
+
+static void window_resize(uint32_t framebuffer_width,
+                          uint32_t framebuffer_height)
+{
+    printf("window resize %d, %d\n", framebuffer_width, framebuffer_height);
+    eva_request_frame();
 }
 
 int main()
@@ -108,7 +100,8 @@ int main()
     eva_set_cancel_quit_fn(cancel_quit);
     eva_set_init_fn(init);
     eva_set_cleanup_fn(cleanup);
-    eva_run("Briskgit", event, frame, fail);
+    eva_set_window_resize_fn(window_resize);
+    eva_run("Briskgit", frame, fail);
 
     return 0;
 }
