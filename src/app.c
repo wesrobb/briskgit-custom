@@ -5,6 +5,7 @@
 
 #include "eva/eva.h"
 
+#include "console.h"
 #include "profiler.h"
 #include "render.h"
 
@@ -44,12 +45,14 @@ void app_shutdown()
 {
 }
 
-void app_keydown(int32_t key)
+void app_keydown(int32_t key, uint32_t mods)
 {
     if (key == EVA_KEY_BACKSPACE) {
         _ctx.text[--_ctx.text_index] = 0;
         eva_request_frame();
     }
+
+    console_keydown(key, mods);
 }
 
 void app_text_input(const char *text, uint32_t len)
@@ -113,7 +116,7 @@ void app_window_resized(uint32_t width, uint32_t height)
     _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
 }
 
-void app_draw()
+void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
@@ -192,6 +195,8 @@ void app_draw()
         };
         render_draw_rect(&test, grey);
     }
+
+    console_draw(fb);
 
     profiler_end;
 }

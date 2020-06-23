@@ -21,9 +21,8 @@ static void handle_key(eva_key key, eva_input_action action,
                        eva_mod_flags mods)
 {
     (void)action;
-    (void)mods;
     if (action == EVA_INPUT_PRESSED) {
-        app_keydown(key);
+        app_keydown(key, mods);
     }
 }
 
@@ -71,7 +70,7 @@ static void frame(const eva_framebuffer *fb)
     (void)fb;
 
     render_begin_frame();
-    app_draw();
+    app_draw(fb);
     render_end_frame();
 
     profiler_log(1);

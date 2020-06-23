@@ -6,6 +6,8 @@ add_executable(briskgit
                src/main.c
                src/app.h 
                src/app.c
+               src/console.h 
+               src/console.c
                src/profiler.h 
                src/profiler.c
                src/render.h 
