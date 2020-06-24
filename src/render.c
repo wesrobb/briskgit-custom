@@ -425,11 +425,20 @@ void draw_font_blend2d(eva_rect rect,
     profiler_begin;
 
     if (rect_intersect(clip_rect, rect)) {
+        BLRectI bl_clip_rect = {
+            .x = clip_rect.x,
+            .y = clip_rect.y,
+            .w = clip_rect.w,
+            .h = clip_rect.h,
+        };
+
+        blContextClipToRectI(&_bl_ctx, &bl_clip_rect);
+        
         BLFontCore font;
         blFontInit(&font);
         blFontCreateFromFace(&font, &_font_cache.bl_font_face, cmd->pt_size * 2.5f);
 
-        blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_ATOP);
+        blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
         BLRgba col;
         col.r = cmd->color.r;
         col.g = cmd->color.g;
@@ -453,6 +462,7 @@ void draw_font_blend2d(eva_rect rect,
 
         blGlyphBufferDestroy(&gb);
         blFontDestroy(&font);
+        blContextRestoreClipping(&_bl_ctx);
     }
 
     profiler_end;
