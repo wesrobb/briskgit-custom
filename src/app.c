@@ -145,6 +145,7 @@ void app_draw(const eva_framebuffer *fb)
 
     render_clear(light_grey);
     render_draw_rect(&_ctx.branch_pane_rect, grey);
+
     // Render_DrawHollowRect(testRect, white, 4);
 
     int32_t ascent, descent;

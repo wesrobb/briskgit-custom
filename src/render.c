@@ -4,6 +4,8 @@
 #include <math.h>
 #include <string.h>
 
+#define BL_STATIC
+#include <blend2d.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_MODULE_H
@@ -55,6 +57,8 @@ typedef struct font_cache {
     float scale_y[FONT_COUNT];
 
     hb_feature_t hb_features[HARFBUZZ_NUM_FEATURES];
+
+    BLFontFaceCore bl_font_face;
 } font_cache;
 
 static font_cache _font_cache;
@@ -80,6 +84,9 @@ static uint32_t _tile_cache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
+
+static BLContextCore _bl_ctx;
+static BLImageCore _bl_img;
 
 static void clip_to_framebuffer(eva_rect *r);
 
@@ -327,6 +334,44 @@ static void load_cached_font(font font,
     profiler_end;
 }
 
+void draw_rect_blend2d(eva_rect rect,
+              render_cmd_rect *cmd,
+              eva_rect clip_rect)
+{
+    profiler_begin;
+
+    eva_framebuffer fb = eva_get_framebuffer();
+
+    uint32_t start_x = (uint32_t)max(clip_rect.x, rect.x);
+    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w, rect.x + rect.w);
+
+    uint32_t start_y = (uint32_t)max(clip_rect.y, rect.y);
+    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h, rect.y + rect.h);
+
+    end_x = min(end_x, fb.w);
+    end_y = min(end_y, fb.h);
+    uint32_t width = end_x - start_x;
+    uint32_t height = end_y - start_y;
+
+    blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
+    BLRgba col;
+    col.r = cmd->color.r;
+    col.g = cmd->color.g;
+    col.b = cmd->color.b;
+    col.a = cmd->color.a;
+    blContextSetFillStyleRgba(&_bl_ctx, &col);
+
+    BLRectI bl_rect = {
+        .x = (int32_t)start_x,
+        .y = (int32_t)start_y,
+        .w = (int32_t)width,
+        .h = (int32_t)height
+    };
+    blContextFillRectI(&_bl_ctx, &bl_rect);
+
+    profiler_end;
+}
+
 void draw_rect(eva_rect rect,
               render_cmd_rect *cmd,
               eva_rect clip_rect)
@@ -369,6 +414,48 @@ bool rect_intersect(eva_rect a, eva_rect b)
 {
     return !((a.x > b.x + b.w || b.x > a.x + a.w) ||
              (a.y > b.y + b.h || b.y > a.y + a.h));
+}
+
+void draw_font_blend2d(eva_rect rect,
+              render_cmd_font *cmd,
+              eva_rect clip_rect)
+{
+    (void)rect;
+
+    profiler_begin;
+
+    if (rect_intersect(clip_rect, rect)) {
+        BLFontCore font;
+        blFontInit(&font);
+        blFontCreateFromFace(&font, &_font_cache.bl_font_face, cmd->pt_size * 2.5f);
+
+        blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_ATOP);
+        BLRgba col;
+        col.r = cmd->color.r;
+        col.g = cmd->color.g;
+        col.b = cmd->color.b;
+        col.a = cmd->color.a;
+        blContextSetFillStyleRgba(&_bl_ctx, &col);
+
+        BLFontMetrics fm;
+        blFontGetMetrics(&font, &fm);
+
+        BLGlyphBufferCore gb;
+        blGlyphBufferInit(&gb);
+
+        blGlyphBufferSetText(&gb, cmd->text, strlen(cmd->text),
+                             BL_TEXT_ENCODING_UTF8);
+        blFontShape(&font, &gb);
+        BLPointI p;
+        p.x = rect.x;
+        p.y = cmd->baseline_y;
+        blContextFillGlyphRunI(&_bl_ctx, &p, &font, blGlyphBufferGetGlyphRun(&gb));
+
+        blGlyphBufferDestroy(&gb);
+        blFontDestroy(&font);
+    }
+
+    profiler_end;
 }
 
 void draw_font(eva_rect rect,
@@ -503,6 +590,10 @@ bool render_init(void)
         _font_cache.hb_font_cache[i] = hb_font;
     }
 
+    blFontFaceInit(&_font_cache.bl_font_face);
+    blFontFaceCreateFromFile(&_font_cache.bl_font_face,
+                             get_font_file(FONT_ROBOTO_REGULAR), 0);
+
     _render_cmd_ctx.current = _render_cmd_ctx.cmds1;
     _render_cmd_ctx.previous = _render_cmd_ctx.cmds2;
     _render_cmd_ctx.curr_index = &_render_cmd_ctx.cmds_index1;
@@ -532,6 +623,8 @@ void render_shutdown(void)
         FT_Done_Face(_font_cache.face_cache[i]);
     }
     FT_Done_Library(_font_cache.font_library);
+
+    blFontFaceDestroy(&_font_cache.bl_font_face);
 }
 
 void render_begin_frame(void)
@@ -614,8 +707,39 @@ void render_end_frame(void)
 
         if (!eva_rect_empty(&dirty_rect))
         {
-            printf("dirty rect x=%d, y=%d, w=%d, h=%d\n",
-                    dirty_rect.x, dirty_rect.y, dirty_rect.w, dirty_rect.h);
+#if 1
+            blImageInit(&_bl_img);
+            blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
+                    BL_FORMAT_PRGB32, fb.pixels,
+                    fb.pitch * sizeof(eva_pixel),
+                    0, 0);
+
+            BLContextCreateInfo create_info = {0};
+            create_info.threadCount = 2;
+            blContextInitAs(&_bl_ctx, &_bl_img, &create_info);
+
+           // printf("dirty rect x=%d, y=%d, w=%d, h=%d\n",
+           //         dirty_rect.x, dirty_rect.y, dirty_rect.w, dirty_rect.h);
+            for (int32_t i = 0; i < num_cmds; i++)
+            {
+                render_cmd *cmd = &_render_cmd_ctx.current[i];
+                switch (cmd->type)
+                {
+                    case RENDER_COMMAND_RECT:
+                        draw_rect_blend2d(cmd->rect, &cmd->rect_cmd, dirty_rect);
+                        break;
+                    case RENDER_COMMAND_FONT:
+                        draw_font_blend2d(cmd->rect, &cmd->font_cmd, dirty_rect);
+                        break;
+                }
+            }
+
+            blContextEnd(&_bl_ctx);
+            blContextDestroy(&_bl_ctx);
+            blImageDestroy(&_bl_img);
+#else
+            (void)_bl_ctx;
+            (void)_bl_img;
             for (int32_t i = 0; i < num_cmds; i++)
             {
                 render_cmd *cmd = &_render_cmd_ctx.current[i];
@@ -629,6 +753,8 @@ void render_end_frame(void)
                         break;
                 }
             }
+#endif
+
         }
 
         // Swap tile caches.

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(Briskgit C)
+project(Briskgit)
 
 add_executable(briskgit 
                src/main.c
@@ -17,7 +17,16 @@ add_executable(briskgit
 target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
-target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
+
+find_library(blend2d blend2d REQUIRED)
+find_path(blend2d_INCLUDES blend2d.h)
+
+if(NOT blend2d_INCLUDES)
+  message(FATAL_ERROR "blend2d library not found")
+endif()
+
+target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz ${blend2d})
+target_include_directories(briskgit PRIVATE ${blend2d_INCLUDES})
 
 if (APPLE)
     enable_language(OBJC)
@@ -46,7 +55,7 @@ if (MSVC)
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:briskgit> ${CMAKE_BINARY_DIR})
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(briskgit PRIVATE -g -Wall -Wextra -pedantic -Werror -Wconversion)
+    target_compile_options(briskgit PRIVATE -g -O3 -Wall -Wextra -pedantic -Werror -Wconversion)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
