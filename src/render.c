@@ -4,8 +4,6 @@
 #include <math.h>
 #include <string.h>
 
-#define BL_STATIC
-#include <blend2d.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_MODULE_H
@@ -57,8 +55,6 @@ typedef struct font_cache {
     float scale_y[FONT_COUNT];
 
     hb_feature_t hb_features[HARFBUZZ_NUM_FEATURES];
-
-    BLFontFaceCore bl_font_face;
 } font_cache;
 
 static font_cache _font_cache;
@@ -84,9 +80,6 @@ static uint32_t _tile_cache1[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
-
-static BLContextCore _bl_ctx;
-static BLImageCore _bl_img;
 
 static void clip_to_framebuffer(eva_rect *r);
 
@@ -160,55 +153,6 @@ static eva_pixel color_to_pixel(color c)
     return result;
 }
 
-static color pixel_to_color(eva_pixel *p)
-{
-    color result = {
-        .b = p->b / 255.0f,
-        .g = p->g / 255.0f,
-        .r = p->r / 255.0f,
-        .a = p->a / 255.0f,
-    };
-
-    return result;
-}
-
-static color srgb_to_linear(color x)
-{
-    // Exact gamma value would be 2.2 but we use 2
-    // to avoid expensive pow function and use the square of x instead.
-    color result = {
-        .r = x.r * x.r,
-        .g = x.g * x.g,
-        .b = x.b * x.b,
-        .a = x.a
-    };
-    return result;
-}
-
-static color linear_to_srgb(color x)
-{
-    color result = {
-        .r = sqrtf(x.r),
-        .g = sqrtf(x.g),
-        .b = sqrtf(x.b),
-        .a = x.a };
-    return result;
-}
-
-// Blends src onto dest assuming linear color space. Src must have
-// pre-multiplied alpha.
-static color linear_blend(color src, color dest)
-{
-    color result = {
-        .r = src.r + dest.r * (1.0f - src.a),
-        .g = src.g + dest.g * (1.0f - src.a),
-        .b = src.b + dest.b * (1.0f - src.a),
-        .a = dest.a
-    };
-
-    return result;
-}
-
 static void draw_ft_bitmap(FT_Bitmap *bitmap,
                            double x_pos,
                            double y_pos,
@@ -245,39 +189,71 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
     end_y = min(end_y, fb.h);
 
     // Move to the first pixel that resides in the rect
-    eva_pixel *framebuffer = fb.pixels;
-    framebuffer += start_x + start_y * fb.pitch;
+    eva_pixel *pxl = fb.pixels;
+    pxl += start_x + start_y * fb.pitch;
     // Calculate how many pixels to jump over at
     // the end of each row in the rect.
     uint32_t next_row = fb.pitch - (end_x - start_x);
 
     for (uint32_t y = start_y, v = (uint32_t)y_clipped; y < end_y; y++, v++) {
         for (uint32_t x = start_x, u = (uint32_t)x_clipped; x < end_x; x++, u++) {
-            float font_alpha_linear = 
-                bitmap->buffer[v * bitmap->width + u] / 255.0f;
-            if (font_alpha_linear != 0.0f) {
+            float alpha = bitmap->buffer[v * bitmap->width + u] / 255.0f;
+            if (alpha != 0.0f) {
+
                 // Pre-multiply font alpha in linear space.
-                color font_linear_premultiplied_alpha = {
-                    .r = c.r * font_alpha_linear,
-                    .g = c.g * font_alpha_linear,
-                    .b = c.b * font_alpha_linear,
-                    .a = font_alpha_linear
+                color src = {
+                    .r = c.r * alpha,
+                    .g = c.g * alpha,
+                    .b = c.b * alpha,
+                    .a = alpha
                 };
 
-                color dest_color_srgb = pixel_to_color(framebuffer);
-                color dest_color_linear = srgb_to_linear(dest_color_srgb);
-                color blended_linear = linear_blend(
-                        font_linear_premultiplied_alpha,
-                        dest_color_linear
-                        );
-                color blended_srgb = linear_to_srgb(blended_linear);
+                // Convert to float
+                color dst_srgb = {
+                    .b = pxl->b / 255.0f,
+                    .g = pxl->g / 255.0f,
+                    .r = pxl->r / 255.0f,
+                    .a = pxl->a / 255.0f,
+                };
 
-                *framebuffer = color_to_pixel(blended_srgb);
+                // Exact gamma value would be 2.2 but we use 2
+                // to avoid expensive pow function and use the square of x instead.
+                color dst = {
+                    .r = dst_srgb.r * dst_srgb.r,
+                    .g = dst_srgb.g * dst_srgb.g,
+                    .b = dst_srgb.b * dst_srgb.b,
+                    .a = dst_srgb.a
+                };
+
+                // Do linear blend
+                color blend = {
+                    .r = src.r + dst.r * (1.0f - src.a),
+                    .g = src.g + dst.g * (1.0f - src.a),
+                    .b = src.b + dst.b * (1.0f - src.a),
+                    .a = dst.a
+                };
+
+                color blend_srgb = {
+                    .r = sqrtf(blend.r),
+                    .g = sqrtf(blend.g),
+                    .b = sqrtf(blend.b),
+                    .a = blend.a
+                };
+
+                // Convert back to uint8_t
+                eva_pixel final = {
+                    .b = (uint8_t)(blend_srgb.b * 255.999f),
+                    .g = (uint8_t)(blend_srgb.g * 255.999f),
+                    .r = (uint8_t)(blend_srgb.r * 255.999f),
+                    .a = (uint8_t)(blend_srgb.a * 255.999f),
+                };
+
+                *pxl = final;
             }
-            framebuffer++;
+            pxl++;
         }
 
-        framebuffer += next_row;
+        pxl += next_row;
     }
 
     profiler_end;
@@ -334,44 +310,6 @@ static void load_cached_font(font font,
     profiler_end;
 }
 
-void draw_rect_blend2d(eva_rect rect,
-              render_cmd_rect *cmd,
-              eva_rect clip_rect)
-{
-    profiler_begin;
-
-    eva_framebuffer fb = eva_get_framebuffer();
-
-    uint32_t start_x = (uint32_t)max(clip_rect.x, rect.x);
-    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w, rect.x + rect.w);
-
-    uint32_t start_y = (uint32_t)max(clip_rect.y, rect.y);
-    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h, rect.y + rect.h);
-
-    end_x = min(end_x, fb.w);
-    end_y = min(end_y, fb.h);
-    uint32_t width = end_x - start_x;
-    uint32_t height = end_y - start_y;
-
-    blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
-    BLRgba col;
-    col.r = cmd->color.r;
-    col.g = cmd->color.g;
-    col.b = cmd->color.b;
-    col.a = cmd->color.a;
-    blContextSetFillStyleRgba(&_bl_ctx, &col);
-
-    BLRectI bl_rect = {
-        .x = (int32_t)start_x,
-        .y = (int32_t)start_y,
-        .w = (int32_t)width,
-        .h = (int32_t)height
-    };
-    blContextFillRectI(&_bl_ctx, &bl_rect);
-
-    profiler_end;
-}
-
 void draw_rect(eva_rect rect,
               render_cmd_rect *cmd,
               eva_rect clip_rect)
@@ -414,58 +352,6 @@ bool rect_intersect(eva_rect a, eva_rect b)
 {
     return !((a.x > b.x + b.w || b.x > a.x + a.w) ||
              (a.y > b.y + b.h || b.y > a.y + a.h));
-}
-
-void draw_font_blend2d(eva_rect rect,
-              render_cmd_font *cmd,
-              eva_rect clip_rect)
-{
-    (void)rect;
-
-    profiler_begin;
-
-    if (rect_intersect(clip_rect, rect)) {
-        BLRectI bl_clip_rect = {
-            .x = clip_rect.x,
-            .y = clip_rect.y,
-            .w = clip_rect.w,
-            .h = clip_rect.h,
-        };
-
-        blContextClipToRectI(&_bl_ctx, &bl_clip_rect);
-        
-        BLFontCore font;
-        blFontInit(&font);
-        blFontCreateFromFace(&font, &_font_cache.bl_font_face, cmd->pt_size * 2.5f);
-
-        blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
-        BLRgba col;
-        col.r = cmd->color.r;
-        col.g = cmd->color.g;
-        col.b = cmd->color.b;
-        col.a = cmd->color.a;
-        blContextSetFillStyleRgba(&_bl_ctx, &col);
-
-        BLFontMetrics fm;
-        blFontGetMetrics(&font, &fm);
-
-        BLGlyphBufferCore gb;
-        blGlyphBufferInit(&gb);
-
-        blGlyphBufferSetText(&gb, cmd->text, strlen(cmd->text),
-                             BL_TEXT_ENCODING_UTF8);
-        blFontShape(&font, &gb);
-        BLPointI p;
-        p.x = rect.x;
-        p.y = cmd->baseline_y;
-        blContextFillGlyphRunI(&_bl_ctx, &p, &font, blGlyphBufferGetGlyphRun(&gb));
-
-        blGlyphBufferDestroy(&gb);
-        blFontDestroy(&font);
-        blContextRestoreClipping(&_bl_ctx);
-    }
-
-    profiler_end;
 }
 
 void draw_font(eva_rect rect,
@@ -600,10 +486,6 @@ bool render_init(void)
         _font_cache.hb_font_cache[i] = hb_font;
     }
 
-    blFontFaceInit(&_font_cache.bl_font_face);
-    blFontFaceCreateFromFile(&_font_cache.bl_font_face,
-                             get_font_file(FONT_ROBOTO_REGULAR), 0);
-
     _render_cmd_ctx.current = _render_cmd_ctx.cmds1;
     _render_cmd_ctx.previous = _render_cmd_ctx.cmds2;
     _render_cmd_ctx.curr_index = &_render_cmd_ctx.cmds_index1;
@@ -633,8 +515,6 @@ void render_shutdown(void)
         FT_Done_Face(_font_cache.face_cache[i]);
     }
     FT_Done_Library(_font_cache.font_library);
-
-    blFontFaceDestroy(&_font_cache.bl_font_face);
 }
 
 void render_begin_frame(void)
@@ -717,39 +597,6 @@ void render_end_frame(void)
 
         if (!eva_rect_empty(&dirty_rect))
         {
-#if 1
-            blImageInit(&_bl_img);
-            blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
-                    BL_FORMAT_PRGB32, fb.pixels,
-                    fb.pitch * sizeof(eva_pixel),
-                    0, 0);
-
-            BLContextCreateInfo create_info = {0};
-            create_info.threadCount = 2;
-            blContextInitAs(&_bl_ctx, &_bl_img, &create_info);
-
-           // printf("dirty rect x=%d, y=%d, w=%d, h=%d\n",
-           //         dirty_rect.x, dirty_rect.y, dirty_rect.w, dirty_rect.h);
-            for (int32_t i = 0; i < num_cmds; i++)
-            {
-                render_cmd *cmd = &_render_cmd_ctx.current[i];
-                switch (cmd->type)
-                {
-                    case RENDER_COMMAND_RECT:
-                        draw_rect_blend2d(cmd->rect, &cmd->rect_cmd, dirty_rect);
-                        break;
-                    case RENDER_COMMAND_FONT:
-                        draw_font_blend2d(cmd->rect, &cmd->font_cmd, dirty_rect);
-                        break;
-                }
-            }
-
-            blContextEnd(&_bl_ctx);
-            blContextDestroy(&_bl_ctx);
-            blImageDestroy(&_bl_img);
-#else
-            (void)_bl_ctx;
-            (void)_bl_img;
             for (int32_t i = 0; i < num_cmds; i++)
             {
                 render_cmd *cmd = &_render_cmd_ctx.current[i];
@@ -763,8 +610,6 @@ void render_end_frame(void)
                         break;
                 }
             }
-#endif
-
         }
 
         // Swap tile caches.

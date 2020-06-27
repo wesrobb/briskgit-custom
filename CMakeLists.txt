@@ -18,15 +18,7 @@ target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 
-find_library(blend2d blend2d REQUIRED)
-find_path(blend2d_INCLUDES blend2d.h)
-
-if(NOT blend2d_INCLUDES)
-  message(FATAL_ERROR "blend2d library not found")
-endif()
-
-target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz ${blend2d})
-target_include_directories(briskgit PRIVATE ${blend2d_INCLUDES})
+target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
 
 if (APPLE)
     enable_language(OBJC)
