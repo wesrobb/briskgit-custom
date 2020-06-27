@@ -55,7 +55,7 @@ if (MSVC)
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:briskgit> ${CMAKE_BINARY_DIR})
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(briskgit PRIVATE -g -O3 -Wall -Wextra -pedantic -Werror -Wconversion)
+    target_compile_options(briskgit PRIVATE -g -O3 -Wall -Wextra -pedantic -Wconversion)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
