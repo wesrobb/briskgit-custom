@@ -28,6 +28,7 @@ typedef struct render_cmd_rect {
 typedef struct render_cmd_font {
     font font;
     char text[MAX_TEXT_LEN];
+    int32_t text_len;
     color color;
     int32_t pt_size;
     int32_t baseline_y;
@@ -368,7 +369,7 @@ void draw_font(eva_rect rect,
 
         hb_buffer_t *buf;
         buf = hb_buffer_create();
-        hb_buffer_add_utf8(buf, cmd->text, -1, 0, -1);
+        hb_buffer_add_utf8(buf, cmd->text, cmd->text_len, 0, -1);
         hb_buffer_guess_segment_properties(buf);
 
         FT_Face face;
@@ -645,7 +646,7 @@ static void add_render_rect_cmd(eva_rect *r, color c)
 }
 
 static void add_render_font_cmd(font font,
-                                const char *text,
+                                const char *text, int32_t text_len,
                                 int32_t x, int32_t y,
                                 int32_t pt_size, color c)
 {
@@ -654,7 +655,7 @@ static void add_render_font_cmd(font font,
         return;
     }
 
-    int32_t width = render_get_text_width(font, text, pt_size);
+    int32_t width = render_get_text_width(font, text, text_len, pt_size);
     int32_t ascent, descent;
     render_get_font_height(font, pt_size, &ascent, &descent);
     int32_t height = ascent - descent;
@@ -674,14 +675,6 @@ static void add_render_font_cmd(font font,
 
     clip_to_framebuffer(&bounding_rect);
 
-    color blue = {
-        0.7f,
-        0.1f,
-        0.1f,
-        1.0f
-    };
-    add_render_rect_cmd(&bounding_rect, blue);
-
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_FONT;
@@ -691,11 +684,10 @@ static void add_render_font_cmd(font font,
     cmd->font_cmd.baseline_y = y;
     cmd->rect = bounding_rect;
 
-    size_t len = strlen(text);
-    memset(cmd->font_cmd.text, 0, MAX_TEXT_LEN);
-    if (len < MAX_TEXT_LEN) {
-        memcpy(cmd->font_cmd.text, text, len);
-    }
+    // Don't copy more than there is space for.
+    int32_t len = text_len < MAX_TEXT_LEN ? text_len : MAX_TEXT_LEN;
+    cmd->font_cmd.text_len = len;
+    memcpy(cmd->font_cmd.text, text, len);
 }
 
 void render_clear(color color)
@@ -730,20 +722,22 @@ void render_draw_rect(eva_rect *rect, color color) // TODO: These should be pass
 //    profiler_end;
 //}
 
-void render_draw_font(
-    font font, const char *text, int32_t posX, int32_t posY, int32_t pt_size, color c)
+void render_draw_font(font font, const char *text, int32_t text_len,
+                      int32_t posX, int32_t posY,
+                      int32_t pt_size, color c)
 {
-    add_render_font_cmd(font, text, posX, posY, pt_size, c);
+    add_render_font_cmd(font, text, text_len, posX, posY, pt_size, c);
 }
 
-int32_t render_get_text_width(font font, const char *text, int32_t pt_size)
+int32_t render_get_text_width(font font, const char *text, int32_t text_len, 
+                              int32_t pt_size)
 {
     // TODO: This is too and it is called before render caching. Optimize.
     profiler_begin;
 
     hb_buffer_t *buf;
     buf = hb_buffer_create();
-    hb_buffer_add_utf8(buf, text, -1, 0, -1);
+    hb_buffer_add_utf8(buf, text, text_len, 0, -1);
     hb_buffer_guess_segment_properties(buf);
 
     FT_Face face;

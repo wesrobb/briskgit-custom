@@ -33,6 +33,8 @@ static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
 
 void app_init()
 {
+    console_init();
+
     eva_framebuffer fb = eva_get_framebuffer();
 
     _ctx.branch_pane_resize_range = (int32_t)(5 * fb.scale_x);
@@ -49,6 +51,13 @@ void app_keydown(int32_t key, uint32_t mods)
 {
     if (key == EVA_KEY_BACKSPACE) {
         _ctx.text[--_ctx.text_index] = 0;
+        eva_request_frame();
+    }
+
+    if (key == EVA_KEY_ENTER) {
+        puts("enter netner");
+        console_logn(_ctx.text, _ctx.text_index);
+        _ctx.text_index = 0;
         eva_request_frame();
     }
 
@@ -173,6 +182,12 @@ void app_draw(const eva_framebuffer *fb)
 
     uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
     for (int32_t i = 0; i < (int32_t)num_text_lines; i++) {
+        const char *text = text_lines[i];
+
+        size_t text_len = strlen(text);
+        if ((uint32_t)i == num_text_lines - 1) {
+            text_len = _ctx.text_index;
+        }
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
         // textLines[i], fontSizePt);
         int32_t x = 40;
@@ -185,7 +200,7 @@ void app_draw(const eva_framebuffer *fb)
         //};
 
         render_draw_font(FONT_ROBOTO_REGULAR,
-                         text_lines[i], 
+                         text_lines[i], (int32_t)text_len, 
                          x, y, font_size_pt, white);
 
         eva_rect test = {

@@ -24,10 +24,11 @@ void render_end_frame(void);
 void render_clear(color);
 void render_draw_rect(eva_rect *, color);
 void render_draw_hollow_rect(eva_rect *rect, color, int32_t border_thickness);
-void render_draw_font(font font, const char *text,
+void render_draw_font(font font, const char *text, int32_t text_len,
                       int32_t pos_x, int32_t pos_y,
                       int32_t pt_size, color);
 
-int32_t render_get_text_width(font font, const char *text, int32_t pt_size);
+int32_t render_get_text_width(font font, const char *text, int32_t text_len, 
+                              int32_t pt_size);
 void    render_get_font_height(font font, int32_t pt_size,
                                int32_t *ascent, int32_t *descent);
