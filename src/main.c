@@ -6,6 +6,7 @@
 #include "eva/eva.h"
 
 #include "app.h"
+#include "console.h"
 #include "profiler.h"
 #include "render.h"
 
@@ -35,14 +36,14 @@ static void handle_text(const char *utf8_text, uint32_t len, eva_mod_flags mods)
 
 static void cleanup(void)
 {
-    puts("Cleaning up");
+    console_log("Cleaning up");
     app_shutdown();
     render_shutdown();
 }
 
 static void fail(int error_code, const char *error_message)
 {
-    printf("Error %d: %s\n", error_code, error_message);
+    console_log("Error %d: %s\n", error_code, error_message);
 }
 
 static void mouse_moved(int32_t x, int32_t y)
@@ -84,13 +85,14 @@ static bool cancel_quit(void)
 static void window_resize(uint32_t framebuffer_width,
                           uint32_t framebuffer_height)
 {
-    printf("window resize %d, %d\n", framebuffer_width, framebuffer_height);
+    console_log("window resize %d, %d\n", framebuffer_width, framebuffer_height);
     eva_request_frame();
 }
 
 int main()
 {
-    printf("Hello briskgit!\n");
+    console_init();
+    console_log("Hello briskgit!\n");
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);

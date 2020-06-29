@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "console.h"
+
 #define PROFILER_MAX_ZONES 5096
 
 typedef struct profiler_zone {
@@ -90,17 +92,24 @@ void _profiler_log(uint32_t depth)
     uint64_t now = eva_time_now();
 
     if (eva_time_since_ms(ctx->last_logged_at) > 3000.0f) {
+        char buf[1024];
         for (uint32_t i = 0; i < ctx->zones_index; i++) {
             profiler_zone *zone = &ctx->zones[i];
             if (zone->level >= depth) {
                 continue;
             }
+            int32_t buf_index = 0; 
             for (uint32_t j = 0; j < zone->level; ++j) {
-                printf("  ");
+                buf[buf_index++] = ' ';
+                buf[buf_index++] = ' ';
+                buf[buf_index++] = ' ';
+                buf[buf_index++] = ' ';
             }
-            printf("%s: %f ms\n",
-                   zone->name,
-                   eva_time_elapsed_ms(zone->start, zone->end));
+            int32_t x = snprintf(buf + buf_index, 
+                                 1024 - buf_index, "%s: %f ms\n", 
+                                 zone->name,
+                                 eva_time_elapsed_ms(zone->start, zone->end));
+            console_logn(buf, (size_t)(x + buf_index));
         }
         ctx->last_logged_at = now;
     }

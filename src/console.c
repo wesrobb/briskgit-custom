@@ -1,6 +1,7 @@
 #include "console.h"
 
 #include <assert.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -12,7 +13,7 @@
 #define MAX_LOG_ENTRIES 2048
 
 typedef struct log_entry {
-    uint8_t *text;
+    char *text;
     size_t len;
 } log_entry;
 
@@ -33,8 +34,6 @@ static console_ctx _ctx;
 
 void console_init()
 {
-    _ctx.logs.start = 0;
-    _ctx.logs.count = 0;
 }
 
 void console_logn(char *text, size_t len)
@@ -67,9 +66,9 @@ void console_logn(char *text, size_t len)
     memcpy(entry->text, text, len);
 }
 
-void console_log(const char *text)
+void console_log(const char *fmt, ...)
 {
-    assert(text);
+    assert(fmt);
 
     log_entry *entry;
     if (_ctx.logs.count == MAX_LOG_ENTRIES) {
@@ -81,7 +80,10 @@ void console_log(const char *text)
         _ctx.logs.count = _ctx.logs.count % MAX_LOG_ENTRIES;
     }
 
-    size_t text_len = strlen(text);
+    va_list args;
+    va_start(args, fmt);
+    size_t text_len = (size_t)vsnprintf(entry->text, 0, fmt, args);
+    text_len += 1; // Make space for the null terminator
 
     // Only free and malloc if the buffer we have is not big enough for the
     // new message;
@@ -94,8 +96,8 @@ void console_log(const char *text)
     }
 
     entry->len = text_len;
-
-    memcpy(entry->text, text, text_len);
+    vsnprintf(entry->text, text_len, fmt, args);
+    va_end(args);
 }
 
 void console_keydown(int32_t key, uint32_t mods)
@@ -151,7 +153,9 @@ void console_draw(const eva_framebuffer *fb)
         int32_t row_count = 0;
         int32_t text_pos_x = rect.x + padding;
         int32_t text_pos_y = rect.y + rect.h + padding + descent;
-        while (row_count <= max_rows && log_count > 0) {
+        while (row_count <= max_rows && 
+               log_count > 0 && 
+               text_pos_y > font_height + padding) {
             int32_t index = (_ctx.logs.start + --log_count) % MAX_LOG_ENTRIES;
             log_entry *entry = &_ctx.logs.entries[index];
             text_pos_y -= font_height;

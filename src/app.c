@@ -54,8 +54,7 @@ void app_keydown(int32_t key, uint32_t mods)
         eva_request_frame();
     }
 
-    if (key == EVA_KEY_ENTER) {
-        puts("enter netner");
+    if (key == EVA_KEY_ENTER && _ctx.text_index > 0) {
         console_logn(_ctx.text, _ctx.text_index);
         _ctx.text_index = 0;
         eva_request_frame();
