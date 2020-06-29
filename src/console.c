@@ -30,6 +30,22 @@ typedef struct console_ctx {
     log_entries logs;
 } console_ctx;
 
+typedef struct scrollbar {
+    float content_size;
+    float window_size;
+    float track_size;
+
+    float window_content_ratio;
+    float grip_size;
+    float min_grip_size;
+
+    float window_scroll_area_size;
+    float window_pos;
+    float window_pos_ratio;
+    float track_scroll_area_size;
+    float grip_pos_on_track;
+} scrollbar;
+
 static console_ctx _ctx;
 
 void console_init()
@@ -100,6 +116,18 @@ void console_log(const char *fmt, ...)
     va_end(args);
 }
 
+void console_mouse_moved(int32_t x, int32_t y)
+{
+}
+
+void console_mouse_pressed(int32_t x, int32_t y)
+{
+}
+
+void console_mouse_released(int32_t x, int32_t y)
+{
+}
+
 void console_keydown(int32_t key, uint32_t mods)
 {
     eva_key k = (eva_key)key;
@@ -129,6 +157,13 @@ void console_draw(const eva_framebuffer *fb)
             .a = 1.0f,
         };
 
+        color dark_blue = {
+            .r = 0.0f,
+            .g = 0.0f,
+            .b = 0.7f,
+            .a = 1.0f,
+        };
+
         eva_rect rect = {
             .x = 0,
             .y = 0,
@@ -138,7 +173,7 @@ void console_draw(const eva_framebuffer *fb)
         render_draw_rect(&rect, base_color);
 
         int32_t pt_size = 12;
-        int32_t padding = 5;
+        int32_t padding = 10;
         int32_t ascent, descent;
         render_get_font_height(FONT_ROBOTO_REGULAR, pt_size, &ascent, &descent);
         int32_t font_height = ascent - descent;
@@ -146,6 +181,42 @@ void console_draw(const eva_framebuffer *fb)
         int32_t line_gap = 0;
         int32_t max_rows = rect.h / (line_gap + font_height);
 
+        scrollbar sb;
+        sb.content_size = _ctx.logs.count * font_height;
+        sb.window_size = rect.h;
+        sb.track_size = rect.h;
+        sb.window_content_ratio = sb.window_size / sb.content_size;
+        sb.grip_size = sb.track_size * sb.window_content_ratio;
+        sb.min_grip_size = 20.0f;
+
+        sb.grip_size = max(sb.min_grip_size, sb.grip_size);
+        sb.grip_size = min(sb.track_size, sb.grip_size);
+        
+        sb.window_scroll_area_size = sb.content_size - sb.window_size;
+        sb.window_pos = 100.0f; // TODO: ??????
+        sb.window_pos_ratio = sb.window_pos / sb.window_scroll_area_size;
+        sb.track_scroll_area_size = sb.track_size - sb.grip_size;
+        sb.grip_pos_on_track = sb.track_scroll_area_size * sb.window_pos_ratio;
+
+        int32_t track_center = (int32_t)fb->w - padding;
+        int32_t track_width = 5;
+        eva_rect track_rect = {
+            .x = (int32_t)(track_center - track_width / 2.0f),
+            .y = rect.y,
+            .w = track_width,
+            .h = (int32_t)sb.track_size
+        };
+
+        int32_t grip_width = 10;
+        eva_rect grip_rect = {
+            .x = (int32_t)(track_center - (grip_width / 2.0f)),
+            .y = (int32_t)sb.grip_pos_on_track,
+            .w = grip_width,
+            .h = (int32_t)sb.grip_size,
+        };
+
+        render_draw_rect(&track_rect, dark_blue);
+        render_draw_rect(&grip_rect, white);
 
         // Work backwards through the entries till we have enough to fill the
         // available space in the console window.

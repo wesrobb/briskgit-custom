@@ -89,6 +89,8 @@ void app_mouse_moved(int32_t x, int32_t y)
         .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
     };
     (void)resizeHandle;
+
+    console_mouse_moved(x, y);
 }
 
 void app_mouse_pressed(int32_t x, int32_t y)
@@ -105,16 +107,18 @@ void app_mouse_pressed(int32_t x, int32_t y)
         _ctx.branch_pane_resizing = true;
         puts("pane resizing");
     }
+
+    console_mouse_pressed(x, y);
 }
 
 void app_mouse_released(int32_t x, int32_t y)
 {
-    (void)x;
-    (void)y;
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_resizing = false;
         puts("pane stopped resizing");
     }
+
+    console_mouse_released(x, y);
 }
 
 void app_window_resized(uint32_t width, uint32_t height)
