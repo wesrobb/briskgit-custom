@@ -106,7 +106,7 @@ void _profiler_log(uint32_t depth)
                 buf[buf_index++] = ' ';
             }
             int32_t x = snprintf(buf + buf_index, 
-                                 1024 - buf_index, "%s: %f ms\n", 
+                                 1024 - buf_index, "%s: %f ms", 
                                  zone->name,
                                  eva_time_elapsed_ms(zone->start, zone->end));
             console_logn(buf, (size_t)(x + buf_index));

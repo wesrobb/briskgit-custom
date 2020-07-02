@@ -43,7 +43,7 @@ static void cleanup(void)
 
 static void fail(int error_code, const char *error_message)
 {
-    console_log("Error %d: %s\n", error_code, error_message);
+    console_log("Error %d: %s", error_code, error_message);
 }
 
 static void mouse_moved(int32_t x, int32_t y)
@@ -73,8 +73,6 @@ static void frame(const eva_framebuffer *fb)
     render_begin_frame();
     app_draw(fb);
     render_end_frame();
-
-    profiler_log(3);
 }
 
 static bool cancel_quit(void)
@@ -85,14 +83,14 @@ static bool cancel_quit(void)
 static void window_resize(uint32_t framebuffer_width,
                           uint32_t framebuffer_height)
 {
-    console_log("window resize %d, %d\n", framebuffer_width, framebuffer_height);
+    console_log("window resize %d, %d", framebuffer_width, framebuffer_height);
     eva_request_frame();
 }
 
 int main()
 {
     console_init();
-    console_log("Hello briskgit!\n");
+    console_log("Hello briskgit!");
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
