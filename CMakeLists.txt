@@ -12,13 +12,19 @@ add_executable(briskgit
                src/profiler.c
                src/render.h 
                src/render.c
+               src/text.h 
+               src/text.c
                src/eva/eva.h)
 
-target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
+#target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
+find_package(ICU REQUIRED COMPONENTS uc dt in io)
 
-target_link_libraries(briskgit PRIVATE freetype harfbuzz::harfbuzz)
+target_link_libraries(briskgit PRIVATE 
+                      freetype
+                      harfbuzz::harfbuzz
+                      ICU::uc ICU::dt ICU::in ICU::io)
 
 if (APPLE)
     enable_language(OBJC)

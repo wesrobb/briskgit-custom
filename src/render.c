@@ -369,6 +369,9 @@ void draw_font(eva_rect rect,
 
         hb_buffer_t *buf;
         buf = hb_buffer_create();
+        // See: https://harfbuzz.github.io/working-with-harfbuzz-clusters.html
+        hb_buffer_set_cluster_level(buf, 
+                                HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
         hb_buffer_add_utf8(buf, cmd->text, cmd->text_len, 0, -1);
         hb_buffer_guess_segment_properties(buf);
 
@@ -737,6 +740,10 @@ int32_t render_get_text_width(font font, const char *text, int32_t text_len,
 
     hb_buffer_t *buf;
     buf = hb_buffer_create();
+
+    // See: https://harfbuzz.github.io/working-with-harfbuzz-clusters.html
+    hb_buffer_set_cluster_level(buf, 
+                                HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
     hb_buffer_add_utf8(buf, text, text_len, 0, -1);
     hb_buffer_guess_segment_properties(buf);
 

@@ -121,6 +121,7 @@ void console_log(const char *fmt, ...)
     va_list args;
     va_start(args, fmt);
     size_t text_len = (size_t)vsnprintf(entry->text, 0, fmt, args);
+    va_end(args);
     text_len += 1; // Make space for the null terminator
 
     // Only free and malloc if the buffer we have is not big enough for the new
@@ -134,8 +135,10 @@ void console_log(const char *fmt, ...)
     }
     // Don't include the null-terminator in the final length.
     entry->len = text_len - 1;
-    vsnprintf(entry->text, text_len, fmt, args);
-    va_end(args);
+    va_list args2;
+    va_start(args2, fmt);
+    vsnprintf(entry->text, text_len, fmt, args2);
+    va_end(args2);
 }
 
 void console_mouse_moved(int32_t x, int32_t y)

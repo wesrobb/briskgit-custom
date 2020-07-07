@@ -8,6 +8,7 @@
 #include "console.h"
 #include "profiler.h"
 #include "render.h"
+#include "text.h"
 
 #define TEXT_MAX_LEN 1000
 
@@ -68,6 +69,11 @@ void app_text_input(const char *text, uint32_t len)
     if (_ctx.text_index + len < TEXT_MAX_LEN) {
         memcpy(_ctx.text + _ctx.text_index, text, len);
         _ctx.text_index += len;
+        struct text t;
+        t.utf8data = (char*)text;
+        t.len = _ctx.text_index;
+        int32_t count = count_character_boundaries(&t);
+        console_log("num graphemes %i", count);
         eva_request_frame();
     }
 }
