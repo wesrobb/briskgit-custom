@@ -176,16 +176,10 @@ void app_draw(const eva_framebuffer *fb)
         "feature/AV",
         "pppppppppp",
         "ffffffffff",
-        "mmastermastermastermasteraster",
-        "dmastermastermastermastermastermasterevelop",
-        "feature/mastermastermastermastermastermastermasterAV",
-        "ppppppppmastermastermastermastermastermastermastermasterpp",
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        "mffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaster",
-        "dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffevelop",
-        "fffffffffffffffffffffffffffffffffffffffffffffffffffeature/AV",
-        "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
-        "fppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppfffffffff",
+        "Iñtërnâtiônàližætiøn",
+        "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
+        "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
+        "😁😂🤮",
         _ctx.text
     };
 

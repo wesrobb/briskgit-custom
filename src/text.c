@@ -9,6 +9,7 @@
 
 int32_t count_character_boundaries(const text *t)
 {
+    /*
     UText          *ut         = NULL;
     UBreakIterator *bi         = NULL;
     int             char_count = 0;
@@ -25,4 +26,6 @@ int32_t count_character_boundaries(const text *t)
     ubrk_close(bi);
     assert(U_SUCCESS(status));
     return char_count;
+    */
+    return 0;
 }

@@ -19,12 +19,25 @@ add_executable(briskgit
 #target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
-find_package(ICU REQUIRED COMPONENTS uc dt in io)
+find_package(unofficial-glib CONFIG REQUIRED)
+#find_package(ICU REQUIRED COMPONENTS uc dt in io)
+find_library(PANGO_LIB pango-1.0)
+find_library(PANGOFT2_LIB pangoft2-1.0)
+find_library(FONTCONFIG_LIB fontconfig)
+find_library(EXPAT_LIB expat)
 
 target_link_libraries(briskgit PRIVATE 
+                      ${PANGO_LIB}
+                      ${PANGOFT2_LIB}
+                      ${FONTCONFIG_LIB}
+                      ${EXPAT_LIB}
                       freetype
                       harfbuzz::harfbuzz
-                      ICU::uc ICU::dt ICU::in ICU::io)
+                      unofficial::glib::glib
+                      unofficial::glib::gmodule
+                      unofficial::glib::gobject
+                      )
+                  #ICU::uc ICU::dt ICU::in ICU::io)
 
 if (APPLE)
     enable_language(OBJC)

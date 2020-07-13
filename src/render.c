@@ -2,6 +2,9 @@
 
 #include <assert.h>
 #include <math.h>
+#include <pango/pango-font.h>
+#include <pango/pango-language.h>
+#include <pango/pango-layout.h>
 #include <string.h>
 
 #include <ft2build.h>
@@ -9,6 +12,9 @@
 #include FT_MODULE_H
 #include <harfbuzz/hb-ft.h>
 #include <harfbuzz/hb.h>
+#include <pango/pango.h>
+#include <pango/pangoft2.h>
+#include <glib.h>
 
 #include "eva/eva.h"
 
@@ -355,6 +361,61 @@ bool rect_intersect(eva_rect a, eva_rect b)
              (a.y > b.y + b.h || b.y > a.y + a.h));
 }
 
+void draw_font_pango(eva_rect rect,
+                     render_cmd_font *cmd,
+                     eva_rect clip_rect)
+{
+    (void)rect;
+
+    profiler_begin;
+
+    if (rect_intersect(clip_rect, rect)) {
+        profiler_begin_name("draw_font_rect_intersect");
+        eva_framebuffer fb = eva_get_framebuffer();
+
+        PangoFT2FontMap *ft2_fontmap = (PangoFT2FontMap*)pango_ft2_font_map_new();
+        pango_ft2_font_map_set_resolution(ft2_fontmap, 192, 192);
+        PangoFontMap *fontmap = (PangoFontMap*)ft2_fontmap;
+
+        PangoContext *context = pango_font_map_create_context(fontmap);
+        pango_context_set_language(context, pango_language_from_string("en"));
+        pango_context_set_base_dir(context, PANGO_DIRECTION_LTR);
+
+        PangoFontDescription *font_desc = pango_font_description_new();
+        pango_font_description_set_family (font_desc, "Noto");
+        pango_font_description_set_weight (font_desc, PANGO_WEIGHT_NORMAL);
+        pango_font_description_set_size(font_desc, 18 * PANGO_SCALE);
+
+        PangoLayout *layout = pango_layout_new(context);
+        pango_layout_set_text(layout, cmd->text, cmd->text_len);
+        pango_layout_set_font_description(layout, font_desc);
+
+        uint8_t *data = malloc(fb.w * fb.h);
+        FT_Bitmap bitmap = {
+            .width = fb.w,
+            .rows = fb.h,
+            .pitch = (int)fb.w,
+            .buffer = data,
+            .num_grays = 4,
+            .pixel_mode = FT_PIXEL_MODE_GRAY
+        };
+
+        pango_ft2_render_layout(&bitmap, layout, rect.x, cmd->baseline_y);
+        draw_ft_bitmap(&bitmap, 0, 0, cmd->color, clip_rect);
+
+        free(data);
+
+        g_object_unref(layout);
+        pango_font_description_free(font_desc);
+        g_object_unref(context);
+        g_object_unref(ft2_fontmap);
+
+        profiler_end;
+    }
+
+    profiler_end;
+}
+
 void draw_font(eva_rect rect,
               render_cmd_font *cmd,
               eva_rect clip_rect)
@@ -610,7 +671,7 @@ void render_end_frame(void)
                         draw_rect(cmd->rect, &cmd->rect_cmd, dirty_rect);
                         break;
                     case RENDER_COMMAND_FONT:
-                        draw_font(cmd->rect, &cmd->font_cmd, dirty_rect);
+                        draw_font_pango(cmd->rect, &cmd->font_cmd, dirty_rect);
                         break;
                 }
             }
