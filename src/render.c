@@ -13,6 +13,7 @@
 #include "eva/eva.h"
 
 #include "common.h"
+#include "coretext.h"
 #include "profiler.h"
 
 typedef enum render_cmd_type {
@@ -610,7 +611,16 @@ void render_end_frame(void)
                         draw_rect(cmd->rect, &cmd->rect_cmd, dirty_rect);
                         break;
                     case RENDER_COMMAND_FONT:
-                        draw_font(cmd->rect, &cmd->font_cmd, dirty_rect);
+                        {
+                            eva_framebuffer fb = eva_get_framebuffer();
+                            coretext_draw_font(&fb,
+                                               &dirty_rect,
+                                               cmd->font_cmd.text, 
+                                               cmd->font_cmd.text_len,
+                                               cmd->font_cmd.pt_size,
+                                               cmd->rect.x,
+                                               cmd->font_cmd.baseline_y);
+                        }
                         break;
                 }
             }

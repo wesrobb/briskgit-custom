@@ -8,6 +8,8 @@ add_executable(briskgit
                src/app.c
                src/console.h 
                src/console.c
+               src/coretext.h 
+               src/coretext.c
                src/profiler.h 
                src/profiler.c
                src/render.h 
@@ -31,7 +33,7 @@ if (APPLE)
     target_sources(briskgit PRIVATE src/eva/eva_macos.m)
 
     target_link_libraries(briskgit PRIVATE
-        "-framework Cocoa -framework Metal -framework MetalKit")
+        "-framework Cocoa -framework Metal -framework MetalKit -framework CoreText")
 
     configure_file(Info.plist Info.plist COPYONLY)
 elseif(WIN32)

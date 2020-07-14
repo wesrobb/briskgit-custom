@@ -170,22 +170,16 @@ void app_draw(const eva_framebuffer *fb)
     render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
                            &ascent, &descent);
 
-    const char *text_lines[] = {
+const char *text_lines[] = {
         "master",
         "develop",
         "feature/AV",
         "pppppppppp",
         "ffffffffff",
-        "mmastermastermastermasteraster",
-        "dmastermastermastermastermastermasterevelop",
-        "feature/mastermastermastermastermastermastermasterAV",
-        "ppppppppmastermastermastermastermastermastermastermasterpp",
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        "mffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaster",
-        "dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffevelop",
-        "fffffffffffffffffffffffffffffffffffffffffffffffffffeature/AV",
-        "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
-        "fppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppfffffffff",
+        //"Iñtërnâtiônàližætiøn",
+        //"Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
+        //"有子曰：「其為人也孝弟，而好犯上者，鮮矣",
+        "😁😂🤮",
         _ctx.text
     };
 
