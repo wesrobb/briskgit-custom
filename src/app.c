@@ -138,7 +138,7 @@ void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
-    int32_t font_size_pt = 26;
+    int32_t font_size_pt = 32;
 
     color white = {
         .r = 1.0f,

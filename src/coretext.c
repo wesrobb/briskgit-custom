@@ -44,6 +44,17 @@ void coretext_draw_font(eva_framebuffer *fb,
     // Set the color of the first 12 chars to red.
     //CFAttributedStringSetAttribute(attrString, CFRangeMake(0, len),
     //                               kCTForegroundColorAttributeName, white);
+    
+    // Set the font size
+    CFStringRef font_name = CFStringCreateWithCString(kCFAllocatorDefault,
+                                                      "Helvetica",
+                                                      kCFStringEncodingUTF8);
+
+    CTFontRef font = CTFontCreateWithName(font_name, pt_size, 0);
+    CFAttributedStringSetAttribute(attrString,
+                                   CFRangeMake(0, CFStringGetLength(cf_string)),
+                                   kCTFontAttributeName,
+                                   font);
 
     // Create the framesetter with the attributed string.
     CTFramesetterRef framesetter =
