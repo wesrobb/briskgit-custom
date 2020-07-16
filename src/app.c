@@ -138,7 +138,7 @@ void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
-    int32_t font_size_pt = 32;
+    int32_t font_size_pt = 16;
 
     color white = {
         .r = 1.0f,
@@ -170,15 +170,15 @@ void app_draw(const eva_framebuffer *fb)
     render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
                            &ascent, &descent);
 
-const char *text_lines[] = {
+    const char *text_lines[] = {
         "master",
         "develop",
         "feature/AV",
         "pppppppppp",
         "ffffffffff",
-        //"Iñtërnâtiônàližætiøn",
-        //"Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
-        //"有子曰：「其為人也孝弟，而好犯上者，鮮矣",
+        "Iñtërnâtiônàližætiøn",
+        "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
+        "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
         "😁😂🤮",
         _ctx.text
     };
@@ -212,7 +212,7 @@ const char *text_lines[] = {
             .w = 900,
             .h = 2
         };
-        render_draw_rect(&test, grey);
+        render_draw_rect(&test, white);
     }
 
     console_draw(fb);

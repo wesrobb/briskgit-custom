@@ -9,7 +9,8 @@ void coretext_draw_font(eva_framebuffer *fb,
                         char *text, int32_t len,
                         int32_t pt_size, int32_t x, int32_t y)
 {
-    uint32_t bitmap_info = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little;
+    uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
+                           kCGBitmapByteOrder32Little;
 
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     size_t bytes_per_row = fb->pitch * 4;
@@ -39,27 +40,38 @@ void coretext_draw_font(eva_framebuffer *fb,
      
     // Copy the textString into the newly created attrString
     CFAttributedStringReplaceString(attrString, CFRangeMake(0, 0), cf_string);
-    CFRelease(cf_string);
 
+    CFIndex cf_string_len = CFStringGetLength(cf_string);
     // Set the color of the first 12 chars to red.
-    //CFAttributedStringSetAttribute(attrString, CFRangeMake(0, len),
-    //                               kCTForegroundColorAttributeName, white);
+    CFAttributedStringSetAttribute(attrString, CFRangeMake(0, cf_string_len),
+                                   kCTForegroundColorAttributeName, white);
     
     // Set the font size
     CFStringRef font_name = CFStringCreateWithCString(kCFAllocatorDefault,
                                                       "Helvetica",
                                                       kCFStringEncodingUTF8);
 
-    CTFontRef font = CTFontCreateWithName(font_name, pt_size, 0);
+    // Assumes scale_x == scale_y
+    CTFontRef font = CTFontCreateWithName(font_name, pt_size * fb->scale_x, 0);
     CFAttributedStringSetAttribute(attrString,
-                                   CFRangeMake(0, CFStringGetLength(cf_string)),
+                                   CFRangeMake(0, cf_string_len),
                                    kCTFontAttributeName,
                                    font);
+    CFRelease(font);
+    CFRelease(font_name);
+    CFRelease(cf_string);
 
     // Create the framesetter with the attributed string.
     CTFramesetterRef framesetter =
              CTFramesetterCreateWithAttributedString(attrString);
     CFRelease(attrString);
+
+    // Find a frame that will fit the string.
+    CFRange string_range = {0};
+    CGSize frame_constraints = { CGFLOAT_MAX, CGFLOAT_MAX };
+    CFRange fit_range = {0};
+    CGSize frame_size =  CTFramesetterSuggestFrameSizeWithConstraints(
+            framesetter, string_range, NULL, frame_constraints, &fit_range);
 
     // Create a path which bounds the area where you will be drawing text.
     // The path need not be rectangular.
@@ -67,7 +79,7 @@ void coretext_draw_font(eva_framebuffer *fb,
 
     // In this simple example, initialize a rectangular path the size of
     // the eva framebuffer
-    CGRect bounds = CGRectMake(x, (int32_t)fb->h - y, 1000.0, 50.0);
+    CGRect bounds = CGRectMake(x, (int32_t)fb->h - y - frame_size.height, frame_size.width, frame_size.height);
     CGPathAddRect(path, NULL, bounds);
 
     // Create a frame.
@@ -76,7 +88,6 @@ void coretext_draw_font(eva_framebuffer *fb,
      
     // Draw the specified frame in the given context.
     CTFrameDraw(frame, context);
-    CGContextFlush(context);
      
     // Release the objects we used.
     CFRelease(frame);
