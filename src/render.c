@@ -12,6 +12,7 @@
 
 #include "eva/eva.h"
 
+#include "color.h"
 #include "common.h"
 #include "coretext.h"
 #include "profiler.h"
@@ -641,21 +642,21 @@ void render_end_frame(void)
     profiler_end;
 }
 
-static void add_render_rect_cmd(const recti *r, color c)
+static void add_render_rect_cmd(const recti *r, const color *c)
 {
 
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
-    cmd->rect_cmd.color = c;
+    cmd->rect_cmd.color = *c;
     clip_to_framebuffer(&cmd->rect);
 }
 
 static void add_render_font_cmd(font font,
                                 const char *text, int32_t text_len,
                                 int32_t x, int32_t y,
-                                int32_t pt_size, color c)
+                                int32_t pt_size, const color *c)
 {
     assert(text);
     if (text[0] == 0) {
@@ -687,7 +688,7 @@ static void add_render_font_cmd(font font,
     cmd->type = RENDER_COMMAND_FONT;
     cmd->font_cmd.font = font;
     cmd->font_cmd.pt_size = pt_size;
-    cmd->font_cmd.color = c;
+    cmd->font_cmd.color = *c;
     cmd->font_cmd.baseline_y = y;
     cmd->rect = bounding_rect;
 
@@ -697,7 +698,7 @@ static void add_render_font_cmd(font font,
     memcpy(cmd->font_cmd.text, text, len);
 }
 
-void render_clear(color color)
+void render_clear(const color *c)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     recti r = {
@@ -706,12 +707,12 @@ void render_clear(color color)
         .w = (int32_t)fb.w,
         .h = (int32_t)fb.h
     };
-    add_render_rect_cmd(&r, color);
+    add_render_rect_cmd(&r, c);
 }
 
-void render_draw_rect(const recti *rect, color color)
+void render_draw_rect(const recti *rect, const color *c)
 {
-    add_render_rect_cmd(rect, color);
+    add_render_rect_cmd(rect, c);
 }
 
 // void Render_DrawHollowRect(
@@ -731,7 +732,7 @@ void render_draw_rect(const recti *rect, color color)
 
 void render_draw_font(font font, const char *text, int32_t text_len,
                       const vec2i *pos,
-                      int32_t pt_size, color c)
+                      int32_t pt_size, const color *c)
 {
     add_render_font_cmd(font, text, text_len, pos->x, pos->y, pt_size, c);
 }

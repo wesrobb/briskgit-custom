@@ -5,6 +5,7 @@
 
 #include "eva/eva.h"
 
+#include "color.h"
 #include "console.h"
 #include "profiler.h"
 #include "rect.h"
@@ -153,8 +154,8 @@ void app_draw(const eva_framebuffer *fb)
     (void)light_grey;
     (void)grey;
 
-    render_clear(light_grey);
-    render_draw_rect(&_ctx.branch_pane_rect, grey);
+    render_clear(&light_grey);
+    render_draw_rect(&_ctx.branch_pane_rect, &grey);
 
     // Render_DrawHollowRect(testRect, white, 4);
 
@@ -198,7 +199,7 @@ void app_draw(const eva_framebuffer *fb)
 
         render_draw_font(FONT_ROBOTO_REGULAR,
                          text_lines[i], (int32_t)text_len, 
-                         &pos, font_size_pt, white);
+                         &pos, font_size_pt, &white);
 
         recti test = {
             .x = 0,
@@ -206,7 +207,7 @@ void app_draw(const eva_framebuffer *fb)
             .w = 900,
             .h = 2
         };
-        render_draw_rect(&test, white);
+        render_draw_rect(&test, &white);
     }
 
     console_draw(fb);

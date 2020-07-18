@@ -9,6 +9,7 @@
 
 #include "eva/eva.h"
 
+#include "color.h"
 #include "rect.h"
 #include "render.h"
 #include "vec2.h"
@@ -236,7 +237,7 @@ void console_draw(const eva_framebuffer *fb)
             .w = (int32_t)fb->w,
             .h = (int32_t)(fb->h / 3.0f)
         };
-        render_draw_rect(&rect, base_color);
+        render_draw_rect(&rect, &base_color);
 
         int32_t pt_size = 12;
         int32_t padding = 10;
@@ -276,8 +277,8 @@ void console_draw(const eva_framebuffer *fb)
             .h = (int32_t)sb.grip_size,
         };
 
-        render_draw_rect(&track_rect, dark_blue);
-        render_draw_rect(&grip_rect, white);
+        render_draw_rect(&track_rect, &dark_blue);
+        render_draw_rect(&grip_rect, &white);
 
         // Work backwards through the entries till we have enough to fill the
         // available space in the console window.
@@ -298,7 +299,7 @@ void console_draw(const eva_framebuffer *fb)
 
             render_draw_font(FONT_ROBOTO_REGULAR,
                              (const char*)entry->text, (int32_t)entry->len,
-                             &text_pos, pt_size, white);
+                             &text_pos, pt_size, &white);
 
             count++;
         }
