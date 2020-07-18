@@ -12,10 +12,13 @@ add_executable(briskgit
                src/coretext.c
                src/profiler.h 
                src/profiler.c
+               src/rect.h 
+               src/rect.c
                src/render.h 
                src/render.c
                src/text.h 
                src/text.c
+               src/vec2.h 
                src/eva/eva.h)
 
 #target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)

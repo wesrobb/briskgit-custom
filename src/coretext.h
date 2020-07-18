@@ -3,9 +3,10 @@
 #include "common.h"
 
 typedef struct eva_framebuffer eva_framebuffer;
-typedef struct eva_rect eva_rect;
+typedef struct recti recti;
+typedef struct vec2i vec2i;
 
 void coretext_draw_font(eva_framebuffer *fb, 
-                        eva_rect *clip_rect,
+                        const recti *clip_rect,
                         char *text, int32_t len,
-                        int32_t pt_size, int32_t x, int32_t y);
+                        int32_t pt_size, const vec2i *pos);

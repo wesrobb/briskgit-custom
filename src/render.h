@@ -2,8 +2,8 @@
 
 #include "common.h"
 
-typedef struct eva_pixel eva_pixel;
-typedef struct eva_rect  eva_rect;
+typedef struct recti recti;
+typedef struct vec2i vec2i;
 
 typedef struct color {
     float b, g, r, a;
@@ -22,11 +22,10 @@ void render_begin_frame(void);
 void render_end_frame(void);
 
 void render_clear(color);
-void render_draw_rect(eva_rect *, color);
-void render_draw_hollow_rect(eva_rect *rect, color, int32_t border_thickness);
+void render_draw_rect(const recti *r, color);
+void render_draw_hollow_rect(const recti *r, color, int32_t border_thickness);
 void render_draw_font(font font, const char *text, int32_t text_len,
-                      int32_t pos_x, int32_t pos_y,
-                      int32_t pt_size, color);
+                      const vec2i *pos, int32_t pt_size, color);
 
 int32_t render_get_text_width(font font, const char *text, int32_t text_len, 
                               int32_t pt_size);

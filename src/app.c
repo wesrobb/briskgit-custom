@@ -7,14 +7,16 @@
 
 #include "console.h"
 #include "profiler.h"
+#include "rect.h"
 #include "render.h"
 #include "text.h"
+#include "vec2.h"
 
 #define TEXT_MAX_LEN 1000
 
 typedef struct app_ctx {
     int32_t branch_pane_resize_range;
-    eva_rect branch_pane_rect;
+    recti branch_pane_rect;
     bool branch_pane_resizing;
     int32_t branch_pane_min_size;
 
@@ -23,14 +25,6 @@ typedef struct app_ctx {
 } app_ctx;
 
 static app_ctx _ctx;
-
-static bool point_in_rect(int32_t x, int32_t y, eva_rect *r)
-{
-    return x >= r->x          &&
-           x <= (r->x + r->w) &&
-           y >= r->y          &&
-           y <= (r->y + r->h);
-}
 
 void app_init()
 {
@@ -78,16 +72,14 @@ void app_text_input(const char *text, uint32_t len)
     }
 }
 
-void app_mouse_moved(int32_t x, int32_t y)
+void app_mouse_moved(const vec2i *mouse_pos)
 {
-    (void)y;
     if (_ctx.branch_pane_resizing) {
-        _ctx.branch_pane_rect.w =
-            max(x, _ctx.branch_pane_min_size);
+        _ctx.branch_pane_rect.w = max(mouse_pos->x, _ctx.branch_pane_min_size);
         eva_request_frame();
     }
 
-    eva_rect resizeHandle = {
+    recti resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
              _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -96,12 +88,12 @@ void app_mouse_moved(int32_t x, int32_t y)
     };
     (void)resizeHandle;
 
-    console_mouse_moved(x, y);
+    console_mouse_moved(mouse_pos);
 }
 
-void app_mouse_pressed(int32_t x, int32_t y)
+void app_mouse_pressed(const vec2i *mouse_pos)
 {
-    eva_rect resizeHandle = {
+    recti resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
             _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -109,22 +101,22 @@ void app_mouse_pressed(int32_t x, int32_t y)
         .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
     };
 
-    if (point_in_rect(x, y, &resizeHandle)) {
+    if (recti_point_intersect(&resizeHandle, mouse_pos)) {
         _ctx.branch_pane_resizing = true;
         puts("pane resizing");
     }
 
-    console_mouse_pressed(x, y);
+    console_mouse_pressed(mouse_pos);
 }
 
-void app_mouse_released(int32_t x, int32_t y)
+void app_mouse_released(const vec2i *mouse_pos)
 {
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_resizing = false;
         puts("pane stopped resizing");
     }
 
-    console_mouse_released(x, y);
+    console_mouse_released(mouse_pos);
 }
 
 void app_window_resized(uint32_t width, uint32_t height)
@@ -193,8 +185,10 @@ void app_draw(const eva_framebuffer *fb)
         }
         // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
         // textLines[i], fontSizePt);
-        int32_t x = 40;
-        int32_t y = (int32_t)(100 + (i * (ascent - descent)));
+        vec2i pos = {
+            .x = 40,
+            .y = (int32_t)(100 + (i * (ascent - descent)))
+        };
         // Rect r = {
         //    .x = x,
         //    .y = y - ascent,
@@ -204,11 +198,11 @@ void app_draw(const eva_framebuffer *fb)
 
         render_draw_font(FONT_ROBOTO_REGULAR,
                          text_lines[i], (int32_t)text_len, 
-                         x, y, font_size_pt, white);
+                         &pos, font_size_pt, white);
 
-        eva_rect test = {
+        recti test = {
             .x = 0,
-            .y = y,
+            .y = pos.y,
             .w = 900,
             .h = 2
         };

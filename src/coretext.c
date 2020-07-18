@@ -4,10 +4,13 @@
 
 #include "eva/eva.h"
 
+#include "rect.h"
+#include "vec2.h"
+
 void coretext_draw_font(eva_framebuffer *fb, 
-                        eva_rect *clip_rect,
+                        const recti *clip_rect,
                         char *text, int32_t len,
-                        int32_t pt_size, int32_t x, int32_t y)
+                        int32_t pt_size, const vec2i *pos)
 {
     uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
                            kCGBitmapByteOrder32Little;
@@ -79,7 +82,9 @@ void coretext_draw_font(eva_framebuffer *fb,
 
     // In this simple example, initialize a rectangular path the size of
     // the eva framebuffer
-    CGRect bounds = CGRectMake(x, (int32_t)fb->h - y - frame_size.height, frame_size.width, frame_size.height);
+    CGRect bounds = CGRectMake(pos->x, 
+                               (int32_t)fb->h - pos->y - frame_size.height,
+                               frame_size.width, frame_size.height);
     CGPathAddRect(path, NULL, bounds);
 
     // Create a frame.

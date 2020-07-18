@@ -7,6 +7,11 @@
 
 #include "common.h"
 
+typedef struct text_attr {
+    int32_t start_grapheme;
+    int32_t end_grapheme;
+} text_attr;
+
 int32_t count_character_boundaries(const text *t)
 {
     UText          *ut         = NULL;

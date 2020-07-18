@@ -9,7 +9,9 @@
 
 #include "eva/eva.h"
 
+#include "rect.h"
 #include "render.h"
+#include "vec2.h"
 
 #define MAX_LOG_ENTRIES 2048
 
@@ -26,7 +28,7 @@ typedef struct log_entries {
 
 typedef struct console_ctx {
     bool visible;
-    eva_rect rect;
+    recti rect;
 
     log_entries logs;
 } console_ctx;
@@ -141,11 +143,11 @@ void console_log(const char *fmt, ...)
     va_end(args2);
 }
 
-void console_mouse_moved(int32_t x, int32_t y)
+void console_mouse_moved(const vec2i *mouse_pos)
 {
     if (sb.active) {
-        float mouse_delta = y - sb.mouse_y;
-        sb.mouse_y = y;
+        float mouse_delta = mouse_pos->y - sb.mouse_y;
+        sb.mouse_y = mouse_pos->y;
 
         float new_grip_pos = sb.grip_pos_on_track + mouse_delta;
         if (new_grip_pos < 0) {
@@ -161,40 +163,32 @@ void console_mouse_moved(int32_t x, int32_t y)
     }
 }
 
-void console_mouse_pressed(int32_t x, int32_t y)
+void console_mouse_pressed(const vec2i *mouse_pos)
 {
     if (_ctx.visible) {
         int32_t padding = 10;
         eva_framebuffer fb = eva_get_framebuffer();
         int32_t track_center = (int32_t)fb.w - padding;
-        int32_t track_width = 5;
-        eva_rect track_rect = {
-            .x = (int32_t)(track_center - track_width / 2.0f),
-            .y = 0,
-            .w = track_width,
-            .h = (int32_t)sb.track_size
-        };
 
         int32_t grip_width = 10;
-        eva_rect grip_rect = {
+        recti grip_rect = {
             .x = (int32_t)(track_center - (grip_width / 2.0f)),
             .y = (int32_t)sb.grip_pos_on_track,
             .w = grip_width,
             .h = (int32_t)sb.grip_size,
         };
 
-        if (x >= grip_rect.x && 
-            x <= grip_rect.x + grip_rect.w &&
-            y >= grip_rect.y &&
-            y <= grip_rect.y + grip_rect.h) {
-            sb.mouse_y = y;
+        if (recti_point_intersect(&grip_rect, mouse_pos)) {
+            sb.mouse_y = mouse_pos->y;
             sb.active = true;
         }
     }
 }
 
-void console_mouse_released(int32_t x, int32_t y)
+void console_mouse_released(const vec2i *mouse_pos)
 {
+    (void)(mouse_pos);
+
     if (sb.active) {
         sb.active = false;
     }
@@ -236,7 +230,7 @@ void console_draw(const eva_framebuffer *fb)
             .a = 1.0f,
         };
 
-        eva_rect rect = {
+        recti rect = {
             .x = 0,
             .y = 0,
             .w = (int32_t)fb->w,
@@ -267,7 +261,7 @@ void console_draw(const eva_framebuffer *fb)
 
         int32_t track_center = (int32_t)fb->w - padding;
         int32_t track_width = 5;
-        eva_rect track_rect = {
+        recti track_rect = {
             .x = (int32_t)(track_center - track_width / 2.0f),
             .y = rect.y,
             .w = track_width,
@@ -275,7 +269,7 @@ void console_draw(const eva_framebuffer *fb)
         };
 
         int32_t grip_width = 10;
-        eva_rect grip_rect = {
+        recti grip_rect = {
             .x = (int32_t)(track_center - (grip_width / 2.0f)),
             .y = (int32_t)sb.grip_pos_on_track,
             .w = grip_width,
@@ -292,17 +286,19 @@ void console_draw(const eva_framebuffer *fb)
         int32_t start_offset = (int32_t)roundf(sb.window_pos / font_height);
         int32_t log_count = _ctx.logs.count;
         int32_t count = 0;
-        int32_t text_pos_x = rect.x + padding;
-        int32_t text_pos_y = rect.y;
+        vec2i text_pos = {
+            rect.x + padding,
+            rect.y
+        };
         while (count < max_rows && 
                count < log_count) {
             int32_t index = (_ctx.logs.start + start_offset++) % MAX_LOG_ENTRIES;
             log_entry *entry = &_ctx.logs.entries[index];
-            text_pos_y += font_height;
+            text_pos.y += font_height;
 
             render_draw_font(FONT_ROBOTO_REGULAR,
                              (const char*)entry->text, (int32_t)entry->len,
-                             text_pos_x, text_pos_y, pt_size, white);
+                             &text_pos, pt_size, white);
 
             count++;
         }

@@ -15,6 +15,8 @@
 #include "common.h"
 #include "coretext.h"
 #include "profiler.h"
+#include "rect.h"
+#include "vec2.h"
 
 typedef enum render_cmd_type {
     RENDER_COMMAND_RECT,
@@ -37,7 +39,7 @@ typedef struct render_cmd_font {
 
 typedef struct render_cmd {
     render_cmd_type type;
-    eva_rect rect;
+    recti rect;
     union {
         render_cmd_rect rect_cmd;
         render_cmd_font font_cmd;
@@ -83,7 +85,7 @@ static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
 
-static void clip_to_framebuffer(eva_rect *r);
+static void clip_to_framebuffer(recti *r);
 
 #define HASH_INITIAL 2166136261
 
@@ -159,7 +161,7 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
                            double x_pos,
                            double y_pos,
                            color c,
-                           eva_rect clip_rect)
+                           const recti *clip_rect)
 {
     // TODO: Clean this function up. At least do the preamble.
     // TODO: This is on the hot path and it is pretty slow. Make it fast!
@@ -170,21 +172,21 @@ static void draw_ft_bitmap(FT_Bitmap *bitmap,
     eva_framebuffer fb = eva_get_framebuffer();
 
     // Start drawing from the bitmap depending on how much of it is clipped.
-    int32_t x_clipped = (int32_t)(clip_rect.x - x_pos);
+    int32_t x_clipped = (int32_t)(clip_rect->x - x_pos);
     if (x_clipped <= 0) {
         x_clipped = 0;
     }
-    int32_t y_clipped = (int32_t)(clip_rect.y - y_pos);
+    int32_t y_clipped = (int32_t)(clip_rect->y - y_pos);
     if (y_clipped <= 0) {
         y_clipped = 0;
     }
 
-    uint32_t start_x = (uint32_t)max(clip_rect.x, (int32_t)(x_pos + 0.5));
-    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w,
+    uint32_t start_x = (uint32_t)max(clip_rect->x, (int32_t)(x_pos + 0.5));
+    uint32_t end_x   = (uint32_t)min(clip_rect->x + clip_rect->w,
                                      (int32_t)(x_pos + bitmap->width + 0.5));
 
-    uint32_t start_y = (uint32_t)max(clip_rect.y, (int32_t)(y_pos + 0.5));
-    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h,
+    uint32_t start_y = (uint32_t)max(clip_rect->y, (int32_t)(y_pos + 0.5));
+    uint32_t end_y   = (uint32_t)min(clip_rect->y + clip_rect->h,
                                      (int32_t)(y_pos + bitmap->rows + 0.5));
 
     end_x = min(end_x, fb.w);
@@ -312,19 +314,19 @@ static void load_cached_font(font font,
     profiler_end;
 }
 
-void draw_rect(eva_rect rect,
-              render_cmd_rect *cmd,
-              eva_rect clip_rect)
+void draw_rect(const recti *rect, render_cmd_rect *cmd, const recti *clip_rect)
 {
     profiler_begin;
 
     eva_framebuffer fb = eva_get_framebuffer();
 
-    uint32_t start_x = (uint32_t)max(clip_rect.x, rect.x);
-    uint32_t end_x   = (uint32_t)min(clip_rect.x + clip_rect.w, rect.x + rect.w);
+    uint32_t start_x = (uint32_t)max(clip_rect->x, rect->x);
+    uint32_t end_x   = (uint32_t)min(clip_rect->x + clip_rect->w,
+                                     rect->x + rect->w);
 
-    uint32_t start_y = (uint32_t)max(clip_rect.y, rect.y);
-    uint32_t end_y   = (uint32_t)min(clip_rect.y + clip_rect.h, rect.y + rect.h);
+    uint32_t start_y = (uint32_t)max(clip_rect->y, rect->y);
+    uint32_t end_y   = (uint32_t)min(clip_rect->y + clip_rect->h,
+                                     rect->y + rect->h);
 
     end_x = min(end_x, fb.w);
     end_y = min(end_y, fb.h);
@@ -350,21 +352,13 @@ void draw_rect(eva_rect rect,
     profiler_end;
 }
 
-bool rect_intersect(eva_rect a, eva_rect b)
-{
-    return !((a.x > b.x + b.w || b.x > a.x + a.w) ||
-             (a.y > b.y + b.h || b.y > a.y + a.h));
-}
-
-void draw_font(eva_rect rect,
-              render_cmd_font *cmd,
-              eva_rect clip_rect)
+void draw_font(const recti *rect, render_cmd_font *cmd, const recti *clip_rect)
 {
     (void)rect;
 
     profiler_begin;
 
-    if (rect_intersect(clip_rect, rect)) {
+    if (recti_intersect(clip_rect, rect)) {
         profiler_begin_name("draw_font_rect_intersect");
         eva_framebuffer fb = eva_get_framebuffer();
 
@@ -386,7 +380,7 @@ void draw_font(eva_rect rect,
         hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(buf, &glyphCount);
         hb_glyph_position_t *glyph_pos = hb_buffer_get_glyph_positions(buf, &glyphCount);
 
-        double cursor_x = rect.x;
+        double cursor_x = rect->x;
         double cursor_y = cmd->baseline_y;
 
         for (uint32_t i = 0; i < glyphCount; ++i) {
@@ -526,7 +520,7 @@ void render_begin_frame(void)
 {
 }
 
-static void update_tile_cache(eva_rect *r, uint32_t hash_value)
+static void update_tile_cache(const recti *r, uint32_t hash_value)
 {
     int32_t x1 = r->x / TILE_SIZE;
     int32_t y1 = r->y / TILE_SIZE;
@@ -548,7 +542,7 @@ void render_end_frame(void)
 
     if (render_cmd_queues_differ())
     {
-        eva_rect dirty_rect = {0};
+        recti dirty_rect = {0};
 
         // Process current queue.
         int32_t num_cmds = *_render_cmd_ctx.curr_index;
@@ -577,7 +571,7 @@ void render_end_frame(void)
                 uint32_t prev = _prev_tile_cache[tile_index];
                 if (curr != prev)
                 {
-                    eva_rect region = {
+                    recti region = {
                         .x = (int32_t)x * TILE_SIZE,
                         .y = (int32_t)y * TILE_SIZE,
                         .w = TILE_SIZE,
@@ -591,7 +585,7 @@ void render_end_frame(void)
                     }
                     else
                     {
-                        dirty_rect = eva_rect_union(&dirty_rect, &region);
+                        recti_union(&dirty_rect, &region, &dirty_rect); 
                     }
                 }
 
@@ -600,7 +594,7 @@ void render_end_frame(void)
         }
 
 
-        if (!eva_rect_empty(&dirty_rect))
+        if (!recti_is_empty(&dirty_rect))
         {
             for (int32_t i = 0; i < num_cmds; i++)
             {
@@ -608,18 +602,18 @@ void render_end_frame(void)
                 switch (cmd->type)
                 {
                     case RENDER_COMMAND_RECT:
-                        draw_rect(cmd->rect, &cmd->rect_cmd, dirty_rect);
+                        draw_rect(&cmd->rect, &cmd->rect_cmd, &dirty_rect);
                         break;
                     case RENDER_COMMAND_FONT:
                         {
                             eva_framebuffer fb = eva_get_framebuffer();
+                            vec2i pos = { cmd->rect.x, cmd->font_cmd.baseline_y };
                             coretext_draw_font(&fb,
                                                &dirty_rect,
                                                cmd->font_cmd.text, 
                                                cmd->font_cmd.text_len,
                                                cmd->font_cmd.pt_size,
-                                               cmd->rect.x,
-                                               cmd->font_cmd.baseline_y);
+                                               &pos);
                         }
                         break;
                 }
@@ -647,15 +641,15 @@ void render_end_frame(void)
     profiler_end;
 }
 
-static void add_render_rect_cmd(eva_rect *r, color c)
+static void add_render_rect_cmd(const recti *r, color c)
 {
-    clip_to_framebuffer(r);
 
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
     cmd->rect = *r;
     cmd->rect_cmd.color = c;
+    clip_to_framebuffer(&cmd->rect);
 }
 
 static void add_render_font_cmd(font font,
@@ -679,7 +673,7 @@ static void add_render_font_cmd(font font,
     // always 100% correct. This results in a tiny bit of overdraw which may
     // slightly affect perf but actual font rendering is not clipped anywhere.
     int32_t padding = 0;
-    eva_rect bounding_rect = {
+    recti bounding_rect = {
         .x = x - padding,
         .y = y - ascent - padding,
         .w = width + padding,
@@ -706,7 +700,7 @@ static void add_render_font_cmd(font font,
 void render_clear(color color)
 {
     eva_framebuffer fb = eva_get_framebuffer();
-    eva_rect r = {
+    recti r = {
         .x = 0,
         .y = 0,
         .w = (int32_t)fb.w,
@@ -715,7 +709,7 @@ void render_clear(color color)
     add_render_rect_cmd(&r, color);
 }
 
-void render_draw_rect(eva_rect *rect, color color) // TODO: These should be passed by pointer
+void render_draw_rect(const recti *rect, color color)
 {
     add_render_rect_cmd(rect, color);
 }
@@ -736,10 +730,10 @@ void render_draw_rect(eva_rect *rect, color color) // TODO: These should be pass
 //}
 
 void render_draw_font(font font, const char *text, int32_t text_len,
-                      int32_t posX, int32_t posY,
+                      const vec2i *pos,
                       int32_t pt_size, color c)
 {
-    add_render_font_cmd(font, text, text_len, posX, posY, pt_size, c);
+    add_render_font_cmd(font, text, text_len, pos->x, pos->y, pt_size, c);
 }
 
 int32_t render_get_text_width(font font, const char *text, int32_t text_len, 
@@ -800,7 +794,7 @@ void render_get_font_height(font font, int32_t pt_size,
     profiler_end;
 }
 
-static void clip_to_framebuffer(eva_rect *r)
+static void clip_to_framebuffer(recti *r)
 {
     assert(r);
 

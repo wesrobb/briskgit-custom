@@ -9,6 +9,7 @@
 #include "console.h"
 #include "profiler.h"
 #include "render.h"
+#include "vec2.h"
 
 void init(void)
 {
@@ -48,18 +49,20 @@ static void fail(int error_code, const char *error_message)
 
 static void mouse_moved(int32_t x, int32_t y)
 {
-    app_mouse_moved(x, y);
+    vec2i mouse_pos = {x, y};
+    app_mouse_moved(&mouse_pos);
 }
 
 static void mouse_btn(int32_t x, int32_t y,
                       eva_mouse_btn btn, eva_input_action action)
 {
+    vec2i mouse_pos = { x, y };
     if (btn == EVA_MOUSE_BTN_LEFT) {
         if (action == EVA_INPUT_PRESSED) {
-            app_mouse_pressed(x, y);
+            app_mouse_pressed(&mouse_pos);
         }
         if (action == EVA_INPUT_RELEASED) {
-            app_mouse_released(x, y);
+            app_mouse_released(&mouse_pos);
         }
     }
 
