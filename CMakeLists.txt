@@ -18,6 +18,8 @@ add_executable(briskgit
                src/render.c
                src/text.h 
                src/text.c
+               src/ustr.h 
+               src/ustr.c
                src/vec2.h 
                src/eva/eva.h)
 
@@ -32,6 +34,7 @@ target_link_libraries(briskgit PRIVATE
                       ICU::uc ICU::dt ICU::in ICU::io)
 
 if (APPLE)
+    target_compile_definitions(briskgit PRIVATE BG_MACOS)
     enable_language(OBJC)
     target_sources(briskgit PRIVATE src/eva/eva_macos.m)
 
@@ -40,6 +43,7 @@ if (APPLE)
 
     configure_file(Info.plist Info.plist COPYONLY)
 elseif(WIN32)
+    target_compile_definitions(briskgit PRIVATE BG_WINDOWS)
     target_sources(briskgit PRIVATE src/eva/eva_windows.c)
 
 endif()

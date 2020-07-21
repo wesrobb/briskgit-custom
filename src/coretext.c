@@ -5,6 +5,8 @@
 #include "eva/eva.h"
 
 #include "rect.h"
+#include "text.h"
+#include "ustr.h"
 #include "vec2.h"
 
 void coretext_draw_font(eva_framebuffer *fb, 
@@ -45,7 +47,8 @@ void coretext_draw_font(eva_framebuffer *fb,
     CFAttributedStringReplaceString(attrString, CFRangeMake(0, 0), cf_string);
 
     CFIndex cf_string_len = CFStringGetLength(cf_string);
-    // Set the color of the first 12 chars to red.
+
+    // Set color
     CFAttributedStringSetAttribute(attrString, CFRangeMake(0, cf_string_len),
                                    kCTForegroundColorAttributeName, white);
     

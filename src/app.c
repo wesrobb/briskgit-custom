@@ -11,6 +11,7 @@
 #include "rect.h"
 #include "render.h"
 #include "text.h"
+#include "ustr.h"
 #include "vec2.h"
 
 #define TEXT_MAX_LEN 1000
@@ -64,10 +65,10 @@ void app_text_input(const char *text, uint32_t len)
     if (_ctx.text_index + len < TEXT_MAX_LEN) {
         memcpy(_ctx.text + _ctx.text_index, text, len);
         _ctx.text_index += len;
-        struct text t;
-        t.utf8data = (char*)text;
-        t.len = _ctx.text_index;
-        int32_t count = count_character_boundaries(&t);
+        ustr str;
+        str.data = (char*)text;
+        str.len = _ctx.text_index;
+        int32_t count = ustr_num_graphemes(&str);
         console_log("num graphemes %i", count);
         eva_request_frame();
     }
@@ -157,8 +158,6 @@ void app_draw(const eva_framebuffer *fb)
     render_clear(&light_grey);
     render_draw_rect(&_ctx.branch_pane_rect, &grey);
 
-    // Render_DrawHollowRect(testRect, white, 4);
-
     int32_t ascent, descent;
     render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
                            &ascent, &descent);
@@ -184,18 +183,11 @@ void app_draw(const eva_framebuffer *fb)
         if ((uint32_t)i == num_text_lines - 1) {
             text_len = _ctx.text_index;
         }
-        // int32_t width = Render_GetTextWidth(FONT_ROBOTO_REGULAR,
-        // textLines[i], fontSizePt);
+
         vec2i pos = {
             .x = 40,
             .y = (int32_t)(100 + (i * (ascent - descent)))
         };
-        // Rect r = {
-        //    .x = x,
-        //    .y = y - ascent,
-        //    .w = width,
-        //    .h = ascent - descent
-        //};
 
         render_draw_font(FONT_ROBOTO_REGULAR,
                          text_lines[i], (int32_t)text_len, 
