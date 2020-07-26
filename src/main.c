@@ -9,12 +9,14 @@
 #include "console.h"
 #include "profiler.h"
 #include "render.h"
+#include "text.h"
 #include "vec2.h"
 
 void init(void)
 {
     profiler_init;
 
+    text_system_init();
     render_init();
     app_init();
 }

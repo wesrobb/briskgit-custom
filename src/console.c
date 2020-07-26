@@ -241,8 +241,8 @@ void console_draw(const eva_framebuffer *fb)
 
         int32_t pt_size = 12;
         int32_t padding = 10;
-        int32_t ascent, descent;
-        render_get_font_height(FONT_ROBOTO_REGULAR, pt_size, &ascent, &descent);
+        int32_t ascent = 0, descent = 0;
+        //render_get_font_height(FONT_ROBOTO_REGULAR, pt_size, &ascent, &descent);
         int32_t font_height = ascent - descent;
 
         sb.content_size = _ctx.logs.count * font_height;
@@ -297,9 +297,9 @@ void console_draw(const eva_framebuffer *fb)
             log_entry *entry = &_ctx.logs.entries[index];
             text_pos.y += font_height;
 
-            render_draw_font(FONT_ROBOTO_REGULAR,
-                             (const char*)entry->text, (int32_t)entry->len,
-                             &text_pos, pt_size, &white);
+           // render_draw_font(FONT_ROBOTO_REGULAR,
+           //                  (const char*)entry->text, (int32_t)entry->len,
+           //                  &text_pos, pt_size, &white);
 
             count++;
         }

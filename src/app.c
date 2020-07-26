@@ -62,16 +62,18 @@ void app_keydown(int32_t key, uint32_t mods)
 
 void app_text_input(const char *text, uint32_t len)
 {
-    if (_ctx.text_index + len < TEXT_MAX_LEN) {
-        memcpy(_ctx.text + _ctx.text_index, text, len);
-        _ctx.text_index += len;
-        ustr str;
-        str.data = (char*)text;
-        str.len = _ctx.text_index;
-        int32_t count = ustr_num_graphemes(&str);
-        console_log("num graphemes %i", count);
-        eva_request_frame();
-    }
+    (void)text;
+    (void)len;
+    //if (_ctx.text_index + len < TEXT_MAX_LEN) {
+    //    memcpy(_ctx.text + _ctx.text_index, text, len);
+    //    _ctx.text_index += len;
+    //    ustr str;
+    //    str.data = (char*)text;
+    //    str.len = _ctx.text_index;
+    //    int32_t count = ustr_num_graphemes(&str);
+    //    console_log("num graphemes %i", count);
+    //    eva_request_frame();
+    //}
 }
 
 void app_mouse_moved(const vec2i *mouse_pos)
@@ -132,7 +134,7 @@ void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
-    int32_t font_size_pt = 16;
+    float font_size_pt = 16;
 
     color white = {
         .r = 1.0f,
@@ -140,6 +142,7 @@ void app_draw(const eva_framebuffer *fb)
         .b = 1.0f,
         .a = 1.0f,
     };
+    (void)white;
     color light_grey = {
         .r = 0.1f,
         .g = 0.1f,
@@ -158,51 +161,58 @@ void app_draw(const eva_framebuffer *fb)
     render_clear(&light_grey);
     render_draw_rect(&_ctx.branch_pane_rect, &grey);
 
-    int32_t ascent, descent;
-    render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
-                           &ascent, &descent);
+    text *t = text_create_cstr("This is a test 😁😂🤮");
+    text_add_attr(t, 0, 0, FONT_FAMILY_MENLO, font_size_pt, &COLOR_WHITE);
+    vec2i pos = { 100, 100 };
+    render_draw_text(t, &pos);
+    text_destroy(t);
 
-    const char *text_lines[] = {
-        "master",
-        "develop",
-        "feature/AV",
-        "pppppppppp",
-        "ffffffffff",
-        "Iñtërnâtiônàližætiøn",
-        "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
-        "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
-        "😁😂🤮",
-        _ctx.text
-    };
+    //int32_t ascent, descent;
+    //render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
+    //                       &ascent, &descent);
 
-    uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
-    for (int32_t i = 0; i < (int32_t)num_text_lines; i++) {
-        const char *text = text_lines[i];
+    //const char *text_lines[] = {
+    //    "master",
+    //    "develop",
+    //    "feature/AV",
+    //    "pppppppppp",
+    //    "ffffffffff",
+    //    "Iñtërnâtiônàližætiøn",
+    //    "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
+    //    "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
+    //    "😁😂🤮",
+    //    _ctx.text
+    //};
 
-        size_t text_len = strlen(text);
-        if ((uint32_t)i == num_text_lines - 1) {
-            text_len = _ctx.text_index;
-        }
+    //uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
+    //for (int32_t i = 0; i < (int32_t)num_text_lines; i++) {
+    //    const char *text = text_lines[i];
 
-        vec2i pos = {
-            .x = 40,
-            .y = (int32_t)(100 + (i * (ascent - descent)))
-        };
+    //    size_t text_len = strlen(text);
+    //    if ((uint32_t)i == num_text_lines - 1) {
+    //        text_len = _ctx.text_index;
+    //    }
 
-        render_draw_font(FONT_ROBOTO_REGULAR,
-                         text_lines[i], (int32_t)text_len, 
-                         &pos, font_size_pt, &white);
+    //    vec2i pos = {
+    //        .x = 40,
+    //        .y = (int32_t)(100 + (i * (ascent - descent)))
+    //    };
 
-        recti test = {
-            .x = 0,
-            .y = pos.y,
-            .w = 900,
-            .h = 2
-        };
-        render_draw_rect(&test, &white);
-    }
+    //    render_draw_font(FONT_ROBOTO_REGULAR,
+    //                     text_lines[i], (int32_t)text_len, 
+    //                     &pos, font_size_pt, &white);
+
+    //    recti test = {
+    //        .x = 0,
+    //        .y = pos.y,
+    //        .w = 900,
+    //        .h = 2
+    //    };
+    //    render_draw_rect(&test, &white);
+    //}
 
     console_draw(fb);
+
 
     profiler_end;
 }
