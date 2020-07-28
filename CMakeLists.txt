@@ -10,6 +10,8 @@ add_executable(briskgit
                src/console.c
                src/coretext.h 
                src/coretext.c
+               src/hash.h 
+               src/hash.c
                src/profiler.h 
                src/profiler.c
                src/rect.h 

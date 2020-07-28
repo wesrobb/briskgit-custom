@@ -11,6 +11,7 @@
 #include <unicode/ustring.h>
 
 #include "console.h"
+#include "hash.h"
 
 typedef struct ustr {
     int32_t len; // num UChar's. NOT a byte length
@@ -143,4 +144,9 @@ int32_t ustr_num_graphemes(const ustr* s)
     ubrk_close(bi);
     assert(U_SUCCESS(status));
     return count;
+}
+
+void ustr_hash(const ustr *s, uint32_t *v)
+{
+    hash(v, (uint8_t*)s->data, (size_t)ustr_byte_len(s));
 }

@@ -14,7 +14,7 @@
 
 #include "color.h"
 #include "common.h"
-#include "coretext.h"
+#include "hash.h"
 #include "profiler.h"
 #include "rect.h"
 #include "text.h"
@@ -66,20 +66,6 @@ static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
 
 static void clip_to_framebuffer(recti *r);
-
-#define HASH_INITIAL 2166136261
-
-// See https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function#FNV-1a_hash
-static void hash(uint32_t *v, uint8_t *buf, size_t len)
-{
-    assert(buf);
-
-    for (size_t i = 0; i < len; i++)
-    {
-        *v ^= buf[i];
-        *v *= 16777619;
-    }
-}
 
 static eva_pixel color_to_pixel(color c)
 {
@@ -202,9 +188,14 @@ void render_end_frame(void)
     int32_t num_cmds = *_render_cmd_ctx.curr_index;
     for (int32_t i = 0; i < num_cmds; i++)
     {
-        render_cmd *cmd = &_render_cmd_ctx.current[i];
         uint32_t cmd_hash = HASH_INITIAL;
-        hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
+        render_cmd *cmd = &_render_cmd_ctx.current[i];
+        if (cmd->type == RENDER_COMMAND_RECT) {
+            hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
+        }
+        else if (cmd->type == RENDER_COMMAND_TEXT) {
+            text_hash(cmd->text_cmd.t, &cmd_hash);
+        }
         update_tile_cache(&cmd->rect, cmd_hash);
     }
 

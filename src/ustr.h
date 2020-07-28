@@ -27,3 +27,7 @@ int32_t ustr_num_codepoints(const ustr *s);
 
 // Returns the number of graphemes in the string.
 int32_t ustr_num_graphemes(const ustr* s);
+
+// Returns the FNV-1a hash of the ustr using the input as the initial hash 
+// value.
+void ustr_hash(const ustr *s, uint32_t *hash);

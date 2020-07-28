@@ -36,3 +36,8 @@ void text_add_attr(text *t,
 void text_extents(const text *t, vec2i *dst);
 
 void text_draw(const text *t, const recti *bbox, const recti *clip); 
+
+// Sets the FNV-1a hash value of the text object using the input
+// hash as the initial value and rights the result bacl to the 
+// same address.
+void text_hash(const text *t, uint32_t *hash);

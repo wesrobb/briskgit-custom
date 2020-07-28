@@ -11,6 +11,7 @@
 #include "common.h"
 #include "color.h"
 #include "coretext.h"
+#include "hash.h"
 #include "rect.h"
 #include "ustr.h"
 #include "vec2.h"
@@ -180,6 +181,16 @@ void text_draw(const text *t, const recti *bbox, const recti *clip)
 #elif BG_WINDOWS
     assert(false);
 #endif
+}
+
+void text_hash(const text *t, uint32_t *v)
+{
+    ustr_hash(t->str, v);
+    text_attr *a = t->attrs;
+    while (a) {
+        hash(v, (uint8_t*)a, sizeof(*a));
+        a = a->next;
+    }
 }
 
 text_attr* get_next_attr()
