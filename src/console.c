@@ -239,7 +239,7 @@ void console_draw(const eva_framebuffer *fb)
         };
         render_draw_rect(&rect, &base_color);
 
-        int32_t pt_size = 12;
+        float font_size = 12.0f;
         int32_t padding = 10;
         int32_t ascent = 0, descent = 0;
         //render_get_font_height(FONT_ROBOTO_REGULAR, pt_size, &ascent, &descent);

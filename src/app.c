@@ -136,83 +136,34 @@ void app_draw(const eva_framebuffer *fb)
 
     float font_size_pt = 16;
 
-    color white = {
-        .r = 1.0f,
-        .g = 1.0f,
-        .b = 1.0f,
-        .a = 1.0f,
+    const char *branches[] = {
+        "master",
+        "develop",
+        "feature/AV",
+        "pppppppppp",
+        "ffffffffff",
+        "Iñtërnâtiônàližætiøn",
+        "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
+        "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
     };
-    (void)white;
-    color light_grey = {
-        .r = 0.1f,
-        .g = 0.1f,
-        .b = 0.1f,
-        .a = 1.0f
-    };
-    color grey = {
-        .r = 0.3f,
-        .g = 0.3f,
-        .b = 0.3f,
-        .a = 1.0f
-    };
-    (void)light_grey;
-    (void)grey;
 
-    render_clear(&light_grey);
-    render_draw_rect(&_ctx.branch_pane_rect, &grey);
+    vec2i padding = { 10, 10 };
 
-    text *t = text_create_cstr("This is a test 😁😂🤮");
-    text_add_attr(t, 0, 0, FONT_FAMILY_MENLO, font_size_pt, &COLOR_WHITE);
-    vec2i pos = { 100, 100 };
-    render_draw_text(t, &pos);
-    text_destroy(t);
+    render_clear(&COLOR_LIGHT_GREY);
+    render_draw_rect(&_ctx.branch_pane_rect, &COLOR_GREY);
 
-    //int32_t ascent, descent;
-    //render_get_font_height(FONT_ROBOTO_REGULAR, font_size_pt, 
-    //                       &ascent, &descent);
-
-    //const char *text_lines[] = {
-    //    "master",
-    //    "develop",
-    //    "feature/AV",
-    //    "pppppppppp",
-    //    "ffffffffff",
-    //    "Iñtërnâtiônàližætiøn",
-    //    "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ",
-    //    "有子曰：「其為人也孝弟，而好犯上者，鮮矣",
-    //    "😁😂🤮",
-    //    _ctx.text
-    //};
-
-    //uint32_t num_text_lines = sizeof(text_lines) / sizeof(text_lines[0]);
-    //for (int32_t i = 0; i < (int32_t)num_text_lines; i++) {
-    //    const char *text = text_lines[i];
-
-    //    size_t text_len = strlen(text);
-    //    if ((uint32_t)i == num_text_lines - 1) {
-    //        text_len = _ctx.text_index;
-    //    }
-
-    //    vec2i pos = {
-    //        .x = 40,
-    //        .y = (int32_t)(100 + (i * (ascent - descent)))
-    //    };
-
-    //    render_draw_font(FONT_ROBOTO_REGULAR,
-    //                     text_lines[i], (int32_t)text_len, 
-    //                     &pos, font_size_pt, &white);
-
-    //    recti test = {
-    //        .x = 0,
-    //        .y = pos.y,
-    //        .w = 900,
-    //        .h = 2
-    //    };
-    //    render_draw_rect(&test, &white);
-    //}
+    vec2i cursor = padding;
+    for (size_t i = 0; i < array_size(branches); i++) {
+        text *t = text_create_cstr(branches[i]);
+        text_add_attr(t, 0, 0, FONT_FAMILY_MENLO, font_size_pt, &COLOR_WHITE);
+        vec2i extents;
+        text_extents(t, &extents);
+        render_draw_text(t, &cursor);
+        cursor.y += extents.y;
+        text_destroy(t);
+    }
 
     console_draw(fb);
-
 
     profiler_end;
 }

@@ -47,12 +47,12 @@ typedef struct text_ctx {
 
 static text_ctx _ctx;
 
-text_attr* get_next_attr();
-void free_attr(text_attr *);
-const char * get_font_family(font_family_id f);
-void text_extents_macos(const text *t, vec2i *dst);
-void text_draw_macos(const text *t, const recti *bbox, const recti *clip);
-CFMutableAttributedStringRef create_attr_str(const text *t);
+static text_attr* get_next_attr();
+static void free_attr(text_attr *);
+static const char * get_font_family(font_family_id f);
+static void text_extents_macos(const text *t, vec2i *dst);
+static void text_draw_macos(const text *t, const recti *bbox, const recti *clip);
+static CFMutableAttributedStringRef create_attr_str(const text *t);
 
 void text_system_init()
 {
@@ -193,7 +193,7 @@ void text_hash(const text *t, uint32_t *v)
     }
 }
 
-text_attr* get_next_attr()
+static text_attr* get_next_attr()
 {
     text_attr *result = _ctx.free_list;
     assert(result);
@@ -207,7 +207,7 @@ text_attr* get_next_attr()
     return result;
 }
 
-void free_attr(text_attr *ta)
+static void free_attr(text_attr *ta)
 {
     assert(ta);
 
@@ -219,7 +219,7 @@ void free_attr(text_attr *ta)
     _ctx.free_list = ta;
 }
 
-const char * get_font_family(font_family_id f)
+static const char * get_font_family(font_family_id f)
 {
     switch (f) {
         case FONT_FAMILY_MENLO:
@@ -231,8 +231,11 @@ const char * get_font_family(font_family_id f)
     };
 }
 
-void text_extents_macos(const text *t, vec2i *dst)
+static void text_extents_macos(const text *t, vec2i *dst)
 {
+    assert(t);
+    assert(dst);
+
     // TODO: Don't throw these results away. Cache them so they don't have to
     // be recalculated at draw time.
     CFMutableAttributedStringRef attr_str = create_attr_str(t);
@@ -259,7 +262,7 @@ void text_extents_macos(const text *t, vec2i *dst)
     CFRelease(framesetter);
 }
 
-void text_draw_macos(const text *t, const recti *bbox, const recti *clip_rect)
+static void text_draw_macos(const text *t, const recti *bbox, const recti *clip_rect)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
@@ -312,7 +315,7 @@ void text_draw_macos(const text *t, const recti *bbox, const recti *clip_rect)
     CGColorSpaceRelease(rgbColorSpace);
 }
 
-CFMutableAttributedStringRef create_attr_str(const text *t)
+static CFMutableAttributedStringRef create_attr_str(const text *t)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     CFStringRef str = CFStringCreateWithBytesNoCopy(
