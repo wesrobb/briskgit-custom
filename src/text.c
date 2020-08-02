@@ -10,7 +10,6 @@
 
 #include "common.h"
 #include "color.h"
-#include "coretext.h"
 #include "hash.h"
 #include "rect.h"
 #include "ustr.h"
@@ -292,8 +291,6 @@ static void text_draw_macos(const text *t, const recti *bbox, const recti *clip_
     // The path need not be rectangular.
     CGMutablePathRef path = CGPathCreateMutable();
 
-    // In this simple example, initialize a rectangular path the size of
-    // the eva framebuffer
     CGRect bounds = CGRectMake(bbox->x, 
                                (int32_t)fb.h - bbox->y - bbox->h,
                                bbox->w, bbox->h);

@@ -158,7 +158,13 @@ void app_draw(const eva_framebuffer *fb)
         text_add_attr(t, 0, 0, FONT_FAMILY_MENLO, font_size_pt, &COLOR_WHITE);
         vec2i extents;
         text_extents(t, &extents);
-        render_draw_text(t, &cursor);
+        recti bbox = {
+            .x = cursor.x,
+            .y = cursor.y,
+            .w = _ctx.branch_pane_rect.w - (padding.x * 2),
+            .h = extents.y
+        };
+        render_draw_text(t, &bbox);
         cursor.y += extents.y;
         text_destroy(t);
     }
