@@ -261,7 +261,8 @@ static void text_extents_macos(const text *t, vec2i *dst)
     CFRelease(framesetter);
 }
 
-static void text_draw_macos(const text *t, const recti *bbox, const recti *clip_rect)
+static void text_draw_macos(const text *t, const recti *bbox,
+                            const recti *clip_rect)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
@@ -276,8 +277,15 @@ static void text_draw_macos(const text *t, const recti *bbox, const recti *clip_
                                                  rgbColorSpace,
                                                  bitmap_info);
 
+    int32_t bbox_endx = bbox->x + bbox->w;
+    int32_t clip_endx = clip_rect->x + clip_rect->w;
+    int32_t clip_width = clip_rect->w;
+    if (clip_rect->x < bbox_endx < clip_endx) {
+        clip_width = bbox_endx - clip_rect->x;
+    }
+
     CGRect clip = CGRectMake(clip_rect->x, clip_rect->y,
-                             clip_rect->w, clip_rect->h);
+                             clip_width, clip_rect->h);
     CGContextClipToRect(context, clip); 
 
     CFMutableAttributedStringRef attr_str = create_attr_str(t);
@@ -291,9 +299,12 @@ static void text_draw_macos(const text *t, const recti *bbox, const recti *clip_
     // The path need not be rectangular.
     CGMutablePathRef path = CGPathCreateMutable();
 
+    vec2i extents;
+    text_extents(t, &extents);
+
     CGRect bounds = CGRectMake(bbox->x, 
                                (int32_t)fb.h - bbox->y - bbox->h,
-                               bbox->w, bbox->h);
+                               extents.x, extents.y);
     CGPathAddRect(path, NULL, bounds);
 
     // Create a frame.
