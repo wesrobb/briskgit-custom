@@ -28,10 +28,19 @@ find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 find_package(ICU REQUIRED COMPONENTS uc dt in io)
 
+find_library(blend2d blend2d REQUIRED)
+find_path(blend2d_INCLUDES blend2d.h)
+
+if(NOT blend2d_INCLUDES)
+  message(FATAL_ERROR "blend2d library not found")
+endif()
+
 target_link_libraries(briskgit PRIVATE 
                       freetype
                       harfbuzz::harfbuzz
-                      ICU::uc ICU::dt ICU::in ICU::io)
+                      ICU::uc ICU::dt ICU::in ICU::io
+                      ${blend2d})
+target_include_directories(briskgit PRIVATE ${blend2d_INCLUDES})
 
 if (APPLE)
     target_compile_definitions(briskgit PRIVATE BG_MACOS)

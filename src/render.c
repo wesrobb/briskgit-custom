@@ -1,9 +1,12 @@
 #include "render.h"
 
 #include <assert.h>
+#include <blend2d/api.h>
 #include <math.h>
 #include <string.h>
 
+#define BL_STATIC
+#include <blend2d.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_MODULE_H
@@ -58,6 +61,9 @@ typedef struct render_cmd_ctx {
 } render_cmd_ctx;
 static render_cmd_ctx _render_cmd_ctx;
 
+static BLContextCore _bl_ctx;
+static BLImageCore _bl_img;
+
 #define MAX_TILE_CACHE_X 80
 #define MAX_TILE_CACHE_Y 50
 #define TILE_SIZE 96
@@ -68,58 +74,24 @@ static uint32_t *_prev_tile_cache;
 
 static void clip_to_framebuffer(recti *r);
 
-static eva_pixel color_to_pixel(color c)
-{
-    eva_pixel result = {
-        .b = (uint8_t)(c.b * 255.999f),
-        .g = (uint8_t)(c.g * 255.999f),
-        .r = (uint8_t)(c.r * 255.999f),
-        .a = (uint8_t)(c.a * 255.999f),
-    };
-
-    return result;
-}
-
-bool float_eq(float a, float b, float epsilon)
-{
-    return fabsf(a - b) < epsilon;
-}
-
-void draw_rect(render_cmd_rect *cmd, const recti *clip_rect)
+void draw_rect(const render_cmd_rect *cmd, const recti *clip_rect)
 {
     profiler_begin;
 
-    eva_framebuffer fb = eva_get_framebuffer();
-    recti *rect = &cmd->rect;
+    BLRectI *bl_clip = (BLRectI*)clip_rect;
+    blContextClipToRectI(&_bl_ctx, bl_clip);
 
-    uint32_t start_x = (uint32_t)max(clip_rect->x, rect->x);
-    uint32_t end_x   = (uint32_t)min(clip_rect->x + clip_rect->w,
-                                     rect->x + rect->w);
+    blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
+    BLRgba col = {
+        .r = cmd->color.r,
+        .g = cmd->color.g,
+        .b = cmd->color.b,
+        .a = cmd->color.a
+    };
+    blContextSetFillStyleRgba(&_bl_ctx, &col);
 
-    uint32_t start_y = (uint32_t)max(clip_rect->y, rect->y);
-    uint32_t end_y   = (uint32_t)min(clip_rect->y + clip_rect->h,
-                                     rect->y + rect->h);
-
-    end_x = min(end_x, fb.w);
-    end_y = min(end_y, fb.h);
-
-    // Move to the first pixel that resides in the rect
-    eva_pixel *framebuffer = fb.pixels;
-    framebuffer += start_x + start_y * fb.pitch;
-
-    /// Calculate how many pixels to jump over
-    // at the end of each row in the rect.
-    uint32_t next_row = fb.pitch - (end_x - start_x);
-
-    eva_pixel colored_pixel = color_to_pixel(cmd->color);
-    for (uint32_t y = start_y; y < end_y; y++) {
-        for (uint32_t x = start_x; x < end_x; x++) {
-            *framebuffer = colored_pixel;
-            framebuffer++;
-        }
-
-        framebuffer += next_row;
-    }
+    BLRectI *bl_rect = (BLRectI*)&cmd->rect;
+    blContextFillRectI(&_bl_ctx, bl_rect);
 
     profiler_end;
 }
@@ -243,6 +215,15 @@ void render_end_frame(void)
         }
     }
 
+    blImageInit(&_bl_img);
+    blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
+            BL_FORMAT_PRGB32, fb.pixels,
+            fb.pitch * sizeof(eva_pixel),
+            0, 0);
+
+    BLContextCreateInfo create_info = {0};
+    create_info.threadCount = 2;
+    blContextInitAs(&_bl_ctx, &_bl_img, &create_info);
 
     if (!recti_is_empty(&dirty_rect))
     {
@@ -255,11 +236,16 @@ void render_end_frame(void)
                     draw_rect(&cmd->rect_cmd, &dirty_rect);
                     break;
                 case RENDER_COMMAND_TEXT:
+                    blContextFlush(&_bl_ctx, BL_CONTEXT_FLUSH_SYNC);
                     draw_text(&cmd->text_cmd, &dirty_rect);
                     break;
             }
         }
     }
+
+    blContextEnd(&_bl_ctx);
+    blContextDestroy(&_bl_ctx);
+    blImageDestroy(&_bl_img);
 
     // Release the reference we took when adding the render text commands.
     for (int32_t i = 0; i < num_cmds; i++)
