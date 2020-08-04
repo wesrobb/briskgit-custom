@@ -10,19 +10,17 @@
 #include "eva/eva.h"
 
 #include "color.h"
+#include "profiler.h"
 #include "rect.h"
 #include "render.h"
+#include "text.h"
+#include "ustr.h"
 #include "vec2.h"
 
 #define MAX_LOG_ENTRIES 2048
 
-typedef struct log_entry {
-    char *text;
-    size_t len;
-} log_entry;
-
 typedef struct log_entries {
-    log_entry entries[MAX_LOG_ENTRIES];
+    text *entries[MAX_LOG_ENTRIES];
     int32_t start;
     int32_t count;
 } log_entries;
@@ -32,6 +30,7 @@ typedef struct console_ctx {
     recti rect;
 
     log_entries logs;
+    float font_size;
 } console_ctx;
 
 typedef struct scrollbar {
@@ -59,6 +58,7 @@ static console_ctx _ctx;
 
 void console_init()
 {
+    _ctx.font_size = 12.0f;
     sb.window_pos = 0.0f;
 
 //    const char *fmt = "Did you put the cap back on the toothpaste? %d\n";
@@ -74,74 +74,62 @@ void console_init()
 //    _ctx.logs.count = 30;
 }
 
-void console_logn(char *text, size_t len)
+static void write_entry(text *t)
 {
-    assert(text);
-    assert(len > 0);
-
-    log_entry *entry;
     if (_ctx.logs.count == MAX_LOG_ENTRIES) {
-        entry = &_ctx.logs.entries[_ctx.logs.start++];
-        _ctx.logs.start = _ctx.logs.start % MAX_LOG_ENTRIES;
+        text *current = _ctx.logs.entries[_ctx.logs.start];
+        text_destroy(current);
+        _ctx.logs.start = _ctx.logs.start++ % MAX_LOG_ENTRIES;
+        _ctx.logs.entries[_ctx.logs.start] = t;
     }
     else {
-        entry = &_ctx.logs.entries[_ctx.logs.count++];
-        _ctx.logs.count = _ctx.logs.count % MAX_LOG_ENTRIES;
+        _ctx.logs.entries[_ctx.logs.count++] = t;
     }
+}
 
-    // Only free and malloc if the buffer we have is not big enough for the
-    // new message;
-    if (!entry->text) {
-        entry->text = malloc(len);
-    }
-    else if (entry->text && entry->len < len) {
-        free(entry->text);
-        entry->text = malloc(len);
-    }
+void console_logn(char *str, size_t len)
+{
+    assert(str);
+    assert(len > 0);
 
-    if (text[len] - 1 == '\n') {
-        len--; // Trim newline.
-    }
-    entry->len = len;
+    ustr *s = ustr_create_utf8(str, len);
+    assert(s);
+    text *t = text_create(s);
+    text_add_attr(t, 0, 0, FONT_FAMILY_COURIER_NEW, _ctx.font_size,
+                  &COLOR_WHITE);
+    assert(t);
+    ustr_destroy(s);
 
-    memcpy(entry->text, text, len);
+    write_entry(t);
 }
 
 void console_log(const char *fmt, ...)
 {
     assert(fmt);
 
-    log_entry *entry;
-    if (_ctx.logs.count == MAX_LOG_ENTRIES) {
-        entry = &_ctx.logs.entries[_ctx.logs.start++];
-        _ctx.logs.start = _ctx.logs.start % MAX_LOG_ENTRIES;
-    }
-    else {
-        entry = &_ctx.logs.entries[_ctx.logs.count++];
-        _ctx.logs.count = _ctx.logs.count % MAX_LOG_ENTRIES;
-    }
-
     va_list args;
     va_start(args, fmt);
-    size_t text_len = (size_t)vsnprintf(entry->text, 0, fmt, args);
+    size_t text_len = (size_t)vsnprintf(NULL, 0, fmt, args);
     va_end(args);
     text_len += 1; // Make space for the null terminator
 
-    // Only free and malloc if the buffer we have is not big enough for the new
-    // message.
-    if (!entry->text) {
-        entry->text = malloc(text_len);
-    }
-    else if (entry->text && entry->len < text_len) {
-        free(entry->text);
-        entry->text = malloc(text_len);
-    }
-    // Don't include the null-terminator in the final length.
-    entry->len = text_len - 1;
+    char *data = malloc(text_len);
     va_list args2;
     va_start(args2, fmt);
-    vsnprintf(entry->text, text_len, fmt, args2);
+    vsnprintf(data, text_len, fmt, args2);
     va_end(args2);
+
+    ustr *s = ustr_create_utf8(data, text_len - 1);
+    assert(s);
+    text *t = text_create(s);
+    text_add_attr(t, 0, 0, FONT_FAMILY_COURIER_NEW, _ctx.font_size,
+                  &COLOR_WHITE);
+    assert(t);
+    ustr_destroy(s);
+
+    write_entry(t);
+
+    free(data);
 }
 
 void console_mouse_moved(const vec2i *mouse_pos)
@@ -210,26 +198,7 @@ void console_keydown(int32_t key, uint32_t mods)
 void console_draw(const eva_framebuffer *fb)
 {
     if (_ctx.visible) {
-        color base_color = {
-            .r = 0.5f,
-            .g = 0.5f,
-            .b = 0.5f,
-            .a = 1.0f,
-        };
-
-        color white = {
-            .r = 1.0f,
-            .g = 1.0f,
-            .b = 1.0f,
-            .a = 1.0f,
-        };
-
-        color dark_blue = {
-            .r = 0.0f,
-            .g = 0.0f,
-            .b = 0.7f,
-            .a = 1.0f,
-        };
+        profiler_begin;
 
         recti rect = {
             .x = 0,
@@ -237,15 +206,22 @@ void console_draw(const eva_framebuffer *fb)
             .w = (int32_t)fb->w,
             .h = (int32_t)(fb->h / 3.0f)
         };
-        render_draw_rect(&rect, &base_color);
+        render_draw_rect(&rect, &COLOR_BLACK);
 
-        float font_size = 12.0f;
+        int32_t total_height = 0;
+
+        int32_t start = _ctx.logs.start;
+        int32_t end = _ctx.logs.start + _ctx.logs.count;
+        for (int32_t i = start; i < end; i++) {
+            text *entry = _ctx.logs.entries[i % MAX_LOG_ENTRIES];
+            vec2i extents;
+            text_extents(entry, &extents);
+            total_height += extents.y;
+        }
+
         int32_t padding = 10;
-        int32_t ascent = 0, descent = 0;
-        //render_get_font_height(FONT_ROBOTO_REGULAR, pt_size, &ascent, &descent);
-        int32_t font_height = ascent - descent;
 
-        sb.content_size = _ctx.logs.count * font_height;
+        sb.content_size = total_height;
         sb.window_size = rect.h;
         sb.track_size = rect.h;
         sb.window_content_ratio = sb.window_size / sb.content_size;
@@ -277,31 +253,47 @@ void console_draw(const eva_framebuffer *fb)
             .h = (int32_t)sb.grip_size,
         };
 
-        render_draw_rect(&track_rect, &dark_blue);
-        render_draw_rect(&grip_rect, &white);
+        render_draw_rect(&track_rect, &COLOR_BLUE);
+        render_draw_rect(&grip_rect, &COLOR_WHITE);
 
-        // Work backwards through the entries till we have enough to fill the
-        // available space in the console window.
-        int32_t line_gap = 0;
-        int32_t max_rows = rect.h / (line_gap + font_height);
-        int32_t start_offset = (int32_t)roundf(sb.window_pos / font_height);
-        int32_t log_count = _ctx.logs.count;
-        int32_t count = 0;
-        vec2i text_pos = {
-            rect.x + padding,
-            rect.y
-        };
-        while (count < max_rows && 
-               count < log_count) {
-            int32_t index = (_ctx.logs.start + start_offset++) % MAX_LOG_ENTRIES;
-            log_entry *entry = &_ctx.logs.entries[index];
-            text_pos.y += font_height;
+        recti text_box = { padding, padding, 0, 0 };
+        for (int32_t i = start; i < end; i++) {
+            text *entry = _ctx.logs.entries[i % MAX_LOG_ENTRIES];
 
-           // render_draw_font(FONT_ROBOTO_REGULAR,
-           //                  (const char*)entry->text, (int32_t)entry->len,
-           //                  &text_pos, pt_size, &white);
+            vec2i extents;
+            text_extents(entry, &extents);
 
-            count++;
+            text_box.w = extents.x;
+            text_box.h = extents.y;
+
+            render_draw_text(entry, &text_box); 
+
+            text_box.y += extents.y;
         }
+
+       // // Work backwards through the entries till we have enough to fill the
+       // // available space in the console window.
+       // int32_t line_gap = 0;
+       // int32_t max_rows = rect.h / (line_gap + font_height);
+       // int32_t start_offset = (int32_t)roundf(sb.window_pos / font_height);
+       // int32_t log_count = _ctx.logs.count;
+       // int32_t count = 0;
+       // vec2i text_pos = {
+       //     rect.x + padding,
+       //     rect.y
+       // };
+       // while (count < max_rows && 
+       //        count < log_count) {
+       //     int32_t index = (_ctx.logs.start + start_offset++) % MAX_LOG_ENTRIES;
+       //     log_entry *entry = &_ctx.logs.entries[index];
+       //     text_pos.y += font_height;
+
+       //    // render_draw_font(FONT_ROBOTO_REGULAR,
+       //    //                  (const char*)entry->text, (int32_t)entry->len,
+       //    //                  &text_pos, pt_size, &white);
+
+       //     count++;
+       // }
+        profiler_end;
     }
 }

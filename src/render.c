@@ -93,6 +93,8 @@ void draw_rect(const render_cmd_rect *cmd, const recti *clip_rect)
     BLRectI *bl_rect = (BLRectI*)&cmd->rect;
     blContextFillRectI(&_bl_ctx, bl_rect);
 
+    blContextRestoreClipping(&_bl_ctx);
+
     profiler_end;
 }
 
@@ -142,10 +144,10 @@ static void update_tile_cache(const recti *r, uint32_t hash_value)
     int32_t y1 = r->y / TILE_SIZE;
     int32_t x2 = (r->x + r->w) / TILE_SIZE;
     int32_t y2 = (r->y + r->h) / TILE_SIZE;
-    for (int y = y1; y <= y2; y++) {
-        for (int x = x1; x <= x2; x++) {
-            hash(&_tile_cache[x + y * MAX_TILE_CACHE_X],
-                 (uint8_t*)&hash_value, sizeof(hash_value));
+    for (int32_t y = y1; y <= y2; y++) {
+        for (int32_t x = x1; x <= x2; x++) {
+            uint32_t *v = &_tile_cache[x + y * MAX_TILE_CACHE_X];
+            hash(v, (uint8_t*)&hash_value, sizeof(hash_value));
         }
     }
 }
@@ -170,6 +172,7 @@ void render_end_frame(void)
             r = &cmd->rect_cmd.rect;
         }
         else if (cmd->type == RENDER_COMMAND_TEXT) {
+            hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
             text_hash(cmd->text_cmd.t, &cmd_hash);
             r = &cmd->text_cmd.bbox;
         }
@@ -215,18 +218,18 @@ void render_end_frame(void)
         }
     }
 
-    blImageInit(&_bl_img);
-    blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
-            BL_FORMAT_PRGB32, fb.pixels,
-            fb.pitch * sizeof(eva_pixel),
-            0, 0);
-
-    BLContextCreateInfo create_info = {0};
-    create_info.threadCount = 2;
-    blContextInitAs(&_bl_ctx, &_bl_img, &create_info);
-
     if (!recti_is_empty(&dirty_rect))
     {
+        blImageInit(&_bl_img);
+        blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
+                BL_FORMAT_PRGB32, fb.pixels,
+                fb.pitch * sizeof(eva_pixel),
+                0, 0);
+
+        BLContextCreateInfo create_info = {0};
+        create_info.threadCount = 2;
+        blContextInitAs(&_bl_ctx, &_bl_img, &create_info);
+
         for (int32_t i = 0; i < num_cmds; i++)
         {
             render_cmd *cmd = &_render_cmd_ctx.current[i];
@@ -241,11 +244,12 @@ void render_end_frame(void)
                     break;
             }
         }
+
+        blContextEnd(&_bl_ctx);
+        blContextDestroy(&_bl_ctx);
+        blImageDestroy(&_bl_img);
     }
 
-    blContextEnd(&_bl_ctx);
-    blContextDestroy(&_bl_ctx);
-    blImageDestroy(&_bl_img);
 
     // Release the reference we took when adding the render text commands.
     for (int32_t i = 0; i < num_cmds; i++)
@@ -305,9 +309,6 @@ void render_draw_rect(const recti *r, const color *c)
 
 void render_draw_text(text *t, const recti *bbox)
 {
-    vec2i dst;
-    text_extents(t, &dst);
-
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_TEXT;

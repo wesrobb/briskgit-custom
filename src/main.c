@@ -16,7 +16,6 @@ void init(void)
 {
     profiler_init;
 
-    text_system_init();
     render_init();
     app_init();
 }
@@ -76,6 +75,7 @@ static void frame(const eva_framebuffer *fb)
     (void)fb;
 
     render_begin_frame();
+    profiler_log(3);
     app_draw(fb);
     render_end_frame();
 }
@@ -94,6 +94,7 @@ static void window_resize(uint32_t framebuffer_width,
 
 int main()
 {
+    text_system_init();
     console_init();
     console_log("Hello briskgit!");
 

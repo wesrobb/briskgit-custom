@@ -30,8 +30,6 @@ static app_ctx _ctx;
 
 void app_init()
 {
-    console_init();
-
     eva_framebuffer fb = eva_get_framebuffer();
 
     _ctx.branch_pane_resize_range = (int32_t)(5 * fb.scale_x);

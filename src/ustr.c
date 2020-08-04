@@ -19,7 +19,7 @@ typedef struct ustr {
     UChar *data; // UTF-16 encoded
 } ustr;
 
-ustr* ustr_create_utf8data(const char *utf8data, size_t len)
+ustr* ustr_create_utf8(const char *utf8data, size_t len)
 {
     assert(utf8data);
 
@@ -69,7 +69,7 @@ ustr* ustr_create_cstr(const char * cstr)
     assert(cstr);
 
     size_t len = strlen(cstr);
-    return ustr_create_utf8data((void*)cstr, len);
+    return ustr_create_utf8((void*)cstr, len);
 }
 
 void ustr_destroy(ustr *str)

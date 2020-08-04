@@ -265,6 +265,7 @@ static void text_draw_macos(const text *t, const recti *bbox,
                             const recti *clip_rect)
 {
     eva_framebuffer fb = eva_get_framebuffer();
+    int32_t fb_height = (int32_t)fb.h;
     uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
                            kCGBitmapByteOrder32Little;
 
@@ -284,7 +285,8 @@ static void text_draw_macos(const text *t, const recti *bbox,
         clip_width = bbox_endx - clip_rect->x;
     }
 
-    CGRect clip = CGRectMake(clip_rect->x, clip_rect->y,
+    CGRect clip = CGRectMake(clip_rect->x,
+                             fb_height - clip_rect->y - clip_rect->h,
                              clip_width, clip_rect->h);
     CGContextClipToRect(context, clip); 
 
@@ -299,12 +301,9 @@ static void text_draw_macos(const text *t, const recti *bbox,
     // The path need not be rectangular.
     CGMutablePathRef path = CGPathCreateMutable();
 
-    vec2i extents;
-    text_extents(t, &extents);
-
     CGRect bounds = CGRectMake(bbox->x, 
-                               (int32_t)fb.h - bbox->y - bbox->h,
-                               extents.x, extents.y);
+                               fb_height - bbox->y - bbox->h,
+                               bbox->w, bbox->h);
     CGPathAddRect(path, NULL, bounds);
 
     // Create a frame.
