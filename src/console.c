@@ -17,7 +17,7 @@
 #include "ustr.h"
 #include "vec2.h"
 
-#define MAX_LOG_ENTRIES 2048
+#define MAX_LOG_ENTRIES 128
 
 typedef struct log_entries {
     text *entries[MAX_LOG_ENTRIES];
@@ -79,8 +79,8 @@ static void write_entry(text *t)
     if (_ctx.logs.count == MAX_LOG_ENTRIES) {
         text *current = _ctx.logs.entries[_ctx.logs.start];
         text_destroy(current);
-        _ctx.logs.start = _ctx.logs.start++ % MAX_LOG_ENTRIES;
         _ctx.logs.entries[_ctx.logs.start] = t;
+        _ctx.logs.start = ++_ctx.logs.start % MAX_LOG_ENTRIES;
     }
     else {
         _ctx.logs.entries[_ctx.logs.count++] = t;
