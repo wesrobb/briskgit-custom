@@ -236,6 +236,13 @@ void console_draw(const eva_framebuffer *fb)
         sb.track_scroll_area_size = sb.track_size - sb.grip_size;
         sb.grip_pos_on_track = sb.track_scroll_area_size * sb.window_pos_ratio;
 
+        rectf window_rect = {
+            .x = rect.x,
+            .y = sb.window_pos,
+            .w = rect.w,
+            .h = rect.h,
+        };
+
         int32_t track_center = (int32_t)fb->w - padding;
         int32_t track_width = 5;
         recti track_rect = {
@@ -253,10 +260,11 @@ void console_draw(const eva_framebuffer *fb)
             .h = (int32_t)sb.grip_size,
         };
 
-        render_draw_rect(&track_rect, &COLOR_BLUE);
-        render_draw_rect(&grip_rect, &COLOR_WHITE);
+        render_draw_rect(&track_rect, &COLOR_WHITE);
+        render_draw_rect(&grip_rect, &COLOR_LIGHT_GREY);
 
-        recti text_box = { padding, padding, 0, 0 };
+        rectf text_box = { padding, padding, 0, 0 };
+        int32_t cursor_y = padding;
         for (int32_t i = start; i < end; i++) {
             text *entry = _ctx.logs.entries[i % MAX_LOG_ENTRIES];
 
@@ -266,7 +274,18 @@ void console_draw(const eva_framebuffer *fb)
             text_box.w = extents.x;
             text_box.h = extents.y;
 
-            render_draw_text(entry, &text_box); 
+            if (rectf_intersect(&text_box, &window_rect)) {
+                recti bbox = {
+                    .x = (int32_t)roundf(text_box.x),
+                    .y = (int32_t)roundf(text_box.y),
+                    .w = (int32_t)roundf(text_box.w),
+                    .h = (int32_t)roundf(text_box.h),
+                };
+                bbox.y -= (int32_t)roundf(sb.window_pos);
+
+                render_draw_text(entry, &bbox); 
+                cursor_y += extents.y;
+            }
 
             text_box.y += extents.y;
         }

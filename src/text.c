@@ -278,16 +278,23 @@ static void text_draw_macos(const text *t, const recti *bbox,
                                                  rgbColorSpace,
                                                  bitmap_info);
 
+    int32_t clip_width = clip_rect->w;
     int32_t bbox_endx = bbox->x + bbox->w;
     int32_t clip_endx = clip_rect->x + clip_rect->w;
-    int32_t clip_width = clip_rect->w;
     if (clip_rect->x < bbox_endx < clip_endx) {
         clip_width = bbox_endx - clip_rect->x;
     }
 
+    int32_t clip_height = clip_rect->h;
+    int32_t bbox_endy = bbox->y + bbox->h;
+    int32_t clip_endy = clip_rect->y + clip_rect->h;
+    if (clip_rect->y < bbox_endy < clip_endy) {
+        clip_height = bbox_endy - clip_rect->y;
+    }
+
     CGRect clip = CGRectMake(clip_rect->x,
-                             fb_height - clip_rect->y - clip_rect->h,
-                             clip_width, clip_rect->h);
+                             fb_height - clip_rect->y - clip_height,
+                             clip_width, clip_height);
     CGContextClipToRect(context, clip); 
 
     CFMutableAttributedStringRef attr_str = create_attr_str(t);
