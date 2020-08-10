@@ -21,4 +21,4 @@ void render_end_frame(void);
 
 void render_clear(const color *c);
 void render_draw_rect(const recti *r, const color *c);
-void render_draw_text(text *t, const recti *bbox);
+void render_draw_text(text *t, const recti *bbox, const recti *clip);

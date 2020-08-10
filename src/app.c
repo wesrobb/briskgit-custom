@@ -105,7 +105,6 @@ void app_mouse_pressed(const vec2i *mouse_pos)
 
     if (recti_point_intersect(&resizeHandle, mouse_pos)) {
         _ctx.branch_pane_resizing = true;
-        puts("pane resizing");
     }
 
     console_mouse_pressed(mouse_pos);
@@ -115,7 +114,6 @@ void app_mouse_released(const vec2i *mouse_pos)
 {
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_resizing = false;
-        puts("pane stopped resizing");
     }
 
     console_mouse_released(mouse_pos);
@@ -159,10 +157,16 @@ void app_draw(const eva_framebuffer *fb)
         recti bbox = {
             .x = cursor.x,
             .y = cursor.y,
-            .w = _ctx.branch_pane_rect.w - (padding.x * 2),
+            .w = (int32_t)fb->h - cursor.x,
             .h = extents.y
         };
-        render_draw_text(t, &bbox);
+        recti clip = {
+            .x = _ctx.branch_pane_rect.x,
+            .y = _ctx.branch_pane_rect.y,
+            .w = _ctx.branch_pane_rect.w - (padding.x * 2),
+            .h = _ctx.branch_pane_rect.h
+        };
+        render_draw_text(t, &bbox, &clip);
         cursor.y += extents.y;
         text_destroy(t);
     }

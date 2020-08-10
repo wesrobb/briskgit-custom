@@ -262,7 +262,7 @@ static void text_extents_macos(const text *t, vec2i *dst)
 }
 
 static void text_draw_macos(const text *t, const recti *bbox,
-                            const recti *clip_rect)
+                            const recti *clip)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     int32_t fb_height = (int32_t)fb.h;
@@ -278,24 +278,11 @@ static void text_draw_macos(const text *t, const recti *bbox,
                                                  rgbColorSpace,
                                                  bitmap_info);
 
-    int32_t clip_width = clip_rect->w;
-    int32_t bbox_endx = bbox->x + bbox->w;
-    int32_t clip_endx = clip_rect->x + clip_rect->w;
-    if (clip_rect->x < bbox_endx < clip_endx) {
-        clip_width = bbox_endx - clip_rect->x;
-    }
-
-    int32_t clip_height = clip_rect->h;
-    int32_t bbox_endy = bbox->y + bbox->h;
-    int32_t clip_endy = clip_rect->y + clip_rect->h;
-    if (clip_rect->y < bbox_endy < clip_endy) {
-        clip_height = bbox_endy - clip_rect->y;
-    }
-
-    CGRect clip = CGRectMake(clip_rect->x,
-                             fb_height - clip_rect->y - clip_height,
-                             clip_width, clip_height);
-    CGContextClipToRect(context, clip); 
+    // Core text uses bottom-up coords but we use top down so we have to
+    // invert our clip rect here.
+    int32_t inverted_clip_y = fb_height - clip->y - clip->h;
+    CGRect cg_clip = CGRectMake(clip->x, inverted_clip_y, clip->w, clip->h);
+    CGContextClipToRect(context, cg_clip); 
 
     CFMutableAttributedStringRef attr_str = create_attr_str(t);
 

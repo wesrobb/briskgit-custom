@@ -274,7 +274,7 @@ void console_draw(const eva_framebuffer *fb)
             text_box.w = extents.x;
             text_box.h = extents.y;
 
-            if (rectf_intersect(&text_box, &window_rect)) {
+            if (rectf_overlap(&text_box, &window_rect)) {
                 recti bbox = {
                     .x = (int32_t)roundf(text_box.x),
                     .y = (int32_t)roundf(text_box.y),
@@ -283,36 +283,15 @@ void console_draw(const eva_framebuffer *fb)
                 };
                 bbox.y -= (int32_t)roundf(sb.window_pos);
 
-                render_draw_text(entry, &bbox); 
+                recti clip = rect;
+
+                render_draw_text(entry, &bbox, &clip); 
                 cursor_y += extents.y;
             }
 
             text_box.y += extents.y;
         }
 
-       // // Work backwards through the entries till we have enough to fill the
-       // // available space in the console window.
-       // int32_t line_gap = 0;
-       // int32_t max_rows = rect.h / (line_gap + font_height);
-       // int32_t start_offset = (int32_t)roundf(sb.window_pos / font_height);
-       // int32_t log_count = _ctx.logs.count;
-       // int32_t count = 0;
-       // vec2i text_pos = {
-       //     rect.x + padding,
-       //     rect.y
-       // };
-       // while (count < max_rows && 
-       //        count < log_count) {
-       //     int32_t index = (_ctx.logs.start + start_offset++) % MAX_LOG_ENTRIES;
-       //     log_entry *entry = &_ctx.logs.entries[index];
-       //     text_pos.y += font_height;
-
-       //    // render_draw_font(FONT_ROBOTO_REGULAR,
-       //    //                  (const char*)entry->text, (int32_t)entry->len,
-       //    //                  &text_pos, pt_size, &white);
-
-       //     count++;
-       // }
         profiler_end;
     }
 }

@@ -35,6 +35,7 @@ typedef struct render_cmd_rect {
 
 #define MAX_TEXT_LEN 1000
 typedef struct render_cmd_text {
+    recti clip;
     recti bbox;
     text *t;
 } render_cmd_text;
@@ -240,7 +241,9 @@ void render_end_frame(void)
                     break;
                 case RENDER_COMMAND_TEXT:
                     blContextFlush(&_bl_ctx, BL_CONTEXT_FLUSH_SYNC);
-                    draw_text(&cmd->text_cmd, &dirty_rect);
+                    recti clip;
+                    recti_intersection(&dirty_rect, &cmd->text_cmd.clip, &clip);
+                    draw_text(&cmd->text_cmd, &clip);
                     break;
             }
         }
@@ -307,11 +310,12 @@ void render_draw_rect(const recti *r, const color *c)
     clip_to_framebuffer(&cmd->rect_cmd.rect);
 }
 
-void render_draw_text(text *t, const recti *bbox)
+void render_draw_text(text *t, const recti *bbox, const recti *clip)
 {
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_TEXT;
+    cmd->text_cmd.clip = *clip;
     cmd->text_cmd.bbox = *bbox;
     cmd->text_cmd.t = text_ref(t);
 }

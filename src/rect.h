@@ -16,8 +16,11 @@ typedef struct rectf {
 bool recti_is_empty(const recti *r);
 bool rectf_is_empty(const rectf *r);
 
-bool recti_intersect(const recti *a, const recti *b);
-bool rectf_intersect(const rectf *a, const rectf *b);
+bool recti_overlap(const recti *a, const recti *b);
+bool rectf_overlap(const rectf *a, const rectf *b);
+
+bool recti_intersection(const recti *a, const recti *b, recti *dst);
+bool rectf_intersection(const rectf *a, const rectf *b, rectf *dst);
 
 bool recti_point_intersect(const recti *r, const vec2i *v);
 bool rectf_point_intersect(const recti *r, const vec2f *v);
