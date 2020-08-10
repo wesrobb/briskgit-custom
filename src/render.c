@@ -101,10 +101,12 @@ void draw_rect(const render_cmd_rect *cmd, const recti *clip_rect)
 
 void draw_text(render_cmd_text *cmd, const recti *clip_rect)
 {
+    profiler_begin;
 #ifdef BG_MACOS
     text_draw(cmd->t, &cmd->bbox, clip_rect);
 #elif BG_WINDOWS
 #endif
+    profiler_end;
 }
 
 bool render_init(void)

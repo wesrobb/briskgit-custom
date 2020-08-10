@@ -17,7 +17,7 @@
 #include "ustr.h"
 #include "vec2.h"
 
-#define MAX_LOG_ENTRIES 128
+#define MAX_LOG_ENTRIES 1024
 
 typedef struct log_entries {
     text *entries[MAX_LOG_ENTRIES];
@@ -204,7 +204,7 @@ void console_draw(const eva_framebuffer *fb)
             .x = 0,
             .y = 0,
             .w = (int32_t)fb->w,
-            .h = (int32_t)(fb->h / 3.0f)
+            .h = (int32_t)(fb->h / 2.0f)
         };
         render_draw_rect(&rect, &COLOR_BLACK);
 

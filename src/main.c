@@ -75,7 +75,7 @@ static void frame(const eva_framebuffer *fb)
     (void)fb;
 
     render_begin_frame();
-    profiler_log(3);
+    profiler_log(0);
     app_draw(fb);
     render_end_frame();
 }

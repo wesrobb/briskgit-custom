@@ -11,6 +11,7 @@
 #include "common.h"
 #include "color.h"
 #include "hash.h"
+#include "profiler.h"
 #include "rect.h"
 #include "ustr.h"
 #include "vec2.h"
@@ -32,6 +33,9 @@ typedef struct text {
     ustr *str;
     text_attr *attrs; // Linked list of text attributes
     int32_t ref;
+
+    bool cached_extents;
+    vec2i extents;
 } text;
 
 typedef struct text_ctx {
@@ -75,6 +79,9 @@ text* text_create(ustr *str)
     t->str = ustr_ref(str);
     t->attrs = NULL;
     t->ref = 1;
+    t->cached_extents = false;
+    t->extents.x = 0;
+    t->extents.y = 0;
 
     return t;
 }
@@ -98,6 +105,9 @@ text* text_create_cstr(const char *cstr)
 
     t->attrs = NULL;
     t->ref = 1;
+    t->cached_extents = false;
+    t->extents.x = 0;
+    t->extents.y = 0;
 
     return t;
 }
@@ -156,6 +166,9 @@ void text_add_attr(text *t,
     else {
         t->attrs = a;
     }
+
+    // Invalidate the cache since text attributes have changed.
+    t->cached_extents = false;
 }
 
 void text_extents(const text *t, vec2i *dst)
@@ -163,11 +176,22 @@ void text_extents(const text *t, vec2i *dst)
     assert(t);
     assert(dst);
 
+    if (t->cached_extents) {
+        *dst = t->extents;
+    }
+    else {
+
 #ifdef BG_MACOS
-    text_extents_macos(t, dst);
+        text_extents_macos(t, dst);
 #elif BG_WINDOWS
-    assert(false);
+        assert(false);
 #endif
+
+        // Const gets in the way of opaque caching systems.
+        text *txt = (text*)t;
+        txt->cached_extents = true;
+        txt->extents = *dst;
+    }
 }
 
 void text_draw(const text *t, const recti *bbox, const recti *clip)
@@ -304,8 +328,10 @@ static void text_draw_macos(const text *t, const recti *bbox,
     CTFrameRef frame = CTFramesetterCreateFrame(framesetter,
               CFRangeMake(0, 0), path, NULL);
      
+    profiler_begin_name("CTFrameDraw");
     // Draw the specified frame in the given context.
     CTFrameDraw(frame, context);
+    profiler_end;
      
     // Release the objects we used.
     CFRelease(frame);
@@ -318,6 +344,7 @@ static void text_draw_macos(const text *t, const recti *bbox,
 
 static CFMutableAttributedStringRef create_attr_str(const text *t)
 {
+    profiler_begin;
     eva_framebuffer fb = eva_get_framebuffer();
     CFStringRef str = CFStringCreateWithBytesNoCopy(
             NULL,                        // Null allocator for no allocs
@@ -411,5 +438,6 @@ static CFMutableAttributedStringRef create_attr_str(const text *t)
         attr = attr->next;
     }
 
+    profiler_end;
     return attr_str;
 }
