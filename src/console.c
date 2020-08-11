@@ -146,9 +146,11 @@ void console_mouse_moved(const vec2i *mouse_pos)
             new_grip_pos = sb.track_scroll_area_size;
         }
 
-        float new_grip_pos_ratio = new_grip_pos / sb.track_scroll_area_size;
-        sb.window_pos = new_grip_pos_ratio * sb.window_scroll_area_size;
-        eva_request_frame();
+        if (sb.track_scroll_area_size > 0.0f) {
+            float new_grip_pos_ratio = new_grip_pos / sb.track_scroll_area_size;
+            sb.window_pos = new_grip_pos_ratio * sb.window_scroll_area_size;
+            eva_request_frame();
+        }
     }
 }
 
@@ -180,6 +182,24 @@ void console_mouse_released(const vec2i *mouse_pos)
 
     if (sb.active) {
         sb.active = false;
+    }
+}
+
+void console_scroll(double delta_x, double delta_y)
+{
+    (void)delta_x;
+    float new_grip_pos = sb.grip_pos_on_track + (float)delta_y;
+    if (new_grip_pos < 0) {
+        new_grip_pos = 0;
+    }
+    if (new_grip_pos > sb.track_scroll_area_size) {
+        new_grip_pos = sb.track_scroll_area_size;
+    }
+
+    if (sb.track_scroll_area_size > 0.0f) {
+        float new_grip_pos_ratio = new_grip_pos / sb.track_scroll_area_size;
+        sb.window_pos = new_grip_pos_ratio * sb.window_scroll_area_size;
+        eva_request_frame();
     }
 }
 

@@ -119,6 +119,11 @@ void app_mouse_released(const vec2i *mouse_pos)
     console_mouse_released(mouse_pos);
 }
 
+void app_scroll(double delta_x, double delta_y)
+{
+    console_scroll(delta_x, delta_y);
+}
+
 void app_window_resized(uint32_t width, uint32_t height)
 {
     (void)width;

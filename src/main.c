@@ -54,6 +54,11 @@ static void mouse_moved(int32_t x, int32_t y)
     app_mouse_moved(&mouse_pos);
 }
 
+static void scroll(double delta_x, double delta_y)
+{
+    app_scroll(delta_x, delta_y);
+}
+
 static void mouse_btn(int32_t x, int32_t y,
                       eva_mouse_btn btn, eva_input_action action)
 {
@@ -100,6 +105,7 @@ int main()
 
     eva_set_mouse_moved_fn(mouse_moved);
     eva_set_mouse_btn_fn(mouse_btn);
+    eva_set_scroll_fn(scroll);
     eva_set_key_fn(handle_key);
     eva_set_text_input_fn(handle_text);
     eva_set_cancel_quit_fn(cancel_quit);

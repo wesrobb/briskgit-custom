@@ -15,6 +15,8 @@ void app_mouse_moved(const vec2i *mouse_pos);
 void app_mouse_pressed(const vec2i *mouse_pos);
 void app_mouse_released(const vec2i *mouse_pos);
 
+void app_scroll(double delta_x, double delta_y);
+
 void app_window_resized(uint32_t window_width, uint32_t window_height);
 
 void app_draw(const eva_framebuffer *);
