@@ -55,6 +55,7 @@ static void free_attr(text_attr *);
 static const char * get_font_family(font_family_id f);
 static void text_extents_macos(const text *t, vec2i *dst);
 static void text_draw_macos(const text *t, const recti *bbox, const recti *clip);
+static void text_draw_macos2(const text *t, const recti *bbox, const recti *clip);
 static CFMutableAttributedStringRef create_attr_str(const text *t);
 
 void text_system_init()
@@ -200,7 +201,7 @@ void text_draw(const text *t, const recti *bbox, const recti *clip)
     assert(bbox);
 
 #ifdef BG_MACOS
-    text_draw_macos(t, bbox, clip);
+    text_draw_macos2(t, bbox, clip);
 #elif BG_WINDOWS
     assert(false);
 #endif
@@ -337,6 +338,52 @@ static void text_draw_macos(const text *t, const recti *bbox,
     CFRelease(frame);
     CFRelease(path);
     CFRelease(framesetter);
+
+    CGContextRelease(context);
+    CGColorSpaceRelease(rgbColorSpace);
+}
+
+static void text_draw_macos2(const text *t, const recti *bbox,
+                             const recti *clip)
+{
+    eva_framebuffer fb = eva_get_framebuffer();
+    int32_t fb_height = (int32_t)fb.h;
+    uint32_t bitmap_info = kCGImageAlphaPremultipliedFirst |
+                           kCGBitmapByteOrder32Little;
+
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    size_t bytes_per_row = fb.pitch * 4;
+    CGContextRef context = CGBitmapContextCreate(fb.pixels,
+                                                 fb.w, fb.h,
+                                                 8,
+                                                 bytes_per_row, 
+                                                 rgbColorSpace,
+                                                 bitmap_info);
+
+    // Core text uses bottom-up coords but we use top down so we have to
+    // invert our clip rect here.
+    int32_t inverted_clip_y = fb_height - clip->y - clip->h;
+    CGRect cg_clip = CGRectMake(clip->x, inverted_clip_y, clip->w, clip->h);
+    CGContextClipToRect(context, cg_clip); 
+
+    CFMutableAttributedStringRef attr_str = create_attr_str(t);
+
+    // Create the framesetter with the attributed string.
+    CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+    CFRelease(attr_str);
+
+    // Create a frame.
+    CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+    CGContextSetTextPosition(context, bbox->x, fb_height - bbox->y - bbox->h);
+     
+    profiler_begin_name("CTLineDraw");
+    // Draw the specified frame in the given context.
+    CTLineDraw(line, context);
+    profiler_end;
+     
+    // Release the objects we used.
+    CFRelease(line);
+    CFRelease(ts);
 
     CGContextRelease(context);
     CGColorSpaceRelease(rgbColorSpace);
