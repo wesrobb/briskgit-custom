@@ -206,7 +206,7 @@ void console_draw(const eva_framebuffer *fb)
             .w = (int32_t)fb->w,
             .h = (int32_t)(fb->h / 2.0f)
         };
-        render_draw_rect(&rect, &COLOR_BLACK);
+        render_draw_recti(&rect, &COLOR_BLACK);
 
         int32_t total_height = 0;
 
@@ -219,7 +219,7 @@ void console_draw(const eva_framebuffer *fb)
             total_height += extents.y;
         }
 
-        int32_t padding = 10;
+        float padding = 10.0f;
 
         sb.content_size = total_height + padding;
         sb.window_size = rect.h;
@@ -243,28 +243,28 @@ void console_draw(const eva_framebuffer *fb)
             .h = rect.h,
         };
 
-        int32_t track_center = (int32_t)fb->w - padding;
-        int32_t track_width = 5;
-        recti track_rect = {
-            .x = (int32_t)(track_center - track_width / 2.0f),
+        float track_center = fb->w - padding;
+        float track_width = 5.0f;
+        rectf track_rect = {
+            .x = track_center - (track_width / 2.0f),
             .y = rect.y,
             .w = track_width,
-            .h = (int32_t)sb.track_size
+            .h = sb.track_size
         };
 
-        int32_t grip_width = 10;
-        recti grip_rect = {
-            .x = (int32_t)(track_center - (grip_width / 2.0f)),
-            .y = (int32_t)sb.grip_pos_on_track,
+        float grip_width = 10.0f;
+        rectf grip_rect = {
+            .x = track_center - (grip_width / 2.0f),
+            .y = sb.grip_pos_on_track,
             .w = grip_width,
-            .h = (int32_t)sb.grip_size,
+            .h = sb.grip_size,
         };
 
-        render_draw_rect(&track_rect, &COLOR_WHITE);
-        render_draw_rect(&grip_rect, &COLOR_LIGHT_GREY);
+        render_draw_rectf(&track_rect, &COLOR_WHITE);
+        render_draw_rectf(&grip_rect, &COLOR_LIGHT_GREY);
 
         rectf text_box = { padding, padding, 0, 0 };
-        int32_t cursor_y = padding;
+        float cursor_y = padding;
         for (int32_t i = start; i < end; i++) {
             text *entry = _ctx.logs.entries[i % MAX_LOG_ENTRIES];
 

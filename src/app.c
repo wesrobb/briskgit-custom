@@ -146,7 +146,7 @@ void app_draw(const eva_framebuffer *fb)
     vec2i padding = { 10, 10 };
 
     render_clear(&COLOR_LIGHT_GREY);
-    render_draw_rect(&_ctx.branch_pane_rect, &COLOR_GREY);
+    render_draw_recti(&_ctx.branch_pane_rect, &COLOR_GREY);
 
     vec2i cursor = padding;
     for (size_t i = 0; i < array_size(branches); i++) {

@@ -302,7 +302,20 @@ void render_clear(const color *c)
     cmd->rect_cmd.color = *c;
 }
 
-void render_draw_rect(const recti *r, const color *c)
+void render_draw_rectf(const rectf *r, const color *c)
+{
+    int32_t index = (*_render_cmd_ctx.curr_index)++;
+    render_cmd *cmd = &_render_cmd_ctx.current[index];
+    cmd->type = RENDER_COMMAND_RECT;
+    cmd->rect_cmd.rect.x = (int32_t)roundf(r->x);
+    cmd->rect_cmd.rect.y = (int32_t)roundf(r->y);
+    cmd->rect_cmd.rect.w = (int32_t)roundf(r->w);
+    cmd->rect_cmd.rect.h = (int32_t)roundf(r->h);
+    cmd->rect_cmd.color = *c;
+    clip_to_framebuffer(&cmd->rect_cmd.rect);
+}
+
+void render_draw_recti(const recti *r, const color *c)
 {
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];

@@ -3,6 +3,7 @@
 #include "common.h"
 
 typedef struct color color;
+typedef struct rectf rectf;
 typedef struct recti recti;
 typedef struct text text;
 typedef struct vec2i vec2i;
@@ -20,5 +21,6 @@ void render_begin_frame(void);
 void render_end_frame(void);
 
 void render_clear(const color *c);
-void render_draw_rect(const recti *r, const color *c);
+void render_draw_rectf(const rectf *r, const color *c);
+void render_draw_recti(const recti *r, const color *c);
 void render_draw_text(text *t, const recti *bbox, const recti *clip);
