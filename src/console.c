@@ -221,7 +221,7 @@ void console_draw(const eva_framebuffer *fb)
 
         int32_t padding = 10;
 
-        sb.content_size = total_height;
+        sb.content_size = total_height + padding;
         sb.window_size = rect.h;
         sb.track_size = rect.h;
         sb.window_content_ratio = sb.window_size / sb.content_size;
