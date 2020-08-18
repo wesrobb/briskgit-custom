@@ -327,6 +327,10 @@ void render_draw_recti(const recti *r, const color *c)
 
 void render_draw_text(text *t, const recti *bbox, const recti *clip)
 {
+    assert(t);
+    assert(bbox);
+    assert(clip);
+
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_TEXT;

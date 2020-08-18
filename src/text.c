@@ -57,6 +57,7 @@ static void text_extents_macos(const text *t, vec2i *dst);
 static void text_draw_macos(const text *t, const recti *bbox, const recti *clip);
 static void text_draw_macos2(const text *t, const recti *bbox, const recti *clip);
 static CFMutableAttributedStringRef create_attr_str(const text *t);
+static CTLineRef create_trunc_token(CFMutableAttributedStringRef attr_str);
 
 void text_system_init()
 {
@@ -370,10 +371,22 @@ static void text_draw_macos2(const text *t, const recti *bbox,
 
     // Create the framesetter with the attributed string.
     CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
-    CFRelease(attr_str);
 
     // Create a frame.
     CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+
+    CGRect line_bounds = CTLineGetImageBounds(line, context);
+    if (line_bounds.size.width > bbox->w) {
+        CTLineRef truncation_token = create_trunc_token(attr_str);
+
+        CTLineRef trunc_line = CTLineCreateTruncatedLine(
+                line, bbox->w, kCTLineTruncationEnd, truncation_token);
+        CFRelease(truncation_token);
+        CFRelease(line);
+        line = trunc_line;
+    }
+    CFRelease(attr_str);
+
     CGContextSetTextPosition(context, bbox->x, fb_height - bbox->y - bbox->h);
      
     profiler_begin_name("CTLineDraw");
@@ -487,4 +500,19 @@ static CFMutableAttributedStringRef create_attr_str(const text *t)
 
     profiler_end;
     return attr_str;
+}
+
+static CTLineRef create_trunc_token(CFMutableAttributedStringRef attr_str)
+{
+    CFRange range;
+    CFDictionaryRef existing_attrs =
+        CFAttributedStringGetAttributes(attr_str, 0, &range);
+
+    CFAttributedStringRef trunc_str =
+        CFAttributedStringCreate(NULL, CFSTR("\u2026"), existing_attrs);
+    CTLineRef token = CTLineCreateWithAttributedString(trunc_str);
+
+    CFRelease(trunc_str);
+
+    return token;
 }

@@ -188,7 +188,7 @@ void console_mouse_released(const vec2i *mouse_pos)
 void console_scroll(double delta_x, double delta_y)
 {
     (void)delta_x;
-    float new_grip_pos = sb.grip_pos_on_track + (float)delta_y;
+    float new_grip_pos = sb.grip_pos_on_track - (float)delta_y;
     if (new_grip_pos < 0) {
         new_grip_pos = 0;
     }
