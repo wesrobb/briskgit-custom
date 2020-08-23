@@ -218,6 +218,36 @@ void text_hash(const text *t, uint32_t *v)
     }
 }
 
+bool text_hit(const text *t, const vec2i *pos, int32_t *index)
+{
+    assert(t);
+    assert(pos);
+
+    vec2i extents;
+    text_extents(t, &extents);
+    if (pos->x <= extents.x && pos->y <= extents.y) {
+        CFMutableAttributedStringRef attr_str = create_attr_str(t);
+        CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+        CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+        CGPoint ct_pos = CGPointMake(pos->x, pos->y);
+
+        CFIndex ct_index = CTLineGetStringIndexForPosition(line, ct_pos);
+
+        CFRelease(line);
+        CFRelease(ts);
+        CFRelease(attr_str);
+
+        if (ct_index == kCFNotFound) {
+            return false;
+        }
+
+        *index = (int32_t)ct_index;
+        return true;
+    }
+
+    return false;
+}
+
 static text_attr* get_next_attr()
 {
     text_attr *result = _ctx.free_list;
@@ -372,7 +402,7 @@ static void text_draw_macos2(const text *t, const recti *bbox,
     // Create the framesetter with the attributed string.
     CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
 
-    // Create a frame.
+    // Create a line.
     CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
 
     CGRect line_bounds = CTLineGetImageBounds(line, context);

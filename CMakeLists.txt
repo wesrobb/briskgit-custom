@@ -21,6 +21,7 @@ add_executable(briskgit
                src/ustr.h 
                src/ustr.c
                src/vec2.h 
+               src/vec2.c 
                src/eva/eva.h)
 
 #target_compile_definitions(briskgit PRIVATE PROFILER_ENABLED)

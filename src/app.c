@@ -24,6 +24,7 @@ typedef struct app_ctx {
     int32_t branch_pane_min_size;
 
     text *branches[MAX_BRANCHES];
+    vec2i text_positions[MAX_BRANCHES];
     int32_t num_branches;
 
     char text[TEXT_MAX_LEN];
@@ -58,6 +59,17 @@ void app_init()
         text *t = text_create_cstr(branches[i]);
         _ctx.branches[i] = t;
         text_add_attr(t, 0, 0, FONT_FAMILY_MENLO, font_size_pt, &COLOR_WHITE);
+    }
+
+    // Cache text position for hit testing on mouse move.
+    vec2i padding = { 10, 10 };
+    vec2i cursor = padding;
+    for (int32_t i = 0; i < _ctx.num_branches; i++) {
+        text *t = _ctx.branches[i];
+        vec2i extents;
+        text_extents(t, &extents);
+        _ctx.text_positions[i] = cursor;
+        cursor.y += extents.y;
     }
 }
 
@@ -99,6 +111,13 @@ void app_text_input(const char *text, uint32_t len)
 
 void app_mouse_moved(const vec2i *mouse_pos)
 {
+    int32_t str_index = 0;
+    vec2i pos = _ctx.text_positions[0];
+    vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+    if (text_hit(_ctx.branches[0], &mouse_pos_in_text_coords, &str_index)) {
+        printf("Hits string index %d\n", str_index);
+    }
+
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_rect.w = max(mouse_pos->x, _ctx.branch_pane_min_size);
         eva_request_frame();
@@ -163,14 +182,15 @@ void app_draw(const eva_framebuffer *fb)
     render_clear(&COLOR_LIGHT_GREY);
     render_draw_recti(&_ctx.branch_pane_rect, &COLOR_GREY);
 
-    vec2i cursor = padding;
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = _ctx.branches[i];
+        vec2i *pos = &_ctx.text_positions[i];
         vec2i extents;
         text_extents(t, &extents);
+
         recti bbox = {
-            .x = cursor.x,
-            .y = cursor.y,
+            .x = pos->x,
+            .y = pos->y,
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
             .h = extents.y
         };
@@ -180,8 +200,8 @@ void app_draw(const eva_framebuffer *fb)
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
             .h = _ctx.branch_pane_rect.h
         };
+
         render_draw_text(t, &bbox, &clip);
-        cursor.y += extents.y;
     }
 
     console_draw(fb);

@@ -41,3 +41,7 @@ void text_draw(const text *t, const recti *bbox, const recti *clip);
 // hash as the initial value and rights the result bacl to the 
 // same address.
 void text_hash(const text *t, uint32_t *hash);
+
+// Sets the utf16 string index of the position relative to the text's origin.
+// Returns false if there is no hit, true otherwise.
+bool text_hit(const text *t, const vec2i *pos, int32_t *index);
