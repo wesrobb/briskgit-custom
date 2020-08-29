@@ -112,10 +112,14 @@ void app_text_input(const char *text, uint32_t len)
 void app_mouse_moved(const vec2i *mouse_pos)
 {
     int32_t str_index = 0;
+    static int32_t curr_index = -1;
     vec2i pos = _ctx.text_positions[0];
     vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
-    if (text_hit(_ctx.branches[0], &mouse_pos_in_text_coords, &str_index)) {
+    bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
+                        &str_index);
+    if (hit && curr_index != str_index) {
         printf("Hits string index %d\n", str_index);
+        curr_index = str_index;
     }
 
     if (_ctx.branch_pane_resizing) {
