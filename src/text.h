@@ -34,6 +34,7 @@ void text_add_attr(text *t,
                    const color *c);
 
 void text_extents(const text *t, vec2i *dst);
+float text_index_offset(const text *t, int32_t index);
 
 void text_draw(const text *t, const recti *bbox, const recti *clip); 
 

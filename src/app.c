@@ -29,6 +29,10 @@ typedef struct app_ctx {
 
     char text[TEXT_MAX_LEN];
     size_t text_index;
+
+    bool text_select;
+    int32_t start_index;
+    int32_t end_index;
 } app_ctx;
 
 static app_ctx _ctx;
@@ -111,15 +115,17 @@ void app_text_input(const char *text, uint32_t len)
 
 void app_mouse_moved(const vec2i *mouse_pos)
 {
-    int32_t str_index = 0;
-    static int32_t curr_index = -1;
-    vec2i pos = _ctx.text_positions[0];
-    vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
-    bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
-                        &str_index);
-    if (hit && curr_index != str_index) {
-        printf("Hits string index %d\n", str_index);
-        curr_index = str_index;
+    if (_ctx.text_select) {
+        int32_t str_index = 0;
+        vec2i pos = _ctx.text_positions[0];
+        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
+                            &str_index);
+        if (hit) {
+            _ctx.end_index = str_index;
+            printf("Hits string index %d\n", str_index);
+            eva_request_frame();
+        }
     }
 
     if (_ctx.branch_pane_resizing) {
@@ -141,6 +147,21 @@ void app_mouse_moved(const vec2i *mouse_pos)
 
 void app_mouse_pressed(const vec2i *mouse_pos)
 {
+    if (!_ctx.text_select) {
+        int32_t str_index = 0;
+        vec2i pos = _ctx.text_positions[0];
+        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
+                            &str_index);
+        if (hit) {
+            _ctx.text_select = true;
+            _ctx.start_index = str_index;
+            _ctx.end_index = str_index;
+            printf("Started hit string index %d\n", str_index);
+            eva_request_frame();
+        }
+    }
+
     recti resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
             _ctx.branch_pane_resize_range,
@@ -158,6 +179,20 @@ void app_mouse_pressed(const vec2i *mouse_pos)
 
 void app_mouse_released(const vec2i *mouse_pos)
 {
+    if (_ctx.text_select) {
+        int32_t str_index = 0;
+        vec2i pos = _ctx.text_positions[0];
+        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
+                            &str_index);
+        if (hit) {
+            _ctx.text_select = false;
+            _ctx.end_index = str_index;
+            printf("Ended hit string index %d\n", str_index);
+            eva_request_frame();
+        }
+    }
+
     if (_ctx.branch_pane_resizing) {
         _ctx.branch_pane_resizing = false;
     }
@@ -191,6 +226,22 @@ void app_draw(const eva_framebuffer *fb)
         vec2i *pos = &_ctx.text_positions[i];
         vec2i extents;
         text_extents(t, &extents);
+
+        if (i == 0 && _ctx.text_select) {
+            float offset_a = text_index_offset(t, _ctx.start_index);
+            float offset_b = text_index_offset(t, _ctx.end_index);
+            float start_offset = min(offset_a, offset_b);
+            float end_offset = max(offset_a, offset_b);
+            float width = end_offset - start_offset;
+            rectf highlight = {
+                .x = pos->x + start_offset,
+                .y = pos->y,
+                .w = width,
+                .h = extents.y,
+            };
+            render_draw_rectf(&highlight, &COLOR_LIGHT_BLUE);
+        }
+
 
         recti bbox = {
             .x = pos->x,

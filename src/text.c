@@ -54,6 +54,7 @@ static text_attr* get_next_attr();
 static void free_attr(text_attr *);
 static const char * get_font_family(font_family_id f);
 static void text_extents_macos(const text *t, vec2i *dst);
+static float text_index_offset_macos(const text *t, int32_t index);
 static void text_draw_macos(const text *t, const recti *bbox, const recti *clip);
 static void text_draw_macos2(const text *t, const recti *bbox, const recti *clip);
 static CFMutableAttributedStringRef create_attr_str(const text *t);
@@ -196,6 +197,21 @@ void text_extents(const text *t, vec2i *dst)
     }
 }
 
+float text_index_offset(const text *t, int32_t index)
+{
+    assert(t);
+    assert(t->str);
+    assert(index >= 0);
+    assert(index <= ustr_len(t->str));
+
+
+#ifdef BG_MACOS
+    return text_index_offset_macos(t, index);
+#elif BG_WINDOWS
+    assert(false);
+#endif
+}
+
 void text_draw(const text *t, const recti *bbox, const recti *clip)
 {
     assert(t);
@@ -315,6 +331,20 @@ static void text_extents_macos(const text *t, vec2i *dst)
     dst->y = (int32_t)round(frame_size.height);
 
     CFRelease(framesetter);
+}
+
+static float text_index_offset_macos(const text *t, int32_t index)
+{
+    CFMutableAttributedStringRef attr_str = create_attr_str(t);
+    CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+    CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+    float offset = (float)CTLineGetOffsetForStringIndex(line, index, NULL);
+
+    CFRelease(line);
+    CFRelease(ts);
+    CFRelease(attr_str);
+
+    return offset;
 }
 
 static void text_draw_macos(const text *t, const recti *bbox,
