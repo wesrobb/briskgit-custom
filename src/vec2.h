@@ -12,3 +12,4 @@ typedef struct vec2f {
 
 // a - b
 vec2i vec2i_sub(const vec2i *a, const vec2i *b);
+vec2f vec2f_sub(const vec2f *a, const vec2f *b);

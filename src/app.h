@@ -3,7 +3,7 @@
 #include "common.h"
 
 typedef struct eva_framebuffer eva_framebuffer;
-typedef struct vec2i vec2i;
+typedef struct vec2f vec2f;
 
 void app_init();
 void app_shutdown();
@@ -11,9 +11,9 @@ void app_shutdown();
 void app_keydown(int32_t key, uint32_t mods);
 void app_text_input(const char *text, uint32_t len);
 
-void app_mouse_moved(const vec2i *mouse_pos);
-void app_mouse_pressed(const vec2i *mouse_pos);
-void app_mouse_released(const vec2i *mouse_pos);
+void app_mouse_moved(const vec2f *mouse_pos);
+void app_mouse_pressed(const vec2f *mouse_pos);
+void app_mouse_released(const vec2f *mouse_pos);
 
 void app_scroll(double delta_x, double delta_y);
 

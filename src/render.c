@@ -29,14 +29,14 @@ typedef enum render_cmd_type {
 } render_cmd_type;
 
 typedef struct render_cmd_rect {
-    recti rect;
+    rectf rect;
     color color;
 } render_cmd_rect;
 
 #define MAX_TEXT_LEN 1000
 typedef struct render_cmd_text {
-    recti clip;
-    recti bbox;
+    rectf clip;
+    rectf bbox;
     text *t;
 } render_cmd_text;
 
@@ -73,14 +73,18 @@ static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
 
-static void clip_to_framebuffer(recti *r);
+static void clip_to_framebuffer(rectf *r);
 
-void draw_rect(const render_cmd_rect *cmd, const recti *clip_rect)
+void draw_rect(const render_cmd_rect *cmd, const rectf *clip_rect)
 {
     profiler_begin;
 
-    BLRectI *bl_clip = (BLRectI*)clip_rect;
-    blContextClipToRectI(&_bl_ctx, bl_clip);
+    BLRect bl_clip;
+    bl_clip.x = clip_rect->x;
+    bl_clip.y = clip_rect->y;
+    bl_clip.w = clip_rect->w;
+    bl_clip.h = clip_rect->h;
+    blContextClipToRectD(&_bl_ctx, &bl_clip);
 
     blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
     BLRgba col = {
@@ -91,15 +95,19 @@ void draw_rect(const render_cmd_rect *cmd, const recti *clip_rect)
     };
     blContextSetFillStyleRgba(&_bl_ctx, &col);
 
-    BLRectI *bl_rect = (BLRectI*)&cmd->rect;
-    blContextFillRectI(&_bl_ctx, bl_rect);
+    BLRect bl_rect;
+    bl_rect.x = cmd->rect.x;
+    bl_rect.y = cmd->rect.y;
+    bl_rect.w = cmd->rect.w;
+    bl_rect.h = cmd->rect.h;
+    blContextFillRectD(&_bl_ctx, &bl_rect);
 
     blContextRestoreClipping(&_bl_ctx);
 
     profiler_end;
 }
 
-void draw_text(render_cmd_text *cmd, const recti *clip_rect)
+void draw_text(render_cmd_text *cmd, const rectf *clip_rect)
 {
     profiler_begin;
 #ifdef BG_MACOS
@@ -141,12 +149,13 @@ void render_begin_frame(void)
 {
 }
 
-static void update_tile_cache(const recti *r, uint32_t hash_value)
+static void update_tile_cache(const rectf *r, uint32_t hash_value)
 {
-    int32_t x1 = r->x / TILE_SIZE;
-    int32_t y1 = r->y / TILE_SIZE;
-    int32_t x2 = (r->x + r->w) / TILE_SIZE;
-    int32_t y2 = (r->y + r->h) / TILE_SIZE;
+    recti rounded_rect = rectf_round(r);
+    int32_t x1 = rounded_rect.x / TILE_SIZE;
+    int32_t y1 = rounded_rect.y / TILE_SIZE;
+    int32_t x2 = (rounded_rect.x + rounded_rect.w) / TILE_SIZE;
+    int32_t y2 = (rounded_rect.y + rounded_rect.h) / TILE_SIZE;
     for (int32_t y = y1; y <= y2; y++) {
         for (int32_t x = x1; x <= x2; x++) {
             uint32_t *v = &_tile_cache[x + y * MAX_TILE_CACHE_X];
@@ -161,7 +170,7 @@ void render_end_frame(void)
 
     eva_framebuffer fb = eva_get_framebuffer();
 
-    recti dirty_rect = {0};
+    rectf dirty_rect = {0};
 
     // Process current queue.
     int32_t num_cmds = *_render_cmd_ctx.curr_index;
@@ -169,17 +178,14 @@ void render_end_frame(void)
     {
         uint32_t cmd_hash = HASH_INITIAL;
         render_cmd *cmd = &_render_cmd_ctx.current[i];
-        recti *r;
+        hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
         if (cmd->type == RENDER_COMMAND_RECT) {
-            hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
-            r = &cmd->rect_cmd.rect;
+            update_tile_cache(&cmd->rect_cmd.rect, cmd_hash);
         }
         else if (cmd->type == RENDER_COMMAND_TEXT) {
-            hash(&cmd_hash, (uint8_t*)cmd, sizeof(*cmd));
             text_hash(cmd->text_cmd.t, &cmd_hash);
-            r = &cmd->text_cmd.bbox;
+            update_tile_cache(&cmd->text_cmd.bbox, cmd_hash);
         }
-        update_tile_cache(r, cmd_hash);
     }
 
     // Merge all the dirty rects into 1 rect.
@@ -199,9 +205,9 @@ void render_end_frame(void)
             uint32_t prev = _prev_tile_cache[tile_index];
             if (curr != prev)
             {
-                recti region = {
-                    .x = (int32_t)x * TILE_SIZE,
-                    .y = (int32_t)y * TILE_SIZE,
+                rectf region = {
+                    .x = x * TILE_SIZE,
+                    .y = y * TILE_SIZE,
                     .w = TILE_SIZE,
                     .h = TILE_SIZE,
                 };
@@ -213,7 +219,7 @@ void render_end_frame(void)
                 }
                 else
                 {
-                    recti_union(&dirty_rect, &region, &dirty_rect); 
+                    rectf_union(&dirty_rect, &region, &dirty_rect); 
                 }
             }
 
@@ -221,7 +227,7 @@ void render_end_frame(void)
         }
     }
 
-    if (!recti_is_empty(&dirty_rect))
+    if (!rectf_is_empty(&dirty_rect))
     {
         blImageInit(&_bl_img);
         blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
@@ -243,8 +249,8 @@ void render_end_frame(void)
                     break;
                 case RENDER_COMMAND_TEXT:
                     blContextFlush(&_bl_ctx, BL_CONTEXT_FLUSH_SYNC);
-                    recti clip;
-                    recti_intersection(&dirty_rect, &cmd->text_cmd.clip, &clip);
+                    rectf clip;
+                    rectf_intersection(&dirty_rect, &cmd->text_cmd.clip, &clip);
                     draw_text(&cmd->text_cmd, &clip);
                     break;
             }
@@ -288,11 +294,11 @@ void render_end_frame(void)
 void render_clear(const color *c)
 {
     eva_framebuffer fb = eva_get_framebuffer();
-    recti r = {
+    rectf r = {
         .x = 0,
         .y = 0,
-        .w = (int32_t)fb.w,
-        .h = (int32_t)fb.h
+        .w = fb.w,
+        .h = fb.h
     };
 
     int32_t index = (*_render_cmd_ctx.curr_index)++;
@@ -307,10 +313,7 @@ void render_draw_rectf(const rectf *r, const color *c)
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
-    cmd->rect_cmd.rect.x = (int32_t)roundf(r->x);
-    cmd->rect_cmd.rect.y = (int32_t)roundf(r->y);
-    cmd->rect_cmd.rect.w = (int32_t)roundf(r->w);
-    cmd->rect_cmd.rect.h = (int32_t)roundf(r->h);
+    cmd->rect_cmd.rect = *r;
     cmd->rect_cmd.color = *c;
     clip_to_framebuffer(&cmd->rect_cmd.rect);
 }
@@ -320,12 +323,15 @@ void render_draw_recti(const recti *r, const color *c)
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
     cmd->type = RENDER_COMMAND_RECT;
-    cmd->rect_cmd.rect = *r;
+    cmd->rect_cmd.rect.x = r->x;
+    cmd->rect_cmd.rect.y = r->y;
+    cmd->rect_cmd.rect.w = r->w;
+    cmd->rect_cmd.rect.h = r->h;
     cmd->rect_cmd.color = *c;
     clip_to_framebuffer(&cmd->rect_cmd.rect);
 }
 
-void render_draw_text(text *t, const recti *bbox, const recti *clip)
+void render_draw_text(text *t, const rectf *bbox, const rectf *clip)
 {
     assert(t);
     assert(bbox);
@@ -339,14 +345,14 @@ void render_draw_text(text *t, const recti *bbox, const recti *clip)
     cmd->text_cmd.t = text_ref(t);
 }
 
-static void clip_to_framebuffer(recti *r)
+static void clip_to_framebuffer(rectf *r)
 {
     assert(r);
 
     eva_framebuffer fb = eva_get_framebuffer();
 
-    r->x = r->x > 0 ? r->x : 0;
-    r->y = r->y > 0 ? r->y : 0;
-    r->w = r->w < (int32_t)fb.w ? r->w : (int32_t)fb.w;
-    r->h = r->h < (int32_t)fb.h ? r->h : (int32_t)fb.h;
+    r->x = max(0, r->x);
+    r->y = max(0, r->y);
+    r->w = min(fb.w, r->w);
+    r->h = min(fb.h, r->h);
 }

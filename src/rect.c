@@ -1,6 +1,7 @@
 #include "rect.h"
 
 #include <assert.h>
+#include <math.h>
 
 #include "common.h"
 #include "vec2.h"
@@ -106,7 +107,7 @@ bool recti_point_intersect(const recti *r, const vec2i *v)
            (v->y >= r->y && v->y <= (r->y + r->h));
 }
 
-bool rectf_point_intersect(const recti *r, const vec2f *v)
+bool rectf_point_intersect(const rectf *r, const vec2f *v)
 {
     assert(r);
     assert(v);
@@ -141,4 +142,16 @@ void rectf_union(const rectf *a, const rectf *b, rectf *dst)
     dst->y = min(a->y, b->y);
     dst->w = max(a->x + a->w, b->x + b->w) - dst->x;
     dst->h = max(a->y + a->h, b->y + b->h) - dst->y;
+}
+
+recti rectf_round(const rectf *r)
+{
+    recti result = {
+        .x = (int32_t)roundf(r->x),
+        .y = (int32_t)roundf(r->y),
+        .w = (int32_t)roundf(r->w),
+        .h = (int32_t)roundf(r->h),
+    };
+
+    return result;
 }

@@ -23,7 +23,9 @@ bool recti_intersection(const recti *a, const recti *b, recti *dst);
 bool rectf_intersection(const rectf *a, const rectf *b, rectf *dst);
 
 bool recti_point_intersect(const recti *r, const vec2i *v);
-bool rectf_point_intersect(const recti *r, const vec2f *v);
+bool rectf_point_intersect(const rectf *r, const vec2f *v);
 
 void recti_union(const recti *a, const recti *b, recti *dst);
 void rectf_union(const rectf *a, const rectf *b, rectf *dst);
+
+recti rectf_round(const rectf *r);

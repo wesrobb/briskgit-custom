@@ -18,21 +18,21 @@
 #define MAX_BRANCHES 64
 
 typedef struct app_ctx {
-    int32_t branch_pane_resize_range;
-    recti branch_pane_rect;
+    float branch_pane_resize_range;
+    rectf branch_pane_rect;
     bool branch_pane_resizing;
-    int32_t branch_pane_min_size;
+    float branch_pane_min_size;
 
     text *branches[MAX_BRANCHES];
-    vec2i text_positions[MAX_BRANCHES];
+    vec2f text_positions[MAX_BRANCHES];
     int32_t num_branches;
 
     char text[TEXT_MAX_LEN];
     size_t text_index;
 
     bool text_select;
-    int32_t start_index;
-    int32_t end_index;
+    size_t start_index;
+    size_t end_index;
 } app_ctx;
 
 static app_ctx _ctx;
@@ -66,11 +66,11 @@ void app_init()
     }
 
     // Cache text position for hit testing on mouse move.
-    vec2i padding = { 10, 10 };
-    vec2i cursor = padding;
+    vec2f padding = { 10, 10 };
+    vec2f cursor = padding;
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = _ctx.branches[i];
-        vec2i extents;
+        vec2f extents;
         text_extents(t, &extents);
         _ctx.text_positions[i] = cursor;
         cursor.y += extents.y;
@@ -113,17 +113,17 @@ void app_text_input(const char *text, uint32_t len)
     //}
 }
 
-void app_mouse_moved(const vec2i *mouse_pos)
+void app_mouse_moved(const vec2f *mouse_pos)
 {
     if (_ctx.text_select) {
-        int32_t str_index = 0;
-        vec2i pos = _ctx.text_positions[0];
-        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        size_t str_index = 0;
+        vec2f pos = _ctx.text_positions[0];
+        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
             _ctx.end_index = str_index;
-            printf("Hits string index %d\n", str_index);
+            printf("Hits string index %zu\n", str_index);
             eva_request_frame();
         }
     }
@@ -133,7 +133,7 @@ void app_mouse_moved(const vec2i *mouse_pos)
         eva_request_frame();
     }
 
-    recti resizeHandle = {
+    rectf resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
              _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -145,24 +145,24 @@ void app_mouse_moved(const vec2i *mouse_pos)
     console_mouse_moved(mouse_pos);
 }
 
-void app_mouse_pressed(const vec2i *mouse_pos)
+void app_mouse_pressed(const vec2f *mouse_pos)
 {
     if (!_ctx.text_select) {
-        int32_t str_index = 0;
-        vec2i pos = _ctx.text_positions[0];
-        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        size_t str_index = 0;
+        vec2f pos = _ctx.text_positions[0];
+        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
             _ctx.text_select = true;
             _ctx.start_index = str_index;
             _ctx.end_index = str_index;
-            printf("Started hit string index %d\n", str_index);
+            printf("Started hit string index %zu\n", str_index);
             eva_request_frame();
         }
     }
 
-    recti resizeHandle = {
+    rectf resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
             _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -170,25 +170,25 @@ void app_mouse_pressed(const vec2i *mouse_pos)
         .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
     };
 
-    if (recti_point_intersect(&resizeHandle, mouse_pos)) {
+    if (rectf_point_intersect(&resizeHandle, mouse_pos)) {
         _ctx.branch_pane_resizing = true;
     }
 
     console_mouse_pressed(mouse_pos);
 }
 
-void app_mouse_released(const vec2i *mouse_pos)
+void app_mouse_released(const vec2f *mouse_pos)
 {
     if (_ctx.text_select) {
-        int32_t str_index = 0;
-        vec2i pos = _ctx.text_positions[0];
-        vec2i mouse_pos_in_text_coords = vec2i_sub(mouse_pos, &pos);
+        size_t str_index = 0;
+        vec2f pos = _ctx.text_positions[0];
+        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
             _ctx.text_select = false;
             _ctx.end_index = str_index;
-            printf("Ended hit string index %d\n", str_index);
+            printf("Ended hit string index %zu\n", str_index);
             eva_request_frame();
         }
     }
@@ -216,15 +216,15 @@ void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
-    vec2i padding = { 10, 10 };
+    vec2f padding = { 10, 10 };
 
     render_clear(&COLOR_LIGHT_GREY);
-    render_draw_recti(&_ctx.branch_pane_rect, &COLOR_GREY);
+    render_draw_rectf(&_ctx.branch_pane_rect, &COLOR_GREY);
 
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = _ctx.branches[i];
-        vec2i *pos = &_ctx.text_positions[i];
-        vec2i extents;
+        vec2f *pos = &_ctx.text_positions[i];
+        vec2f extents;
         text_extents(t, &extents);
 
         if (i == 0 && _ctx.text_select) {
@@ -243,13 +243,13 @@ void app_draw(const eva_framebuffer *fb)
         }
 
 
-        recti bbox = {
+        rectf bbox = {
             .x = pos->x,
             .y = pos->y,
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
             .h = extents.y
         };
-        recti clip = {
+        rectf clip = {
             .x = _ctx.branch_pane_rect.x,
             .y = _ctx.branch_pane_rect.y,
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
