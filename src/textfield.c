@@ -14,14 +14,14 @@ typedef struct textfield {
     text *t;
     bool hovered;
     bool active;
-    vec2f pos;
-    float width;
-    float font_size;
+    vec2 pos;
+    double width;
+    double font_size;
     int32_t padding;
 } textfield;
 
-textfield* textfield_create(const vec2f *pos, float width,
-                            float font_size, int32_t padding)
+textfield* textfield_create(const vec2 *pos, double width,
+                            double font_size, int32_t padding)
 {
     textfield *tf = malloc(sizeof(*tf));
     if (!tf) {
@@ -60,33 +60,33 @@ void textfield_input_text(const textfield *tf,
     text_append(tf->t, text, len);
 }
 
-void textfield_mouse_moved(const textfield *tf, const vec2f *pos);
-void textfield_mouse_pressed(const textfield *tf, const vec2f *pos);
-void textfield_mouse_released(const textfield *tf, const vec2f *pos);
+void textfield_mouse_moved(const textfield *tf, const vec2 *pos);
+void textfield_mouse_pressed(const textfield *tf, const vec2 *pos);
+void textfield_mouse_released(const textfield *tf, const vec2 *pos);
 
 void textfield_draw(const textfield *tf)
 {
     assert(tf);
 
-    vec2f extents;
+    vec2 extents;
     text_extents(tf->t, &extents);
 
-    rectf bbox = {
+    rect bbox = {
         .x = tf->pos.x,
         .y = tf->pos.y,
         .w = tf->width,
         .h = extents.y
     };
 
-    render_draw_rectf(&bbox, &COLOR_WHITE);
+    render_draw_rect(&bbox, &COLOR_WHITE);
 
-    rectf tbox = {
+    rect tbox = {
         .x = tf->pos.x + tf->padding,
         .y = tf->pos.y + tf->padding,
         .w = extents.x,
         .h = extents.y - (tf->padding * 2) 
     };
-    rectf clip = tbox;
+    rect clip = tbox;
     clip.w = tf->width;
     render_draw_text(tf->t, &tbox, &clip);
 }

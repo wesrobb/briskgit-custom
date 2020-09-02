@@ -8,9 +8,9 @@ vec2i vec2i_sub(const vec2i *a, const vec2i *b)
     return result;
 }
 
-vec2f vec2f_sub(const vec2f *a, const vec2f *b)
+vec2 vec2_sub(const vec2 *a, const vec2 *b)
 {
-    vec2f result;
+    vec2 result;
     result.x = a->x - b->x;
     result.y = a->y - b->y;
     return result;

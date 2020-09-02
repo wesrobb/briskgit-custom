@@ -3,11 +3,11 @@
 #include "common.h"
 
 typedef struct color color;
-typedef struct rectf rectf;
+typedef struct rect rect;
 typedef struct text text;
 typedef struct text_attr text_attr;
 typedef struct ustr ustr;
-typedef struct vec2f vec2f;
+typedef struct vec2 vec2;
 
 typedef enum font_family_id {
     FONT_FAMILY_MENLO,
@@ -31,13 +31,13 @@ text* text_ref(text *t);
 // to set the attribute for the entire text length.
 void text_add_attr(text *t,
                    int32_t start, int32_t len,
-                   font_family_id font_family, float font_size,
+                   font_family_id font_family, double font_size,
                    const color *c);
 
-void text_extents(const text *t, vec2f *dst);
-float text_index_offset(const text *t, size_t index);
+void text_extents(const text *t, vec2 *dst);
+double text_index_offset(const text *t, size_t index);
 
-void text_draw(const text *t, const rectf *bbox, const rectf *clip); 
+void text_draw(const text *t, const rect *bbox, const rect *clip); 
 
 // Sets the FNV-1a hash value of the text object using the input
 // hash as the initial value and rights the result bacl to the 
@@ -46,6 +46,6 @@ void text_hash(const text *t, uint32_t *hash);
 
 // Sets the utf16 string index of the position relative to the text's origin.
 // Returns false if there is no hit, true otherwise.
-bool text_hit(const text *t, const vec2f *pos, size_t *index);
+bool text_hit(const text *t, const vec2 *pos, size_t *index);
 
 void text_append(text *t, const uint16_t *data, size_t len);

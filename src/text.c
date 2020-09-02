@@ -23,7 +23,7 @@ typedef struct text_attr {
     int32_t len;
 
     font_family_id font_family;
-    float font_size;
+    double font_size;
     color color;
 
     text_attr *next;
@@ -35,7 +35,7 @@ typedef struct text {
     int32_t ref;
 
     bool cached_extents;
-    vec2f extents;
+    vec2 extents;
 } text;
 
 typedef struct text_ctx {
@@ -53,10 +53,10 @@ static text_ctx _ctx;
 static text_attr* get_next_attr();
 static void free_attr(text_attr *);
 static const char * get_font_family(font_family_id f);
-static void text_extents_macos(const text *t, vec2f *dst);
-static float text_index_offset_macos(const text *t, size_t index);
-static void text_draw_macos(const text *t, const rectf *bbox, const rectf *clip);
-static void text_draw_macos2(const text *t, const rectf *bbox, const rectf *clip);
+static void text_extents_macos(const text *t, vec2 *dst);
+static double text_index_offset_macos(const text *t, size_t index);
+static void text_draw_macos(const text *t, const rect *bbox, const rect *clip);
+static void text_draw_macos2(const text *t, const rect *bbox, const rect *clip);
 static CFMutableAttributedStringRef create_attr_str(const text *t);
 static CTLineRef create_trunc_token(CFMutableAttributedStringRef attr_str);
 
@@ -162,7 +162,7 @@ text* text_ref(text *t)
 
 void text_add_attr(text *t,
                    int32_t start, int32_t len,
-                   font_family_id font_family, float font_size,
+                   font_family_id font_family, double font_size,
                    const color *c)
 {
     assert(t);
@@ -193,7 +193,7 @@ void text_add_attr(text *t,
     t->cached_extents = false;
 }
 
-void text_extents(const text *t, vec2f *dst)
+void text_extents(const text *t, vec2 *dst)
 {
     assert(t);
     assert(dst);
@@ -216,7 +216,7 @@ void text_extents(const text *t, vec2f *dst)
     }
 }
 
-float text_index_offset(const text *t, size_t index)
+double text_index_offset(const text *t, size_t index)
 {
     assert(t);
     assert(t->str);
@@ -231,7 +231,7 @@ float text_index_offset(const text *t, size_t index)
 #endif
 }
 
-void text_draw(const text *t, const rectf *bbox, const rectf *clip)
+void text_draw(const text *t, const rect *bbox, const rect *clip)
 {
     assert(t);
     assert(bbox);
@@ -253,12 +253,12 @@ void text_hash(const text *t, uint32_t *v)
     }
 }
 
-bool text_hit(const text *t, const vec2f *pos, size_t *index)
+bool text_hit(const text *t, const vec2 *pos, size_t *index)
 {
     assert(t);
     assert(pos);
 
-    vec2f extents;
+    vec2 extents;
     text_extents(t, &extents);
     if (pos->x <= extents.x && pos->y <= extents.y) {
         CFMutableAttributedStringRef attr_str = create_attr_str(t);
@@ -330,7 +330,7 @@ static const char * get_font_family(font_family_id f)
     };
 }
 
-static void text_extents_macos(const text *t, vec2f *dst)
+static void text_extents_macos(const text *t, vec2 *dst)
 {
     assert(t);
     assert(dst);
@@ -355,18 +355,18 @@ static void text_extents_macos(const text *t, vec2f *dst)
             frame_constraints,
             &fit_range);
 
-    dst->x = (float)frame_size.width;
-    dst->y = (float)frame_size.height;
+    dst->x = frame_size.width;
+    dst->y = frame_size.height;
 
     CFRelease(framesetter);
 }
 
-static float text_index_offset_macos(const text *t, size_t index)
+static double text_index_offset_macos(const text *t, size_t index)
 {
     CFMutableAttributedStringRef attr_str = create_attr_str(t);
     CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
     CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
-    float offset = (float)CTLineGetOffsetForStringIndex(line, (CFIndex)index,
+    double offset = CTLineGetOffsetForStringIndex(line, (CFIndex)index,
                                                         NULL);
 
     CFRelease(line);
@@ -376,8 +376,8 @@ static float text_index_offset_macos(const text *t, size_t index)
     return offset;
 }
 
-static void text_draw_macos(const text *t, const rectf *bbox,
-                            const rectf *clip)
+static void text_draw_macos(const text *t, const rect *bbox,
+                            const rect *clip)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     int32_t fb_height = (int32_t)fb.h;
@@ -395,7 +395,7 @@ static void text_draw_macos(const text *t, const rectf *bbox,
 
     // Core text uses bottom-up coords but we use top down so we have to
     // invert our clip rect here.
-    float inverted_clip_y = fb_height - clip->y - clip->h;
+    double inverted_clip_y = fb_height - clip->y - clip->h;
     CGRect cg_clip = CGRectMake(clip->x, inverted_clip_y, clip->w, clip->h);
     CGContextClipToRect(context, cg_clip); 
 
@@ -433,8 +433,8 @@ static void text_draw_macos(const text *t, const rectf *bbox,
     CGColorSpaceRelease(rgbColorSpace);
 }
 
-static void text_draw_macos2(const text *t, const rectf *bbox,
-                             const rectf *clip)
+static void text_draw_macos2(const text *t, const rect *bbox,
+                             const rect *clip)
 {
     eva_framebuffer fb = eva_get_framebuffer();
     int32_t fb_height = (int32_t)fb.h;
@@ -452,7 +452,7 @@ static void text_draw_macos2(const text *t, const rectf *bbox,
 
     // Core text uses bottom-up coords but we use top down so we have to
     // invert our clip rect here.
-    float inverted_clip_y = fb_height - clip->y - clip->h;
+    double inverted_clip_y = fb_height - clip->y - clip->h;
     CGRect cg_clip = CGRectMake(clip->x, inverted_clip_y, clip->w, clip->h);
     CGContextClipToRect(context, cg_clip); 
 
@@ -532,7 +532,7 @@ static CFMutableAttributedStringRef create_attr_str(const text *t)
                 kCFStringEncodingUTF8, 
                 false, 
                 kCFAllocatorNull);
-        float scaled_font_size = attr->font_size * fb.scale_x;
+        double scaled_font_size = attr->font_size * fb.scale_x;
         CFNumberRef font_size_value = CFNumberCreate(
                 NULL,
                 kCFNumberFloat32Type,

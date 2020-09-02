@@ -48,9 +48,9 @@ static void fail(int error_code, const char *error_message)
     console_log("Error %d: %s", error_code, error_message);
 }
 
-static void mouse_moved(float x, float y)
+static void mouse_moved(double x, double y)
 {
-    vec2f mouse_pos = {x, y};
+    vec2 mouse_pos = {x, y};
     app_mouse_moved(&mouse_pos);
 }
 
@@ -59,10 +59,10 @@ static void scroll(double delta_x, double delta_y)
     app_scroll(delta_x, delta_y);
 }
 
-static void mouse_btn(float x, float y,
+static void mouse_btn(double x, double y,
                       eva_mouse_btn btn, eva_input_action action)
 {
-    vec2f mouse_pos = { x, y };
+    vec2 mouse_pos = { x, y };
     if (btn == EVA_MOUSE_BTN_LEFT) {
         if (action == EVA_INPUT_PRESSED) {
             app_mouse_pressed(&mouse_pos);

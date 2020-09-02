@@ -11,7 +11,7 @@ bool recti_is_empty(const recti *r)
     return r->x == 0 && r->y == 0 && r->w == 0 && r->h == 0;
 }
 
-bool rectf_is_empty(const rectf *r)
+bool rect_is_empty(const rect *r)
 {
     return r->x == 0 && r->y == 0 && r->w == 0 && r->h == 0;
 }
@@ -25,7 +25,7 @@ bool recti_overlap(const recti *a, const recti *b)
              (a->y > b->y + b->h || b->y > a->y + a->h));
 }
 
-bool rectf_overlap(const rectf *a, const rectf *b)
+bool rect_overlap(const rect *a, const rect *b)
 {
     assert(a);
     assert(b);
@@ -66,24 +66,24 @@ bool recti_intersection(const recti *a, const recti *b, recti *dst)
     return false;
 }
 
-bool rectf_intersection(const rectf *a, const rectf *b, rectf *dst)
+bool rect_intersection(const rect *a, const rect *b, rect *dst)
 {
     assert(a);
     assert(b);
     assert(dst);
 
-    float a_end_x = a->x + a->w;
-    float a_end_y = a->y + a->h;
-    float b_end_x = b->x + b->w;
-    float b_end_y = b->y + b->h;
+    double a_end_x = a->x + a->w;
+    double a_end_y = a->y + a->h;
+    double b_end_x = b->x + b->w;
+    double b_end_y = b->y + b->h;
 
-    float start_x = max(a->x, b->x);
-    float start_y = max(a->y, b->y);
-    float end_x   = min(a_end_x, b_end_x);
-    float end_y   = min(a_end_y, b_end_y);
+    double start_x = max(a->x, b->x);
+    double start_y = max(a->y, b->y);
+    double end_x   = min(a_end_x, b_end_x);
+    double end_y   = min(a_end_y, b_end_y);
 
-    float x_overlap = max(0.0f, end_x - start_x);
-    float y_overlap = max(0.0f, end_y - start_y);
+    double x_overlap = max(0.0f, end_x - start_x);
+    double y_overlap = max(0.0f, end_y - start_y);
 
     if (x_overlap > 0.0f && y_overlap > 0.0f)
     {
@@ -107,7 +107,7 @@ bool recti_point_intersect(const recti *r, const vec2i *v)
            (v->y >= r->y && v->y <= (r->y + r->h));
 }
 
-bool rectf_point_intersect(const rectf *r, const vec2f *v)
+bool rect_point_intersect(const rect *r, const vec2 *v)
 {
     assert(r);
     assert(v);
@@ -132,7 +132,7 @@ void recti_union(const recti *a, const recti *b, recti *dst)
     *dst = result;
 }
 
-void rectf_union(const rectf *a, const rectf *b, rectf *dst)
+void rect_union(const rect *a, const rect *b, rect *dst)
 {
     assert(a);
     assert(b);
@@ -144,13 +144,13 @@ void rectf_union(const rectf *a, const rectf *b, rectf *dst)
     dst->h = max(a->y + a->h, b->y + b->h) - dst->y;
 }
 
-recti rectf_round(const rectf *r)
+recti rect_round(const rect *r)
 {
     recti result = {
-        .x = (int32_t)roundf(r->x),
-        .y = (int32_t)roundf(r->y),
-        .w = (int32_t)roundf(r->w),
-        .h = (int32_t)roundf(r->h),
+        .x = (int32_t)round(r->x),
+        .y = (int32_t)round(r->y),
+        .w = (int32_t)round(r->w),
+        .h = (int32_t)round(r->h),
     };
 
     return result;

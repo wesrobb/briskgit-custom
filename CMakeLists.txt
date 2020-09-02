@@ -18,6 +18,8 @@ add_executable(briskgit
                src/render.c
                src/text.h 
                src/text.c
+               src/textfield.h 
+               src/textfield.c
                src/ustr.h 
                src/ustr.c
                src/vec2.h 

@@ -29,14 +29,14 @@ typedef enum render_cmd_type {
 } render_cmd_type;
 
 typedef struct render_cmd_rect {
-    rectf rect;
+    rect rect;
     color color;
 } render_cmd_rect;
 
 #define MAX_TEXT_LEN 1000
 typedef struct render_cmd_text {
-    rectf clip;
-    rectf bbox;
+    rect clip;
+    rect bbox;
     text *t;
 } render_cmd_text;
 
@@ -73,41 +73,22 @@ static uint32_t _tile_cache2[MAX_TILE_CACHE_X * MAX_TILE_CACHE_Y];
 static uint32_t *_tile_cache;
 static uint32_t *_prev_tile_cache;
 
-static void clip_to_framebuffer(rectf *r);
+static void clip_to_framebuffer(rect *r);
 
-void draw_rect(const render_cmd_rect *cmd, const rectf *clip_rect)
+void draw_rect(const render_cmd_rect *cmd, const rect *clip_rect)
 {
     profiler_begin;
 
-    BLRect bl_clip;
-    bl_clip.x = clip_rect->x;
-    bl_clip.y = clip_rect->y;
-    bl_clip.w = clip_rect->w;
-    bl_clip.h = clip_rect->h;
-    blContextClipToRectD(&_bl_ctx, &bl_clip);
-
+    blContextClipToRectD(&_bl_ctx, (BLRect*)clip_rect);
     blContextSetCompOp(&_bl_ctx, BL_COMP_OP_SRC_OVER);
-    BLRgba col = {
-        .r = cmd->color.r,
-        .g = cmd->color.g,
-        .b = cmd->color.b,
-        .a = cmd->color.a
-    };
-    blContextSetFillStyleRgba(&_bl_ctx, &col);
-
-    BLRect bl_rect;
-    bl_rect.x = cmd->rect.x;
-    bl_rect.y = cmd->rect.y;
-    bl_rect.w = cmd->rect.w;
-    bl_rect.h = cmd->rect.h;
-    blContextFillRectD(&_bl_ctx, &bl_rect);
-
+    blContextSetFillStyleRgba(&_bl_ctx, (BLRgba*)&cmd->color);
+    blContextFillRectD(&_bl_ctx, (BLRect*)&cmd->rect);
     blContextRestoreClipping(&_bl_ctx);
 
     profiler_end;
 }
 
-void draw_text(render_cmd_text *cmd, const rectf *clip_rect)
+void draw_text(render_cmd_text *cmd, const rect *clip_rect)
 {
     profiler_begin;
 #ifdef BG_MACOS
@@ -149,9 +130,9 @@ void render_begin_frame(void)
 {
 }
 
-static void update_tile_cache(const rectf *r, uint32_t hash_value)
+static void update_tile_cache(const rect *r, uint32_t hash_value)
 {
-    recti rounded_rect = rectf_round(r);
+    recti rounded_rect = rect_round(r);
     int32_t x1 = rounded_rect.x / TILE_SIZE;
     int32_t y1 = rounded_rect.y / TILE_SIZE;
     int32_t x2 = (rounded_rect.x + rounded_rect.w) / TILE_SIZE;
@@ -170,7 +151,7 @@ void render_end_frame(void)
 
     eva_framebuffer fb = eva_get_framebuffer();
 
-    rectf dirty_rect = {0};
+    rect dirty_rect = {0};
 
     // Process current queue.
     int32_t num_cmds = *_render_cmd_ctx.curr_index;
@@ -205,7 +186,7 @@ void render_end_frame(void)
             uint32_t prev = _prev_tile_cache[tile_index];
             if (curr != prev)
             {
-                rectf region = {
+                rect region = {
                     .x = x * TILE_SIZE,
                     .y = y * TILE_SIZE,
                     .w = TILE_SIZE,
@@ -219,7 +200,7 @@ void render_end_frame(void)
                 }
                 else
                 {
-                    rectf_union(&dirty_rect, &region, &dirty_rect); 
+                    rect_union(&dirty_rect, &region, &dirty_rect); 
                 }
             }
 
@@ -227,7 +208,7 @@ void render_end_frame(void)
         }
     }
 
-    if (!rectf_is_empty(&dirty_rect))
+    if (!rect_is_empty(&dirty_rect))
     {
         blImageInit(&_bl_img);
         blImageCreateFromData(&_bl_img, (int32_t)fb.w, (int32_t)fb.h, 
@@ -249,8 +230,8 @@ void render_end_frame(void)
                     break;
                 case RENDER_COMMAND_TEXT:
                     blContextFlush(&_bl_ctx, BL_CONTEXT_FLUSH_SYNC);
-                    rectf clip;
-                    rectf_intersection(&dirty_rect, &cmd->text_cmd.clip, &clip);
+                    rect clip;
+                    rect_intersection(&dirty_rect, &cmd->text_cmd.clip, &clip);
                     draw_text(&cmd->text_cmd, &clip);
                     break;
             }
@@ -294,7 +275,7 @@ void render_end_frame(void)
 void render_clear(const color *c)
 {
     eva_framebuffer fb = eva_get_framebuffer();
-    rectf r = {
+    rect r = {
         .x = 0,
         .y = 0,
         .w = fb.w,
@@ -308,7 +289,7 @@ void render_clear(const color *c)
     cmd->rect_cmd.color = *c;
 }
 
-void render_draw_rectf(const rectf *r, const color *c)
+void render_draw_rect(const rect *r, const color *c)
 {
     int32_t index = (*_render_cmd_ctx.curr_index)++;
     render_cmd *cmd = &_render_cmd_ctx.current[index];
@@ -331,7 +312,7 @@ void render_draw_recti(const recti *r, const color *c)
     clip_to_framebuffer(&cmd->rect_cmd.rect);
 }
 
-void render_draw_text(text *t, const rectf *bbox, const rectf *clip)
+void render_draw_text(text *t, const rect *bbox, const rect *clip)
 {
     assert(t);
     assert(bbox);
@@ -345,7 +326,7 @@ void render_draw_text(text *t, const rectf *bbox, const rectf *clip)
     cmd->text_cmd.t = text_ref(t);
 }
 
-static void clip_to_framebuffer(rectf *r)
+static void clip_to_framebuffer(rect *r)
 {
     assert(r);
 

@@ -18,13 +18,13 @@
 #define MAX_BRANCHES 64
 
 typedef struct app_ctx {
-    float branch_pane_resize_range;
-    rectf branch_pane_rect;
+    double branch_pane_resize_range;
+    rect branch_pane_rect;
     bool branch_pane_resizing;
-    float branch_pane_min_size;
+    double branch_pane_min_size;
 
     text *branches[MAX_BRANCHES];
-    vec2f text_positions[MAX_BRANCHES];
+    vec2 text_positions[MAX_BRANCHES];
     int32_t num_branches;
 
     char text[TEXT_MAX_LEN];
@@ -58,7 +58,7 @@ void app_init()
     };
 
     _ctx.num_branches = array_size(branches);
-    float font_size_pt = 14.0f;
+    double font_size_pt = 14.0;
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = text_create_cstr(branches[i]);
         _ctx.branches[i] = t;
@@ -66,11 +66,11 @@ void app_init()
     }
 
     // Cache text position for hit testing on mouse move.
-    vec2f padding = { 10, 10 };
-    vec2f cursor = padding;
+    vec2 padding = { 10, 10 };
+    vec2 cursor = padding;
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = _ctx.branches[i];
-        vec2f extents;
+        vec2 extents;
         text_extents(t, &extents);
         _ctx.text_positions[i] = cursor;
         cursor.y += extents.y;
@@ -113,12 +113,12 @@ void app_text_input(const char *text, uint32_t len)
     //}
 }
 
-void app_mouse_moved(const vec2f *mouse_pos)
+void app_mouse_moved(const vec2 *mouse_pos)
 {
     if (_ctx.text_select) {
         size_t str_index = 0;
-        vec2f pos = _ctx.text_positions[0];
-        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
+        vec2 pos = _ctx.text_positions[0];
+        vec2 mouse_pos_in_text_coords = vec2_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
@@ -133,7 +133,7 @@ void app_mouse_moved(const vec2f *mouse_pos)
         eva_request_frame();
     }
 
-    rectf resizeHandle = {
+    rect resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
              _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -145,12 +145,12 @@ void app_mouse_moved(const vec2f *mouse_pos)
     console_mouse_moved(mouse_pos);
 }
 
-void app_mouse_pressed(const vec2f *mouse_pos)
+void app_mouse_pressed(const vec2 *mouse_pos)
 {
     if (!_ctx.text_select) {
         size_t str_index = 0;
-        vec2f pos = _ctx.text_positions[0];
-        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
+        vec2 pos = _ctx.text_positions[0];
+        vec2 mouse_pos_in_text_coords = vec2_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
@@ -162,7 +162,7 @@ void app_mouse_pressed(const vec2f *mouse_pos)
         }
     }
 
-    rectf resizeHandle = {
+    rect resizeHandle = {
         .x = _ctx.branch_pane_rect.x + _ctx.branch_pane_rect.w -
             _ctx.branch_pane_resize_range,
         .y = _ctx.branch_pane_rect.y,
@@ -170,19 +170,19 @@ void app_mouse_pressed(const vec2f *mouse_pos)
         .h = _ctx.branch_pane_rect.y + _ctx.branch_pane_rect.h,
     };
 
-    if (rectf_point_intersect(&resizeHandle, mouse_pos)) {
+    if (rect_point_intersect(&resizeHandle, mouse_pos)) {
         _ctx.branch_pane_resizing = true;
     }
 
     console_mouse_pressed(mouse_pos);
 }
 
-void app_mouse_released(const vec2f *mouse_pos)
+void app_mouse_released(const vec2 *mouse_pos)
 {
     if (_ctx.text_select) {
         size_t str_index = 0;
-        vec2f pos = _ctx.text_positions[0];
-        vec2f mouse_pos_in_text_coords = vec2f_sub(mouse_pos, &pos);
+        vec2 pos = _ctx.text_positions[0];
+        vec2 mouse_pos_in_text_coords = vec2_sub(mouse_pos, &pos);
         bool hit = text_hit(_ctx.branches[0], &mouse_pos_in_text_coords,
                             &str_index);
         if (hit) {
@@ -216,40 +216,40 @@ void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
 
-    vec2f padding = { 10, 10 };
+    vec2 padding = { 10, 10 };
 
     render_clear(&COLOR_LIGHT_GREY);
-    render_draw_rectf(&_ctx.branch_pane_rect, &COLOR_GREY);
+    render_draw_rect(&_ctx.branch_pane_rect, &COLOR_GREY);
 
     for (int32_t i = 0; i < _ctx.num_branches; i++) {
         text *t = _ctx.branches[i];
-        vec2f *pos = &_ctx.text_positions[i];
-        vec2f extents;
+        vec2 *pos = &_ctx.text_positions[i];
+        vec2 extents;
         text_extents(t, &extents);
 
         if (i == 0 && _ctx.text_select) {
-            float offset_a = text_index_offset(t, _ctx.start_index);
-            float offset_b = text_index_offset(t, _ctx.end_index);
-            float start_offset = min(offset_a, offset_b);
-            float end_offset = max(offset_a, offset_b);
-            float width = end_offset - start_offset;
-            rectf highlight = {
+            double offset_a = text_index_offset(t, _ctx.start_index);
+            double offset_b = text_index_offset(t, _ctx.end_index);
+            double start_offset = min(offset_a, offset_b);
+            double end_offset = max(offset_a, offset_b);
+            double width = end_offset - start_offset;
+            rect highlight = {
                 .x = pos->x + start_offset,
                 .y = pos->y,
                 .w = width,
                 .h = extents.y,
             };
-            render_draw_rectf(&highlight, &COLOR_LIGHT_BLUE);
+            render_draw_rect(&highlight, &COLOR_LIGHT_BLUE);
         }
 
 
-        rectf bbox = {
+        rect bbox = {
             .x = pos->x,
             .y = pos->y,
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
             .h = extents.y
         };
-        rectf clip = {
+        rect clip = {
             .x = _ctx.branch_pane_rect.x,
             .y = _ctx.branch_pane_rect.y,
             .w = _ctx.branch_pane_rect.w - (padding.x * 2),
