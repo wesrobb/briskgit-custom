@@ -41,6 +41,9 @@ textfield* textfield_create(const vec2 *pos, double width,
     tf->font_size = font_size;
     tf->padding = padding;
 
+    text_add_attr(tf->t, 0, 0,
+                  FONT_FAMILY_COURIER_NEW, font_size, &COLOR_BLACK);
+
     return tf;
 }
 
@@ -75,7 +78,7 @@ void textfield_draw(const textfield *tf)
         .x = tf->pos.x,
         .y = tf->pos.y,
         .w = tf->width,
-        .h = extents.y
+        .h = extents.y + (tf->padding * 2)
     };
 
     render_draw_rect(&bbox, &COLOR_WHITE);

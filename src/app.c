@@ -11,6 +11,7 @@
 #include "rect.h"
 #include "render.h"
 #include "text.h"
+#include "textfield.h"
 #include "ustr.h"
 #include "vec2.h"
 
@@ -33,6 +34,8 @@ typedef struct app_ctx {
     bool text_select;
     size_t start_index;
     size_t end_index;
+
+    textfield *tf;
 } app_ctx;
 
 static app_ctx _ctx;
@@ -75,6 +78,12 @@ void app_init()
         _ctx.text_positions[i] = cursor;
         cursor.y += extents.y;
     }
+
+    // TODO: textfield does NOT need to know it's own position.
+    vec2 tf_pos = { 500, 500 };
+    _ctx.tf = textfield_create(&tf_pos, 500, 14, 10);
+    uint16_t data = 57;
+    textfield_input_text(_ctx.tf, &data, 1);
 }
 
 void app_shutdown()
@@ -259,7 +268,10 @@ void app_draw(const eva_framebuffer *fb)
         render_draw_text(t, &bbox, &clip);
     }
 
+    textfield_draw(_ctx.tf);
+
     console_draw(fb);
+
 
     profiler_end;
 }
