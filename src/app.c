@@ -80,10 +80,9 @@ void app_init()
     }
 
     // TODO: textfield does NOT need to know it's own position.
-    vec2 tf_pos = { 500, 500 };
-    _ctx.tf = textfield_create(&tf_pos, 500, 14, 10);
-    uint16_t data = 57;
-    textfield_input_text(_ctx.tf, &data, 1);
+    _ctx.tf = textfield_create(500, 18.0, 0);
+    uint16_t data[] = {'L', 'p', 's', 't'};
+    textfield_input_text(_ctx.tf, data, array_size(data));
 }
 
 void app_shutdown()
@@ -268,10 +267,10 @@ void app_draw(const eva_framebuffer *fb)
         render_draw_text(t, &bbox, &clip);
     }
 
-    textfield_draw(_ctx.tf);
+    vec2 tf_pos = { 500, 500 };
+    textfield_draw(_ctx.tf, &tf_pos);
 
     console_draw(fb);
-
 
     profiler_end;
 }

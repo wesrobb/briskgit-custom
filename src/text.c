@@ -36,6 +36,12 @@ typedef struct text {
 
     bool cached_extents;
     vec2 extents;
+
+    bool cached_metrics;
+    double width;
+    double leading;
+    double ascent;
+    double descent;
 } text;
 
 typedef struct text_ctx {
@@ -54,6 +60,8 @@ static text_attr* get_next_attr();
 static void free_attr(text_attr *);
 static const char * get_font_family(font_family_id f);
 static void text_extents_macos(const text *t, vec2 *dst);
+static void text_metrics_macos(const text *t, double *width, double *leading,
+                               double *ascent, double *descent);
 static double text_index_offset_macos(const text *t, size_t index);
 static void text_draw_macos(const text *t, const rect *bbox, const rect *clip);
 static void text_draw_macos2(const text *t, const rect *bbox, const rect *clip);
@@ -216,6 +224,39 @@ void text_extents(const text *t, vec2 *dst)
     }
 }
 
+void text_metrics(const text *t, double *width, double *leading,
+                  double *ascent, double *descent)
+{
+    assert(t);
+    assert(width);
+    assert(leading);
+    assert(ascent);
+    assert(descent);
+
+    if (t->cached_metrics) {
+        *width = t->width;
+        *leading = t->leading;
+        *ascent = t->ascent;
+        *descent = t->descent;
+    }
+    else {
+
+#ifdef BG_MACOS
+        text_metrics_macos(t, width, leading, ascent, descent);
+#elif BG_WINDOWS
+        assert(false);
+#endif
+
+        // Const gets in the way of opaque caching systems.
+        text *txt = (text*)t;
+        txt->cached_metrics = true;
+        txt->width = *width;
+        txt->leading = *leading;
+        txt->ascent = *ascent;
+        txt->descent = *descent;
+    }
+}
+
 double text_index_offset(const text *t, size_t index)
 {
     assert(t);
@@ -359,6 +400,20 @@ static void text_extents_macos(const text *t, vec2 *dst)
     dst->y = frame_size.height;
 
     CFRelease(framesetter);
+}
+
+static void text_metrics_macos(const text *t, double *width, double *leading,
+                               double *ascent, double *descent)
+{
+    CFMutableAttributedStringRef attr_str = create_attr_str(t);
+    CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+    CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+
+    *width = CTLineGetTypographicBounds(line, ascent, descent, leading);
+
+    CFRelease(line);
+    CFRelease(ts);
+    CFRelease(attr_str);
 }
 
 static double text_index_offset_macos(const text *t, size_t index)
