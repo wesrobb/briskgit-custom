@@ -92,8 +92,7 @@ void app_shutdown()
 void app_keydown(int32_t key, uint32_t mods)
 {
     if (key == EVA_KEY_BACKSPACE) {
-        _ctx.text[--_ctx.text_index] = 0;
-        eva_request_frame();
+        textfield_keydown(_ctx.tf, key, mods);
     }
 
     if (key == EVA_KEY_ENTER && _ctx.text_index > 0) {
@@ -105,7 +104,7 @@ void app_keydown(int32_t key, uint32_t mods)
     console_keydown(key, mods);
 }
 
-void app_text_input(const char *text, uint32_t len)
+void app_text_input(const uint16_t *text, uint32_t len)
 {
     (void)text;
     (void)len;
@@ -119,6 +118,9 @@ void app_text_input(const char *text, uint32_t len)
     //    console_log("num graphemes %i", count);
     //    eva_request_frame();
     //}
+    
+    textfield_input_text(_ctx.tf, text, len);
+    eva_request_frame();
 }
 
 void app_mouse_moved(const vec2 *mouse_pos)

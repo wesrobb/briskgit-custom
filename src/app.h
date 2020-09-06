@@ -9,7 +9,7 @@ void app_init();
 void app_shutdown();
 
 void app_keydown(int32_t key, uint32_t mods);
-void app_text_input(const char *text, uint32_t len);
+void app_text_input(const uint16_t *text, uint32_t len);
 
 void app_mouse_moved(const vec2 *mouse_pos);
 void app_mouse_pressed(const vec2 *mouse_pos);

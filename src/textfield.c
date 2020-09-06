@@ -1,13 +1,18 @@
 #include "textfield.h"
 
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
+
+#include "eva/eva.h"
 
 #include "color.h"
 #include "console.h"
+#include "grapheme.h"
 #include "render.h"
 #include "rect.h"
 #include "text.h"
+#include "ustr.h"
 #include "vec2.h"
 
 typedef struct textfield {
@@ -58,6 +63,23 @@ void textfield_input_text(const textfield *tf,
     assert(text);
 
     text_append(tf->t, text, len);
+}
+
+void textfield_keydown(const textfield *tf, int32_t key, uint32_t mods)
+{
+    assert(tf);
+
+    if (key == EVA_KEY_BACKSPACE) {
+        const ustr *str = text_ustr(tf->t);
+        if (!ustr_empty(str)) {
+            grapheme_iter *gi = grapheme_iter_create(str);
+            int32_t last = grapheme_iter_last(gi);
+            int32_t previous = grapheme_iter_previous(gi);
+            printf("removing %d %d\n", previous, last);
+            text_remove(tf->t, (size_t)previous, (size_t)last);
+            eva_request_frame();
+        }
+    }
 }
 
 void textfield_mouse_moved(const textfield *tf, const vec2 *pos);

@@ -27,6 +27,11 @@ void text_destroy(text *);
 
 text* text_ref(text *t);
 
+// Returns the ustr string contained within the text object. This string
+// should not be modified since it will break the caching system inside the
+// text object.
+const ustr* text_ustr(const text *t);
+
 // Sets text attributes. Set start = 0 and len = 0
 // to set the attribute for the entire text length.
 void text_add_attr(text *t,
@@ -51,3 +56,4 @@ void text_hash(const text *t, uint32_t *hash);
 bool text_hit(const text *t, const vec2 *pos, size_t *index);
 
 void text_append(text *t, const uint16_t *data, size_t len);
+void text_remove(text *t, size_t start, size_t end);

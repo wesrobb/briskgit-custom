@@ -125,6 +125,12 @@ size_t ustr_len(const ustr *s)
     return s->len;
 }
 
+bool ustr_empty(const ustr *s)
+{
+    assert(s);
+    return s->len == 0;
+}
+
 size_t ustr_byte_len(const ustr *s)
 {
     assert(s);
@@ -201,4 +207,19 @@ void ustr_append(ustr *s, const uint16_t *data, size_t len)
 
     memcpy(s->data + s->len, data, len * sizeof(uint16_t));
     s->len += len;
+}
+
+void ustr_remove(ustr *s, size_t start, size_t end)
+{
+    assert(s);
+    assert(!ustr_empty(s));
+    assert(start >= 0);
+    assert(start <= end);
+    assert(end <= s->len);
+
+    if (end < s->len) {
+        size_t byte_len = (s->len - end) * sizeof(uint16_t);
+        memcpy(s->data + start, s->data + end, byte_len);
+    }
+    s->len -= end - start;
 }

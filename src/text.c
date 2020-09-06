@@ -168,6 +168,12 @@ text* text_ref(text *t)
     return t;
 }
 
+const ustr* text_ustr(const text *t)
+{
+    assert(t);
+    return t->str;
+}
+
 void text_add_attr(text *t,
                    int32_t start, int32_t len,
                    font_family_id font_family, double font_size,
@@ -331,6 +337,16 @@ void text_append(text *t, const uint16_t *data, size_t len)
 
     ustr_append(t->str, data, len);
     t->cached_extents = false;
+    t->cached_metrics = false;
+}
+
+void text_remove(text *t, size_t start, size_t end)
+{
+    assert(t);
+    assert(start >= 0);
+    assert(start <= end);
+
+    ustr_remove(t->str, start, end);
 }
 
 static text_attr* get_next_attr()

@@ -29,11 +29,12 @@ static void handle_key(eva_key key, eva_input_action action,
     }
 }
 
-static void handle_text(const char *utf8_text, uint32_t len, eva_mod_flags mods)
+static void handle_text(const uint16_t *utf16_text, uint32_t len,
+                        eva_mod_flags mods)
 {
     (void)mods;
 
-    app_text_input(utf8_text, len);
+    app_text_input(utf16_text, len);
 }
 
 static void cleanup(void)
