@@ -53,6 +53,7 @@ void textfield_destroy(textfield *tf)
 {
     assert(tf);
 
+    text_destroy(tf->t);
     free(tf);
 }
 
