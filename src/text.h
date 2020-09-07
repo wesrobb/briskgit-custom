@@ -55,5 +55,9 @@ void text_hash(const text *t, uint32_t *hash);
 // Returns false if there is no hit, true otherwise.
 bool text_hit(const text *t, const vec2 *pos, size_t *index);
 
+// Returns the visual position for the specified character index.
+// The position is relative to the origin of the text.
+double text_index_pos(const text *t, size_t index);
+
 void text_append(text *t, const uint16_t *data, size_t len);
 void text_remove(text *t, size_t start, size_t end);

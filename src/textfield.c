@@ -22,6 +22,8 @@ typedef struct textfield {
     double width;
     double font_size;
     int32_t padding;
+    size_t cursor_index;
+    double cursor_pos;
 } textfield;
 
 textfield* textfield_create(double width, double font_size, int32_t padding)
@@ -76,15 +78,45 @@ void textfield_keydown(const textfield *tf, int32_t key, uint32_t mods)
             grapheme_iter *gi = grapheme_iter_create(str);
             int32_t last = grapheme_iter_last(gi);
             int32_t previous = grapheme_iter_previous(gi);
-            printf("removing %d %d\n", previous, last);
             text_remove(tf->t, (size_t)previous, (size_t)last);
+            grapheme_iter_destroy(gi);
             eva_request_frame();
         }
     }
 }
 
 void textfield_mouse_moved(const textfield *tf, const vec2 *pos);
-void textfield_mouse_pressed(const textfield *tf, const vec2 *pos);
+void textfield_mouse_pressed(textfield *tf,
+                             const vec2 *mouse_pos, const vec2 *pos)
+{
+    assert(tf);
+    assert(mouse_pos);
+    assert(pos);
+
+    double width, leading, ascent, descent;
+    text_metrics(tf->t, &width, &leading, &ascent, &descent);
+    double height = ascent + descent;
+
+    rect bbox = {
+        .x = pos->x,
+        .y = pos->y,
+        .w = tf->width,
+        .h = height + (tf->padding * 2)
+    };
+
+    if (rect_point_intersect(&bbox, mouse_pos)) {
+        tf->active = true;
+        vec2 rel = vec2_sub(mouse_pos, pos);
+        if (text_hit(tf->t, &rel, &tf->cursor_index)) {
+            tf->cursor_pos = text_index_offset(tf->t, tf->cursor_index);
+            printf("cursor pos %f\n", tf->cursor_pos);
+        }
+    }
+    else {
+        tf->active = false;
+    }
+}
+
 void textfield_mouse_released(const textfield *tf, const vec2 *pos);
 
 void textfield_draw(const textfield *tf, const vec2 *pos)
@@ -111,6 +143,16 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
         .w = width,
         .h = ascent 
     };
+
+    if (tf->active) {
+        rect cursor = {
+            .x = tbox.x + tf->cursor_pos,
+            .y = tbox.y,
+            .w = 2.0,
+            .h = height
+        };
+        render_draw_rect(&cursor, &COLOR_BLACK);
+    }
     render_draw_text(tf->t, &tbox, &bbox);
 }
 

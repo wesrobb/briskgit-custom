@@ -330,6 +330,25 @@ bool text_hit(const text *t, const vec2 *pos, size_t *index)
     return false;
 }
 
+double text_index_pos(const text *t, size_t index)
+{
+    assert(t);
+    assert(t->str);
+    assert(index < ustr_len(t->str));
+
+    CFMutableAttributedStringRef attr_str = create_attr_str(t);
+    CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+    CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+
+    double offset = CTLineGetOffsetForStringIndex(line, (long)index, NULL);
+
+    CFRelease(line);
+    CFRelease(ts);
+    CFRelease(attr_str);
+
+    return offset;
+}
+
 void text_append(text *t, const uint16_t *data, size_t len)
 {
     assert(t);

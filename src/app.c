@@ -184,6 +184,8 @@ void app_mouse_pressed(const vec2 *mouse_pos)
         _ctx.branch_pane_resizing = true;
     }
 
+    vec2 tf_pos = { 500, 500 };
+    textfield_mouse_pressed(_ctx.tf, mouse_pos, &tf_pos);
     console_mouse_pressed(mouse_pos);
 }
 
