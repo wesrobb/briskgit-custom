@@ -1,3 +1,5 @@
+// TODO: Make a memory pool for strings.
+
 #include "ustr.h"
 
 #include <assert.h>
@@ -188,7 +190,6 @@ void ustr_append(ustr *s, const uint16_t *data, size_t len)
 {
     assert(s);
     assert(data);
-    assert(len > 0);
 
     if (len > (s->cap - s->len)) {
         size_t new_cap = max(len, s->cap * 2);
@@ -207,6 +208,32 @@ void ustr_append(ustr *s, const uint16_t *data, size_t len)
 
     memcpy(s->data + s->len, data, len * sizeof(uint16_t));
     s->len += len;
+}
+
+void ustr_insert(ustr *s, size_t index, const uint16_t *data, size_t len)
+{
+    assert(s);
+    assert(data);
+    assert(index <= s->len);
+
+    size_t new_len = s->len + len;
+    size_t new_cap = new_len;
+    uint16_t *new_data = malloc(new_cap * sizeof(uint16_t));
+    if (!new_data) {
+        console_log("Failed to alloc when inserting into ustr");
+        assert(false);
+        return;
+    }
+
+    memcpy(new_data, s->data, index * sizeof(uint16_t));
+    memcpy(new_data + index, data, len * sizeof(uint16_t));
+    memcpy(new_data + index + len, s->data + index, 
+           (s->len - index) * sizeof(uint16_t));
+
+    free(s->data);
+    s->data = new_data;
+    s->len = new_len;
+    s->cap = new_cap;
 }
 
 void ustr_remove(ustr *s, size_t start, size_t end)

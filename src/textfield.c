@@ -41,10 +41,11 @@ textfield* textfield_create(double width, double font_size, int32_t padding)
         return NULL;
     }
 
+    tf->hovered = false;
+    tf->active = false;
     tf->width = width;
     tf->font_size = font_size;
     tf->padding = padding;
-    tf->cursor_pos = 0;
     tf->cursor_index = 0;
 
     text_add_attr(tf->t, 0, 0,
@@ -61,26 +62,44 @@ void textfield_destroy(textfield *tf)
     free(tf);
 }
 
-void textfield_input_text(const textfield *tf, 
-                          const uint16_t *text, size_t len)
+void textfield_input_text(textfield *tf, const uint16_t *text, size_t len)
 {
     assert(tf);
     assert(text);
 
-    text_append(tf->t, text, len);
+    text_insert(tf->t, tf->cursor_index, text, len);
+    
+    // TODO: This probably isn't correct for the multichar case.
+    tf->cursor_index += len;
+    eva_request_frame();
 }
 
-void textfield_keydown(const textfield *tf, int32_t key, uint32_t mods)
+void textfield_keydown(textfield *tf, int32_t key, uint32_t mods)
 {
     assert(tf);
+    
+    if (!tf->active)
+    {
+        return;
+    }
 
     if (key == EVA_KEY_BACKSPACE) {
         const ustr *str = text_ustr(tf->t);
-        if (!ustr_empty(str)) {
+        if (!ustr_empty(str) && tf->cursor_index > 0) {
             grapheme_iter *gi = grapheme_iter_create(str);
-            int32_t last = grapheme_iter_last(gi);
-            int32_t previous = grapheme_iter_previous(gi);
-            text_remove(tf->t, (size_t)previous, (size_t)last);
+            size_t preceding = grapheme_iter_preceding(gi, tf->cursor_index);
+            text_remove(tf->t, preceding, tf->cursor_index);
+            tf->cursor_index = preceding;
+            grapheme_iter_destroy(gi);
+            eva_request_frame();
+        }
+    }
+    else if (key == EVA_KEY_DELETE) {
+        const ustr *str = text_ustr(tf->t);
+        if (!ustr_empty(str) && tf->cursor_index < ustr_len(str)) {
+            grapheme_iter *gi = grapheme_iter_create(str);
+            size_t following = grapheme_iter_following(gi, tf->cursor_index);
+            text_remove(tf->t, tf->cursor_index, following);
             grapheme_iter_destroy(gi);
             eva_request_frame();
         }
@@ -106,17 +125,7 @@ void textfield_mouse_pressed(textfield *tf,
         .h = height + (tf->padding * 2)
     };
 
-    if (rect_point_intersect(&bbox, mouse_pos)) {
-        tf->active = true;
-        vec2 rel = vec2_sub(mouse_pos, pos);
-        if (text_hit(tf->t, &rel, &tf->cursor_index)) {
-            tf->cursor_pos = text_index_offset(tf->t, tf->cursor_index);
-            printf("cursor pos %f\n", tf->cursor_pos);
-        }
-    }
-    else {
-        tf->active = false;
-    }
+    tf->active = rect_point_intersect(&bbox, mouse_pos);
 }
 
 void textfield_mouse_released(const textfield *tf, const vec2 *pos);
@@ -146,9 +155,10 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
         .h = ascent 
     };
 
+    double cursor_pos = text_index_offset(tf->t, tf->cursor_index);
     if (tf->active) {
         rect cursor = {
-            .x = tbox.x + tf->cursor_pos,
+            .x = tbox.x + cursor_pos,
             .y = tbox.y,
             .w = 2.0,
             .h = height

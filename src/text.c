@@ -359,6 +359,16 @@ void text_append(text *t, const uint16_t *data, size_t len)
     t->cached_metrics = false;
 }
 
+void text_insert(text *t, size_t index, const uint16_t *data, size_t len)
+{
+    assert(t);
+    assert(data);
+
+    ustr_insert(t->str, index, data, len);
+    t->cached_extents = false;
+    t->cached_metrics = false;
+}
+
 void text_remove(text *t, size_t start, size_t end)
 {
     assert(t);

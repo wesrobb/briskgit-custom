@@ -66,34 +66,50 @@ void grapheme_iter_destroy(grapheme_iter *gi)
     gi->in_use = false;
 }
 
-int32_t grapheme_iter_first(grapheme_iter *gi)
+size_t grapheme_iter_first(grapheme_iter *gi)
 {
     assert(gi);
     assert(gi->in_use);
 
-    return ubrk_first(gi->bi);
+    return (size_t)ubrk_first(gi->bi);
 }
 
-int32_t grapheme_iter_last(grapheme_iter *gi)
+size_t grapheme_iter_last(grapheme_iter *gi)
 {
     assert(gi);
     assert(gi->in_use);
 
-    return ubrk_last(gi->bi);
+    return (size_t)ubrk_last(gi->bi);
 }
 
-int32_t grapheme_iter_next(grapheme_iter *gi)
+size_t grapheme_iter_next(grapheme_iter *gi)
 {
     assert(gi);
     assert(gi->in_use);
 
-    return ubrk_next(gi->bi);
+    return (size_t)ubrk_next(gi->bi);
 }
 
-int32_t grapheme_iter_previous(grapheme_iter *gi)
+size_t grapheme_iter_previous(grapheme_iter *gi)
 {
     assert(gi);
     assert(gi->in_use);
 
-    return ubrk_previous(gi->bi);
+    return (size_t)ubrk_previous(gi->bi);
+}
+
+size_t grapheme_iter_preceding(grapheme_iter *gi, size_t index)
+{
+    assert(gi);
+    assert(gi->in_use);
+
+    return (size_t)ubrk_preceding(gi->bi, index);
+}
+
+size_t grapheme_iter_following(grapheme_iter *gi, size_t index)
+{
+    assert(gi);
+    assert(gi->in_use);
+
+    return (size_t)ubrk_following(gi->bi, index);
 }

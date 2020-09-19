@@ -91,9 +91,7 @@ void app_shutdown()
 
 void app_keydown(int32_t key, uint32_t mods)
 {
-    if (key == EVA_KEY_BACKSPACE) {
-        textfield_keydown(_ctx.tf, key, mods);
-    }
+    textfield_keydown(_ctx.tf, key, mods);
 
     if (key == EVA_KEY_ENTER && _ctx.text_index > 0) {
         console_logn(_ctx.text, _ctx.text_index);

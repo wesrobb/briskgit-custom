@@ -39,5 +39,8 @@ void ustr_hash(const ustr *s, uint32_t *hash);
 // Append data to the string.
 void ustr_append(ustr *s, const uint16_t *data, size_t len);
 
+// Insert data at the specified index into the string.
+void ustr_insert(ustr *s, size_t index, const uint16_t *data, size_t len);
+
 // Remove the specified range from the string.
 void ustr_remove(ustr *s, size_t start, size_t end);

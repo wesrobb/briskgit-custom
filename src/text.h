@@ -60,4 +60,5 @@ bool text_hit(const text *t, const vec2 *pos, size_t *index);
 double text_index_pos(const text *t, size_t index);
 
 void text_append(text *t, const uint16_t *data, size_t len);
+void text_insert(text *t, size_t index, const uint16_t *data, size_t len);
 void text_remove(text *t, size_t start, size_t end);
