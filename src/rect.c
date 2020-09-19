@@ -146,8 +146,10 @@ void rect_union(const rect *a, const rect *b, rect *dst)
 
 recti rect_round(const rect *r)
 {
+    double rounded_x = round(r->x);
+
     recti result = {
-        .x = (int32_t)round(r->x),
+        .x = (int32_t)rounded_x,
         .y = (int32_t)round(r->y),
         .w = (int32_t)round(r->w),
         .h = (int32_t)round(r->h),

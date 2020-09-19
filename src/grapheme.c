@@ -33,16 +33,22 @@ grapheme_iter* grapheme_iter_create(const ustr *s)
             
             gi->ut = utext_openUChars(gi->ut, ustr_data(s), ustr_len(s), 
                                       &status);
-            gi->bi = ubrk_open(UBRK_CHARACTER, "en_us", NULL, 0, &status); 
-            ubrk_setUText(gi->bi, gi->ut, &status);
-
             if (U_SUCCESS(status)) {
-                gi->in_use = true;
-                return gi;
+                gi->bi = ubrk_open(UBRK_CHARACTER, "en_us", NULL, 0, &status); 
+                ubrk_setUText(gi->bi, gi->ut, &status);
+
+                if (U_SUCCESS(status)) {
+                    gi->in_use = true;
+                    return gi;
+                }
+                else {
+                    assert(false);
+                    utext_close(gi->ut);
+                    ubrk_close(gi->bi);
+                }
             }
             else {
-                utext_close(gi->ut);
-                ubrk_close(gi->bi);
+                assert(false);
             }
         }
     }
@@ -55,6 +61,8 @@ void grapheme_iter_destroy(grapheme_iter *gi)
     assert(gi);
     utext_close(gi->ut);
     ubrk_close(gi->bi);
+    gi->ut = NULL;
+    gi->bi = NULL;
     gi->in_use = false;
 }
 

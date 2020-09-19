@@ -44,6 +44,8 @@ textfield* textfield_create(double width, double font_size, int32_t padding)
     tf->width = width;
     tf->font_size = font_size;
     tf->padding = padding;
+    tf->cursor_pos = 0;
+    tf->cursor_index = 0;
 
     text_add_attr(tf->t, 0, 0,
                   FONT_FAMILY_COURIER_NEW, font_size, &COLOR_BLACK);
