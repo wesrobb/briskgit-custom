@@ -179,7 +179,9 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
         .w = 2.0,
         .h = height - tf->padding
     };
-    render_draw_rect(&cursor, &COLOR_BLACK);
+    if (rect_overlap(&cursor, &bbox)) {
+        render_draw_rect(&cursor, &COLOR_BLACK);
+    }
     render_draw_text(tf->t, &tbox, &bbox);
 }
 
