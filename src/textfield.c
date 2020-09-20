@@ -17,8 +17,6 @@
 
 typedef struct textfield {
     text *t;
-    bool hovered;
-    bool active;
     double width;
     double font_size;
     int32_t padding;
@@ -41,8 +39,6 @@ textfield* textfield_create(double width, double font_size, int32_t padding)
         return NULL;
     }
 
-    tf->hovered = false;
-    tf->active = false;
     tf->width = width;
     tf->font_size = font_size;
     tf->padding = padding;
@@ -76,13 +72,10 @@ void textfield_input_text(textfield *tf, const uint16_t *text, size_t len)
 
 void textfield_keydown(textfield *tf, int32_t key, uint32_t mods)
 {
+    (void)mods;
+
     assert(tf);
     
-    if (!tf->active)
-    {
-        return;
-    }
-
     if (key == EVA_KEY_BACKSPACE) {
         const ustr *str = text_ustr(tf->t);
         if (!ustr_empty(str) && tf->cursor_index > 0) {
@@ -125,7 +118,11 @@ void textfield_mouse_pressed(textfield *tf,
         .h = height + (tf->padding * 2)
     };
 
-    tf->active = rect_point_intersect(&bbox, mouse_pos);
+    if (rect_point_intersect(&bbox, mouse_pos)) {
+        vec2 rel_pos = vec2_sub(mouse_pos, pos);
+        text_hit(tf->t, &rel_pos, &tf->cursor_index);
+        eva_request_frame();
+    }
 }
 
 void textfield_mouse_released(const textfield *tf, const vec2 *pos);
@@ -156,15 +153,13 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
     };
 
     double cursor_pos = text_index_offset(tf->t, tf->cursor_index);
-    if (tf->active) {
-        rect cursor = {
-            .x = tbox.x + cursor_pos,
-            .y = tbox.y,
-            .w = 2.0,
-            .h = height
-        };
-        render_draw_rect(&cursor, &COLOR_BLACK);
-    }
+    rect cursor = {
+        .x = tbox.x + cursor_pos,
+        .y = tbox.y,
+        .w = 2.0,
+        .h = height
+    };
+    render_draw_rect(&cursor, &COLOR_BLACK);
     render_draw_text(tf->t, &tbox, &bbox);
 }
 

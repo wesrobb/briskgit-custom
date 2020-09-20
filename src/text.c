@@ -305,29 +305,23 @@ bool text_hit(const text *t, const vec2 *pos, size_t *index)
     assert(t);
     assert(pos);
 
-    vec2 extents;
-    text_extents(t, &extents);
-    if (pos->x <= extents.x && pos->y <= extents.y) {
-        CFMutableAttributedStringRef attr_str = create_attr_str(t);
-        CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
-        CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
-        CGPoint ct_pos = CGPointMake(pos->x, pos->y);
+    CFMutableAttributedStringRef attr_str = create_attr_str(t);
+    CTTypesetterRef ts = CTTypesetterCreateWithAttributedString(attr_str);
+    CTLineRef line = CTTypesetterCreateLine(ts, CFRangeMake(0, 0));
+    CGPoint ct_pos = CGPointMake(pos->x, pos->y);
 
-        CFIndex ct_index = CTLineGetStringIndexForPosition(line, ct_pos);
+    CFIndex ct_index = CTLineGetStringIndexForPosition(line, ct_pos);
 
-        CFRelease(line);
-        CFRelease(ts);
-        CFRelease(attr_str);
+    CFRelease(line);
+    CFRelease(ts);
+    CFRelease(attr_str);
 
-        if (ct_index == kCFNotFound) {
-            return false;
-        }
-
-        *index = (size_t)ct_index;
-        return true;
+    if (ct_index == kCFNotFound) {
+        return false;
     }
 
-    return false;
+    *index = (size_t)ct_index;
+    return true;
 }
 
 double text_index_pos(const text *t, size_t index)
