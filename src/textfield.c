@@ -64,10 +64,12 @@ void textfield_input_text(textfield *tf, const uint16_t *text, size_t len)
     assert(text);
 
     text_insert(tf->t, tf->cursor_index, text, len);
-    
-    // TODO: This probably isn't correct for the multichar case.
-    tf->cursor_index += len;
-    eva_request_frame();
+
+    ustr *temp = ustr_create();
+    ustr_append(temp, text, len);
+    grapheme_iter *gi = grapheme_iter_create(temp);
+    tf->cursor_index += grapheme_iter_last(gi);
+    grapheme_iter_destroy(gi);
 }
 
 void textfield_keydown(textfield *tf, int32_t key, uint32_t mods)
@@ -93,6 +95,24 @@ void textfield_keydown(textfield *tf, int32_t key, uint32_t mods)
             grapheme_iter *gi = grapheme_iter_create(str);
             size_t following = grapheme_iter_following(gi, tf->cursor_index);
             text_remove(tf->t, tf->cursor_index, following);
+            grapheme_iter_destroy(gi);
+            eva_request_frame();
+        }
+    }
+    else if (key == EVA_KEY_LEFT) {
+        const ustr *str = text_ustr(tf->t);
+        if (!ustr_empty(str) && tf->cursor_index > 0) {
+            grapheme_iter *gi = grapheme_iter_create(str);
+            tf->cursor_index = grapheme_iter_preceding(gi, tf->cursor_index);
+            grapheme_iter_destroy(gi);
+            eva_request_frame();
+        }
+    }
+    else if (key == EVA_KEY_RIGHT) {
+        const ustr *str = text_ustr(tf->t);
+        if (!ustr_empty(str) && tf->cursor_index < ustr_len(str)) {
+            grapheme_iter *gi = grapheme_iter_create(str);
+            tf->cursor_index = grapheme_iter_following(gi, tf->cursor_index);
             grapheme_iter_destroy(gi);
             eva_request_frame();
         }
@@ -155,9 +175,9 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
     double cursor_pos = text_index_offset(tf->t, tf->cursor_index);
     rect cursor = {
         .x = tbox.x + cursor_pos,
-        .y = tbox.y,
+        .y = tbox.y + tf->padding,
         .w = 2.0,
-        .h = height
+        .h = height - tf->padding
     };
     render_draw_rect(&cursor, &COLOR_BLACK);
     render_draw_text(tf->t, &tbox, &bbox);

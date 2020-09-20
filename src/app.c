@@ -80,8 +80,8 @@ void app_init()
     }
 
     // TODO: textfield does NOT need to know it's own position.
-    _ctx.tf = textfield_create(500, 18.0, 0);
-    uint16_t data[] = {'L', 'p', 's', 't'};
+    _ctx.tf = textfield_create(500, 18.0, 2.0);
+    uint16_t data[] = {'X'};
     textfield_input_text(_ctx.tf, data, array_size(data));
 }
 
@@ -131,7 +131,7 @@ void app_mouse_moved(const vec2 *mouse_pos)
                             &str_index);
         if (hit) {
             _ctx.end_index = str_index;
-            printf("Hits string index %zu\n", str_index);
+            //printf("Hits string index %zu\n", str_index);
             eva_request_frame();
         }
     }
@@ -165,7 +165,7 @@ void app_mouse_pressed(const vec2 *mouse_pos)
             _ctx.text_select = true;
             _ctx.start_index = str_index;
             _ctx.end_index = str_index;
-            printf("Started hit string index %zu\n", str_index);
+            //printf("Started hit string index %zu\n", str_index);
             eva_request_frame();
         }
     }
