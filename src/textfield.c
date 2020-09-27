@@ -169,9 +169,11 @@ void textfield_draw(textfield *tf, const vec2 *pos)
     rect textbox = {
         .x = border.x + tf->padding,
         .y = border.y + tf->padding,
-        .w = border.w - tf->padding,
+        .w = border.w - (tf->padding * 2.0),
         .h = ascent
     };
+    rect clip = textbox;
+    clip.h = height;
 
     double text_pos = textbox.x + tf->tbox_offset;
     double cursor_width = 4.0;
@@ -184,18 +186,26 @@ void textfield_draw(textfield *tf, const vec2 *pos)
     double offset = 0.0f;
     double cursor_end = cursor_start + cursor_width;
     double textbox_end = textbox.x + textbox.w;
-    if (cursor_start < textbox.x) {
-        offset = textbox.x - cursor_start;
+    if (cursor_start <= textbox.x) {
+        offset = textbox.x - cursor_start + (tf->width / 2.0);
+        cursor_start += offset;
+        cursor_end += offset;
     }
-    else if (cursor_end > textbox_end) {
+    if (cursor_end > textbox_end) {
         // produces a negative offset
         offset = textbox_end - cursor_end;
+        cursor_start += offset;
+        cursor_end += offset;
     }
 
-    printf("delta %f\n", offset);
     text_pos += offset;
-    cursor_start += offset;
     tf->tbox_offset += offset;
+    if (tf->tbox_offset > 0.0) {
+        double delta = tf->tbox_offset;
+        cursor_start -= delta;
+        text_pos -= delta;
+        tf->tbox_offset = 0.0;
+    }
     
     rect cursor = {
         .x = cursor_start,
@@ -208,7 +218,7 @@ void textfield_draw(textfield *tf, const vec2 *pos)
     textbox.w = text_width;
 
     render_draw_rect(&cursor, &COLOR_BLUE);
-    render_draw_text(tf->t, &textbox, &border);
+    render_draw_text(tf->t, &textbox, &clip);
 }
 
 bool textfield_active(const textfield *tf);

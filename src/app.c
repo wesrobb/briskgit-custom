@@ -79,8 +79,7 @@ void app_init()
         cursor.y += extents.y;
     }
 
-    // TODO: textfield does NOT need to know it's own position.
-    _ctx.tf = textfield_create(500, 18.0, 2.0);
+    _ctx.tf = textfield_create(500, 18.0, 10.0);
     uint16_t data[] = {'X'};
     textfield_input_text(_ctx.tf, data, array_size(data));
 }
