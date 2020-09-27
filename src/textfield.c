@@ -21,7 +21,7 @@ typedef struct textfield {
     double font_size;
     int32_t padding;
     size_t cursor_index;
-    double cursor_pos;
+    double tbox_offset;
 } textfield;
 
 textfield* textfield_create(double width, double font_size, int32_t padding)
@@ -43,6 +43,7 @@ textfield* textfield_create(double width, double font_size, int32_t padding)
     tf->font_size = font_size;
     tf->padding = padding;
     tf->cursor_index = 0;
+    tf->tbox_offset = 0.0;
 
     text_add_attr(tf->t, 0, 0,
                   FONT_FAMILY_COURIER_NEW, font_size, &COLOR_BLACK);
@@ -147,7 +148,7 @@ void textfield_mouse_pressed(textfield *tf,
 
 void textfield_mouse_released(const textfield *tf, const vec2 *pos);
 
-void textfield_draw(const textfield *tf, const vec2 *pos)
+void textfield_draw(textfield *tf, const vec2 *pos)
 {
     assert(tf);
     assert(pos);
@@ -156,33 +157,58 @@ void textfield_draw(const textfield *tf, const vec2 *pos)
     text_metrics(tf->t, &width, &leading, &ascent, &descent);
     double height = ascent + descent;
 
-    rect bbox = {
+    rect border = {
         .x = pos->x,
         .y = pos->y,
         .w = tf->width,
         .h = height + (tf->padding * 2)
     };
 
-    render_draw_rect(&bbox, &COLOR_WHITE);
+    render_draw_rect(&border, &COLOR_WHITE);
 
-    rect tbox = {
-        .x = pos->x + tf->padding,
-        .y = pos->y + tf->padding,
-        .w = width,
-        .h = ascent 
+    rect textbox = {
+        .x = border.x + tf->padding,
+        .y = border.y + tf->padding,
+        .w = border.w - tf->padding,
+        .h = ascent
     };
 
-    double cursor_pos = text_index_offset(tf->t, tf->cursor_index);
-    rect cursor = {
-        .x = tbox.x + cursor_pos,
-        .y = tbox.y + tf->padding,
-        .w = 2.0,
-        .h = height - tf->padding
-    };
-    if (rect_overlap(&cursor, &bbox)) {
-        render_draw_rect(&cursor, &COLOR_BLACK);
+    double text_pos = textbox.x + tf->tbox_offset;
+    double cursor_width = 4.0;
+    double cursor_half_width = cursor_width / 2.0;
+    double cursor_start = text_pos +
+                          text_index_offset(tf->t, tf->cursor_index) -
+                          cursor_half_width;
+    double text_width = max(width, tf->width);
+
+    double offset = 0.0f;
+    double cursor_end = cursor_start + cursor_width;
+    double textbox_end = textbox.x + textbox.w;
+    if (cursor_start < textbox.x) {
+        offset = textbox.x - cursor_start;
     }
-    render_draw_text(tf->t, &tbox, &bbox);
+    else if (cursor_end > textbox_end) {
+        // produces a negative offset
+        offset = textbox_end - cursor_end;
+    }
+
+    printf("delta %f\n", offset);
+    text_pos += offset;
+    cursor_start += offset;
+    tf->tbox_offset += offset;
+    
+    rect cursor = {
+        .x = cursor_start,
+        .y = textbox.y,
+        .w = cursor_width,
+        .h = height
+    };
+
+    textbox.x = text_pos;
+    textbox.w = text_width;
+
+    render_draw_rect(&cursor, &COLOR_BLUE);
+    render_draw_text(tf->t, &textbox, &border);
 }
 
 bool textfield_active(const textfield *tf);

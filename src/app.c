@@ -269,7 +269,7 @@ void app_draw(const eva_framebuffer *fb)
         render_draw_text(t, &bbox, &clip);
     }
 
-    vec2 tf_pos = { 500, 500 };
+    vec2 tf_pos = { 1000, 500 };
     textfield_draw(_ctx.tf, &tf_pos);
 
     console_draw(fb);

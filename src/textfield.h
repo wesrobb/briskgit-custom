@@ -14,6 +14,6 @@ void textfield_mouse_moved(const textfield *tf, const vec2 *pos);
 void textfield_mouse_pressed(textfield *tf,
                              const vec2 *mouse_pos, const vec2 *pos);
 void textfield_mouse_released(const textfield *tf, const vec2 *pos);
-void textfield_draw(const textfield *tf, const vec2 *pos);
+void textfield_draw(textfield *tf, const vec2 *pos);
 bool textfield_active(const textfield *tf);
 bool textfield_hovered(const textfield *tf);
