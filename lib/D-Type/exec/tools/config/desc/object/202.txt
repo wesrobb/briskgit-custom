@@ -1,0 +1,5 @@
+This object supplies a column definition for any secondary columns in the {a href="../objects/305.htm"}List Box{/a} object.
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.

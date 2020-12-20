@@ -1,0 +1,6 @@
+Text Scroll Type.
+
+{strong}Supported values:{/strong}
+
+0 = By Row (Up/Down)
+1 = By Letter (Left/Right)

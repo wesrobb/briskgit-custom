@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtxGlyphsDoOutput</h2><div class="box_prototype"><strong>
+DT_FLOAT dtxGlyphsDoOutput(DT_DTENGINE engine, DT_FLOAT x, DT_FLOAT y, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG glyph_arr[], const DT_SLONG glyph_arr_displacement[], const DT_SLONG glyph_arr_advance[], DT_FLOAT start_advance)</strong></div><br /><strong>Short Description:</strong> <em>Render a sequence of glyphs to Output as a straight line</em><br /><br />
+
+<h2>dtxCharsDoOutput</h2><div class="box_prototype"><strong>
+DT_FLOAT dtxCharsDoOutput(DT_DTENGINE engine, DT_FLOAT x, DT_FLOAT y, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG chars_arr[])</strong></div><br /><strong>Short Description:</strong> <em>Render a sequence of characters to Output as a straight line</em><br /><br />
+
+<p>These functions draw a text string as a simple straight text line. The origin point of the text line is placed at the (x, y) coordinates of the current Output.</p>
+
+<p>The Typesetter provides type (e.g. font, transformation, outline expansion), hinting and positioning attributes to the individual glyphs within the text string, while the two-dimensional transformation matrix <em>tm</em> maps their locations (origin points) to the  destination pixel coordinates. Essentially, this mapping represents the projection of  points in the native font dependent design space to the final pixel locations.</p>
+
+<p>As with other rendering functions, the current Output provides the destination surface (which can be either D-Type's Memory Device Context surface or Windows compatible Device Context surface) and style attributes that are applied to the text string  when its image is actually rendered.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>X coordinate of the text line's origin point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Y coordinate of the text line's origin point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>spacing</em></p>
+</td><td>
+<p>Additional spacing between glyphs/characters in the text string, in font units.</p>
+</td></tr>
+
+<tr><td>
+<p><em>mode</em></p>
+</td><td>
+
+<p>This parameter specifies the writing direction (horizontal or vertical) and how the function should calculate the position of glyphs/characters. Currently, the following values are supported:</p>
+
+<p><strong>Horizontal Writing Mode</strong></p>
+
+<ul>
+
+<li><p><em>mode</em> = 0 (DV_SPACING_ROUND_ADD) &mdash; <em>Do not kern, Round then Add.</em> The accurate distance from the previous character is rounded to the closest pixel value and added to the previous pixel position.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;ROUND(Delta)&nbsp;+&nbsp;PosPrevPix</p>
+<p><em>Note:</em> Because in the above formula the total rounding error accumulates with each character drawn, this method is not suitable for a device independent text layout. Instead, this method can be used in a device dependent text layout. However, because of rounding, this method does not always produce great looking character spacing.</p>
+</li>
+
+<li><p><em>mode</em> = 1 (DV_SPACING_KERN_ROUND_ADD) &mdash; <em>Kern, Round then Add.</em> Same as DV_SPACING_ROUND_ADD but with kerning. That is, the accurate distance from the previous character is kerned, rounded to the closest pixel value and added to the previous pixel position.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;ROUND(Delta&nbsp;+&nbsp;Kerning)&nbsp;+&nbsp;PosPrevPix</p>
+<p><em>Note:</em> Same as for DV_SPACING_ROUND_ADD.</p>
+</li>
+
+<li><p><em>mode</em> = 2 (DV_SPACING_ADD_ROUND) &mdash; <em>Do not kern, Add then Round.</em> The accurate distance from the previous character is added to the previous accurate position, and the result rounded to the closest pixel value.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;ROUND(Delta&nbsp;+&nbsp;PosPrev)</p>
+<p>With this method, only the final result is rounded, which means that the total rounding error can never exceed 0.5 pixels. As a result, this method can be used for a device independent text layout. However, because of rounding, this method does not always produce great looking character spacing.</p>
+</li>
+
+<li><p><em>mode</em> = 3 (DV_SPACING_KERN_ADD_ROUND) &mdash; <em>Kern, Add then Round.</em> Same as DV_SPACING_ADD_ROUND but with kerning. That is, the accurate distance from the previous character is kerned, added to the previous accurate position, and the result rounded to the closest pixel value.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;ROUND(Delta&nbsp;+&nbsp;Kerning&nbsp;+&nbsp;PosPrev)</p>
+<p><em>Note:</em> Same as for DV_SPACING_ADD_ROUND.</p>
+</li>
+
+<li><p><em>mode</em> = 4 (DV_SPACING_FRAC) &mdash; <em>Do not kern, Use Fractional Pixel Positioning.</em> The accurate distance from the previous character is added to the previous pixel position.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;Delta&nbsp;+&nbsp;PosPrevPix</p>
+<p><em>Note:</em> <strong>This method is very suitable and recommended for a device independent text layout. It produces good looking text and accurate (device independent) character spacing.</strong></p>
+</li>
+
+<li><p><em>mode</em> = 5 (DV_SPACING_KERN_FRAC) &mdash; <em>Kern, Use Fractional Pixel Positioning.</em> Same as DV_SPACING_FRAC but with kerning. That is, the accurate distance from the previous character is kerned and added to the previous pixel position.</p>
+<p align="center">PosNewPix&nbsp;=&nbsp;Delta&nbsp;+&nbsp;Kerning&nbsp;+&nbsp;PosPrevPix</p>
+<p><em>Note:</em> Same as for DV_SPACING_FRAC.</p>
+</li>
+
+<li><p><em>mode</em> = 6 (DV_SPACING_DEVICE) &mdash; This method utilizes a complex device-dependent formula that is specially crafted to give great looking character spacing. With this formula, character spacing is calculated in whole-pixel units and in a device dependent manner.</p>
+<p><em>Note:</em> <strong>This method is very suitable and recommended for a device dependent text layout. It produces very nice looking text and visually pleasing (device dependent) character spacing.</strong></p>
+</li>
+
+<li><p><em>mode</em> = 7 (DV_SPACING_KERN_DEVICE) &mdash; Same as DV_SPACING_DEVICE but with kerning.</p>
+<p><em>Note:</em> Same as for DV_SPACING_DEVICE.</p>
+</li>
+
+<li><p><em>mode</em> = 8 (DV_SPACING_DEVICE_2) &mdash; This method is very similar to DV_SPACING_DEVICE which means that it utilizes a similar complex device-dependent formula crafted to give great looking character spacing. However, this method produces even better looking and easier to read text, especially at smaller sizes. This is accomplished by artificially increasing the amount of character spacing between certain characters and in certain conditions.</p>
+
+<p><em>Note:</em> <strong>This method is very suitable and recommended for a device dependent text layout. It produces very nice looking text and visually pleasing (device dependent) character spacing.</strong></p>
+</li>
+
+<li><p><em>mode</em> = 9 (DV_SPACING_KERN_DEVICE_2) &mdash; Same as DV_SPACING_DEVICE_2 but with kerning.</p>
+<p><em>Note:</em> Same as for DV_SPACING_DEVICE_2.</p>
+</li>
+</ul>
+
+<p><strong>Vertical Writing Mode</strong></p>
+
+<p>All of the above values are supported in vertical writing mode as well. However, you must combine them with the value 128 (DV_SPACING_VERTICAL) using the OR ("|") operator. For example, (DV_SPACING_VERTICAL&nbsp;|&nbsp;DV_SPACING_KERN_FRAC). This way the function will know the writing direction is vertical.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>tm</em></p>
+</td><td>
+<p>A two-dimensional transformation matrix that maps the locations (origin points) of individual glyphs within the text string to their final pixel coordinates. As mentioned above, this mapping represents the projection of points in the native font dependent design space to the final pixel locations.</p>
+<p>This parameter can be supplied as DV_NULL. In this case, the function will use a simple scaling matrix which is calculated based on the current type attributes in the Typesetter and is suitable for drawing horizontal text lines.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr</em></p>
+</td><td>
+<p>A string of glyph indices, terminated with DV_ENDOFGLYPHARR.</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars_arr</em></p>
+</td><td>
+<p>A null-terminated string in UCS4 format.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr_displacement</em></p>
+</td><td>
+<p>An array of glyph displacements (in the direction perpendicular to the writing direction, which depends on the <em>mode</em> parameter), in font units. Each element of this array represents the offset of the corresponding glyph from the baseline.</p>
+<p>If this value is DV_NULL, all glyph displacement values will be 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr_advance</em></p>
+</td><td>
+<p>An array of glyph advancements (in the direction parallel with the writing direction, which depends on the <em>mode</em> parameter), in font units. Each element of this array represents the offset of the corresponding glyph from the previous one. The first element is the offset of the first glyph from  the origin.</p>
+<p>If this value is DV_NULL, the function will calculate glyph advancements automatically, using the default advance width of each glyph.</p>
+</td></tr>
+
+<tr><td>
+<p><em>start_advance</em></p>
+</td><td>
+<p>Initial advancement value, in pixels.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value represents the advance width of the text string in pixels.</p>
+
+
+<h3>Comments</h3>
+
+<p>When rendering text, the two-dimensional transformation matrix <em>tm</em> maps the locations (origin points) of individual glyphs within the text string in the native font dependent design space to the final pixel coordinates. This is a very powerful feature which makes it possible to apply various types of transformations to the text lines. As an example, applications can draw horizontal, vertical, rotated or skewed text lines. However, it is important to understand that the two-dimensional transformation matrix <em>tm</em> only controls the placement of the glyph's origin points and has absolutely no impact on the transformation of individual glyphs within the text string. To control the transformation of individual glyphs within the string, call the <a href="../funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> or <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a> function appropriately.</p>
+
+<p>While the transformation attributes within the <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure and the transformation matrix <em>tm</em> in this function are completely independent, in many cases you will want them to work in conjunction. For example, when rendering rotated text lines, you will most likely want to rotate both the individual glyphs within the string and apply a rotation matrix to their origin points so that a horizontal line becomes a rotated one. A familiarity with the mathematical properties of two-dimensional transformation matrices is assumed here.</p>
+
+
+<h3>Example</h3>
+
+<p>The following example shows a sample text paragraph (at small font size) rendered using different kerning modes.</p>
+
+<p class="center"><img src="../images/text_modes.gif" width="520" height="467" alt="kerning modes" border="1" /></p>
+<p>To view the subtle differences between various kerning modes more easily, each text paragraph is magnified 2 times and shown below separately. Please note, however, that the final output does not only depend on the selected kerning mode, but also the active <a href="../manual/ph.htm">Positioning and Hinting</a> modes and other Typesetter's parameters such as quality and subpixel precision. Please remember that the Typesetter controls the positioning and hinting of glyphs at the lowest level. You should therefore first set the Typesetter's parameters (by calling <a href="../funcs/dtTypesetterSetHinting.htm">dtTypesetterSetHinting</a>, <a href="../funcs/dtTypesetterSetPositioning.htm">dtTypesetterSetPositioning</a>, <a href="../funcs/dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a>, <a href="../funcs/dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> and other relevant functions), so they make sense when used in conjunction with the specified kerning mode. For example, it does not make much sense (although it is not illegal) to set <em>mode</em> to DV_SPACING_FRAC if Typesetter's positioning is set to DV_POSITIONING_INTX_INTY. But it does make sense to set Typesetter's positioning to DV_POSITIONING_FRACX_FRACY and use any <em>mode</em>.</p>
+<p>In our example, fractional positioning is set to DV_POSITIONING_FRACX_FRACY and hinting is on in both X and Y direction (DV_HINTING_XON_YON). Also, the quality level is set to DV_QUALITY_HINT_FILTER_2. Obviously, our images would look different if hinting or fractional positioning was disabled or if the quality level was set to some other setting.</p>
+
+<p><strong>DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE</strong></p>
+<p class="center"><img src="../images/text_mode_1.gif" hspace="10" vspace="10" width="518" height="210" alt="DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE" border="1" /></p>
+<p>DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE produce great looking character spacing in a device dependent manner. Since only whole-pixel coordinates are used, all characters look identical regardless of their position.</p>
+
+<p><strong>DV_SPACING_FRAC and DV_SPACING_KERN_FRAC</strong></p>
+<p class="center"><img src="../images/text_mode_2.gif" hspace="10" vspace="10" width="518" height="210" alt="DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE" border="1" /></p>
+<p>DV_SPACING_FRAC and DV_SPACING_KERN_FRAC produce nice looking character spacing in a device independent manner. Because in this example fractional positioning is enabled and hinting is on, you will notice that the same characters sometimes look slightly different at different fractional positions (for example, look at the character 'a' in the word 'Saturn' and then in the word 'distant'). If the hinting was off, character spacing would look even better but the overall text appearance would be a little blurry. Regardless of the hinting, this method is very suitable and recommended for a device independent text layout.</p>
+
+<p><strong>DV_SPACING_ROUND_ADD and DV_SPACING_KERN_ROUND_ADD</strong></p>
+<p class="center"><img src="../images/text_mode_3.gif" hspace="10" vspace="10" width="518" height="210" alt="DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE" border="1" /></p>
+<p>DV_SPACING_ROUND_ADD and DV_SPACING_KERN_ROUND_ADD can be used in a device dependent text layout but, because of rounding, character spacing is not always ideal. Characters are sometimes either too close or too far apart. Look for example at the word 'planets', 'side', 'this' or 'encircling'. Since pixel coordinates are always rounded, all characters look identical.</p>
+
+<p><strong>DV_SPACING_ADD_ROUND and DV_SPACING_KERN_ADD_ROUND</strong></p>
+<p class="center"><img src="../images/text_mode_4.gif" hspace="10" vspace="10" width="518" height="210" alt="DV_SPACING_DEVICE and DV_SPACING_KERN_DEVICE" border="1" /></p>
+<p>DV_SPACING_ADD_ROUND and DV_SPACING_KERN_ADD_ROUND can be used in a device independent text layout but, because of rounding, character spacing is not always ideal. Characters are sometimes either too close or too far apart. Look for example at the word 'planets', 'either side' or 'this'. Since pixel coordinates are always rounded, all characters look identical.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

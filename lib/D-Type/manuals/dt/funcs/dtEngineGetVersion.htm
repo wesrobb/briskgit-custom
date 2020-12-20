@@ -1,0 +1,90 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtEngineGetVersion</h2><div class="box_prototype"><strong>
+DT_SLONG dtEngineGetVersion(DT_DTENGINE engine, DT_CHAR* ver_name, DT_CHAR* ver_snum, DT_CHAR* reserved)</strong></div><br /><strong>Short Description:</strong> <em>Get D-Type Standard Engine version</em><br /><br />
+
+<p>This function returns the version of D-Type Standard Engine being utilized.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ver_name</em></p>
+</td><td>
+<p>A valid pointer to a buffer supplied by your application that will hold the name of the engine, expressed as a standard ANSI C/C++ string. The size of this buffer must be at least 255 bytes.</p>
+<p>However, if you do not wish to receive the value of the above parameter, you may set this pointer to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ver_snum</em></p>
+</td><td>
+<p>A valid pointer to a buffer supplied by your application that will hold the version number of the engine, expressed as a standard ANSI C/C++ string in the following format:</p>
+<p class="center">
+<em>ReleaseNumber.VersionNumber.SubVersionNumber.BuildNr</em>
+</p>
+<p>The size of this buffer must be at least 16 bytes.</p>
+<p>However, if you do not wish to receive the value of the above parameter, you may set this pointer to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>A valid pointer to a buffer reserved for future use. The size of this buffer must be at least 255 bytes. At present, the engine will write an empty string to this buffer.</p>
+<p>However, if you do not wish to receive the value of the above parameter, you may set this pointer to DV_NULL.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The function returns the version number of D-Type Standard Engine being utilized and expressed as an integer. The larger this number is, the more mature the engine is.</p>
+
+<h3>Example</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/types.htm#DT_CHAR">DT_CHAR</a> reserved[255];
+<a href="../manual/types.htm#DT_CHAR">DT_CHAR</a> ver_name[255];
+<a href="../manual/types.htm#DT_CHAR">DT_CHAR</a> ver_snum[16];
+<a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> ver_num = dtEngineGetVersion(engine, ver_name, ver_snum, reserved);
+
+printf("%s version %s (%d)\r\n", ver_name, ver_snum, ver_num);
+</pre>
+</div>
+
+<p><em>Output</em>:</p>
+
+<pre>
+D-Type Standard Engine version 4.0.0.1 (4001)
+</pre>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

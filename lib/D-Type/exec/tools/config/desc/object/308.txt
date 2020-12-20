@@ -1,0 +1,3 @@
+The Rich Text Box object is a visual and interactive form control that allows users to input text. This control can be used as a single-line input control or a multi-line input control.
+
+{strong}Designated Rendering Function:{/strong} fcDrawRichTextBox (10007)

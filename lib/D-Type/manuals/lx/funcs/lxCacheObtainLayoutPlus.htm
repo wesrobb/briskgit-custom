@@ -1,0 +1,89 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxCacheObtainLayoutPlus</h2><div class="box_prototype"><strong>
+DT_SWORD lxCacheObtainLayoutPlus(DT_LXCACHE layout_cache, DT_ID_SWORD font_index, DT_ID_SLONG script_code, DT_ID_SLONG language_code, DT_SLONG typo_flags, DT_LXLAYOUT* layout)</strong></div><br /><strong>Short Description:</strong> <em>Obtain text layout instance from the layout cache</em><br /><br />
+
+<h2>lxCacheObtainLayout</h2><div class="box_prototype"><strong>
+DT_SWORD lxCacheObtainLayout(DT_LXCACHE layout_cache, DT_ID_SWORD font_index, DT_ID_SLONG script_code, DT_LXLAYOUT* layout)</strong></div><br /><strong>Short Description:</strong> <em>Obtain text layout instance from the layout cache</em><br /><br />
+
+<p>Based on the supplied script and font, these functions return a layout instance from the layout cache.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>layout_cache</em></p>
+</td><td>
+<p>Handle of the previously created layout cache instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog (associated with the Standard Engine instance that was used to create the layout cache) for which the text layout instance is to be obtained.</p>
+</td></tr>
+
+<tr><td>
+<p><em>script_code</em></p>
+</td><td>
+<p>Script code that identifies the script for which the text layout instance is to be obtained. Must be a code from the list of <a href="../manual/scripts.htm">defined scripts</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>language_code</em></p>
+</td><td>
+<p>Language code that identifies the language for which the text layout instance is to be obtained. Must be a code from the list of <a href="../manual/languages.htm">defined languages</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>typo_flags</em></p>
+</td><td>
+<p>Typographic control flags. Use 0 for no specific typographic features, 1 for kerning, 2 for ligature formation, and 3 for kerning and ligature formation. Others values are reserved for future.
+</p>
+</td></tr>
+
+<tr><td>
+<p><em>layout</em></p>
+</td><td>
+<p>Pointer to the handle of the returned layout instance.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the functions were successful, the return value is 1 and <em>layout</em> holds a handle of the layout instance in the layout cache. Otherwise, the functions return 0 and <em>layout</em> holds DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>Before calling these functions, the assumption is that you have obtained a valid font index from the Font Catalog associated with the Standard Engine instance that was used to create the layout cache.</p>
+
+<p>These functions are usually very quick, because if the requested text layout instance is already in the layout cache, that instance will be returned (and the corresponding font file will not be accessed). The font file will be accessed (and a new text layout instance created) only if the requested text layout instance is not found in the layout cache.</p>
+
+<p>Keep in mind that the returned text layout instance is under exclusive control of the layout cache; your application does not own the returned text layout instance and must not attempt to destroy it. Also, you must remember that this instance is valid only until the next call to <a href="lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> / <a href="lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a> (or <a href="lxCacheClearPlus.htm">lxCacheClear</a> / <a href="lxCacheClearPlus.htm">lxCacheClearPlus</a>). This is because subsequent requests for additional text layout instances might empty the layout cache and invalidate your text layout instance. Therefore, use the <a href="lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> / <a href="lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a> functions just before laying out a run of text.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

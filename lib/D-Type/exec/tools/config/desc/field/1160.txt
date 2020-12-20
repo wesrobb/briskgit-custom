@@ -1,0 +1,5 @@
+Right margin, in document units. Positive values mean "inside", negative values mean "outside".
+
+{strong}Sample values:{/strong}
+
+"100" = Right margin of 100 document units

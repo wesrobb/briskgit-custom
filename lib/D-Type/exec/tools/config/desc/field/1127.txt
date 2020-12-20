@@ -1,0 +1,352 @@
+Array of Style Effects
+
+Style effects to apply to a surface. This is an array that contains one or more effect values. The maximum number of values this array can hold is 64. The array begins with the first {em}EffectID{/em}, which is followed by the first set of {em}n{/em} {em}EffectParameter{/em} values. The array continues with the second {em}EffectID{/em}, which is followed by the second set of {em}n{/em} {em}EffectParameter{/em} values. The array continues with the third {em}EffectID{/em}, which is followed by the third set of {em}n{/em} {em}EffectParameter{/em} values. And so on. Once again, the total number of {em}EffectID{/em} and {em}EffectParameter{/em} values in the array cannot exceed 64.
+
+The number of {em}EffectParameter{/em} values in each set ({em}n{/em}) depends on the actual {em}EffectID{/em} in that set. Some {em}EffectID{/em} values have no parameters, while others have 1 or 2 parameters. See Appendix - Style Effects for details.
+
+{em}EffectID{/em} identifies one of D-Type's special effects, while {em}EffectParameter{/em} values provide effect specific parameters. Some effects have no parameters, while others have 1 or 2 {em}EffectParameter{/em} values. The following chart lists all currently supported style effects and explains how to use their parameters:
+
+{em}EffectID{/em}: 0 (DV_EFFECT_NONE)
+Description: No special effect
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 0
+
+{em}EffectID{/em}: 1 (DV_EFFECT_HBLUR_FUZZY)
+Description: Fuzzy Blur - only horizontal
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+
+{em}EffectID{/em}: 2 (DV_EFFECT_VBLUR_FUZZY)
+Description: Fuzzy Blur - only vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 3 (DV_EFFECT_HVBLUR_FUZZY)
+Description: Fuzzy Blur - horizontal and vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 4 (DV_EFFECT_HBLUR_GAUSS)
+Description: Gaussian Blur - only horizontal
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+
+{em}EffectID{/em}: 5 (DV_EFFECT_VBLUR_GAUSS)
+Description: Gaussian Blur - only vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 6 (DV_EFFECT_HVBLUR_GAUSS)
+Description: Gaussian Blur - horizontal and vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 7 (DV_EFFECT_EMBOSS_50_NW)
+Description: 50% Transparent Emboss - North-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboss in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboss in pixels.
+
+{em}EffectID{/em}: 8 (DV_EFFECT_EMBOSS_50_NE)
+Description: 50% Transparent Emboss - North-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboss in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboss in pixels.
+
+{em}EffectID{/em}: 9 (DV_EFFECT_EMBOSS_50_SW)
+Description: 50% Transparent Emboss - South-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboss in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboss in pixels.
+
+{em}EffectID{/em}: 10 (DV_EFFECT_EMBOSS_50_SE)
+Description: 50% Transparent Emboss - South-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboss in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboss in pixels.
+
+{em}EffectID{/em}: 11 (DV_EFFECT_PATTERN_PHOTO)
+Description: Pattern Group 1 - Photo Shades
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 12 (DV_EFFECT_PATTERN_SHADES)
+Description: Pattern Group 2 - Fine Shades
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 13 (DV_EFFECT_PATTERN_STRIPES)
+Description: Pattern Group 3 - Stripes
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 14 (DV_EFFECT_PATTERN_ORNAMENTAL)
+Description: Pattern Group 4 - Ornamental
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 15 (DV_EFFECT_EDGE_50_NW)
+Description: 50% Transparent Shaded Edge - North-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 16 (DV_EFFECT_EDGE_50_NE)
+Description: 50% Transparent Shaded Edge - North-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 17 (DV_EFFECT_EDGE_50_SW)
+Description: 50% Transparent Shaded Edge - South-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 18 (DV_EFFECT_EDGE_50_SE)
+Description: 50% Transparent Shaded Edge - South-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 19 (DV_EFFECT_BODY_50_NW)
+Description: 50% Transparent Shaded Body - North-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 20 (DV_EFFECT_BODY_50_NE)
+Description: 50% Transparent Shaded Body - North-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 21 (DV_EFFECT_BODY_50_SW)
+Description: 50% Transparent Shaded Body - South-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 22 (DV_EFFECT_BODY_50_SE)
+Description: 50% Transparent Shaded Body - South-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 23 (DV_EFFECT_EDGE_100_NW)
+Description: Opaque Shaded Edge - North-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 24 (DV_EFFECT_EDGE_100_NE)
+Description: Opaque Shaded Edge - North-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 25 (DV_EFFECT_EDGE_100_SW)
+Description: Opaque Shaded Edge - South-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 26 (DV_EFFECT_EDGE_100_SE)
+Description: Opaque Shaded Edge - South-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 27 (DV_EFFECT_BODY_100_NW)
+Description: Opaque Shaded Body - North-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 28 (DV_EFFECT_BODY_100_NE)
+Description: Opaque Shaded Body - North-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 29 (DV_EFFECT_BODY_100_SW)
+Description: Opaque Shaded Body - South-West
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 30 (DV_EFFECT_BODY_100_SE)
+Description: Opaque Shaded Body - South-East
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 31 (DV_EFFECT_SHADE_INNER_A)
+Description: Inner Shade A
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 32 (DV_EFFECT_SHADE_INNER_B)
+Description: Inner Shade B
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 33 (DV_EFFECT_SHADE_INNER_C)
+Description: Inner Shade C
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The horizontal shading factor in pixels.
+2nd {em}EffectParameter{/em}: The vertical shading factor in pixels.
+
+{em}EffectID{/em}: 34 (DV_EFFECT_HBOLD)
+Description: Bold - only horizontal
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of horizontal emboldening in pixels.
+
+{em}EffectID{/em}: 35 (DV_EFFECT_VBOLD)
+Description: Bold - only vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of vertical emboldening in pixels.
+
+{em}EffectID{/em}: 36 (DV_EFFECT_HVBOLD)
+Description: Bold - horizontal and vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboldening in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboldening in pixels.
+
+{em}EffectID{/em}: 37 (DV_EFFECT_HBOLD_VBLUR_FUZZY)
+Description: Horizontal Bold with vertical Fuzzy Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboldening in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 38 (DV_EFFECT_VBOLD_HBLUR_FUZZY)
+Description: Vertical Bold with horizontal Fuzzy Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboldening in pixels.
+
+{em}EffectID{/em}: 39 (DV_EFFECT_PATTERN_INVPHOTO)
+Description: Inverted Pattern Group 1 - Photo Shades
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 40 (DV_EFFECT_PATTERN_INVSHADES)
+Description: Inverted Pattern Group 2 - Fine Shades
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 41 (DV_EFFECT_PATTERN_INVSTRIPES)
+Description: Inverted Pattern Group 3 - Stripes
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 42 (DV_EFFECT_PATTERN_INVORNAMENTAL)
+Description: Inverted Pattern Group 4 - Ornamental
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Pattern fill index. Refer to Appendix - Pattern Fills for a list of available pattern fills.
+
+{em}EffectID{/em}: 43 (DV_EFFECT_PATTERN_CUSTOM)
+Description: Custom Pattern Fill
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Custom pattern fill index.
+
+{em}EffectID{/em}: 44 (DV_EFFECT_RESERVED_A)
+Description: Reserved for future use
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 0
+
+{em}EffectID{/em}: 45 (DV_EFFECT_RESERVED_B)
+Description: Reserved for future use
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 0
+
+{em}EffectID{/em}: 46 (DV_EFFECT_HBLUR_STACK)
+Description: Stack Blur - only horizontal
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+
+{em}EffectID{/em}: 47 (DV_EFFECT_VBLUR_STACK)
+Description: Stack Blur - only vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 48 (DV_EFFECT_HVBLUR_STACK)
+Description: Stack Blur - horizontal and vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 49 (DV_EFFECT_HBOLD_VBLUR_GAUSS)
+Description: Horizontal Bold with vertical Gaussian Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboldening in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 50 (DV_EFFECT_VBOLD_HBLUR_GAUSS)
+Description: Vertical Bold with horizontal Gaussian Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboldening in pixels.
+
+{em}EffectID{/em}: 51 (DV_EFFECT_HBOLD_VBLUR_STACK)
+Description: Horizontal Bold with vertical Stack Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal emboldening in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical blur in pixels.
+
+{em}EffectID{/em}: 52 (DV_EFFECT_VBOLD_HBLUR_STACK)
+Description: Vertical Bold with horizontal Stack Blur
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: The amount of horizontal blur in pixels.
+2nd {em}EffectParameter{/em}: The amount of vertical emboldening in pixels.
+
+{em}EffectID{/em}: 53 (DV_EFFECT_RESERVED_B)
+Description: Reserved for future use
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 0
+
+{em}EffectID{/em}: 54 (DV_EFFECT_RESERVED_C)
+Description: Reserved for future use
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 0
+
+{em}EffectID{/em}: 55 (DV_EFFECT_HOUTLINE)
+Description: Outline - only horizontal
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Horizontal outline value in pixels.
+
+{em}EffectID{/em}: 56 (DV_EFFECT_VOUTLINE)
+Description: Outline - only vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 1
+1st {em}EffectParameter{/em}: Vertical outline value in pixels.
+
+{em}EffectID{/em}: 57 (DV_EFFECT_HVOUTLINE)
+Description: Outline - horizontal and vertical
+Number of Required {em}EffectParameter{/em} Values ({em}n{/em}): 2
+1st {em}EffectParameter{/em}: Horizontal outline value in pixels.
+2nd {em}EffectParameter{/em}: Vertical outline value in pixels.
+
+{strong}Notes:{/strong}
+
+Note 1: Effects 4, 5 and 6 (Gaussian Blur) are computationally intensive. The larger the amount of blur, the more time it takes to render the effect. Use Gaussian Blur with caution, especially on slower machines.
+
+Note 2: Fuzzy Blur and Stack Blur are extremely fast and suitable for real-time blurring.
+
+Note 3: Gaussian Blur and Stack Blur produce softer, more aesthetically pleasing look compared to Fuzzy Blur.
+
+Note 4: In order to use effects 11, 12, 13, 14, 39, 40, 41 or 42, the engine must be initialized using the dtype.pat file. This file contains pattern fill definitions listed in Appendix - Pattern Fills.
+
+Note 5: Effects 34, 35, 36 (Bold) can be used to simulate bold typefaces.
+
+{strong}Sample values:{/strong}
+
+"24, 15, 1" = Single Style Effect: Opaque Shaded Edge - North-East (DV_EFFECT_EDGE_100_NE) with the horizontal shading factor of 15 pixels and vertical shading factor of 1 pixel
+
+"24, 15, 1, 13, 6" = First Style Effect: Opaque Shaded Edge - North-East (DV_EFFECT_EDGE_100_NE) with the horizontal shading factor of 15 pixels and vertical shading factor of 1 pixel; Second Style Effect: Pattern Group 3 - Stripes (DV_EFFECT_PATTERN_STRIPES) with pattern fill #6
+
+"3, 5, 10" = Single Style Effect: Fuzzy Blur - horizontal and vertical (DV_EFFECT_HVBLUR_FUZZY) with the horizontal blur amount of 5 pixels and vertical blur amount of 10 pixels
+
+"11, 22" = Single Style Effect: Pattern Group 1 - Photo Shades (DV_EFFECT_PATTERN_PHOTO) with pattern fill #22
+
+"3, 5, 10, 11, 22" = First Style Effect: Fuzzy Blur - horizontal and vertical (DV_EFFECT_HVBLUR_FUZZY) with the horizontal blur amount of 5 pixels and vertical blur amount of 10 pixels; Second Style Effect: Pattern Group 1 - Photo Shades (DV_EFFECT_PATTERN_PHOTO) with pattern fill #22
+
+"11, 22, 3, 5, 10" = First Style Effect: Pattern Group 1 - Photo Shades (DV_EFFECT_PATTERN_PHOTO) with pattern fill #22; Second Style Effect: Fuzzy Blur - horizontal and vertical (DV_EFFECT_HVBLUR_FUZZY) with the horizontal blur amount of 5 pixels and vertical blur amount of 10 pixels

@@ -1,0 +1,8 @@
+Quality.
+
+{strong}Supported values:{/strong}
+
+0 = Low Quality But Fast
+1 = High Quality But Slower
+2 = Very High Quality But Slower
+3 = Very High Quality (More Blur) But Slower

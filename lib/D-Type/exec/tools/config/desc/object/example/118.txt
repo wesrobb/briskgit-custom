@@ -1,0 +1,28 @@
+DT_ID_SLONG obj[4];
+
+obj[0] = pdObjAdd(pd, 0, "Grid Style");
+obj[1] = pdObjAdd(pd, 0, "Grid Border");
+obj[2] = pdObjAdd(pd, 0, "Grid Lines");
+{strong}obj[3] = pdObjAdd(pd, 0, "Grid");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);
+
+/* Properties for object 1 */
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[1], pdLineThickness, "300", PD_WORD_SIGNED);
+
+/* Properties for object 2 */
+pdLinkAdd(pd, obj[2], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[2], pdLineThickness, "100", PD_WORD_SIGNED);
+
+/* Properties for object 3 */
+{strong}pdLinkAdd(pd, obj[3], pdOutlinePtr, obj[1]);
+pdLinkAdd(pd, obj[3], pdLinePtr, obj[2]);
+pdPropAdd(pd, obj[3], pdDw, "600", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[3], pdDh, "250", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[3], pdNw, "5", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[3], pdNh, "3", PD_WORD_UNSIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[3], 0, 50, 50, 0, 0, 0, pdDrawGrid, DV_NULL);{/strong}

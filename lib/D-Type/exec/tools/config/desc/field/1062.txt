@@ -1,0 +1,27 @@
+Alignment of the last text line in a paragraph.
+
+{strong}Supported values:{/strong}
+
+0 = Left: The text line is aligned left.
+
+1 = Center: The text line is centered.
+
+2 = Right: The text line is aligned right.
+
+3 = Justify Type A / Left: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.
+
+4 = Justify Type B / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align left.
+
+5 = Justify Type A / Center: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.
+
+6 = Justify Type B / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then center.
+
+7 = Justify Type A / Right: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.
+
+8 = Justify Type B / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align right.
+
+9 = Justify Type B / Justify Type A / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.
+
+10 = Justify Type B / Justify Type A / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.
+
+11 = Justify Type B / Justify Type A / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.

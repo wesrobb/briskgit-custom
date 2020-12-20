@@ -1,0 +1,25 @@
+Transformation matrix. This is an array that must contain either 4 or 8 elements. Each element is 4 bytes long and represents a single transformation parameter in the 14.18 fixed-point format (i.e. the transformation parameters are premultiplied by 262144).
+
+If the array contains 4 elements, the transformation matrix is assumed to be a special case of a two-dimensional affine transformation described by the following equation:
+
+tx = m[0][0] * x + m[0][1] * y
+ty = m[1][0] * x + m[1][1] * y
+
+In this case, the elements in the array are specified in the following order: m[0][0], m[0][1], m[1][0], m[1][1].
+
+If the array contains 8 elements, the transformation matrix is assumed to be a 2D perspective (or projective) transformation described by the following equation:
+
+tx = (m[0][0] * x + m[0][1] * y + m[0][2]) / w
+ty = (m[1][0] * x + m[1][1] * y + m[1][2]) / w
+
+where w = (m[2][0] * x + m[2][1] * y + m[2][2])
+
+In this case, the elements in the array are specified in the following order: m[0][0], m[0][1], m[1][0], m[1][1], m[0][2], m[1][2], m[2][0], m[2][1]. The m[2][2] parameter is assumed to equal 1.
+
+In the above equations x and y represent the original (source) coordinates in document units, m[i][j] represent the transformation parameters, while tx and ty represent the final (output) coordinates in document units.
+
+{strong}Sample values:{/strong}
+
+"185363, -185363, 185363, 185363"
+"185363, -185363, 185363, 185363, 500296, 500296, 0, 0"
+"125696, -1536, 0, 119296, -55050240, -31457280, 0, -262"

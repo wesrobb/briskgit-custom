@@ -1,0 +1,45 @@
+Font underline and/or strike-through effect.
+
+The first byte (bits 1-8) is used to specify the type of the underline and/or strike-through effect. Supported values are as follows:
+
+0 (000 000) = No Effect
+1 (000 001) = Underline
+2 (000 010) = Double Underline
+8 (001 000) = Strike-Through
+9 (001 001) = Strike-Through and Underline
+10 (001 010) = Strike-Through and Double Underline
+16 (010 000) = Double Strike-Through
+17 (010 001) = Double Strike-Through and Underline
+18 (010 010) = Double Strike-Through and Double Underline
+
+If the line definition for the underline and/or strike-through effect is supplied (via the pdUnderlinePtr link in Power Engine or TX_ATTR_UNDERLINE_THICKNESS attribute in Text Engine), then the second byte (bits 9-16) is used to specify the thickness of the secondary line in double underline and double strike-through effects relative to the primary line. The value itself is expressed in 1/255 increments of the thickness of the primary line. Value 0 is special and indicates a default thickness (which is set to 50% of the thickness of the primary line). The thickness of the primary line is supplied via the line definition and is expressed in 1/100 increments of document units..
+
+Interpretation of the second byte when line definition is supplied:
+
+0 = Default thickness (50% of the thickness of the primary line)
+1 = 1/255 (or 0.39%) of the thickness of the primary line
+2 = 2/255 (or 0.78%) of the thickness of the primary line
+3 = 3/255 (or 1.17%) of the thickness of the primary line
+...
+253 = 253/255 (or 99.22%) of the thickness of the primary line
+254 = 254/255 (or 99.61%) of the thickness of the primary line
+255 = 255/255 (or 100%) of the thickness of the primary line
+
+If the line definition for the underline and/or strike-through effect is not supplied (via the pdUnderlinePtr link in Power Engine or TX_ATTR_UNDERLINE_THICKNESS attribute in Text Engine), then the second byte (bits 9-16) is used to specify the thickness of both the primary and secondary line relative to the font height. The value itself is expressed in 1/255 increments of the font height. Value 0 is special and indicates a default thickness (which is set to 3.5% of the font height).
+
+Interpretation of the second byte when line definition is not supplied:
+
+0 = Default thickness (3.5% of the font height)
+1 = 1/255 (or 0.39%) of the font height
+2 = 2/255 (or 0.78%) of the font height
+3 = 3/255 (or 1.17%) of the font height
+...
+253 = 253/255 (or 99.22%) of the font height
+254 = 254/255 (or 99.61%) of the font height
+255 = 255/255 (or 100%) of the font height
+
+{strong}Sample values:{/strong}
+
+3856 = Double strike-through whose primary line thickness is supplied via the line definition while the secondary line thickness is 15/255 (or 5.88%) of the primary line thickness
+
+3856 = Double strike-through whose both primary and secondary line thickness is 15/255 (or 5.88%) of the font height

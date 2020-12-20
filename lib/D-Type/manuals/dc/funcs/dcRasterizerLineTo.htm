@@ -1,0 +1,101 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dcRasterizerLineTo</h2><div class="box_prototype"><strong>
+void dcRasterizerLineTo(DT_DCRASTER dcr, DT_FLOAT x1, DT_FLOAT y1)</strong></div><br /><strong>Short Description:</strong> <em>LineTo command</em><br /><br />
+<h2>dcRasterizerLineToFrac</h2><div class="box_prototype"><strong>
+void dcRasterizerLineToFrac(DT_DCRASTER dcr, DT_SFRAC_L x1, DT_SFRAC_L y1)</strong></div><br /><strong>Short Description:</strong> <em>LineToFrac command</em><br /><br />
+
+<h2>dcRasterizerLineTo2</h2><div class="box_prototype"><strong>
+void dcRasterizerLineTo2(DT_DCRASTER dcr, DT_FLOAT x1, DT_FLOAT y1, const DT_UBYTE color[])</strong></div><br /><strong>Short Description:</strong> <em>LineTo2 command</em><br /><br />
+<h2>dcRasterizerLineToFrac2</h2><div class="box_prototype"><strong>
+void dcRasterizerLineToFrac2(DT_DCRASTER dcr, DT_SFRAC_L x1, DT_SFRAC_L y1, const DT_UBYTE color[])</strong></div><br /><strong>Short Description:</strong> <em>LineToFrac2 command</em><br /><br />
+
+<h2>dcRasterizerLineTo3</h2><div class="box_prototype"><strong>
+void dcRasterizerLineTo3(DT_DCRASTER dcr, DT_FLOAT x1, DT_FLOAT y1, DT_UBYTE r, DT_UBYTE g, DT_UBYTE b, DT_UBYTE t)</strong></div><br /><strong>Short Description:</strong> <em>LineTo3 command</em><br /><br />
+<h2>dcRasterizerLineToFrac3</h2><div class="box_prototype"><strong>
+void dcRasterizerLineToFrac3(DT_DCRASTER dcr, DT_SFRAC_L x1, DT_SFRAC_L y1, DT_UBYTE r, DT_UBYTE g, DT_UBYTE b, DT_UBYTE t)</strong></div><br /><strong>Short Description:</strong> <em>LineToFrac3 command</em><br /><br />
+
+<p>The dcRasterizerLineTo, dcRasterizerLineToFrac, dcRasterizerLineTo2, dcRasterizerLineToFrac2, dcRasterizerLineTo3 and dcRasterizerLineToFrac3 functions instruct D-Type Direct Color Rasterizer to add a new line segment to the current contour.</p>
+
+<p>dcRasterizerLineToFrac is identical to dcRasterizerLineTo except that its coordinatess are 24.8 signed fractional values. For more details on fractional units, see the <a href="../manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<p>dcRasterizerLineTo2 is identical to dcRasterizerLineTo except that it supports colour at the line's end point (with certain D-Type Rasterizers only). dcRasterizerLineToFrac2 is identical to dcRasterizerLineToFrac except that it supports colour at the line's end point (with certain D-Type Rasterizers only).</p>
+
+<p>dcRasterizerLineTo3 is identical to dcRasterizerLineTo2 except that its colour and transparency are defined as 4 separate values. dcRasterizerLineToFrac3 is identical to dcRasterizerLineToFrac2 except that its colour and transparency are defined as 4 separate values.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>dcr</em></p>
+</td><td>
+<p>Handle of the previously created D-Type Direct Color Rasterizer instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x1</em></p>
+</td><td>
+<p>End X coordinate of the new line segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y1</em></p>
+</td><td>
+<p>End Y coordinate of the new line segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>r</em></p>
+</td><td>
+<p>Color of the end point &mdash; Red component (R). Must be between 0 and 255. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only.</p>
+</td></tr>
+
+<tr><td>
+<p><em>g</em></p>
+</td><td>
+<p>Color of the end point &mdash; Green component (G). Must be between 0 and 255. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only.</p>
+</td></tr>
+
+<tr><td>
+<p><em>b</em></p>
+</td><td>
+<p>Color of the end point &mdash; Blue component (B). Must be between 0 and 255. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only. </p>
+</td></tr>
+
+<tr><td>
+<p><em>t</em></p>
+</td><td>
+<p>Transparency of the end point (T). Must be between 0 and 255. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color</em></p>
+</td><td>
+<p>Same as <em>r</em>, <em>g</em>, <em>b</em> and <em>t</em> defined above, except that all 4 components are stored in an array.</p>
+</td></tr>
+
+</table>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

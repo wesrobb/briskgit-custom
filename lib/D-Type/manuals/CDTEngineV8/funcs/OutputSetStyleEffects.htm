@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>OutputSetStyleEffects</strong></div><br />
+
+<p>This function supplies <em>style</em> to the Output of the specified Standard Engine instance. Style is a set of style properties that are applied to output primitives (glyphs/characters, shapes, bitmaps) during rendering. These properties are: color, transparency and various special effects such as shadow, glow, pattern fill, emboss, blur, emboldening etc. All these properties can be defined using the <a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> structure.</p>
+
+<p>OutputSetStyleEffects is an advanced version of the <a href="OutputSetStyleAttribs.htm">OutputSetStyleAttribs</a> function. It uses the <a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> structure, which allows several style effects to be combined and applied to an output primitive (glyph, character, shape, bitmap) at the same time. It also allows certain style effects to use multiple effect parameters (e.g. Gaussian blur with a different amount of blur in the horizontal and vertical direction). In every other respect, this function behaves the same as <a href="OutputSetStyleAttribs.htm">OutputSetStyleAttribs</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>style</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> structure. This structure contains the style to be associated with the Output of the specified Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+See <a href="OutputSetStyleAttribs.htm">OutputSetStyleAttribs</a>.
+
+
+<h3>Example 1</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {3, {DV_EFFECT_EDGE_100_NE, 15, 1}, {0, 0, 0, 0}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 3;
+   style.effects_arr[0] = DV_EFFECT_EDGE_100_NE;
+   style.effects_arr[1] = 15;
+   style.effects_arr[2] = 1;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 0;
+   style.rgbt[2] = 0;
+   style.rgbt[3] = 0;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_4.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<h3>Example 2</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {5, {<span class="codecomment">/*first effect*/</span> DV_EFFECT_EDGE_100_NE, 15, 1, <span class="codecomment">/*second effect*/</span> DV_EFFECT_PATTERN_STRIPES, 6}, {0, 0, 0, 0}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 5;
+   //first effect
+   style.effects_arr[0] = DV_EFFECT_EDGE_100_NE;
+   style.effects_arr[1] = 15;
+   style.effects_arr[2] = 1;
+   //second effect
+   style.effects_arr[3] = DV_EFFECT_PATTERN_STRIPES;
+   style.effects_arr[4] = 6;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 0;
+   style.rgbt[2] = 0;
+   style.rgbt[3] = 0;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_5.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<h3>Example 3</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {3, {DV_EFFECT_HVBLUR_FUZZY, 5, 10}, {0, 48, 178, 200}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 3;
+   style.effects_arr[0] = DV_EFFECT_HVBLUR_FUZZY;
+   style.effects_arr[1] = 5;
+   style.effects_arr[2] = 10;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 48;
+   style.rgbt[2] = 178;
+   style.rgbt[3] = 200;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_6.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<h3>Example 4</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {2, {DV_EFFECT_PATTERN_PHOTO, 22}, {0, 48, 178, 200}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 2;
+   style.effects_arr[0] = DV_EFFECT_PATTERN_PHOTO;
+   style.effects_arr[1] = 22;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 48;
+   style.rgbt[2] = 178;
+   style.rgbt[3] = 200;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_7.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<h3>Example 5</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {5, {<span class="codecomment">/*first effect*/</span> DV_EFFECT_HVBLUR_FUZZY, 5, 10, <span class="codecomment">/*second effect*/</span> DV_EFFECT_PATTERN_PHOTO, 22}, {0, 48, 178, 200}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 5;
+   //first effect
+   style.effects_arr[0] = DV_EFFECT_HVBLUR_FUZZY;
+   style.effects_arr[1] = 5;
+   style.effects_arr[2] = 10;
+   //second effect
+   style.effects_arr[3] = DV_EFFECT_PATTERN_PHOTO
+   style.effects_arr[4] = 22;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 48;
+   style.rgbt[2] = 178;
+   style.rgbt[3] = 200;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_8.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<h3>Example 6</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> style = {5, {<span class="codecomment">/*first effect*/</span> DV_EFFECT_PATTERN_PHOTO, 22, <span class="codecomment">/*second effect*/</span> DV_EFFECT_HVBLUR_FUZZY, 5, 10}, {0, 48, 178, 200}, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.effects_len = 5;
+   //first effect
+   style.effects_arr[0] = DV_EFFECT_PATTERN_PHOTO
+   style.effects_arr[1] = 22;
+   //second effect
+   style.effects_arr[2] = DV_EFFECT_HVBLUR_FUZZY;
+   style.effects_arr[3] = 5;
+   style.effects_arr[4] = 10;
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 48;
+   style.rgbt[2] = 178;
+   style.rgbt[3] = 200;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph M using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_9.gif" width="180" height="175" alt="M" />
+</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,6 @@
+Shadow or glow offset in horizontal direction, in document units. Can be positive or negative.
+
+{strong}Sample values:{/strong}
+
+10 = Offset of 10 document units in horizontal direction
+-10 = Offset of -10 document units in horizontal direction

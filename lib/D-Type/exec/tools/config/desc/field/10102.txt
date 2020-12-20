@@ -1,0 +1,6 @@
+A flag indicating whether multiple list items can be selected.
+
+{strong}Supported values:{/strong}
+
+0 = Only single item can be selected
+1 = Multiple items can be selected

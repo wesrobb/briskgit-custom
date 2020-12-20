@@ -1,0 +1,6 @@
+DT_ID_SLONG obj[0];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Program");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdxSourceCode, "for (local i = 1; i <= 50; i++)\r{\r::my.app.Print(\"Hello world \" + i + \"!\\n\");\r}", PD_ASC);{/strong}

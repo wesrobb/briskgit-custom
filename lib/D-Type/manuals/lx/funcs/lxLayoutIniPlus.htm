@@ -1,0 +1,87 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxLayoutIniPlus</h2><div class="box_prototype"><strong>
+DT_SWORD lxLayoutIniPlus(DT_LXLAYOUT* layout, DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SLONG script_code, DT_ID_SLONG language_code, DT_SLONG typo_flags)</strong></div><br /><strong>Short Description:</strong> <em>Initialize text layout instance</em><br /><br />
+
+<h2>lxLayoutIni</h2><div class="box_prototype"><strong>
+DT_SWORD lxLayoutIni(DT_LXLAYOUT* layout, DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SLONG script_code)</strong></div><br /><strong>Short Description:</strong> <em>Initialize text layout instance</em><br /><br />
+
+<p>Based on the supplied script and font, these functions create a new text layout instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>layout</em></p>
+</td><td>
+<p>Pointer to the handle of the newly created text layout instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the associated Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog (associated with the above Standard Engine instance) for which the text layout instance is to be created.</p>
+</td></tr>
+
+<tr><td>
+<p><em>script_code</em></p>
+</td><td>
+<p>Script code that identifies the script for which the text layout instance is to be created. Must be a code from the list of <a href="../manual/scripts.htm">defined scripts</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>language_code</em></p>
+</td><td>
+<p>Language code that identifies the language for which the text layout instance is to be created. Must be a code from the list of <a href="../manual/languages.htm">defined languages</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>typo_flags</em></p>
+</td><td>
+<p>Typographic control flags. Use 0 for no specific typographic features, 1 for kerning, 2 for ligature formation, and 3 for kerning and ligature formation. Others values are reserved for future.
+</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the initialization was successful, the return value is 1 and <em>layout</em> holds a handle of the newly created text layout instance. Otherwise, the functions return 0 and <em>layout</em> holds DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>Before a new layout instance can be created, applications must initialize D-Type Standard Engine (D-Type Font Engine and Rasterizer) and obtain its Standard Engine instance (<em>engine</em>). In addition, applications should obtain a valid font index from the Font Catalog associated with that Standard Engine instance.</p>
+
+<p>Please remember that each call to lxLayoutIni or lxLayoutIniPlus takes some time because the corresponding font must be accessed to obtain any required font layout tables. Therefore, avoid calling lxLayoutIni or lxLayoutIniPlus repeatedly for the same font, script, language and/or typographic flags. Alternatively, use the built-in caching subsystem to speed up the text layout process.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

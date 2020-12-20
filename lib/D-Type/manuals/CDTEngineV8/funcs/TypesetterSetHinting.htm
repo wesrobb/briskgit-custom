@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>TypesetterSetHinting</strong></div><br />
+
+<p>This function sets the hinting mode in the Typesetter. The hinting mode tells the Typesetter how to micro-adjust glyph outlines in hinted or auto-hinted fonts with respect to the pixel grid before the glyphs are actually rasterized by the Rasterizer. The purpose of these micro-adjustments is to improve the quality and appearance of glyph images when viewed on the screen (or any other raster device). The adjustments usually include subtle outline distortions of glyph outlines such as snapping to the pixel grid, alignment, micro-compression, micro-expansion etc.</p>
+
+<p>When D-Type Engine is initialized, the hinting mode is already set in the Typesetter to the recommended default value (DV_HINTING_ENGINE_DEFAULT_A).</p>
+
+<p>This function can be used in conjunction with <a href="TypesetterSetPositioning.htm">TypesetterSetPositioning</a>. For further details and illustrations, see Appendix &mdash; <a href="../manual/ph.htm">Positioning And Hinting</a>.</p>
+
+<p>Please note that all the hinting adjustments described here will only have effect on fonts that are added to the Font Catalog as hinted or auto-hinted (see e.g. <a href="FontAddViaStream.htm">FontAddViaStream</a> for details).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>hinting</em></p>
+</td><td>
+<p>Sets one of the hinting modes. The hinting mode tells the Typesetter how to interact with the pixel grid when rendering glyphs. At present, the following values are supported:</p>
+
+<p><em>hinting</em> = 0 (DV_HINTING_ENGINE_DEFAULT_A) &mdash; Engine Default A (same as 8)<br /></p>
+
+<p><em>hinting</em> = 1 (DV_HINTING_ENGINE_DEFAULT_B) &mdash; Engine Default B (same as 9)<br /></p>
+
+<p><em>hinting</em> = 2 (DV_HINTING_USER_DEFAULT_A) &mdash; User Default A (same as 4)<br /></p>
+
+<p><em>hinting</em> = 3 (DV_HINTING_USER_DEFAULT_B) &mdash; User Default B (same as 6)<br /></p>
+
+<p><em>hinting</em> = 4 (DV_HINTING_XON_YON) &mdash; X On, Y On<br />
+Both X and Y edges are snapped to the pixel grid. As a result, both X and Y edges look reasonably sharp.</p>
+
+<p><em>hinting</em> = 5 (DV_HINTING_XON_YOFF) &mdash; X On, Y Off<br />
+Only X edges are snapped to the pixel grid. As a result, X edges look reasonably sharp, while Y edges look somewhat blurry.</p>
+
+<p><em>hinting</em> = 6 (DV_HINTING_XOFF_YON) &mdash; X Off, Y On<br />
+Only Y edges are snapped to the pixel grid. As a result, X edges look somewhat blurry, while Y edges look reasonably sharp.</p>
+
+<p><em>hinting</em> = 7 (DV_HINTING_XOFF_YOFF) &mdash; X Off, Y Off<br />
+Neither X nor Y edges are snapped to the pixel grid. As a result, both X and Y edges look somewhat blurry.</p>
+
+<p><em>hinting</em> = 8 (DV_HINTING_AUTO_A) &mdash; Auto A<br />
+Same as 4 for standard font sizes, but disables hinting in the X and/or Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.</p>
+
+<p><em>hinting</em> = 9 (DV_HINTING_AUTO_B) &mdash; Auto B<br />
+Same as 6 for standard font sizes, but disables hinting in the Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+See Appendix &mdash; <a href="../manual/ph.htm">Positioning And Hinting</a>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

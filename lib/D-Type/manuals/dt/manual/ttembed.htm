@@ -1,0 +1,81 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>TrueType Font Embedding Licensing Rights</h1>
+
+
+<p>This value can be obtained by calling the <a href="../funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function and setting the <em>numeric_id</em> parameter to 2101  (DV_NVAL_EMBED). The value indicates font embedding licensing rights for the font.</p>
+
+<p>Embeddable fonts may be stored in a document. When a document with embedded fonts is opened on a system that does not have the font installed (the remote system), the embedded font may be loaded for temporary (and in some cases, permanent) use on that system by an embedding-aware application. Embedding licensing rights are granted by the vendor of the font.</p>
+
+<table class="table_data">
+
+<tr align="center">
+<th>Bit</th>
+<th>Bit Mask</th>
+<th>Description</th></tr>
+
+<tr>
+<td>&nbsp;</td>
+<td>0x0000</td>
+<td>Installable Embedding: Fonts with this setting indicate that they may be embedded and permanently installed on the remote system by an application. The user of the remote system acquires the identical rights, obligations and licenses for that font as the original purchaser of the font, and is subject to the same end-user license agreement, copyright, design patent, and/or trademark as was the original purchaser.</td></tr>
+
+<tr>
+<td>0</td>
+<td>0x0001</td>
+<td>Reserved, must be zero.</td></tr>
+<tr>
+<td>1</td>
+<td>0x0002</td>
+<td>Restricted License embedding: <br />
+Fonts that have <strong>only</strong> this bit set <strong>must not be modified, embedded or exchanged in any manner</strong> without first obtaining permission of the legal owner. <br /> <em>Caution:</em> For Restricted License embedding to take effect, it must be the only level of embedding selected.</td></tr>
+<tr>
+<td>2</td>
+<td>0x0004</td>
+<td>Preview &amp; Print embedding: When this bit is set, the font may be embedded, and temporarily loaded on the remote system. Documents containing Preview &amp; Print fonts must be opened &quot;read-only;&quot; no edits can be applied to the document.</td></tr>
+<tr>
+<td>3</td>
+<td>0x0008</td>
+<td>Editable embedding: When this bit is set, the font may be embedded but must only be installed <strong>temporarily</strong> on other systems. In contrast to Preview
+&amp; Print fonts, documents containing Editable fonts <em>may</em> be opened for reading, editing is permitted, and changes may be saved.</td></tr>
+<tr>
+<td>4 - 7</td>
+<td>&nbsp;</td>
+<td>Reserved, must be zero.</td></tr>
+<tr>
+<td>8</td>
+<td>0x0100</td>
+<td>No subsetting: When this bit is set, the font may not be subsetted prior to embedding. Other embedding restrictions specified in the lower byte also apply.</td></tr>
+<tr>
+<td>9</td>
+<td>0x0200</td>
+<td>Bitmap embedding only: When this bit is set, only bitmaps contained in the font may be embedded. No outline data may be embedded. If there are no bitmaps available in the font, then the font is considered unembeddable and the embedding services will fail. Other embedding restrictions specified in the lower byte also apply.</td></tr>
+<tr>
+<td>10 - 15</td>
+<td>&nbsp;</td>
+<td>Reserved, must be zero.</td></tr>
+</table>
+
+
+<p><em>Comments:</em> If multiple embedding bits are set, the least restrictive license granted takes precedence. For example, if bits 1 and 3 are set, bit 3 takes precedence over bit 1and the font may be embedded with Editable rights. For compatibility purposes, most vendors granting Editable embedding rights are also setting the Preview &amp; Print bit (0x000C). This will permit an application that only supports Preview &amp; Print embedding to detect that font embedding is allowed.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

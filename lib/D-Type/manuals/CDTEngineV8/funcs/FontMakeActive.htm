@@ -1,0 +1,182 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>FontMakeActive</strong></div><br />
+
+<p>This function activates a font in the Font Catalog of the specified Standard Engine instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Index of the font to be activated.</p>
+</td></tr>
+
+<tr><td>
+<p><em>level</em></p>
+</td><td>
+<p>The desired font activation level. Must be one of the following:</p>
+
+<ul>
+<li><p><em>level</em> = 1 &mdash; Basic Activation. In this level, the Font Engine will allocate only the most critical resources necessary to access and manage the specified font.</p></li>
+
+<li><p><em>level</em> = 2 &mdash; Full Activation. In this level, the Font Engine will allocate all the resources necessary to access and manage the specified font.</p></li>
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>last_fcnr</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> type that will receive the last font collection number of the font (collection) referenced by <em>font_index</em>. This is the total number of fonts in the specified font collection. See <a href="FontAddViaStream.htm">FontAddViaStream</a> for details.</p>
+<p>However, if you do not wish to receive the value of the above parameter, you may set this pointer to DV_NULL.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns 1. Otherwise the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>In a typical scenario, it is not necessary for applications to explicitly call this function. Fonts are activated automatically to the appropriate activation level by the Font Engine as they are used. However, this function can be useful to applications that wish to perform a basic validation of the font and/or retrieve the total number of fonts in the font collection (if the font file corresponding to the <em>font_index</em> is actually a font collection). For more details, see the <a href="FontAddViaStream.htm">FontAddViaStream</a> function. Also, see the following example.</p>
+
+
+<h3>Example</h3>
+
+<p>This example shows how to add a new font to the Font Catalog using the <a href="FontAddViaStream.htm">FontAddViaStream</a> function and then perform a basic validation of the newly added font using the <a href="FontMakeActive.htm">FontMakeActive</a> function.</p>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_format_id = DV_FONT_OPENTYPE_TTF_WINUNICODE;
+<a href="../../dt/manual/types.htm#DT_CHAR">DT_CHAR</a>* fuid = DV_NULL;
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> fcnr = 0;
+<a href="../../dt/manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> cmap_id = -1;
+<a href="../../dt/manual/types.htm#DT_ID_UBYTE">DT_ID_UBYTE</a> caching = 0;
+<a href="../../dt/manual/types.htm#DT_ID_UBYTE">DT_ID_UBYTE</a> hinting = 1;
+<a href="../../dt/manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_index;
+
+DT_STREAM_FILE(sd, "chopsie.ttf");
+font_index = dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id, caching, hinting, &amp;sd);
+
+if (font_index &gt;= 0)
+{
+  if (dtFontMakeActive(engine, font_index, 2, &amp;last_fcnr) == 1)
+  {
+    sprintf(s, "The selected font has been successfully added to the font catalog and
+    assigned a unique font index %d. Use the \"Select Font\" option from the \"View\"
+    menu to see it.", font_index);
+  }
+  else
+  {
+    sprintf(s, "The selected font has been added to the font catalog and assigned a unique
+    font index %d. However, D-Type Font Engine could not activate it. Most likely this font
+    is corrupt or is in a wrong format. You may try the \"Select Font\" option from the
+    \"View\" menu, however be aware that this font may not render correctly.", font_index);
+  }
+}
+else
+{
+  sprintf(s, "The selected font could not be added to the font catalog. Most likely the
+  specified font format is not supported or an internal error has occurred.");
+}
+
+printf(s);
+</pre>
+</div>
+
+<p><em>Output &mdash; Scenario 1</em>:</p>
+
+<pre>
+The selected font has been successfully added to the font catalog and
+assigned a unique font index 24. Use the "Select Font" option from the "View"
+menu to see it.
+</pre>
+
+<p><em>Output &mdash; Scenario 2</em>:</p>
+
+<pre>
+The selected font has been added to the font catalog and assigned a unique font
+index 24. However, D-Type Font Engine could not activate it. Most likely this
+font is corrupt or is in a wrong format. You may try the "Select Font" option
+from the "View" menu, however be aware that this font may not render correctly.
+</pre>
+
+<p><em>Output &mdash; Scenario 3</em>:</p>
+
+<pre>
+The selected font could not be added to the font catalog. Most likely the
+specified font format is not supported or an internal error has occurred.
+</pre>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

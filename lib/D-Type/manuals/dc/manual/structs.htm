@@ -1,0 +1,59 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>D-Type Direct Color Rasterizer Structures</h1>
+
+<p>D-Type Direct Color Rasterizer defines and utilizes only one structure type:</p>
+
+<h2><strong id="DT_MDC">DT_MDC</strong></h2>
+
+<p>This structure type contains information about D-Type's memory (off-screen) surfaces.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's memory (off-screen) surface */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L w, h; <span class="codecomment">/* Surface's dimensions in pixels */</span>&nbsp;
+    DT_UBYTE* m;     <span class="codecomment">/* Pointer to surface's memory buffer */</span>&nbsp;
+    DT_SLONG l;      <span class="codecomment">/* Length of the buffer in bytes (defines pitch) */</span>&nbsp;
+
+} DT_MDC;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>w</em> &mdash; width of the memory surface in pixels. This value must be positive. <!--For best performance on all platforms, it should also be a multiple of 4.--></p></li>
+
+<li><p><em>h</em> &mdash; height of the memory surface in pixels. D-Type supports bottom-to-top and top-to-bottom surfaces. A positive <em>h</em> value indicates a bottom-to-top surface; a negative <em>h</em> value indicates a top-to-bottom surface. The value 0 is illegal.</p></li>
+
+<li><p><em>m</em> &mdash; pointer to a memory buffer that stores the surface's pixels. Depending on the format of the surface, each pixel in the buffer is represented with 8, 16, 24 or 32 bits (i.e. 1, 2, 3 or 4 <em>bytes per pixel</em>). <!--As a result, each scan-line consists of exactly <span class="nobreak"><em>bytes-per-pixel</em> * <em>w</em> bytes</span>.--></p></li>
+
+<li><p><em>l</em> &mdash; length of the memory buffer in bytes; must equal <span class="nobreak"><em>pitch</em> * abs(<em>h</em>)</span></p>
+<p>In the above equation, <em>pitch</em> is the distance, in bytes, between two memory addresses in the buffer that represent the beginning of two neighbouring pixel rows. Each pixel row consists of precisely <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes that represent the surface's pixels. Consequently, a valid <em>pitch</em> value must not be less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. A pitch value that is exactly <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is <span class="nobreak"><em>pitch</em> - <em>w</em> * <em>bytes per pixel</em></span>). Note that when rendering to the memory surface D-Type never reads or writes these extra bytes.</p>
+
+<p>Although not explicitly specified, <em>pitch</em> is an important value that has a direct impact on how D-Type renders pixels to your memory surface. To obtain the surface's pitch, D-Type divides the length of the memory buffer <em>l</em> by the absolute height of the memory surface <em>h</em>. For this reason, you must ensure that <em>l</em> is divisible by abs(<em>h</em>) and that the result of this division is not less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. If these conditions are not met, your pitch value is not properly defined and D-Type will assume the value <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> instead.</p>
+</li>
+</ul>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

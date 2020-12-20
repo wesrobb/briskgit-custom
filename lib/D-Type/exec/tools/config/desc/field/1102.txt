@@ -1,0 +1,34 @@
+Instructions for pdPosArrX_32 and pdPosArrY_32 (variable length, 1 byte per instruction).
+
+pdPosArrI is an array containing instructions that describe the corresponding pair of coordinates in the pdPosArrX_32 and pdPosArrY_32 arrays and provide some additional information about the letters (i.e. characters or glyphs). The length of the array should be the same as the number of letters. If the array is shorter, any missing instructions will assume the value 0. If the array is longer, any extra instructions will be ignored.
+
+Each instruction is a combination of the following bit independent bit values:
+
+Bit 0: If set (1), the corresponding letter starts a new text row. If not set (0), the letter is in the same (current) row. Visually, this bit has no impact on the text layout. However, its value is used to calculate and set the Row member of the DT_PD_FRAME structure when the text layout engine generates frames. This makes it possible to implement cursor movement in the vertical direction and not just horizontal.
+
+Bit 1: If set (1), the corresponding value in the pdPosArrX_32 is an absolute X coordinate. If not set (0), the corresponding value represents a relative delta (i.e. horizontal move relative to the previous X coordinate).
+
+Bit 2: If set (1), the corresponding value in the pdPosArrY_32 is an absolute Y coordinate. If not set (0), the corresponding value represents a relative delta (i.e. vertical move relative to the previous Y coordinate).
+
+The remaining bits are reserved for future use and must be set to 0.
+
+Based on the above, each element of the pdPosArrI array can represent one of the following 8 valid instructions:
+
+0 (000) : Y-RELATIVE, X-RELATIVE, SAME ROW
+1 (001) : Y-RELATIVE, X-RELATIVE, NEW ROW
+2 (010) : Y-RELATIVE, X-ABSOLUTE, SAME ROW
+3 (011) : Y-RELATIVE, X-ABSOLUTE, NEW ROW
+4 (100) : Y-ABSOLUTE, X-RELATIVE, SAME ROW
+5 (101) : Y-ABSOLUTE, X-RELATIVE, NEW ROW
+6 (110) : Y-ABSOLUTE, X-ABSOLUTE, SAME ROW
+7 (111) : Y-ABSOLUTE, X-ABSOLUTE, NEW ROW
+
+Any other instructions are invalid.
+
+{strong}Sample values:{/strong}
+
+0, 0, 0, 1, 0, 0, 0, 0, 7
+
+{strong}Tip:{/strong}
+
+If all the elements of the pdPosArrI array are 0, the array can be omitted. Similarly, all trailing zero values can be omitted. For example, the array 0, 0, 0, 1, 0, 0, 0, 0, 7 will have the same effect as the array 0, 0, 0, 1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0.

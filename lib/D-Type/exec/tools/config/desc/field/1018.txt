@@ -1,0 +1,3 @@
+Link to the Typography object. When standard glyphs or characters are used, this should be a link to the {a href="../objects/004.htm"}Typography (For Outline Fonts){/a} object. When PowerGlyphs (or PowerChars in the future) are used, this should be a link to the {a href="../objects/014.htm"}Typography (For PowerFonts){/a} object.
+
+In either case, this link supplies typographic parameters.

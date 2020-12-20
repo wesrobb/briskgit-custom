@@ -1,0 +1,51 @@
+---------------------------------------------------------
+D-Type Standard Engine
+Version 8.0.1.3 (Nov 2020)
+---------------------------------------------------------
+
+NOTICE: This is an evaluation version of the above noted
+software. You may use it only for evaluation purposes
+as described in the evaluation agreement. Any other use
+or distribution of this software is strictly prohibited
+and will be prosecuted to the maximum extent possible
+under the law.
+
+This message does not appear in a fully licensed version
+of D-Type Standard Engine.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+D-Type Power Engine
+Version 8.0.1.3 (Nov 2020)
+---------------------------------------------------------
+
+NOTICE: This is an evaluation version of the above noted
+software. You may use it only for evaluation purposes
+as described in the evaluation agreement. Any other use
+or distribution of this software is strictly prohibited
+and will be prosecuted to the maximum extent possible
+under the law.
+
+This message does not appear in a fully licensed version
+of D-Type Power Engine.
+
+---------------------------------------------------------
+
+---------------------------------------------------------
+D-Type Text Engine
+Version 8.0.1.3 (Nov 2020)
+---------------------------------------------------------
+
+NOTICE: This is an evaluation version of the above noted
+software. You may use it only for evaluation purposes
+as described in the evaluation agreement. Any other use
+or distribution of this software is strictly prohibited
+and will be prosecuted to the maximum extent possible
+under the law.
+
+This message does not appear in a fully licensed version
+of D-Type Text Engine.
+
+---------------------------------------------------------
+

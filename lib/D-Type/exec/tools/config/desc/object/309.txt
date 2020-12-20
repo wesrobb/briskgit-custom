@@ -1,0 +1,3 @@
+The Rich Button object is a visual and interactive form control whose purpose is to trigger certain action(s) when an event occurs (e.g. the user presses the button, releases it, etc.).
+
+{strong}Designated Rendering Function:{/strong} fcDrawRichButton (10008)

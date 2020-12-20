@@ -1,0 +1,22 @@
+DT_ID_SLONG obj[3];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Pattern Fill Definition - First");
+obj[1] = pdObjAdd(pd, 0, "Pattern Fill Definition - Second");
+obj[2] = pdObjAdd(pd, 0, "Pattern Fill Definition - Third");{/strong}
+
+/* Properties for object 0 */
+{strong}pdLinkAdd(pd, obj[0], pdPatternFillPtr, obj[1]);
+pdPropAdd(pd, obj[0], pdNw, "3", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdNh, "3", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdImageDataGray, "880088 888888 008800", PD_HEX);{/strong}
+
+/* Properties for object 1 */
+{strong}pdLinkAdd(pd, obj[1], pdPatternFillPtr, obj[2]);
+pdPropAdd(pd, obj[1], pdNw, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[1], pdNh, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[1], pdImageDataGray, "88880000 88880000 00008888 00008888", PD_HEX);{/strong}
+
+/* Properties for object 2 */
+{strong}pdPropAdd(pd, obj[2], pdNw, "5", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[2], pdNh, "5", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[2], pdImageDataGray, "8888008888 8888008888 8888888888 0000880000 0000880000", PD_HEX);{/strong}

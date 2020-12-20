@@ -1,0 +1,1 @@
+Amount of spacing to be added after a character or glyph, in font units. Both positive and negative values are valid.

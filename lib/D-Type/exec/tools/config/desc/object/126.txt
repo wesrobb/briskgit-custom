@@ -1,0 +1,3 @@
+This objects represents an inverter. In Power Engine API, an inverter is a rectangular surface which, when placed on the page, inverts the color and alpha-channel of the covered area. This object is a special case of the standard gradient.
+
+{strong}Designated Rendering Function:{/strong} pdDrawGradient (14), pdDrawInverter (14)

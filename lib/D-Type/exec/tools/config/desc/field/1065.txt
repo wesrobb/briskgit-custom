@@ -1,0 +1,17 @@
+Row spacing calculation method.
+
+0 = Mathematically calculate spacing between text rows.
+
+10 = Respect typographic values when calculating spacing between text rows. The typographic values must be defined in the font file in order for this method to function as intended. For text in horizontal layout (rows), the typographic values are supplied by the sTypoAscender and sTypoDescender fields of the OS/2 table (TrueType/OpenType fonts) or the Ascender and Descender key of the Font Metrics (AFM) file (Type 1/Type 3 fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_ASCENDER and DV_NVAL_DESCENDER identifiers. For text in vertical layout (columns), the typographic values are supplied by the vertTypoAscender and vertTypoDescender fields of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_VER_ASCENDER and DV_NVAL_VER_DESCENDER identifiers. If the typographic values are not defined in the font file, method 0 will be used instead.
+
+20 = Same as method 10 but adds an additional linegap, if available in the font. For text in horizontal layout (rows), this additional linegap is supplied by the sTypoLineGap field of the OS/2 table (TrueType/OpenType fonts); in Type 1 and Type 3 fonts, this information is most likely not available. D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_LINEGAP identifier. For text in vertical layout (columns), the additional linegap is supplied by the vertTypoLineGap field of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_VER_LINEGAP identifier.
+
+30 = Respect Windows specific typographic values when calculating spacing between text rows. The Windows specific typographic values must be defined in the font file in order for this method to function as intended. For text in either horizontal layout (rows) or vertical layout (columns), the Windows specific typographic values are supplied by the usWinAscent and usWinDescent fields of the OS/2 table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_WIN_ASCENT and DV_NVAL_WIN_DESCENT identifiers. If the Windows specific typographic values are not defined in the font file, method 0 will be used instead.
+
+110 = Same as method 10, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+
+120 = Same as method 20, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+
+Other property values will be described in the future.
+
+{strong}Supported values:{/strong} 0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 110, 111, 112, 113, 114, 120, 121, 122, 123, 124

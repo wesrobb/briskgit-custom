@@ -1,0 +1,6 @@
+Font rotation in degrees. Must be between 0 and 360.
+
+{strong}Sample values:{/strong}
+
+30 = Rotation of 30 degrees
+120 = Rotation of 120 degrees

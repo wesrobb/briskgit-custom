@@ -1,0 +1,29 @@
+Offset of 2nd strike-through line from glyph's baseline.
+
+The interpretation of the value depends on the specified Underline/Strike-Through Line Positioning Mode:
+
+* Mode 0 - Automatic: This value is ignored and should be set to 0 or omitted.
+
+* Mode 2 - Manual (% of font height): The offset is manually specified and represents the percentage of the font height, multiplied by 1024/100.
+
+  Examples:
+
+  -2048 = -200%
+  -1024 = -100%
+  -512 = -50%
+  0 = 0%
+  512 = 50%
+  1024 = 100%
+  2048 = 200%
+
+* Mode 4 - Manual (document units): The offset is manually specified and represents the offset in document units, multiplied by 1024.
+
+  Examples:
+
+  -2048 = -2 doc units
+  -1024 = -1 doc units
+  -512 = -0.5  doc units
+  0 = 0  doc units
+  512 = 0.5  doc units
+  1024 = 1 doc units
+  2048 = 2 doc units

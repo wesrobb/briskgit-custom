@@ -1,0 +1,114 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdLinkAdd</h2><div class="box_prototype"><strong>
+DT_SWORD pdLinkAdd(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG name, DT_ID_SLONG link)</strong></div><br /><strong>Short Description:</strong> <em>Add link</em><br /><br />
+
+<p>The pdLinkAdd function adds a PowerDoc link to the PowerDoc object referenced by <em>obj</em>. A PowerDoc link is one of the basic field types.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the link to be added. Can be a user-defined value or one of the following predefined PowerDoc values:</p>
+
+<table class="table_data">
+<tr>
+<th width="50%">Basic PowerDoc Links</th>
+<th width="50%">PowerDoc Links For Form Controls</th>
+</tr>
+<tr valign="top">
+<td><ul>
+<li>pdBodyPtr</li>
+<li>pdBaselinePtr</li>
+<li>pdFnDrawObjectPtr</li>
+<li>pdFontDataPtr</li>
+<li>pdGroupMemberPtr</li>
+<li>pdImageDataPtr</li>
+<li>pdLinePtr</li>
+<li>pdMaskPtr</li>
+<li>pdOutlinePtr</li>
+<li>pdPatternFillPtr</li>
+<li>pdPowerFontPtr</li>
+<li>pdPowerFontRecordPtr</li>
+<li>pdRowBoundPtr</li>
+<li>pdShadowPtr</li>
+<li>pdStylePtr</li>
+<li>pdTextExtrasPtr</li>
+<li>pdTextFragmentPtr</li>
+<li>pdTextLayoutPtr</li>
+<li>pdTextRulerHorPtr</li>
+<li>pdTypoFramePtr</li>
+<li>pdTypographyPtr</li>
+<li>pdUnderlinePtr</li>
+<li>pdxMediaDataPtr</li>
+</ul>
+</td>
+<td><ul>
+<li>fcColumnNextPtr</li>
+<li>fcConfigPtr</li>
+<li>fcControlPtr</li>
+<li>fcProgramPtr</li>
+</ul>
+</td>
+</tr>
+</table>
+</td></tr>
+
+<tr><td>
+<p><em>link</em></p>
+</td><td>
+<p>Represents the index of the linked PowerDoc object.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input) or -1 (memory error).</p>
+
+
+<h3>Comments</h3>
+<p>To avoid unexpected rendering results, links must be assigned to PowerDoc objects in accordance with D-Type's Guidelines For Creating PowerDoc Objects.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdLinkGet.htm">pdLinkGet</a>, <a href="pdLinkSet.htm">pdLinkSet</a><br />
+<a href="pdLinkDel.htm">pdLinkDel</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

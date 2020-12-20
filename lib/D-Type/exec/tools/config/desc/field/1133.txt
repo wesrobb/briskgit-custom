@@ -1,0 +1,7 @@
+The distance, in bytes, between the beginning of two neighbouring pixel rows. This property makes it possible to pass to D-Type Power Engine bitmap images that have some padding (extra bytes) at the end of each bitmap row.
+
+This property works with all supported Bitmap Image Data formats (pdImageDataGray, pdImageDataGrayAlpha, pdImageDataRGB, pdImageDataRGBAlpha) except pdImageDataMono.
+
+A valid pitch value must not be less than pdNw * bytes_per_pixel, where bytes_per_pixel is 1 for pdImageDataGray, 2 for pdImageDataGrayAlpha, 3 for pdImageDataRGB and 4 for pdImageDataRGBAlpha. A pitch value that is exactly pdNw * bytes_per_pixel bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than pdNw * bytes_per_pixel bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is pdPitch - pdNw * bytes_per_pixel). Note that D-Type Power Engine does not read or use these extra bytes.
+
+If pdPitch is not specified, D-Type Power Engine will use the value pdNw * bytes_per_pixel, i.e. assume that pixel rows are contiguous. If pdPitch is not properly defined, D-Type Power Engine will not be able to display the bitmap image.

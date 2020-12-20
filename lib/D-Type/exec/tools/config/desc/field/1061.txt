@@ -1,0 +1,6 @@
+When applicable, size of line's end arrowhead or dot, in percentages. Must be between 0 and 100.
+
+{strong}Sample values:{/strong}
+
+10 = The relative size of the line's arrowhead or dot is 10%
+20 = The relative size of the line's arrowhead or dot is 20%

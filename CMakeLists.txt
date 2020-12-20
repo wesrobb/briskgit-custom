@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Add local cmake content
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+
 project(Briskgit)
 
 add_executable(briskgit 
@@ -32,6 +35,7 @@ add_executable(briskgit
 find_package(harfbuzz CONFIG REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 find_package(ICU REQUIRED COMPONENTS uc dt in io)
+find_package(dtype REQUIRED)
 
 find_library(blend2d blend2d REQUIRED)
 find_path(blend2d_INCLUDES blend2d.h)
@@ -44,7 +48,8 @@ target_link_libraries(briskgit PRIVATE
                       freetype
                       harfbuzz::harfbuzz
                       ICU::uc ICU::dt ICU::in ICU::io
-                      ${blend2d})
+                      ${blend2d}
+                      dtype::standard)
 target_include_directories(briskgit PRIVATE ${blend2d_INCLUDES})
 
 if (APPLE)

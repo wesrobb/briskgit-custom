@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Font Data</h2>
+<h3 id="overview">Overview</h3>
+This object holds an entire outline font file. It is used for storing (embedding) D-Type, TrueType, OpenType, Type 1, PostScript Type 3 or Bare CFF fonts in the document.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataFormat"><em><span class="field">pdFontDataFormat</span> (1070)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Font format.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = D-Type Font Format (.dtf)<br />
+<br />
+1 = TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collection (.ttc) [Apple Mac ASCII Encoding]<br />
+<br />
+3 = TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collection (.ttc) [Windows Unicode Encoding]<br />
+<br />
+6 = OpenType (.otf) containing Type 2/CFF outlines [Apple Mac ASCII Encoding]<br />
+<br />
+5 = OpenType (.otf) containing Type 2/CFF outlines [Windows Unicode Encoding]<br />
+<br />
+2 = Adobe Type 1 (.pfb or .pfa) [Adobe Standard Encoding]<br />
+<br />
+7 = Adobe Type 1 (.pfb or .pfa) [ISO Latin Encoding]<br />
+<br />
+8 = Adobe Type 1 (.pfb or .pfa) [Synthesized Windows Unicode Encoding]<br />
+<br />
+11 = Adobe Type 3 PostScript (.ps) [ISO Latin Encoding] - must obey D-Type's strict parsing rules<br />
+<br />
+12 = Adobe Type 3 PostScript (.ps) [Synthesized Windows Unicode Encoding] - must obey D-Type's strict parsing rules<br />
+<br />
+14 = Bare CFF (.cff) [Adobe Standard Encoding]<br />
+<br />
+15 = Bare CFF (.cff) [ISO Latin Encoding]<br />
+<br />
+16 = Bare CFF (.cff) [Synthesized Windows Unicode Encoding]<br />
+<br />
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataBytes"><em><span class="field">pdFontDataBytes</span> (1071)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p>
+Font file.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataNumber"><em><span class="field">pdFontDataNumber</span> (1072)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Font collection number.<br />
+<br />
+Some font files are actually font collections (e.g. D-Type or TrueType Collections) which contain multiple fonts in the same file. Font collection number identifies a font in the font collection. Set the font collection number to 0 to open the first font in the collection. If this value is too large, the font will not open.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataHinting"><em><span class="field">pdFontDataHinting</span> (1098)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Font Hinting.<br />
+<br />
+Tells the engine whether to apply hinting to the font. Hinted fonts typically produce better looking and sharper output, however they are somewhat slower to process than non-hinted fonts (especially if they contain many complex glyphs such as in Chinese/Japanese/Korean fonts).<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = don't apply hinting to the font<br />
+1 = apply native hinting when available, otherwise apply auto-hinting to the font<br />
+2 = apply auto-hinting to the font<br />
+3 = apply native hinting when available, otherwise apply compact auto-hinting<br />
+4 = apply compact auto-hinting exclusively<br />
+<br />
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataCaching"><em><span class="field">pdFontDataCaching</span> (1099)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Font Caching.<br />
+<br />
+Tells the engine how to cache the font. This parameter will be described more thoroughly in the future. For now, set this parameter to 0 which identifies a standard caching scheme. This caching scheme ensures a good performance with all supported font formats.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Font Data - Arial TrueType Font");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+<strong>pdPropAdd(pd, obj[5], pdFontDataFormat, "3", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDataAdvancedFlags, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDataHintingFlags, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDataBytes,<br />
+"0001000000170100000400704453494780B1E5C2000412DC0000140020006FE<br />
+00FF010001080109010A010B010C010D010E010F011001110112011301140115<br />
+0116011701180119011A011B011C011D011E011F012001210122012301240125<br />
+0126012701280129012A012B012C012D012E012F013001310132013301340135<br />
+0136013701380139003AB03AD03AF03B103B503B903BD03C103C503C903CD03D<br />
+... many hex values omitted ...<br />
+103D503D903DD03E103E503E903ED03EF03F103F503F703F903FB00040009000<br />
+10008000100580002000A00360005000C0014001A00200026037F000303E003E<br />
+10347000202F20348000202F30349000202F4034A000202F5034B000202F6000<br />
+1000102F7000000010000000161726162000C000600000000000502F0031B046<br />
+7046804690000", PD_HEX);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Font Data - Arial TrueType Font");<br />
+<br />
+obj_5 + i(pdFontDataFormat, 3);<br />
+obj_5 + i(pdFontDataAdvancedFlags, 1);<br />
+obj_5 + i(pdFontDataHintingFlags, 1);<br />
+obj_5 + p(pdFontDataBytes, "0001000000170100000400704453494780B1E5C2000412DC0000140020006FE00FF010001080109010A010B010C010D010E010F0110011101120113011401150116011701180119011A011B011C011D011E011F0120012101220123012401250126012701280129012A012B012C012D012E012F0130013101320133013401350136013701380139003AB03AD03AF03B103B503B903BD03C103C503C903CD03D ... many hex values omitted ... 103D503D903DD03E103E503E903ED03EF03F103F503F703F903FB0004000900010008000100580002000A00360005000C0014001A00200026037F000303E003E10347000202F20348000202F30349000202F4034A000202F5034B000202F60001000102F7000000010000000161726162000C000600000000000502F0031B0467046804690000");<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

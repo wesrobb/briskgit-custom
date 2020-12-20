@@ -1,0 +1,3 @@
+Link to the {a href="../objects/017.htm"}Line Definition (Minimal){/a} object.
+
+This link supplies attributes necessary to render the text underline and strike-through effects.

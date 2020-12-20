@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Code Pages</h1>
+
+
+<p>Code pages encompassed by a font can be obtained by calling the <a href="../funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function and setting the <em>numeric_id</em> parameter to 2102 (DV_NVAL_CPAGE_A) or 2103 (DV_NVAL_CPAGE_B). This information is not always available. Only more recent TrueType and OpenType fonts contain this information.</p>
+
+<table>
+<tr valign="top" align="left">
+<th>Format:&nbsp;</th>
+<td>32-bit long (2 copies returned via DV_NVAL_CPAGE_A and DV_NVAL_CPAGE_B) totaling 64 bits.</td></tr>
+<tr valign="top" align="left">
+<th>Description:&nbsp;</th>
+<td>These two values can be used to retrieve the code pages encompassed by the font. If the font file is a Microsoft Symbol Font, then the Symbol Character Set bit should be set. If the bit is set (1) then the code page is considered functional. If the bit is clear (0) then the code page is not considered functional. Each of the bits is treated as an independent flag and the bits can be set in any combination. The determination of "functional" is left up to the font designer, although character set selection should attempt to be functional by code pages if at all possible. <br /><br />Symbol character sets have a special meaning. If the symbol bit is set, and the font file is a Microsoft Unicode Font, then all of the characters in the Unicode range 0xF000 - 0xF0FF (inclusive) will be used to enumerate the symbol character set. If the bit is not set, any characters present in that range will not be enumerated as a symbol character set.
+<br /><br />All reserved fields must be zero.
+</td>
+</tr>
+</table>
+
+<p><strong>DV_NVAL_CPAGE_A</strong></p>
+
+<table class="table_data">
+<tr>
+<th>Bit</th>
+<th>Code Page</th>
+<th>Description</th></tr>
+<tr>
+<td>0</td>
+<td>1252</td>
+<td>Latin 1</td></tr>
+<tr>
+<td>1</td>
+<td>1250</td>
+<td>Latin 2: Eastern Europe</td></tr>
+<tr>
+<td>2</td>
+<td>1251</td>
+<td>Cyrillic</td></tr>
+<tr>
+<td>3</td>
+<td>1253</td>
+<td>Greek</td></tr>
+<tr>
+<td>4</td>
+<td>1254</td>
+<td>Turkish</td></tr>
+<tr>
+<td>5</td>
+<td>1255</td>
+<td>Hebrew</td></tr>
+<tr>
+<td>6</td>
+<td>1256</td>
+<td>Arabic</td></tr>
+<tr>
+<td>7</td>
+<td>1257</td>
+<td>Windows Baltic</td></tr>
+<tr>
+<td>8</td>
+<td>1258</td>
+<td>Vietnamese</td></tr>
+<tr>
+<td>9-15</td>
+<td>&nbsp;</td>
+<td>Reserved for Alternate ANSI</td></tr>
+<tr>
+<td>16</td>
+<td>874</td>
+<td>Thai</td></tr>
+<tr>
+<td>17</td>
+<td>932</td>
+<td>JIS/Japan</td></tr>
+<tr>
+<td>18</td>
+<td>936</td>
+<td>Chinese: Simplified chars--PRC and Singapore</td></tr>
+<tr>
+<td>19</td>
+<td>949</td>
+<td>Korean Wansung</td></tr>
+<tr>
+<td>20</td>
+<td>950</td>
+<td>Chinese: Traditional chars--Taiwan and Hong Kong</td></tr>
+<tr>
+<td>21</td>
+<td>1361</td>
+<td>Korean Johab</td></tr>
+<tr>
+<td>22 - 28</td>
+<td>&nbsp;</td>
+<td>Reserved for Alternate ANSI &amp; OEM</td></tr>
+<tr>
+<td>29</td>
+<td>&nbsp;</td>
+<td>Macintosh Character Set (US Roman)</td></tr>
+<tr>
+<td>30</td>
+<td>&nbsp;</td>
+<td>OEM Character Set</td></tr>
+<tr>
+<td>31</td>
+<td>&nbsp;</td>
+<td>Symbol Character Set</td></tr>
+</table>
+
+<p><strong>DV_NVAL_CPAGE_B</strong></p>
+
+<table class="table_data">
+<tr>
+<th>Bit</th>
+<th>Code Page</th>
+<th>Description</th></tr>
+<tr>
+<td>0 - 15</td>
+<td>&nbsp;</td>
+<td>Reserved for OEM</td></tr>
+<tr>
+<td>16</td>
+<td>869</td>
+<td>IBM Greek</td></tr>
+<tr>
+<td>17</td>
+<td>866</td>
+<td>MS-DOS Russian</td></tr>
+<tr>
+<td>18</td>
+<td>865</td>
+<td>MS-DOS Nordic</td></tr>
+<tr>
+<td>19</td>
+<td>864</td>
+<td>Arabic</td></tr>
+<tr>
+<td>20</td>
+<td>863</td>
+<td>MS-DOS Canadian French</td></tr>
+<tr>
+<td>21</td>
+<td>862</td>
+<td>Hebrew</td></tr>
+<tr>
+<td>22</td>
+<td>861</td>
+<td>MS-DOS Icelandic</td></tr>
+<tr>
+<td>23</td>
+<td>860</td>
+<td>MS-DOS Portuguese</td></tr>
+<tr>
+<td>24</td>
+<td>857</td>
+<td>IBM Turkish</td></tr>
+<tr>
+<td>25</td>
+<td>855</td>
+<td>IBM Cyrillic; primarily Russian</td></tr>
+<tr>
+<td>26</td>
+<td>852</td>
+<td>Latin 2</td></tr>
+<tr>
+<td>27</td>
+<td>775</td>
+<td>MS-DOS Baltic</td></tr>
+<tr>
+<td>28</td>
+<td>737</td>
+<td>Greek; former 437 G</td></tr>
+<tr>
+<td>29</td>
+<td>708</td>
+<td>Arabic; ASMO 708</td></tr>
+<tr>
+<td>30</td>
+<td>850</td>
+<td>WE/Latin 1</td></tr>
+<tr>
+<td>31</td>
+<td>437</td>
+<td>US</td></tr>
+</table>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

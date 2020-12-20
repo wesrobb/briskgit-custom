@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: Character Encoding</h1>
+
+
+<p><strong>Q-3-1. Why is <em>char_code</em> in <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a> a 4-byte unsigned integer? What is the code for character 'A'?</strong></p>
+
+<p><em>char_code</em> is a 4-byte unsigned integer (<a href="../../dt/manual/types.htm#DT_ID_ULONG">DT_ID_ULONG</a>) referencing a Unicode character. The 4-byte encoding scheme offers additional flexibility and simplifies programming with international character sets. Code for character 'A' is still 65 (as defined by Unicode), but the Unicode representation makes it possible to display all character sets in the world simultaneously. Since ASCII is a subset of Unicode, any ASCII character can be represented as a Unicode character code by casting its value to the <a href="../../dt/manual/types.htm#DT_ID_ULONG">DT_ID_ULONG</a> type.</p>
+
+<p><strong>Q-3-2. When using marlet.ttf, wingdings.ttf or webdings.ttf fonts, I do not see any output. I tried to render all of the standard ASCII characters but nothing shows up.</strong></p>
+
+<p>Marlet.ttf, wingdings.ttf and webdings.ttf are symbol fonts. According to the TrueType specification, the term "symbol" is used for "undefined character sets or indexing schemes". This means that applications must know how the characters are encoded within the font in order for the font to be useful.</p>
+
+<p>A Symbol font does not have any characters in the ASCII range 0x00-0xFF (or 0-255 decimal). All of its characters (also called "symbol" characters) are located at private Unicode locations 0xF000-0xF0FF (or 61440-61695 decimal). However, when encountering a Symbol font, Microsoft Windows operating system applies a special rule: it maps all character codes in its private Unicode range 0xF000-0xF0FF to the standard ASCII range 0x00-0xFF. This is most likely done in order to make these characters accessible to Unicode-unaware applications.</p>
+
+<p>Although this behavior is in violation of the Unicode standard, fonts utilizing this so-called encoding sometimes appear. Examples do not only include known symbol fonts such as wingdings.ttf, webdings.ttf and marlet.ttf but also some freeware Roman fonts created using popular font editing tools (e.g. Fontographer). Unaware of what the term "symbol" really means, some font authors choose to save their fonts as Microsoft Symbol Fonts.</p>
+
+<p>Microsoft has recently added the following note about the symbol fonts: "Symbol character sets have a special meaning. If the symbol bit (31) is set, and the font file contains a 'cmap' subtable for platform of 3 and encoding ID of 1, then all of the characters in the Unicode range 0xF000 - 0xF0FF (inclusive) will be used to enumerate the symbol character set. If the bit is not set, any characters present in that range will not be enumerated as a symbol character set."</p>
+
+<p>In order to display symbol characters in the same way Windows operating system does, you have two options:</p>
+
+<p><strong>Option A: perform the conversion yourself</strong></p>
+
+<ol>
+<li><p>Call the <a href="../../dt/funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function and pass it <em>DV_NVAL_PLATFORM_TYPE</em> to check if the font in question is a symbol font.</p></li>
+<li>
+<p>If <a href="../../dt/funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a> returns 200, the font in question is a symbol font. In this case add 0xF000 (or 61440 decimal) to every ASCII character code in your text string before rendering.</p>
+<p>For example, to render the character 'A' (Unicode 65), instead of calling <tt>dtCharDoOutput(engine, 65, X, Y, 0, &amp;bmp)</tt> you will need to call <tt>dtCharDoOutput(engine, 65+61440, X, Y, 0, &amp;bmp)</tt>.</p>
+</li>
+</ol>
+
+<p><strong>Option B: Let D-Type Font Engine perform the conversion</strong></p>
+
+<p>Alternatively, you can instruct D-Type Font Engine to perform the above conversion for you automatically. To do so, specify <em>font_format_id</em> = 81 (for TrueType or OpenType fonts with TrueType outlines) or <em>font_format_id</em> = 82 (for OpenType fonts with Type 2/CFF outlines) when adding the font to the Font Catalog using one of the <strong>dtFontAdd...</strong> functions. In order for this automatic conversion to work, you must initialize D-Type Font Engine via the <strong>dtype.inf</strong> file and the file called <strong>ot-win-symbol.ccv</strong> must be in the location specified by dtype.inf (typically this is system/ccv/ot-win-symbol.ccv).</p>
+
+
+<p><strong>Q-3-3. Is it possible to detect if a font does not contain the glyph for a certain Unicode character?</strong></p>
+
+<p>Using D-Type Font Engine, yes. See <a href="../../dt/funcs/dtFontGetGlyphIndex.htm">dtFontGetGlyphIndex</a> for details.</p>
+
+
+<p><strong>Q-3-4. Can D-Type support character codes beyond the codepoint U+FFFF?</strong></p>
+
+<p>Yes. To enable D-Type's 32-bit Unicode support, which means support beyond the codepoint U+FFFF, three things are required:</p>
+
+<p>1. It is necessary to use D-Type Font Engine 5.0.1.3 (released in August 2014) or more recent.</p>
+
+<p>2. It is necessary to activate Unicode support beyond codepoint U+FFFF (or 65535 using the standard decimal notation) for those font formats whose charmaps can support it: TrueType (.ttf) and OpenType (.otf). This is done by modifying Section A (CHARACTER TRANSLATION FOR WINDOWS UNICODE ENCODING) of the <em>ot-win-unicode.ccv</em> file which can be found in your D-Type's <em>system/ccv/</em> folder. Specifically, open the <em>ot-win-unicode.ccv</em> file in a text editor and locate the last line of this section. It should look as shown below:</p>
+
+<pre>160,-65535,160</pre>
+
+<p>This line needs to be changed to:</p>
+
+<pre>160,-1114111,160</pre>
+
+<p>This will enable support for Unicode codepoints up to U+10FFFF (or 1114111 using the standard decimal notation), which is the highest possible/allowed Unicode codepoint. The entire Section A of the <em>ot-win-unicode.ccv</em> file set up like this is shown below.</p>
+
+<div class="box_field">
+<pre># A) CHARACTER TRANSLATION FOR WINDOWS UNICODE ENCODING
+
+{
+1,-127,1
+128,8364
+129,0
+130,8218
+131,402
+132,8222
+133,8230
+134,8224
+135,8225
+136,710
+137,8240
+138,352
+139,8249
+140,338
+141,0
+142,0
+143,0
+144,0
+145,8216
+146,8217
+147,8220
+148,8221
+149,8226
+150,8211
+151,8212
+152,732
+153,8482
+154,353
+155,8250
+156,339
+157,0
+158,0
+159,376
+160,-1114111,160
+-1
+}</pre>
+</div>
+
+<p>This step does not apply to D-Type (.dtf) fonts because 32-bit Unicode charmaps are the only charmaps D-Type fonts support.</p>
+
+<p>3. Finally, when loading fonts (i.e. adding them to D-Type's Font Catalog), it is necessary to set the <em>cmap_id</em> parameter to 14. This means: prefer 32-bit Unicode charmaps over legacy Windows Unicode charmaps (which don't provide support beyond codepoint U+FFFF). By default this parameter is set to -1, which is the legacy behaviour.</p>
+
+<p>For example, if you are loading the font via D-Type's Initial Font List (dtype.fls), your font should be added to this file as shown below:</p>
+
+<pre>3,F0010_HIERO__NS0,0,14,128,1,1,0,../../fonts/Noto Sans Egyptian Hieroglyphs Regular.ttf,DV_NULL</pre>
+
+<p>Note that the 4th parameter is set to 14. This is the <em>cmap_id</em> parameter.</p>
+
+<p>That should be it. Once D-Type Font Engine is configured like this, support for 32-bit Unicode codepoints becomes available.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

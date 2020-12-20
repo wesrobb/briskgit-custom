@@ -1,0 +1,5 @@
+PowerGlyphs Status
+
+0 = Not explicitly set
+1 = Fully visible
+2 = Not fully visible

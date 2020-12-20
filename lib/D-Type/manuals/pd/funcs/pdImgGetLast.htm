@@ -1,0 +1,53 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdImgGetLast</h2><div class="box_prototype"><strong>
+DT_SLONG pdImgGetLast(DT_PDDOC power_doc)</strong></div><br /><strong>Short Description:</strong> <em>Get last image in document</em><br /><br />
+
+<p>The pdImgGetLast function returns the index of the last PowerDoc image in a Power Engine document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The index of the last PowerDoc image in the document. Thus, if there are no PowerDoc images in the document the function will return -1.</p>
+
+
+<h3>Comments</h3>
+<p>In Power Engine API, each PowerDoc image has a unique index. The index of a PowerDoc image simply represents its position (or location) in the <em>Image Allocation Array</em>. When a new PowerDoc image is added to the document, the engine will always append it to the end of this array. Similarly, when a PowerDoc image is deleted, the engine will always remove it from this array and move all subsequent PowerDoc images down (toward the beginning of the array) by one position.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdImgAddPlus.htm">pdImgAdd</a>, <a href="pdImgDel.htm">pdImgDel</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

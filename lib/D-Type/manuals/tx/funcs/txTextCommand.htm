@@ -1,0 +1,149 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextCommand</h2><div class="box_prototype"><strong>
+DT_SWORD txTextCommand(DT_TXDOC text_doc, DT_ID_SWORD command, DT_RECT_SLONG* extent, DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Process text commands</em><br /><br />
+
+<p>This function processes a text command (e.g. an operation on text performed by pressing a key on the keyboard or by choosing a text command from the menu). Depending on the command and current text selection state, this action may result in a new cursor position or updated boundaries of the text selection.</p>
+
+<p>This function should be used after a texflow area is rendered by calling the <a href="txTextDraw.htm">txTextDraw</a> function with its <em>flags</em> parameter set to instruct D-Type Text Engine to generate text flows and frames.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>command</em></p>
+</td><td>
+<p>Type of command. Can be one of the following:</p>
+<div class="box_field">
+
+
+<pre>TX_CMD_RESET                  -3   <span class="codecomment">/* Deselect all text and remove cursor */</span>&nbsp;
+TX_CMD_SELECTFLOW             -1   <span class="codecomment">/* Select the current text flow (obsolete) */</span>&nbsp;
+TX_CMD_SELECTFIRSTWORD        -4   <span class="codecomment">/* Select first word (obsolete) */</span>&nbsp;
+TX_CMD_SELECTFIRSTLINE        -6   <span class="codecomment">/* Select first line (obsolete) */</span>&nbsp;
+TX_CMD_SELECTFIRSTPARAGRAPH   -5   <span class="codecomment">/* Select first paragraph (obsolete) */</span>&nbsp;
+TX_CMD_SELECTFIRSTAREA        -7   <span class="codecomment">/* Select first text area (obsolete) */</span>&nbsp;
+TX_CMD_SELECTALL              -2   <span class="codecomment">/* Same as TX_CMD_SELECTTEXT (obsolete) */</span>&nbsp;
+TX_CMD_SELECTWORD             -8   <span class="codecomment">/* Select entire word */</span>&nbsp;
+TX_CMD_SELECTWORDS           -13   <span class="codecomment">/* Select entire words (extend existing selections) */</span>&nbsp;
+TX_CMD_SELECTLINE             -9   <span class="codecomment">/* Select entire line */</span>&nbsp;
+TX_CMD_SELECTPARAGRAPH       -10   <span class="codecomment">/* Select entire paragraph */</span>&nbsp;
+TX_CMD_SELECTPARAGRAPHS      -14   <span class="codecomment">/* Select entire paragraphs (extend existing selections) */</span>&nbsp;
+TX_CMD_SELECTAREA            -11   <span class="codecomment">/* Select entire text area */</span>&nbsp;
+TX_CMD_SELECTTEXT            -12   <span class="codecomment">/* Select all text */</span>&nbsp;
+
+TX_CMD_LEFT                    3   <span class="codecomment">/* Go to previous visible character */</span>&nbsp;
+TX_CMD_RIGHT                   4   <span class="codecomment">/* Go to next visible character */</span>&nbsp;
+TX_CMD_UP                      5   <span class="codecomment">/* Go to previous row */</span>&nbsp;
+TX_CMD_DOWN                    6   <span class="codecomment">/* Go to next row */</span>&nbsp;
+TX_CMD_SHIFT_LEFT              7   <span class="codecomment">/* Shift + Go to previous visible character */</span>&nbsp;
+TX_CMD_SHIFT_RIGHT             8   <span class="codecomment">/* Shift + Go to next visible character */</span>&nbsp;
+TX_CMD_SHIFT_UP                9   <span class="codecomment">/* Shift + Go to previous row */</span>&nbsp;
+TX_CMD_SHIFT_DOWN             10   <span class="codecomment">/* Shift + Go to next row */</span>&nbsp;
+
+TX_CMD_SET                    11   <span class="codecomment">/* Set cursor to closest visible position */</span>&nbsp;
+TX_CMD_CURRCHAR               12   <span class="codecomment">/* Go to current character */</span>&nbsp;
+TX_CMD_CURRTEXT               53   <span class="codecomment">/* Same as TX_CMD_CURRCHAR but safer (checks bounds in case the text is changed externally) */</span>&nbsp;
+
+TX_CMD_PREVCHAR               13   <span class="codecomment">/* Go to previous character */</span>&nbsp;
+TX_CMD_PREVWORD               14   <span class="codecomment">/* Go to previous word */</span>&nbsp;
+TX_CMD_PREVLINE               15   <span class="codecomment">/* Go to previous text line */</span>&nbsp;
+TX_CMD_PREVPARAGRAPH          16   <span class="codecomment">/* Go to previous paragraph */</span>&nbsp;
+TX_CMD_PREVAREA               17   <span class="codecomment">/* Go to previous text area */</span>&nbsp;
+TX_CMD_NEXTCHAR               18   <span class="codecomment">/* Go to next character */</span>&nbsp;
+TX_CMD_NEXTWORD               19   <span class="codecomment">/* Go to next word */</span>&nbsp;
+TX_CMD_NEXTLINE               20   <span class="codecomment">/* Go to next text line */</span>&nbsp;
+TX_CMD_NEXTPARAGRAPH          21   <span class="codecomment">/* Go to next paragraph */</span>&nbsp;
+TX_CMD_NEXTAREA               22   <span class="codecomment">/* Go to next text area */</span>&nbsp;
+
+TX_CMD_SHIFT_PREVCHAR         23   <span class="codecomment">/* Shift + Go to previous character */</span>&nbsp;
+TX_CMD_SHIFT_PREVWORD         24   <span class="codecomment">/* Shift + Go to previous word */</span>&nbsp;
+TX_CMD_SHIFT_PREVLINE         25   <span class="codecomment">/* Shift + Go to previous text line */</span>&nbsp;
+TX_CMD_SHIFT_PREVPARAGRAPH    26   <span class="codecomment">/* Shift + Go to previous paragraph */</span>&nbsp;
+TX_CMD_SHIFT_PREVAREA         27   <span class="codecomment">/* Shift + Go to previous text area */</span>&nbsp;
+TX_CMD_SHIFT_NEXTCHAR         28   <span class="codecomment">/* Shift + Go to next character */</span>&nbsp;
+TX_CMD_SHIFT_NEXTWORD         29   <span class="codecomment">/* Shift + Go to next word */</span>&nbsp;
+TX_CMD_SHIFT_NEXTLINE         30   <span class="codecomment">/* Shift + Go to next text line */</span>&nbsp;
+TX_CMD_SHIFT_NEXTPARAGRAPH    31   <span class="codecomment">/* Shift + Go to next paragraph */</span>&nbsp;
+TX_CMD_SHIFT_NEXTAREA         32   <span class="codecomment">/* Shift + Go to next text area */</span>&nbsp;
+
+TX_CMD_STARTWORD              33   <span class="codecomment">/* Go to start of word */</span>&nbsp;
+TX_CMD_STARTLINE              34   <span class="codecomment">/* Go to start of text line */</span>&nbsp;
+TX_CMD_STARTPARAGRAPH         35   <span class="codecomment">/* Go to start of paragraph */</span>&nbsp;
+TX_CMD_STARTAREA              36   <span class="codecomment">/* Go to start of text area */</span>&nbsp;
+TX_CMD_STARTTEXT              37   <span class="codecomment">/* Go to start of text */</span>&nbsp;
+TX_CMD_ENDWORD                38   <span class="codecomment">/* Go to end of word */</span>&nbsp;
+TX_CMD_ENDLINE                39   <span class="codecomment">/* Go to end of text line */</span>&nbsp;
+TX_CMD_ENDPARAGRAPH           40   <span class="codecomment">/* Go to end of paragraph */</span>&nbsp;
+TX_CMD_ENDAREA                41   <span class="codecomment">/* Go to end of text area */</span>&nbsp;
+TX_CMD_ENDTEXT                42   <span class="codecomment">/* Go to end of text */</span>&nbsp;
+
+TX_CMD_SHIFT_STARTWORD        43   <span class="codecomment">/* Shift + Go to start of word */</span>&nbsp;
+TX_CMD_SHIFT_STARTLINE        44   <span class="codecomment">/* Shift + Go to start of text line */</span>&nbsp;
+TX_CMD_SHIFT_STARTPARAGRAPH   45   <span class="codecomment">/* Shift + Go to start of paragraph */</span>&nbsp;
+TX_CMD_SHIFT_STARTAREA        46   <span class="codecomment">/* Shift + Go to start of text area */</span>&nbsp;
+TX_CMD_SHIFT_STARTTEXT        47   <span class="codecomment">/* Shift + Go to start of text */</span>&nbsp;
+TX_CMD_SHIFT_ENDWORD          48   <span class="codecomment">/* Shift + Go to end of word */</span>&nbsp;
+TX_CMD_SHIFT_ENDLINE          49   <span class="codecomment">/* Shift + Go to end of text line  */</span>&nbsp;
+TX_CMD_SHIFT_ENDPARAGRAPH     50   <span class="codecomment">/* Shift + Go to end of paragraph */</span>&nbsp;
+TX_CMD_SHIFT_ENDAREA          51   <span class="codecomment">/* Shift + Go to end of text area */</span>&nbsp;
+TX_CMD_SHIFT_ENDTEXT          52   <span class="codecomment">/* Shift + Go to end of text */</span>&nbsp;
+</pre>
+
+</div>
+</td></tr>
+
+<tr><td>
+<p><em>extent</em></p>
+</td><td>
+<p>A pointer to the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure that will receive a rectangle describing the smallest enclosing box of the screen area that needs to be repainted following a text selection action.<br />
+<br />
+If you do not wish to receive this rectangle, you may set <em>extent</em> to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If a portion of the screen area needs to be repainted, the return value is 1. If no portion of the screen area needs to be repainted, the return value is 2. In this case all members of the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure will be set to 0.</p>
+<p>If the function was not successful (e.g. invalid input parameters), the return value is 0.</p>
+
+
+<h3>Comments</h3>
+<p>This function can be called when the user presses a key on the keyboard or chooses a text command from the menu. When called, the function will interpret the command as required. This may result in a cursor movement, selection highlighting or any other text selection action that a text command can invoke. However, the developer does not need to know what operation, if any, was invoked.</p>
+<p>The <em>extent</em> returned by this function is a rectangle that describes the smallest enclosing box of the screen area that needs to be repainted following a text selection action. After that, the <a href="txTextDraw.htm">txTextDraw</a> function can be called again in order to repaint the area defined by <em>extent</em>.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

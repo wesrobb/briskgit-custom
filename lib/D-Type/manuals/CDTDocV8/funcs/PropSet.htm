@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>PropSet</strong></div><br />
+
+<p>The PropSet function changes the value of an existing PowerDoc property within the PowerDoc object referenced by <em>obj</em>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property to be changed. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="PropAdd.htm">PropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>value</em></p>
+</td><td>
+<p>The value of the property. It can be supplied as native binary data or a null-terminated C/C++ string that Power Engine will transparently convert to the native binary format.</p>
+<p>For more information, see Guidelines For Creating PowerDoc Objects.</p>
+</td></tr>
+
+<tr><td>
+<p><em>len</em> (or <em>Format Identifier</em>)</p>
+</td><td>
+<p>Same as in the PropAdd function. See <a href="PropAdd.htm">PropAdd</a> for details.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input) or -1 (memory error).</p>
+
+
+<h3>Comments</h3>
+<p>To avoid unexpected rendering results, properties must be assigned to PowerDoc objects in accordance with D-Type's Guidelines For Creating PowerDoc Objects.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

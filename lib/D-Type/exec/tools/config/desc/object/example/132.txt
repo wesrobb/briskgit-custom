@@ -1,0 +1,12 @@
+DT_ID_SLONG obj[1];
+
+obj[0] = {strong}pdObjAdd(pd, 0, "Library Bitmap Image");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdDw, "400", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[0], pdDh, "400", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[0], pdID, "15", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdQuality, "2", PD_BYTE_UNSIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[1], 0, 50, 50, 0, 0, 0, pdDrawLibraryImage, DV_NULL);{/strong}

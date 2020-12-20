@@ -1,0 +1,57 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextIni</h2><div class="box_prototype"><strong>
+DT_SLONG txTextIni(DT_TXDOC* text_doc)</strong></div><br /><strong>Short Description:</strong> <em>Create and initialize empty text document</em><br /><br />
+
+<p>This function creates a new empty text document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Pointer to the handle that will represent the newly created text document instance.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the new text document was created successfully, the return value will be 1. Otherwise, the function returns 0 and <em>text_doc</em> holds DV_NULL.</p>
+
+
+<h3>Comments</h3>
+<p>An application can call <a href="txTextIni.htm">txTextIni</a> multiple times and create as many empty text documents as necessary. When this function is called, each text document is created dynamically and must be destroyed by calling the <a href="txTextExt.htm">txTextExt</a> function.</p>
+<p>After a successful call to <a href="txTextIni.htm">txTextIni</a>, applications will typically want to build some Unicode text in the newly created document by calling one of the following functions: <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>, <a href="txTextMakeViaPowerDoc.htm">txTextMakeViaPowerDoc</a>. Alternatively, it is possible to execute both steps by a single call to one of the following convenience functions: <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextIniViaPowerDoc.htm">txTextIniViaPowerDoc</a>.
+
+<h3>Related Functions</h3>
+<p>
+<a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextIniViaPowerDoc.htm">txTextIniViaPowerDoc</a><br />
+<a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>, <a href="txTextMakeViaPowerDoc.htm">txTextMakeViaPowerDoc</a><br />
+<a href="txTextExt.htm">txTextExt</a>
+</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

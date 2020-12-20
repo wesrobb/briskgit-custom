@@ -1,0 +1,7 @@
+Amount of spacing from the previous baseline, in document units. This provides a means of manually setting the line height in text areas and rich text areas. This value must be non-negative. The value -1 is special and indicates that the line height is to be calculated automatically.
+
+{strong}Sample values:{/strong}
+
+48 = spacing of 48 document units
+16 = spacing of 16 document units
+-1 = calculate the baseline spacing automatically

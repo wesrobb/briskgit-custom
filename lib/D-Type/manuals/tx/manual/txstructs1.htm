@@ -1,0 +1,804 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Text Engine Core Structures</h1>
+
+
+<p>In addition to the <a href="../../dt/manual/types.htm">basic data types</a>, D-Type Text Engine also defines and utilizes the following structure types:</p>
+
+
+<h2><strong id="DT_RECT_SLONG">DT_RECT_SLONG</strong></h2>
+
+<p>This structure type describers a rectangle whose coordinates are expressed as 32-bit signed integers.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Rectangle (coordinates expressed as 32-bit signed integers) */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG xmn, ymn, xmx, ymx;
+
+} DT_RECT_SLONG;
+</pre>
+</div>
+
+<p>Here, <em>xmn</em> and <em>ymn</em> represent the minimum (x,&nbsp;y) coordinate of the rectangle (or its top left corner) while
+<em>xmx</em> and <em>ymx</em> represent the maximum (x,&nbsp;y) coordinate of the rectangle (or its bottom right corner).</p>
+
+
+<h2><strong id="DT_MDC">DT_MDC</strong></h2>
+
+<p>This structure type contains information about D-Type's memory (off-screen) surfaces.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's memory (off-screen) surface */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L w, h; <span class="codecomment">/* Surface's dimensions in pixels */</span>&nbsp;
+    DT_UBYTE* m;     <span class="codecomment">/* Pointer to surface's memory buffer */</span>&nbsp;
+    DT_SLONG l;      <span class="codecomment">/* Length of the buffer in bytes (defines pitch) */</span>&nbsp;
+
+} DT_MDC;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>w</em> &mdash; width of the memory surface in pixels. This value must be positive. <!--For best performance on all platforms, it should also be a multiple of 4.--></p></li>
+
+<li><p><em>h</em> &mdash; height of the memory surface in pixels. D-Type supports bottom-to-top and top-to-bottom surfaces. A positive <em>h</em> value indicates a bottom-to-top surface; a negative <em>h</em> value indicates a top-to-bottom surface. The value 0 is illegal.</p></li>
+
+<li><p><em>m</em> &mdash; pointer to a memory buffer that stores the surface's pixels. Depending on the format of the surface, each pixel in the buffer is represented with 8, 16, 24 or 32 bits (i.e. 1, 2, 3 or 4 <em>bytes per pixel</em>). <!--As a result, each scan-line consists of exactly <span class="nobreak"><em>bytes-per-pixel</em> * <em>w</em> bytes</span>.--></p></li>
+
+<li><p><em>l</em> &mdash; length of the memory buffer in bytes; must equal <span class="nobreak"><em>pitch</em> * abs(<em>h</em>)</span></p>
+<p>In the above equation, <em>pitch</em> is the distance, in bytes, between two memory addresses in the buffer that represent the beginning of two neighbouring pixel rows. Each pixel row consists of precisely <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes that represent the surface's pixels. Consequently, a valid <em>pitch</em> value must not be less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. A pitch value that is exactly <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is <span class="nobreak"><em>pitch</em> - <em>w</em> * <em>bytes per pixel</em></span>). Note that when rendering to the memory surface D-Type never reads or writes these extra bytes.</p>
+
+<p>Although not explicitly specified, <em>pitch</em> is an important value that has a direct impact on how D-Type renders pixels to your memory surface. To obtain the surface's pitch, D-Type divides the length of the memory buffer <em>l</em> by the absolute height of the memory surface <em>h</em>. For this reason, you must ensure that <em>l</em> is divisible by abs(<em>h</em>) and that the result of this division is not less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. If these conditions are not met, your pitch value is not properly defined and D-Type will assume the value <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> instead.</p>
+</li>
+</ul>
+
+
+<h2><strong id="DT_TX_DOC_PARAMS">DT_TX_DOC_PARAMS</strong></h2>
+
+<p>This structure is used by the <a href="../funcs/txTextSetParams.htm">txTextSetParams</a> and <a href="../funcs/txTextGetParams.htm">txTextGetParams</a> functions. For details, see the <a href="../funcs/txTextSetParams.htm">txTextSetParams</a> function.</p>
+
+<p><strong>Deprecation Notice:</strong> As of D-Type 8.0.1.3 this structure is deprecated and might be removed in the future.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Parameters for text documents */</span>&nbsp;
+typedef struct
+{
+    DT_ULONG EnableBits;          <span class="codecomment">/* A set of bit values to enable or disable various text document features */</span>&nbsp;
+    DT_ULONG ConfigBits;          <span class="codecomment">/* Various configuration bits */</span>&nbsp;
+    const DT_PD_DOC_PARAMS* Extra <span class="codecomment">/* Optional extra parameters (can be DV_NULL) */</span>&nbsp;
+
+} DT_TX_DOC_PARAMS;
+</pre>
+</div>
+
+
+<h2><strong id="DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</strong></h2>
+
+<p>This structure represents a single textflow area and contains parameters such as the area's (x,&nbsp;y) location (in document units), width and height (in document units), type (rectangular, circular, diamond-like etc.), row spacing calculation method (e.g. typographical, mathematical etc.), global text direction (e.g. Letf-to-Right &amp; Top-to-Bottom, Top-to-Bottom &amp; Left-to-Right, Top-to-Bottom &amp; Right-to-Left etc.), bidirectional text display method (bidirectional reordering or bidirectional rotation), device mode (e.g. device dependent, device independent, mixed) and, optionally, a transformation matrix (affine or 2D perspective).</p>
+
+<p>This structure type is utilized by the <a href="../funcs/txTextSetFlow.htm">txTextSetFlow</a> function, but can also be supplied while creating a new Unicode text document using the <a href="../funcs/txTextIniViaStream.htm">txTextIniViaStream</a> or <a href="../funcs/txTextIniViaBuffer.htm">txTextIniViaBuffer</a> function.</p>
+
+<p>The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Textflow area attributes */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG X, Y, W, H;            <span class="codecomment">/* Textflow area's bounding box in document units */</span>&nbsp;
+    DT_ID_UBYTE Type;               <span class="codecomment">/* Type of textflow area and control of empty text lines */</span>&nbsp;
+    DT_ID_UBYTE RowType;            <span class="codecomment">/* Row type within the textflow area */</span>&nbsp;
+    DT_ID_UBYTE WrapType;           <span class="codecomment">/* Text wrap method */</span>&nbsp;
+    DT_ID_UBYTE GlobalDirection;    <span class="codecomment">/* Global text direction and bidirectional text display method for a textflow area */</span>&nbsp;
+    DT_ID_UBYTE TargetDeviceID;     <span class="codecomment">/* Textflow area's device mode */</span>&nbsp;
+    DT_ID_UBYTE TransformAndExtras; <span class="codecomment">/* Identifies the type of the transformation matrix and/or any extra parameters. Can be one of the following:
+                                       TX_TM_NULL       = no transformation matrix and no extra parameters - TransformArray/Extra is DV_NULL
+                                       TX_TM_1X1        = 1x1 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 1 element
+                                       TX_TM_2X2        = 2x2 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 4 elements
+                                       TX_TM_3X3        = 3x3 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 9 elements
+                                       TX_TM_EXTRA_NULL = extra parameters only - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                                                          structure, Extra->TransformArray is DV_NULL
+                                       TX_TM_EXTRA_1X1  = 1x1 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 1 element
+                                       TX_TM_EXTRA_2X2  = 2x2 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 4 elements
+                                       TX_TM_EXTRA_3X3  = 3x3 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 9 elements
+                                    */</span>&nbsp;
+    union
+    {
+        <span class="codecomment">/* An affine or perspective transformation to apply to the textflow area */</span>&nbsp;
+        const DT_FLOAT* TransformArray;
+        <span class="codecomment">/* An affine or perspective transformation and any extra parameters to apply to the textflow area */</span>&nbsp;
+        const DT_TX_TEXTFLOW_AREA_EXTRA* Extra;
+    };
+
+} DT_TX_TEXTFLOW_AREA;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li>
+<p><em>X</em>, <em>Y</em> &mdash; (x,&nbsp;y) coordinate of the textflow area's bounding box (its top left corner), in document units.</p>
+</li>
+<li>
+<p><em>W</em>, <em>H</em> &mdash; width and height of the textflow area's bounding box, in document units. Both values must be positive.</p>
+</li>
+<li>
+<p><em>Type</em> &mdash; type of textflow area and control of empty text lines. The first 6 bits (Bit 0 - Bit 5) are interpreted as a single 6 bit value. This value specifies the type of the text area and can be one of the following:</p>
+<div class="box_field"><pre>
+TX_RECT         0    <span class="codecomment">/* Rectangular */</span>&nbsp;
+TX_CUSTOM       5    <span class="codecomment">/* Custom */</span>&nbsp;
+TX_CUSTOM2      6    <span class="codecomment">/* Custom With Extra Precision */</span>&nbsp;
+TX_CIRC_QRTR_A  10   <span class="codecomment">/* Quarter-Circular A */</span>&nbsp;
+TX_CIRC_QRTR_B  11   <span class="codecomment">/* Quarter-Circular B */</span>&nbsp;
+TX_CIRC_QRTR_C  12   <span class="codecomment">/* Quarter-Circular C */</span>&nbsp;
+TX_CIRC_QRTR_D  13   <span class="codecomment">/* Quarter-Circular D */</span>&nbsp;
+TX_CIRC_HALF_A  14   <span class="codecomment">/* Half-Circular A */</span>&nbsp;
+TX_CIRC_HALF_B  15   <span class="codecomment">/* Half-Circular B */</span>&nbsp;
+TX_CIRC_HALF_C  16   <span class="codecomment">/* Half-Circular C */</span>&nbsp;
+TX_CIRC_HALF_D  17   <span class="codecomment">/* Half-Circular D */</span>&nbsp;
+TX_CIRC         18   <span class="codecomment">/* Circular */</span>&nbsp;
+TX_DIAM_QRTR_A  20   <span class="codecomment">/* Quarter-Diamond A */</span>&nbsp;
+TX_DIAM_QRTR_B  21   <span class="codecomment">/* Quarter-Diamond B */</span>&nbsp;
+TX_DIAM_QRTR_C  22   <span class="codecomment">/* Quarter-Diamond C */</span>&nbsp;
+TX_DIAM_QRTR_D  23   <span class="codecomment">/* Quarter-Diamond D */</span>&nbsp;
+TX_DIAM_HALF_A  24   <span class="codecomment">/* Half-Diamond A */</span>&nbsp;
+TX_DIAM_HALF_B  25   <span class="codecomment">/* Half-Diamond B */</span>&nbsp;
+TX_DIAM_HALF_C  26   <span class="codecomment">/* Half-Diamond C */</span>&nbsp;
+TX_DIAM_HALF_D  27   <span class="codecomment">/* Half-Diamond D */</span>&nbsp;
+TX_DIAM         28   <span class="codecomment">/* Diamond */</span>&nbsp;
+</pre></div>
+<p>The seventh bit (Bit 6) is interpreted as a single bit value that specifies how the left (pdTextAreaEdgeLeft) and right edge (pdTextAreaEdgeRight) in non-rectangular text areas will be calculated. If this bit is set (1), the calculation will be more precise but slower; otherwise, if this bit is unset (0), the calculation will be less precise but faster. In rectangular text areas, this bit is ignored.</p>
+<p>The final bit (Bit 7) is interpreted as a single bit value that signifies whether the control of empty text lines is enabled. If this bit is set (1), the control of empty text lines is enabled; otherwise, if this bit is unset (0), the control of empty text lines is disabled.</p>
+<p>When the control of empty text lines is enabled, D-Type Engine will ignore any trailing empty text lines (i.e. text lines that only contain white characters such as spaces or carriage returns) when performing vertical alignment of text in this text area. This is useful in high-end text layout applications that require more professional vertical alignment of text.</p>
+</li>
+<li>
+<p><em>RowType</em> &mdash; specifies the way spacing between rows is calculated within the textflow area. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_MATHROW            0    <span class="codecomment">/* mathematically calculate spacing between text rows */</span>&nbsp;
+TX_TYPOROW            10   <span class="codecomment">/* respect typographic values (i.e. sTypoAscender, sTypoDescender) when calculating spacing between text rows */</span>&nbsp;
+TX_TYPOROW_LINEGAP    20   <span class="codecomment">/* same as TX_TYPOROW but adds additional linegap (i.e. sTypoLineGap), if available in the font */</span>&nbsp;
+TX_WINTYPOROW         30   <span class="codecomment">/* respect Windows specific typographic values (i.e. usWinAscent, usWinDescent) when calculating spacing between text rows */</span>&nbsp;
+TX_HORTYPOROW         110  <span class="codecomment">/* same as TX_TYPOROW but horizontal typographic values are used for text in vertical layout (columns) */</span>&nbsp;
+TX_HORTYPOROW_LINEGAP 120  <span class="codecomment">/* same as TX_TYPOROW_LINEGAP but horizontal typographic values are used for text in vertical layout (columns) */</span>&nbsp;
+</pre></div>
+<p>
+Explanation of row spacing calculation methods:
+</p>
+<ul>
+<li>
+<p>
+TX_MATHROW (0) = Mathematically calculate spacing between text rows.
+</p>
+</li>
+<li>
+<p>
+TX_TYPOROW (10) = Respect typographic values when calculating spacing between text rows. The typographic values must be defined in the font file in order for this method to function as intended. For text in horizontal layout (rows), the typographic values are supplied by the sTypoAscender and sTypoDescender fields of the OS/2 table (TrueType/OpenType fonts) or the Ascender and Descender key of the Font Metrics (AFM) file (Type 1/Type 3 fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_ASCENDER and DV_NVAL_DESCENDER identifiers. For text in vertical layout (columns), the typographic values are supplied by the vertTypoAscender and vertTypoDescender fields of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_VER_ASCENDER and DV_NVAL_VER_DESCENDER identifiers. If the typographic values are not defined in the font file, method 0 will be used instead.
+</p>
+</li>
+<li>
+<p>
+TX_TYPOROW_LINEGAP (20) = Same as method 10 but adds an additional linegap, if available in the font. For text in horizontal layout (rows), this additional linegap is supplied by the sTypoLineGap field of the OS/2 table (TrueType/OpenType fonts); in Type 1 and Type 3 fonts, this information is most likely not available. D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_LINEGAP identifier. For text in vertical layout (columns), the additional linegap is supplied by the vertTypoLineGap field of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_VER_LINEGAP identifier.
+</p>
+</li>
+<li>
+<p>
+TX_WINTYPOROW (30) = Respect Windows specific typographic values when calculating spacing between text rows. The Windows specific typographic values must be defined in the font file in order for this method to function as intended. For text in either horizontal layout (rows) or vertical layout (columns), the Windows specific typographic values are supplied by the usWinAscent and usWinDescent fields of the OS/2 table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_WIN_ASCENT and DV_NVAL_WIN_DESCENT identifiers. If the Windows specific typographic values are not defined in the font file, method 0 will be used instead.
+</p>
+</li>
+<li>
+<p>
+TX_HORTYPOROW (110) = Same as method 10, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+</p>
+</li>
+<li>
+<p>
+TX_HORTYPOROW_LINEGAP (120) = Same as method 20, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+</p>
+</li>
+</ul>
+
+</li>
+<li>
+<p><em>WrapType</em> &mdash; text wrap method. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_WRAP     0   <span class="codecomment">/* Soft Wrap Enabled */</span>&nbsp;
+TX_NOWRAP_A 1   <span class="codecomment">/* Soft Wrap Disabled - trim text after any character */</span>&nbsp;
+TX_NOWRAP_B 2   <span class="codecomment">/* Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) but not after a hyphen */</span>&nbsp;
+TX_NOWRAP_C 3   <span class="codecomment">/* Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) or after a hyphen */</span>&nbsp;
+TX_NOWRAP_D 4   <span class="codecomment">/* Soft Wrap Disabled - trim text after any character and add a horizontal ellipsis */</span>&nbsp;
+</pre></div>
+<p>Most applications will set <em>WrapType</em> to TX_WRAP (0).</p>
+</li>
+<li>
+<p><em>GlobalDirection</em> &mdash; specifies the global text direction and bidirectional text display method for a textflow area. Can be one of the following:</p>
+<div class="box_field"><pre>
+<span class="codecomment">/* Horizontal Layout (Text in Rows) and Bidirectional Reordering: */</span>&nbsp;
+TX_DIR_ROW_LR_TB               0   <span class="codecomment">/* Letf-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek) */</span>&nbsp;
+TX_DIR_ROW_RL_TB               1   <span class="codecomment">/* Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew) */</span>&nbsp;
+TX_DIR_ROW_LR_BT               2   <span class="codecomment">/* Letf-to-Right, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_RL_BT               3   <span class="codecomment">/* Right-to-Left, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_LR_TB_SWAP          4   <span class="codecomment">/* Same as TX_DIR_ROW_LR_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_RL_TB_SWAP          5   <span class="codecomment">/* Same as TX_DIR_ROW_RL_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_LR_BT_SWAP          6   <span class="codecomment">/* Same as TX_DIR_ROW_LR_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_RL_BT_SWAP          7   <span class="codecomment">/* Same as TX_DIR_ROW_RL_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Vertical Layout (Text in Columns) and Bidirectional Reordering: */</span>&nbsp;
+TX_DIR_COL_TB_RL               8   <span class="codecomment">/* Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese) */</span>&nbsp;
+TX_DIR_COL_BT_RL               9   <span class="codecomment">/* Bottom-to-Top, Right-to-Left */</span>&nbsp;
+TX_DIR_COL_TB_LR              10   <span class="codecomment">/* Top-to-Bottom, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BT_LR              11   <span class="codecomment">/* Bottom-to-Top, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_TB_RL_SWAP         12   <span class="codecomment">/* Same as TX_DIR_COL_TB_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BT_RL_SWAP         13   <span class="codecomment">/* Same as TX_DIR_COL_BT_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_TB_LR_SWAP         14   <span class="codecomment">/* Same as TX_DIR_COL_TB_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BT_LR_SWAP         15   <span class="codecomment">/* Same as TX_DIR_COL_BT_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Horizontal Layout (Text in Rows) and Bidirectional Rotation: */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_TB      16   <span class="codecomment">/* Letf-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek) */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_TB      17   <span class="codecomment">/* Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew) */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_BT      18   <span class="codecomment">/* Letf-to-Right, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_BT      19   <span class="codecomment">/* Right-to-Left, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_TB_SWAP 20   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_LR_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_TB_SWAP 21   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_RL_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_BT_SWAP 22   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_LR_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_BT_SWAP 23   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_RL_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Vertical Layout (Text in Columns) and Bidirectional Rotation: */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_RL      24   <span class="codecomment">/* Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese) */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_RL      25   <span class="codecomment">/* Bottom-to-Top, Right-to-Left */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_LR      26   <span class="codecomment">/* Top-to-Bottom, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_LR      27   <span class="codecomment">/* Bottom-to-Top, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_RL_SWAP 28   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_TB_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_RL_SWAP 29   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_BT_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_LR_SWAP 30   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_TB_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_LR_SWAP 31   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_BT_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+</pre></div>
+<p>
+D-Type Engine can display text in horizontal writing mode (text in rows) and vertical writing mode (text in columns). In horizontal writing mode, the global text progression can be Letf-to-Right/Top-to-Bottom, Right-to-Left/Top-to-Bottom, Letf-to-Right/Bottom-to-Top or Right-to-Left/Bottom-to-Top. In vertical writing mode, the global text progression can be Top-to-Bottom/Right-to-Left, Bottom-to-Top/Right-to-Left, Top-to-Bottom/Left-to-Right or Bottom-to-Top/Left-to-Right.
+</p>
+<p>
+Additionally, D-Type Engine can display bidirectional text (e.g. a mixture of left-to-right text such as English or Chinese and right-to-left text such as Arabic or Hebrew) using two different methods: the first method is Bidirectional Reordering, the second method is Bidirectional Rotation. Visually, these two methods produce quite different output. However, both are suitable for displaying text that was processed by the Unicode Bidirectional Algorithm (BiDi).
+</p>
+<p>
+With Bidirectional Reordering the characters are reordered for display depending on the relative direction of the containing text fragment. Thus, a left-to-right text fragment has its characters ordered (visually) in the opposite order from a right-to-left text fragment. While reading bidirectional text, from start to end, the reader must alternate the reading direction (left-to-right/right-to-left in horizontal writing mode or top-to-bottom/bottom-to-top in vertical writing mode) each time a change of direction occurs. This is also the progression of the cursor as it advances from one character to another. This means that with Bidirectional Reordering, the order in which the characters are displayed is not the same as the order in which they are stored in memory (logical or storage order).
+</p>
+<p>
+With Bidirectional Rotation all characters are ordered uniformly (e.g. from left-to-right in horizontal writing mode or top-to-bottom in vertical writing mode) regardless of whether the containing text fragment has a left-to-right or right-to-left direction. However, their rotation depends on the relative direction of the containing text fragment. More specifically, characters that are part of a left-to-right text fragment are rotated 180 degrees relative to the characters that are part of a right-to-left text fragment. Thus, while reading bidirectional text, from start to end, the reader must rotate the display surface or tilt his/her head (clockwise or counterclockwise) each time a change of direction occurs. However, the reading direction and the progression of the cursor remain uniform. This also means that with Bidirectional Rotation, the order in which the characters are displayed is the same as the order in which they are stored in memory.
+</p>
+<p>
+Bidirectional Reordering is frequently used in horizontal writing mode and also works well in vertical writing mode. Bidirectional Rotation is typically not used in horizontal writing mode due to the fact that almost all Unicode scripts, when displayed in horizontal writing mode, have their orientation set to portrait (meaning that the glyph's x-axis in font design space is parallel with the baseline). Using Bidirectional Rotation in this case would require the user to rotate the display surface by 180 degrees (clockwise or counterclockwise) each time a change of direction is encountered &mdash; which is, needles to say, far from practical. However, Bidirectional Rotation works well in vertical writing mode. This is due to the fact that vertical writing is used mostly with CJK scripts (Chinese/Japanese/Korean) which typically have their orientation set to landscape (meaning that the glyph's x-axis in font design space is perpendicular to the baseline). Non-CJK scripts, such as Latin or Arabic then have their orientation set to portrait. Under this scheme, the reading direction and the progression of the cursor is always top-to-bottom. When reading the majority of content (i.e. CJK text), there is no need to rotate the display surface. However, when a left-to-right text fragment (e.g. English) is encountered, the reader rotates the display surface by 90 degrees clockwise. Similarly, when a right-to-left text fragment (e.g. Arabic) is encountered, the reader rotates the display surface by 90 degrees counterclockwise. In all three cases (Chinese, English and Arabic) the characters are ordered from top to bottom and the reader is never expected to alter the reading direction (which would otherwise be required if Bidirectional Reordering was used). This is not to say that Bidirectional Reordering cannot be used in vertical writing mode. However, Bidirectional Rotation might work better in certain applications as rotating the display surface by 90 degrees clockwise or counterclockwise relative to the vertical baseline is sometimes considered a more practical way of reading vertical bidirectional text.
+</p>
+</li>
+<li>
+<p><em>TargetDeviceID</em> &mdash; specifies textflow area's device mode. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_LAY_FRAC      0   <span class="codecomment">/* Device Independent (Mode 0, Enhanced Fractional Positioning) */</span>&nbsp;
+TX_LAY_WHOLE     1   <span class="codecomment">/* Device Independent (Mode 0, Enhanced Whole Pixel Positioning) */</span>&nbsp;
+TX_LAY_DEVICE_A  2   <span class="codecomment">/* Device Dependent (Mode 1) */</span>&nbsp;
+TX_LAY_DEVICE_B  3   <span class="codecomment">/* Device Dependent (Mode 2) */</span>&nbsp;
+TX_LAY_MIXED_A   4   <span class="codecomment">/* Mixed (Mode 101) */</span>&nbsp;
+TX_LAY_MIXED_B   5   <span class="codecomment">/* Mixed (Mode 102) */</span>&nbsp;
+</pre></div>
+<p>
+Explanation of device modes:
+</p>
+<ul>
+<li>
+<p>
+0 = Device Independent Mode. Text will be rendered in a device independent mode, which means that text metrics are independent of the device, resolution or zoom factor and are mathematically accurate. Therefore, characters that are supposed to vertically line up will always line up. In addition, all text lines will always fit within the width of the textflow area. Recommended for WYSIWYG applications.
+</p>
+</li>
+<li>
+<p>
+1 = Device Dependent Mode #1. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode utilizes a complex device dependent formula that is specially crafted to give good looking character spacing (calculated in whole-pixel units). This mode corresponds to the DV_TEXTMODE_DEVICE value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.
+</p>
+<p>
+Because this mode is device dependent, please be aware that the length of certain text lines will sometimes exceed the width of the textflow area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.
+</p>
+</li>
+<li>
+<p>
+2 = Device Dependent Mode #2. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode is similar to Device Dependent Mode #1 since it also utilizes a complex device dependent formula crafted to give good looking character spacing. However, this mode produces even better looking and easier to read text, especially at smaller sizes. This is accomplished by artificially increasing the amount of character spacing between certain characters and in certain conditions. This mode corresponds to the DV_TEXTMODE_DEVICE_2 value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.
+</p>
+<p>
+Because this mode is device dependent (and also because the character spacing may be artificially increased), please be aware that the length of certain text lines will sometimes exceed the width of the textflow area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.
+</p>
+</li>
+<li>
+<p>
+101 = Mixed Mode #1. By default, the engine will render all text using Device Dependent Mode #1. However, if there are any text lines whose length would exceed the width of the textflow area, those text lines will be rendered in a device independent manner. Consequently, this mode guarantees that all text lines will always fit within the width of the textflow area.
+</p>
+</li>
+<li>
+<p>
+102 = Mixed Mode #2. By default, the engine will render all text using Device Dependent Mode #2. However, if there are any text lines whose length would exceed the width of the textflow area, then the engine will attempt to render those lines using Device Dependent Mode #1. If, after this, there are still some text lines whose length exceeds the width of the textflow area, those lines will be rendered in a device independent manner. Consequently, this mode guarantees that all text lines will always fit within the width of the textflow area. This mode usually produces great looking character spacing and is highly recommended whenever true WYSIWYG support is not a priority.
+</p>
+</li>
+</ul>
+
+</li>
+<li>
+<p><em>TransformAndExtras</em> &mdash; type of transformation matrix held in the TransformArray member or extra parameters. It is used in conjunction with the <em>TransformArray</em> or <em>Extra</em> members and can be one of the following:</p>
+<div class="box_field"><pre>
+TX_TM_NULL        0   <span class="codecomment">/* no transformation matrix and no extra parameters - TransformArray/Extra is DV_NULL */</span>&nbsp;
+TX_TM_1X1         1   <span class="codecomment">/* 1x1 transformation matrix only - TransformArray is a valid pointer to an array containing 1 element */</span>&nbsp;
+TX_TM_2X2         2   <span class="codecomment">/* 2x2 transformation matrix only - TransformArray is a valid pointer to an array containing 4 elements */</span>&nbsp;
+TX_TM_3X3         3   <span class="codecomment">/* 3x3 transformation matrix only - TransformArray is a valid pointer to an array containing 9 elements */</span>&nbsp;
+TX_TM_EXTRA_NULL  4   <span class="codecomment">/* extra parameters only - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA structure,
+                         Extra->TransformArray is DV_NULL */</span>&nbsp;
+TX_TM_EXTRA_1X1   5   <span class="codecomment">/* 1x1 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 1 element */</span>&nbsp;
+TX_TM_EXTRA_2X2   6   <span class="codecomment">/* 2x2 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 4 elements */</span>&nbsp;
+TX_TM_EXTRA_3X3   7   <span class="codecomment">/* 3x3 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 9 elements */</span>&nbsp;
+</pre></div>
+</li>
+<li>
+<p><em>TransformArray</em> &mdash; a pointer to an array that holds an affine or perspective transformation to apply to the textflow area. Depending on the value of the <em>TransformAndExtras</em> member, this pointer is either DV_NULL or points to an array of floats containing 1, 4 or 9 elements.</p>
+</li>
+
+<li>
+<p><em>Extra</em> &mdash; a pointer to the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA_EXTRA">DT_TX_TEXTFLOW_AREA_EXTRA</a> structure. This structure contains a pointer to an array that holds an affine or perspective transformation and any additional parameters (e.g. vertical text alignment, user-defined left/right edge) to apply to the textflow area.</p>
+</li>
+</ul>
+
+
+
+<h2><strong id="DT_TX_TEXTFLOW_AREA_EXTRA">DT_TX_TEXTFLOW_AREA_EXTRA</strong></h2>
+
+<p>This structure type supplements the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure, providing additional information. The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Extra information for DT_TX_TEXTFLOW_AREA */</span>&nbsp;
+typedef struct
+{
+    const DT_FLOAT* TransformArray; <span class="codecomment">/* An affine or perspective transformation to apply to the textflow area */</span>&nbsp;
+    const DT_UBYTE* EdgeArrayLeft;  <span class="codecomment">/* Left edge polyline for text areas with a custom (i.e. user-defined) left edge.
+                                       Should be used only with custom text areas (Type=TX_CUSTOM or Type=TX_CUSTOM2). */</span>&nbsp;
+    const DT_UBYTE* EdgeArrayRight; <span class="codecomment">/* Right edge polyline for text areas with a custom (i.e. user-defined) right edge.
+                                       Should be used only with custom text areas (Type=TX_CUSTOM or Type=TX_CUSTOM2). */</span>&nbsp;
+    DT_SLONG EdgeLenLeft;           <span class="codecomment">/* Length of the EdgeArrayLeft array */</span>&nbsp;
+    DT_SLONG EdgeLenRight;          <span class="codecomment">/* Length of the EdgeArrayRight array */</span>&nbsp;
+    DT_ID_UBYTE VAlign;             <span class="codecomment">/* Vertical alignment of text inside the text area, when the text flow does not end in this text area.
+                                       Should be used only with rectangular text areas (Type=TX_RECT). */</span>&nbsp;
+    DT_ID_UBYTE VAlignEnd;          <span class="codecomment">/* Vertical alignment of text inside the text area, when the text flow ends in this text area.
+                                       Should be used only with rectangular text areas (Type=TX_RECT). */</span>&nbsp;
+} DT_TX_TEXTFLOW_AREA_EXTRA;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li>
+<p><em>TransformArray</em> &mdash; a pointer to an array that holds an affine or perspective transformation to apply to the textflow area. Depending on the value of the <em>TransformAndExtras</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure, this pointer is either DV_NULL or points to an array of floats containing 1, 4 or 9 elements.</p>
+</li>
+<li>
+<p><em>EdgeArrayLeft</em> &mdash; a pointer to an array that defines the left edge polyline for text areas with a custom (i.e. user-defined) left edge. In order for this feature to work, the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure must be set to TX_CUSTOM or TX_CUSTOM2. In all other cases, <em>EdgeArrayLeft</em> should be set to DV_NULL and <em>EdgeLenLeft</em> should be set to 0.</p>
+<p>
+Explanation of the left edge polyline:
+</p>
+<p>
+The left edge polyline is defined as a sequence of connected segments which can be made of lines, Quadratic B-Spline and/or B&eacute;zier curves. Each sequence begins with the descriptor (value 20, 25 or 24) followed by an appropriate number of coordinates for the control points as shown below:
+</p>
+<div class="box_field"><pre>
+Line: <strong>20, X1, Y1</strong>
+Quadratic B-Spline Curve: <strong>25, X1, Y1, X2, Y2</strong>
+B&eacute;zier Curve: <strong>24, X1, Y1, X2, Y2, X3, Y3</strong>
+</pre></div>
+<p>
+The size of each descriptor value (20, 25 or 24) is always 1 byte.
+</p>
+<p>
+When the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_CUSTOM, the size of each coordinate is 1 byte. In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area width while the value 255 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area height while the value 255 means 100% of the text area height
+</p>
+<p>
+When the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_CUSTOM2, the size of each coordinate is 2 bytes (little endian byte ordering). In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0&nbsp;-&nbsp;65,535 range. The value 0 means 0% of the text area width while the value 65,535 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0&nbsp;-&nbsp;65,535 range. The value 0 means 0% of the text area height while the value 65,535 means 100% of the text area height.
+</p>
+<p>
+Implicitly, the first control point is always located at the coordinate (0,0) which is the top left corner of the text area. Therefore, the user definition of the polyline starts with the second control point. In addition, the last control point is automatically placed at the coordinate (x_last, y_max) where x_last is the X coordinate of the last user defined control point and y_max is 255 (when <em>Type</em> is TX_CUSTOM) or 65,535 (when <em>Type</em> is TX_CUSTOM2). In this way the polyline and the text area always have the same height.
+</p>
+<p>
+Although any sequence of connected lines, Quadratic B-Spline and/or B&eacute;zier curves can be used to define a polyline, the Y coordinates should be specified in a non-decreasing order. That is, any time a new Y coordinates is specified, its value should not be less than the value of the previously specified Y coordinate. This is to ensure that the polyline does not have multiple intersections with any horizontal line. This restriction does not apply to X coordinates.
+</p>
+</li>
+<li>
+<p><em>EdgeArrayRight</em> &mdash; a pointer to an array that defines the right edge polyline for text areas with a custom (i.e. user-defined) left edge. In order for this feature to work, the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure must be set to TX_CUSTOM or TX_CUSTOM2. In all other cases, <em>EdgeArrayRight</em> should be set to DV_NULL and <em>EdgeLenRight</em> should be set to 0.</p>
+<p>
+Explanation of the right edge polyline:
+</p>
+<p>
+The right edge polyline is defined as a sequence of connected segments which can be made of lines, Quadratic B-Spline and/or B&eacute;zier curves. Each sequence begins with the descriptor (value 20, 25 or 24) followed by an appropriate number of coordinates for the control points as shown below:
+</p>
+<div class="box_field"><pre>
+Line: <strong>20, X1, Y1</strong>
+Quadratic B-Spline Curve: <strong>25, X1, Y1, X2, Y2</strong>
+B&eacute;zier Curve: <strong>24, X1, Y1, X2, Y2, X3, Y3</strong>
+</pre></div>
+<p>
+The size of each descriptor value (20, 25 or 24) is always 1 byte.
+</p>
+<p>
+When the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_CUSTOM, the size of each coordinate is 1 byte. In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area width while the value 255 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area height while the value 255 means 100% of the text area height
+</p>
+<p>
+When the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_CUSTOM2, the size of each coordinate is 2 bytes (little endian byte ordering). In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0&nbsp;-&nbsp;65,535 range. The value 0 means 0% of the text area width while the value 65,535 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0&nbsp;-&nbsp;65,535 range. The value 0 means 0% of the text area height while the value 65,535 means 100% of the text area height.
+</p>
+<p>
+Implicitly, the first control point is always located at the coordinate (0,0) which is the top right corner of the text area. Therefore, the user definition of the polyline starts with the second control point. In addition, the last control point is automatically placed at the coordinate (x_last, y_max) where x_last is the X coordinate of the last user defined control point and y_max is 255 (when <em>Type</em> is TX_CUSTOM) or 65,535 (when <em>Type</em> is TX_CUSTOM2). In this way the polyline and the text area always have the same height.
+</p>
+<p>
+Although any sequence of connected lines, Quadratic B-Spline and/or B&eacute;zier curves can be used to define a polyline, the Y coordinates should be specified in a non-decreasing order. That is, any time a new Y coordinates is specified, its value should not be less than the value of the previously specified Y coordinate. This is to ensure that the polyline does not have multiple intersections with any horizontal line. This restriction does not apply to X coordinates.
+</p>
+</li>
+<li>
+<p><em>EdgeLenLeft</em> &mdash; the length of the <em>EdgeArrayLeft</em> array, in bytes.</p>
+</li>
+<li>
+<p><em>EdgeLenRight</em> &mdash; the length of the <em>EdgeArrayRight</em> array, in bytes.</p>
+</li>
+<li>
+<p><em>VAlign</em> &mdash; vertical alignment of text inside the text area (top, middle, bottom, justified), when the text flow does not end in this text area. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_VALIGN_TOP        0   <span class="codecomment">/* Top */</span>&nbsp;
+TX_VALING_MIDDLE     1   <span class="codecomment">/* Middle */</span>&nbsp;
+TX_VALIGN_BOTTOM     2   <span class="codecomment">/* Bottom */</span>&nbsp;
+TX_VALIGN_JUSTIFIED  3   <span class="codecomment">/* Justified */</span>&nbsp;
+</pre></div>
+<p>Values other than TX_VALIGN_TOP should be used only with rectangular text areas, i.e. when the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_RECT.</p>
+</li>
+<li>
+<p><em>VAlignEnd</em> &mdash; vertical alignment of text inside the text area (top, middle, bottom, justified), when the text flow ends in this text area. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_VALIGN_TOP        0   <span class="codecomment">/* Top */</span>&nbsp;
+TX_VALING_MIDDLE     1   <span class="codecomment">/* Middle */</span>&nbsp;
+TX_VALIGN_BOTTOM     2   <span class="codecomment">/* Bottom */</span>&nbsp;
+TX_VALIGN_JUSTIFIED  3   <span class="codecomment">/* Justified */</span>&nbsp;
+</pre></div>
+<p>Values other than TX_VALIGN_TOP should be used only with rectangular text areas, i.e. when the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure is set to TX_RECT.</p>
+</li>
+</ul>
+
+
+<h2><strong id="DT_TX_ATTRIBS">DT_TX_ATTRIBS</strong></h2>
+
+<p>This structure type represents a single text formatting/styling attribute. It is primarily utilized by the <a href="../funcs/txTextSetAttribs.htm">txTextSetAttribs</a> function although it can also be supplied while creating a new Unicode text document using the <a href="../funcs/txTextIniViaStream.htm">txTextIniViaStream</a> or <a href="../funcs/txTextIniViaBuffer.htm">txTextIniViaBuffer</a> function. It is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Text formatting/styling structure */</span>&nbsp;
+typedef struct
+{
+    DT_ID_SLONG Id;                  <span class="codecomment">/* Text formatting/styling attribute identifier and indicator if its value is supplied via the Value or Buffer union member */</span>&nbsp;
+
+    union
+    {
+        DT_TX_ATTRIBS_VALUE Value;   <span class="codecomment">/* Value of the formatting/styling attribute (suitable for null-terminated ASCII strings up to 255 bytes long) */</span>&nbsp;
+        DT_TX_ATTRIBS_BUFFER Buffer; <span class="codecomment">/* Buffer holding the value of the formatting/styling attribute (suitable for longer values and/or binary data) */</span>&nbsp;
+    };
+
+} DT_TX_ATTRIBS;
+</pre>
+</div>
+
+
+<p>The type of the <em>Value</em> union member variable is DT_TX_ATTRIBS_VALUE, which is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Formatting/Styling Value */</span>&nbsp;
+typedef DT_CHAR DT_TX_ATTRIBS_VALUE [256];
+</pre>
+</div>
+
+<p>This type is suitable for storing null-terminated ASCII strings that are up to 255 characters long. In D-Type Text Engine most formatting/styling attributes have values that are much shorter than 255 bytes. Thus, this type is suitable and recommended for the majority of formatting/styling attributes.</p>
+
+
+<p>The type of the <em>Buffer</em> union member variable is DT_TX_ATTRIBS_BUFFER, which is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Formatting/Styling Buffer */</span>&nbsp;
+typedef struct
+{
+    const DT_UBYTE* Addr; <span class="codecomment">/* Memory address at which the value of the formatting/styling attribute begins */</span>&nbsp;
+    DT_SLONG Len;         <span class="codecomment">/* Length of the value in bytes */</span>&nbsp;
+
+} DT_TX_ATTRIBS_BUFFER;
+</pre>
+</div>
+
+<p>This type is suitable for supplying longer strings and/or binary data. In D-Type Text Engine there are presently a few formatting/styling attributes that may require more than 255 bytes of storage for their values. These are TX_ATTR_TABSTOP_POSITIONS, TX_ATTR_TABSTOP_FLAGS and TX_ATTR_USER_SPECIFIC_CONTENT. Thus, this type is primarily suitable for these three formatting/styling attributes.</p>
+
+<p>Note, however, that regardless of whether the value is supplied via the <em>Value</em> or <em>Buffer</em> union member, all values must be shorter than 1024 bytes in length. This is the current implementation limit. D-Type Text Engine will reject any requests to format/style text if the length of a formatting/styling attribute value equals or exceeds 1024 bytes.</p>
+
+
+
+<p>The members of the DT_TX_ATTRIBS structure have the following purpose:</p>
+
+<ul>
+<li>
+<p><em>Id</em> &mdash; identifies the formatting/styling attribute and, at the same time, specifies whether its value is supplied via the <em>Value</em> or <em>Buffer</em> union member variable.
+</p>
+<p>
+The list of currently supported formatting/styling attribute identifiers follows. Click on any attribute identifier for a more detailed description:</p>
+
+
+<div class="box_field"><pre>
+<span class="codecomment">/* Typography */</span>&nbsp;
+<a name="txattr_1" href="txattrids.htm#TX_ATTR_FONT_INDEX">TX_ATTR_FONT_INDEX</a>                   1
+<a name="txattr_2" href="txattrids.htm#TX_ATTR_FONT_UNIQUEID">TX_ATTR_FONT_UNIQUEID</a>                2
+<a name="txattr_3" href="txattrids.htm#TX_ATTR_FONT_MMCONTRIBUTIONS">TX_ATTR_FONT_MMCONTRIBUTIONS</a>         3
+<a name="txattr_4" href="txattrids.htm#TX_ATTR_FONT_WIDTH">TX_ATTR_FONT_WIDTH</a>                   4
+<a name="txattr_5" href="txattrids.htm#TX_ATTR_FONT_HEIGHT">TX_ATTR_FONT_HEIGHT</a>                  5
+<a name="txattr_6" href="txattrids.htm#TX_ATTR_SKEW_HOR">TX_ATTR_SKEW_HOR</a>                     6
+<a name="txattr_7" href="txattrids.htm#TX_ATTR_SKEW_VER">TX_ATTR_SKEW_VER</a>                     7
+<a name="txattr_8" href="txattrids.htm#TX_ATTR_ROTATION">TX_ATTR_ROTATION</a>                     8
+<a name="txattr_9" href="txattrids.htm#TX_ATTR_EFFECT">TX_ATTR_EFFECT</a>                       9
+<a name="txattr_54" href="txattrids.htm#TX_ATTR_EFFECT_PARAM0">TX_ATTR_EFFECT_PARAM0</a>                54
+<a name="txattr_55" href="txattrids.htm#TX_ATTR_EFFECT_PARAM1">TX_ATTR_EFFECT_PARAM1</a>                55
+<a name="txattr_56" href="txattrids.htm#TX_ATTR_EFFECT_PARAM2">TX_ATTR_EFFECT_PARAM2</a>                56
+<a name="txattr_57" href="txattrids.htm#TX_ATTR_EFFECT_PARAM3">TX_ATTR_EFFECT_PARAM3</a>                57
+<a name="txattr_58" href="txattrids.htm#TX_ATTR_EFFECT_PARAM4">TX_ATTR_EFFECT_PARAM4</a>                58
+
+<span class="codecomment">/* Text Body */</span>&nbsp;
+<a name="txattr_38" href="txattrids.htm#TX_ATTR_BODY">TX_ATTR_BODY</a>                         38
+<a name="txattr_10" href="txattrids.htm#TX_ATTR_BODY_RGBT">TX_ATTR_BODY_RGBT</a>                    10
+<a name="txattr_11" href="txattrids.htm#TX_ATTR_BODY_EP">TX_ATTR_BODY_EP</a>                      11
+<a name="txattr_60" href="txattrids.htm#TX_ATTR_BODY_EFFECTS">TX_ATTR_BODY_EFFECTS</a>                 60
+
+<span class="codecomment">/* Text Shadow */</span>&nbsp;
+<a name="txattr_39" href="txattrids.htm#TX_ATTR_SHADOW">TX_ATTR_SHADOW</a>                       39
+<a name="txattr_12" href="txattrids.htm#TX_ATTR_SHADOW_DX">TX_ATTR_SHADOW_DX</a>                    12
+<a name="txattr_13" href="txattrids.htm#TX_ATTR_SHADOW_DY">TX_ATTR_SHADOW_DY</a>                    13
+<a name="txattr_14" href="txattrids.htm#TX_ATTR_SHADOW_RGBT">TX_ATTR_SHADOW_RGBT</a>                  14
+<a name="txattr_15" href="txattrids.htm#TX_ATTR_SHADOW_EP">TX_ATTR_SHADOW_EP</a>                    15
+<a name="txattr_61" href="txattrids.htm#TX_ATTR_SHADOW_EFFECTS">TX_ATTR_SHADOW_EFFECTS</a>               61
+
+<span class="codecomment">/* Text Outline */</span>&nbsp;
+<a name="txattr_40" href="txattrids.htm#TX_ATTR_OUTLINE">TX_ATTR_OUTLINE</a>                      40
+<a name="txattr_37" href="txattrids.htm#TX_ATTR_OUTLINE_TREATMENT">TX_ATTR_OUTLINE_TREATMENT</a>            37
+<a name="txattr_16" href="txattrids.htm#TX_ATTR_OUTLINE_THICKNESS">TX_ATTR_OUTLINE_THICKNESS</a>            16
+<a name="txattr_17" href="txattrids.htm#TX_ATTR_OUTLINE_SEGMENT">TX_ATTR_OUTLINE_SEGMENT</a>              17
+<a name="txattr_17" href="txattrids.htm#TX_ATTR_OUTLINE_DASHSIZE">TX_ATTR_OUTLINE_DASHSIZE</a>             69
+<a name="txattr_18" href="txattrids.htm#TX_ATTR_OUTLINE_RGBT">TX_ATTR_OUTLINE_RGBT</a>                 18
+<a name="txattr_19" href="txattrids.htm#TX_ATTR_OUTLINE_EP">TX_ATTR_OUTLINE_EP</a>                   19
+<a name="txattr_62" href="txattrids.htm#TX_ATTR_OUTLINE_EFFECTS">TX_ATTR_OUTLINE_EFFECTS</a>              62
+
+<span class="codecomment">/* Text Underline */</span>&nbsp;
+<a name="txattr_44" href="txattrids.htm#TX_ATTR_UNDERLINE">TX_ATTR_UNDERLINE</a>                    44
+<a name="txattr_45" href="txattrids.htm#TX_ATTR_UNDERLINE_THICKNESS">TX_ATTR_UNDERLINE_THICKNESS</a>          45
+<a name="txattr_46" href="txattrids.htm#TX_ATTR_UNDERLINE_SEGMENT">TX_ATTR_UNDERLINE_SEGMENT</a>            46
+<a name="txattr_46" href="txattrids.htm#TX_ATTR_UNDERLINE_DASHSIZE">TX_ATTR_UNDERLINE_DASHSIZE</a>           70
+<a name="txattr_47" href="txattrids.htm#TX_ATTR_UNDERLINE_RGBT">TX_ATTR_UNDERLINE_RGBT</a>               47
+<a name="txattr_48" href="txattrids.htm#TX_ATTR_UNDERLINE_EP">TX_ATTR_UNDERLINE_EP</a>                 48
+<a name="txattr_63" href="txattrids.htm#TX_ATTR_UNDERLINE_EFFECTS">TX_ATTR_UNDERLINE_EFFECTS</a>            63
+
+<span class="codecomment">/* Text Layout */</span>&nbsp;
+<a name="txattr_41" href="txattrids.htm#TX_ATTR_TEXTLAYOUT">TX_ATTR_TEXTLAYOUT</a>                   41
+<a name="txattr_20" href="txattrids.htm#TX_ATTR_SPACING_LETTER">TX_ATTR_SPACING_LETTER</a>               20
+<a name="txattr_21" href="txattrids.htm#TX_ATTR_SPACING_ROW">TX_ATTR_SPACING_ROW</a>                  21
+<a name="txattr_43" href="txattrids.htm#TX_ATTR_SPACING_BASELINE">TX_ATTR_SPACING_BASELINE</a>             43
+<a name="txattr_49" href="txattrids.htm#TX_ATTR_SPACING_FACTOR">TX_ATTR_SPACING_FACTOR</a>               49
+<a name="txattr_22" href="txattrids.htm#TX_ATTR_DX">TX_ATTR_DX</a>                           22
+<a name="txattr_23" href="txattrids.htm#TX_ATTR_DY">TX_ATTR_DY</a>                           23
+<a name="txattr_24" href="txattrids.htm#TX_ATTR_ALIGN">TX_ATTR_ALIGN</a>                        24
+<a name="txattr_25" href="txattrids.htm#TX_ATTR_ALIGNEND">TX_ATTR_ALIGNEND</a>                     25
+<a name="txattr_59" href="txattrids.htm#TX_ATTR_VALIGN_ROW">TX_ATTR_VALIGN_ROW</a>                   59
+<a name="txattr_26" href="txattrids.htm#TX_ATTR_KERNING">TX_ATTR_KERNING</a>                      26
+<a name="txattr_27" href="txattrids.htm#TX_ATTR_HINTING">TX_ATTR_HINTING</a>                      27
+<a name="txattr_28" href="txattrids.htm#TX_ATTR_POSITIONING">TX_ATTR_POSITIONING</a>                  28
+<a name="txattr_29" href="txattrids.htm#TX_ATTR_DIRECTION">TX_ATTR_DIRECTION</a>                    29
+<a name="txattr_30" href="txattrids.htm#TX_ATTR_ORIENTATION">TX_ATTR_ORIENTATION</a>                  30
+
+<span class="codecomment">/* Text Ruler */</span>&nbsp;
+<a name="txattr_42" href="txattrids.htm#TX_ATTR_TEXTRULER">TX_ATTR_TEXTRULER</a>                    42
+<a name="txattr_31" href="txattrids.htm#TX_ATTR_TABSTOP_POSITIONS">TX_ATTR_TABSTOP_POSITIONS</a>            31
+<a name="txattr_32" href="txattrids.htm#TX_ATTR_TABSTOP_FLAGS">TX_ATTR_TABSTOP_FLAGS</a>                32
+<a name="txattr_33" href="txattrids.htm#TX_ATTR_MARGIN_LEFT">TX_ATTR_MARGIN_LEFT</a>                  67
+<a name="txattr_34" href="txattrids.htm#TX_ATTR_MARGIN_RIGHT">TX_ATTR_MARGIN_RIGHT</a>                 68
+<a name="txattr_33" href="txattrids.htm#TX_ATTR_INDENT_LEFT">TX_ATTR_INDENT_LEFT</a>                  33
+<a name="txattr_34" href="txattrids.htm#TX_ATTR_INDENT_RIGHT">TX_ATTR_INDENT_RIGHT</a>                 34
+
+<span class="codecomment">/* Miscellaneous */</span>&nbsp;
+<a name="txattr_35" href="txattrids.htm#TX_ATTR_ENCODING">TX_ATTR_ENCODING</a>                     35
+<a name="txattr_36" href="txattrids.htm#TX_ATTR_SHAPING">TX_ATTR_SHAPING</a>                      36
+<a name="txattr_66" href="txattrids.htm#TX_ATTR_SHAPING_PARAM0">TX_ATTR_SHAPING_PARAM0</a>               66
+<a name="txattr_50" href="txattrids.htm#TX_ATTR_BREAK_FLAGS">TX_ATTR_BREAK_FLAGS</a>                  50
+<a name="txattr_51" href="txattrids.htm#TX_ATTR_HYPHENATION">TX_ATTR_HYPHENATION</a>                  51
+<a name="txattr_64" href="txattrids.htm#TX_ATTR_MISC_ATTRIBS">TX_ATTR_MISC_ATTRIBS</a>                 64
+<a name="txattr_65" href="txattrids.htm#TX_ATTR_LANGUAGE">TX_ATTR_LANGUAGE</a>                     65
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_POWERFONT_PTR">TX_ATTR_POWERFONT_PTR</a>                52 <span class="codecomment">/* not currently supported */</span>&nbsp;
+<a name="txattr_53" href="txattrids.htm#TX_ATTR_USER_SPECIFIC_CONTENT">TX_ATTR_USER_SPECIFIC_CONTENT</a>        53
+
+<span class="codecomment">/* Typographic Frame Body */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_BODY">TX_ATTR_TYPOFRAME_BODY</a>               71
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_BODY_RGBT">TX_ATTR_TYPOFRAME_BODY_RGBT</a>          72
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_BODY_EP">TX_ATTR_TYPOFRAME_BODY_EP</a>            73
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_BODY_EFFECTS">TX_ATTR_TYPOFRAME_BODY_EFFECTS</a>       74
+<span class="codecomment">/* Typographic Frame Shadow */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW">TX_ATTR_TYPOFRAME_SHADOW</a>             75
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW_DX">TX_ATTR_TYPOFRAME_SHADOW_DX</a>          76
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW_DY">TX_ATTR_TYPOFRAME_SHADOW_DY</a>          77
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW_RGBT">TX_ATTR_TYPOFRAME_SHADOW_RGBT</a>        78
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW_EP">TX_ATTR_TYPOFRAME_SHADOW_EP</a>          79
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_SHADOW_EFFECTS">TX_ATTR_TYPOFRAME_SHADOW_EFFECTS</a>     80
+<span class="codecomment">/* Typographic Frame Outline */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE">TX_ATTR_TYPOFRAME_OUTLINE</a>            81
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_TREATMENT">TX_ATTR_TYPOFRAME_OUTLINE_TREATMENT</a>  82
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_THICKNESS">TX_ATTR_TYPOFRAME_OUTLINE_THICKNESS</a>  83
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_SEGMENT">TX_ATTR_TYPOFRAME_OUTLINE_SEGMENT</a>    84
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_DASHSIZE">TX_ATTR_TYPOFRAME_OUTLINE_DASHSIZE</a>   85
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_RGBT">TX_ATTR_TYPOFRAME_OUTLINE_RGBT</a>       86
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_EP">TX_ATTR_TYPOFRAME_OUTLINE_EP</a>         87
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_TYPOFRAME_OUTLINE_EFFECTS">TX_ATTR_TYPOFRAME_OUTLINE_EFFECTS</a>    88
+<span class="codecomment">/* Text Extras - Row Boundary Body */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_BODY">TX_ATTR_ROWBOUND_BODY</a>                89
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_BODY_RGBT">TX_ATTR_ROWBOUND_BODY_RGBT</a>           90
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_BODY_EP">TX_ATTR_ROWBOUND_BODY_EP</a>             91
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_BODY_EFFECTS">TX_ATTR_ROWBOUND_BODY_EFFECTS</a>        92
+<span class="codecomment">/* Text Extras - Row Boundary Shadow */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW">TX_ATTR_ROWBOUND_SHADOW</a>              93
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW_DX">TX_ATTR_ROWBOUND_SHADOW_DX</a>           94
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW_DY">TX_ATTR_ROWBOUND_SHADOW_DY</a>           95
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW_RGBT">TX_ATTR_ROWBOUND_SHADOW_RGBT</a>         96
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW_EP">TX_ATTR_ROWBOUND_SHADOW_EP</a>           97
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_SHADOW_EFFECTS">TX_ATTR_ROWBOUND_SHADOW_EFFECTS</a>      98
+<span class="codecomment">/* Text Extras - Row Boundary Outline */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE">TX_ATTR_ROWBOUND_OUTLINE</a>             99
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_TREATMENT">TX_ATTR_ROWBOUND_OUTLINE_TREATMENT</a>  100
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_THICKNESS">TX_ATTR_ROWBOUND_OUTLINE_THICKNESS</a>  101
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_SEGMENT">TX_ATTR_ROWBOUND_OUTLINE_SEGMENT</a>    102
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_DASHSIZE">TX_ATTR_ROWBOUND_OUTLINE_DASHSIZE</a>   103
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_RGBT">TX_ATTR_ROWBOUND_OUTLINE_RGBT</a>       104
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_EP">TX_ATTR_ROWBOUND_OUTLINE_EP</a>         105
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_OUTLINE_EFFECTS">TX_ATTR_ROWBOUND_OUTLINE_EFFECTS</a>    106
+<span class="codecomment">/* Text Extras - Row Boundary General */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_MARGIN_LEFT">TX_ATTR_ROWBOUND_MARGIN_LEFT</a>        107
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_MARGIN_RIGHT">TX_ATTR_ROWBOUND_MARGIN_RIGHT</a>       108
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_MARGIN_TOP">TX_ATTR_ROWBOUND_MARGIN_TOP</a>         109
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_MARGIN_BOTTOM">TX_ATTR_ROWBOUND_MARGIN_BOTTOM</a>      110
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_ROUND">TX_ATTR_ROWBOUND_ROUND</a>              111
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_ROWBOUND_MERGE">TX_ATTR_ROWBOUND_MERGE</a>              112
+<span class="codecomment">/* Text Extras - Baseline Line */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE">TX_ATTR_BASELINE_LINE</a>               113
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_THICKNESS">TX_ATTR_BASELINE_LINE_THICKNESS</a>     114
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_SEGMENT">TX_ATTR_BASELINE_LINE_SEGMENT</a>       115
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_DASHSIZE">TX_ATTR_BASELINE_LINE_DASHSIZE</a>      116
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_START">TX_ATTR_BASELINE_LINE_START</a>         117
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_END">TX_ATTR_BASELINE_LINE_END</a>           118
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_RGBT">TX_ATTR_BASELINE_LINE_RGBT</a>          119
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_EP">TX_ATTR_BASELINE_LINE_EP</a>            120
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_LINE_EFFECTS">TX_ATTR_BASELINE_LINE_EFFECTS</a>       121
+<span class="codecomment">/* Text Extras - Baseline General */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_MARGIN_LEFT">TX_ATTR_BASELINE_MARGIN_LEFT</a>        122
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_MARGIN_RIGHT">TX_ATTR_BASELINE_MARGIN_RIGHT</a>       123
+<span class="codecomment">/* Text Extras - Baseline Shadow */</span>&nbsp;
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW">TX_ATTR_BASELINE_SHADOW</a>             124
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW_DX">TX_ATTR_BASELINE_SHADOW_DX</a>          125
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW_DY">TX_ATTR_BASELINE_SHADOW_DY</a>          126
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW_RGBT">TX_ATTR_BASELINE_SHADOW_RGBT</a>        127
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW_EP">TX_ATTR_BASELINE_SHADOW_EP</a>          128
+<a name="txattr_52" href="txattrids.htm#TX_ATTR_BASELINE_SHADOW_EFFECTS">TX_ATTR_BASELINE_SHADOW_EFFECTS</a>     129
+</pre></div>
+
+
+
+<p>
+If <em>Id</em> is set to one of the above attribute identifiers, this automatically indicates that its value is supplied via the <em>Value</em> union member variable. If, however, <em>Id</em> is set to one of the above attribute identifiers increased by TX_ATTR_BUFFER (1024), then this is an indicator that its value is supplied via the <em>Buffer</em> union member variable.
+</p>
+
+<p><strong>Example 1a - value supplied via the <em>Value</em> union member variable</strong></p>
+<div class="box_field"><pre>
+DT_TX_ATTRIBS attrib;
+attrib.Id = TX_ATTR_FONT_WIDTH;
+attrib.Value = 48;
+</pre></div>
+
+<p><strong>Example 1b - value supplied via the <em>Value</em> union member variable</strong></p>
+<div class="box_field"><pre>
+DT_TX_ATTRIBS attrib = {TX_ATTR_FONT_WIDTH, {"48"}};
+</pre></div>
+
+
+<p><strong>Example 2a - value supplied via the <em>Buffer</em> union member variable</strong></p>
+<div class="box_field"><pre>
+const DT_CHAR* buffer = "48";
+DT_TX_ATTRIBS attrib;
+attrib.Id = TX_ATTR_BUFFER + TX_ATTR_FONT_WIDTH;
+attrib.Buffer.Addr = (DT_UBYTE*)buffer;
+attrib.Buffer.Len = strlen(buffer);
+</pre></div>
+
+
+<p><strong>Example 2b - value supplied via the <em>Buffer</em> union member variable</strong></p>
+<div class="box_field"><pre>
+DT_UBYTE buffer[512] = {32, 22, 12, 12, 44, 0, 0, 12, 21, 44, 78, 33, 66, 88, 12, 14, etc...} /* some binary data */
+DT_TX_ATTRIBS attrib;
+attrib.Id = TX_ATTR_BUFFER + TX_ATTR_USER_SPECIFIC_CONTENT;
+attrib.Buffer.Addr = buffer;
+attrib.Buffer.Len = 512;
+</pre></div>
+
+
+</li>
+<li>
+<p><em>Value</em> &mdash; the value of the formatting/styling attribute. If stored this way, the value must be a null-terminated ASCII string (as there is no other way to specify the length of the string).</p>
+</li>
+<li>
+<p><em>Buffer</em> &mdash; buffer holding the value of the formatting/styling attribute. The <em>Addr</em> member of this structure represents the memory address at which the value of the formatting/styling attribute begins while <em>Len</em> is its length. If stored this way the value does not have to be a null-terminated ASCII string (since the length of the string is explicitly specified using the <em>Len</em> member).
+</p>
+</li>
+</ul>
+
+<p>The <a href="../funcs/txTextSetAttribs.htm">txTextSetAttribs</a>, <a href="../funcs/txTextIniViaStream.htm">txTextIniViaStream</a> and <a href="../funcs/txTextIniViaBuffer.htm">txTextIniViaBuffer</a> functions expect an array of the <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> structures so that multiple formatting/styling attributes can be applied at the same time. In order to signal the end of the array, the <em>Id</em> member of the last structure in the array must be TX_ATTR_END (-1) while its <em>Value</em> must be an empty string. For example, an array of <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> structures that specify a font width and height of 60 documents units would be initialized as follows:</p>
+
+<div class="box_field"><pre>
+const DT_TX_ATTRIBS attrib_array[] =
+{
+   {TX_ATTR_FONT_WIDTH,  {"60" <span class="codecomment">/* font width in document units */</span>&nbsp;}},
+   {TX_ATTR_FONT_HEIGHT, {"60" <span class="codecomment">/* font height in document units */</span>&nbsp;}},
+   {TX_ATTR_END,         {""   <span class="codecomment">/* mandatory end-of-array */</span>&nbsp;}}
+};
+</pre></div>
+
+<p>The value TX_ATTR_END (-1) cannot be combined with TX_ATTR_BUFFER (1024). In other words only TX_ATTR_END signals the end of an array, the sum TX_ATTR_BUFFER + TX_ATTR_END is invalid and does not signal anything.</p>
+
+
+<h2><strong id="DT_TX_TEXTEDIT_CONFIG">DT_TX_TEXTEDIT_CONFIG</strong></h2>
+
+<p>This structure type represents a text edit configuration. For details see the <a href="../funcs/txTextRegisterConfig.htm">txTextRegisterConfig</a> function.</p>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Textedit configuration */</span>&nbsp;
+typedef struct
+{
+    DT_SWORD FnDraw;
+    DT_SLONG DefaultWidth, DefaultHeight;
+    DT_SLONG Name_TextAreaW, Name_TextAreaH;
+    DT_SLONG Name_TextString_8, Name_TextString_16;
+    DT_SLONG Name_TextFragmentPtr;
+    DT_UBYTE DisableTextFormat;
+
+} DT_TX_TEXTEDIT_CONFIG;
+</pre>
+</div>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

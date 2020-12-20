@@ -1,0 +1,21 @@
+Alignment of the last text line in a paragraph within a text box.
+
+{strong}Supported values:{/strong}
+
+0 = Left: The text line is aligned left.
+
+1 = Center: The text line is centered.
+
+2 = Right: The text line is aligned right.
+
+3 = Justified Type A-L: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then left justify.
+
+4 = Justified Type B-L: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then left justify.
+
+5 = Justified Type A-C: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.
+
+6 = Justified Type B-C: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then center.
+
+7 = Justified Type A-R: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then right justify.
+
+8 = Justified Type B-R: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then right justify.

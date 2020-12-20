@@ -1,0 +1,72 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdTransformBoxPlus</h2><div class="box_prototype"><strong>
+DT_SWORD pdTransformBoxPlus(DT_SRAST_L* x, DT_SRAST_L* y, DT_SRAST_L* w, DT_SRAST_L* h, const DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Apply 3X3 transformation matrix to a rectangle</em><br /><br />
+<h2>pdTransformBox</h2><div class="box_prototype"><strong>
+DT_SWORD pdTransformBox(DT_SRAST_L* x, DT_SRAST_L* y, DT_SRAST_L* w, DT_SRAST_L* h, const DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Apply 2x2 transformation matrix to a rectangle and return its bounding box</em><br /><br />
+
+<p>This is a utility function which returns the bounding box of the rectangle after being transformed using a 2x2 or 3x3 transformation matrix.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>This is both an input and output parameter. As input, it represents the X coordinate of the rectangle to which the transformation matrix will be applied. As output, it represents the X coordinate of the box which encloses the transformed rectangle.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>This is both an input and output parameter. As input, it represents the Y coordinate of the rectangle to which the transformation matrix will be applied. As output, it represents the Y coordinate of the box which encloses the transformed rectangle.</p>
+</td></tr>
+
+<tr><td>
+<p><em>w</em></p>
+</td><td>
+<p>This is both an input and output parameter. As input, it represents the width of the rectangle to which the transformation matrix will be applied. As output, it represents the width of the box which encloses the transformed rectangle.</p>
+</td></tr>
+
+<tr><td>
+<p><em>h</em></p>
+</td><td>
+<p>This is both an input and output parameter. As input, it represents the height of the rectangle to which the transformation matrix will be applied. As output, it represents the height of the box which encloses the transformed rectangle.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For pdTransformBoxPlus, this is a 3x3 transformation matrix. This matrix represents the 2D perspective (or projective) transform to apply to the rectangle specified by the <em>x</em>, <em>y</em>, <em>w</em> and <em>h</em> parameters. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+<p>For pdTransformBox, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of the 2D perspective transform to apply to the rectangle specified by the <em>x</em>, <em>y</em>, <em>w</em> and <em>h</em> parameters. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,45 @@
+Sets one of the positioning modes. The positioning mode tells the Typesetter how to position glyphs. See D-Type Standard Engine Manual for details.
+
+{strong}Supported values:{/strong}
+
+0 = Engine Default A (same as 8)
+
+1 = Engine Default B (same as 9)
+
+2 = User Default A (same as 4)
+
+3 = User Default B (same as 5)
+
+4 = Frac X, Frac Y
+Both X and Y coordinates of origin points are placed at fractional positions. As a result, spacing between characters looks reasonably consistent in both the horizontal and vertical direction.
+
+5 = Frac X, Int Y
+X coordinates of origin points are placed at fractional positions, while Y coordinates are snapped to the closest whole pixel positions. As a result, spacing between characters looks reasonably consistent in horizontal direction and somewhat inconsistent in vertical direction.
+
+6 = Int X, Frac Y
+X coordinates of origin points are snapped to the closest whole pixel positions, while Y coordinates are placed at fractional positions. As a result, spacing between characters looks somewhat inconsistent in horizontal direction and reasonably consistent in vertical direction.
+
+7 = Int X, Int Y
+Both X and Y coordinates of origin points are snapped to the closest whole pixel positions. As a result, spacing between characters looks somewhat inconsistent in both the horizontal and vertical direction.
+
+8 = Auto A
+Same as 4 for standard font sizes, but disables fractional pixel positioning in the X and/or Y direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.
+
+9 = Auto B
+Same as 5 for standard font sizes, but disables fractional pixel positioning in the X direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.
+
+The above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.
+
+When rendering Text Lines, Rich Text Lines, Text Areas and Rich Text Areas, the following values are also supported:
+
+10 = Enhanced Frac X, Frac Y
+This positioning mode is similar to mode 4 but designed to further enhance spacing between glyphs based on the context. This mode can noticeably improve glyph spacing when compared with mode 4 and is highly recommended.
+
+11 = Enhanced Frac X, Int Y
+This positioning mode is similar to mode 5 but designed to further enhance spacing between glyphs based on the context. This mode can noticeably improve glyph spacing when compared with mode 5 and is highly recommended.
+
+12 = Enhanced Int X, Frac Y
+This positioning mode is similar to mode 6 but designed to further enhance spacing between glyphs based on the context. This mode can significantly improve glyph spacing when compared with mode 6 and is highly recommended.
+
+13 = Enhanced Int X, Int Y
+This positioning mode is similar to mode 7 but designed to further enhance spacing between glyphs based on the context. This mode can significantly improve glyph spacing when compared with mode 7 and is highly recommended.

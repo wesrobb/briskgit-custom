@@ -1,0 +1,93 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetErrorCallback</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetErrorCallback(DT_PDDOC power_doc, void (*user_error_func)(DT_PD_DOCDRAW_CANVAS* canvas, DT_SLONG fn_draw, DT_SWORD error_code))</strong></div><br /><strong>Short Description:</strong> <em>Set document's callback function to be called if critical errors occur while rendering objects</em><br /><br />
+
+<p>The pdDocSetErrorCallback function registers a callback function to be called whenever critical errors occur while rendering PowerDoc objects.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_prop_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called whenever critical errors occur while rendering PowerDoc objects. Your function must be declared as follows:</p>
+
+<p class="center"><em>
+void user_error_func(<a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a>* canvas, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> fn_draw, <a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> error_code)
+</em></p>
+
+<p>where <em>user_error_func</em> is the name of your own C function, <em>canvas</em> a pointer to the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a> structure that supplies all the information necessary to identify the PowerDoc object that generated the critical error and <em>fn_draw</em> a numerical value of the rendering function associated with this object. The <em>error_code parameter</em> identifies the type of object-specific error that was encountered and can be one of the following:</p>
+
+<div class="box_field"><pre>
+PD_RET_OBJ_ERR_MDC        -8 <span class="codecomment">/* memory surface not supported by object */</span>&nbsp;
+PD_RET_OBJ_ERR_PATTERN    -7 <span class="codecomment">/* pattern file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_BITMAP     -6 <span class="codecomment">/* bitmap file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_VECTOR     -5 <span class="codecomment">/* vector file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_FONT       -4 <span class="codecomment">/* font file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_MEMORY     -3 <span class="codecomment">/* not enough memory to process the object */</span>&nbsp;
+PD_RET_OBJ_ERR_DEFINITION -2 <span class="codecomment">/* object not properly defined */</span>&nbsp;
+</pre></div>
+
+<p>Your function is called any time D-Type Power Engine encounters a critical error while rendering a PowerDoc object. If your callback function is called, you should assume that the document will not be rendered completely and/or correctly. Note that a callback is initiated only if an object-specific error is classified as critical (meaning that it has a severe impact on the rendering outcome). Minor object-specific errors or inconsistencies will not initiate any callbacks.</p>
+
+<p>Setting the <em>user_error_func</em> parameter to DV_NULL when calling pdDocSetErrorCallback will permanently unregister a previously registered callback function. Once this is done, <a href="pdDocDraw.htm">pdDocDraw</a> will no longer initiate any callbacks when encountering critical object-specific errors.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+
+<h3>Note</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

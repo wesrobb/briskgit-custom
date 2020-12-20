@@ -1,0 +1,98 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>ObjGet</strong></div><br />
+
+<p>The ObjGet function retrieves the numerical value and text description associated with the PowerDoc object referenced by <em>obj</em>. This value and description are set by the <a href="ObjAdd.htm">ObjAdd</a> or <a href="ObjSet.htm">ObjSet</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A pointer to a <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> variable that will hold the numerical value associated with the referenced object.</p>
+</td></tr>
+
+<tr><td>
+<p><em>desc</em></p>
+</td><td>
+<p>Address of the <a href="../../dt/manual/types.htm#DT_CHAR">DT_CHAR</a>* variable that points to the standard ANSI C/C++ string which represents a user-defined text description associated with the referenced PowerDoc object. This string is inside an internal read-only buffer managed by D-Type Power Engine and must not be freed. Also, the buffer is only for reading the string; applications should not write to it.</p>
+<p>Note that this pointer is valid only until the next call to one of D-Type Power Engine functions that operate on the same Power Engine document. This is because subsequent function calls might reallocate the buffer. Therefore, your application should not permanently record the value of this pointer. Instead, your application should either immediately consume (read) the data in the buffer or copy it to its own buffer for later use.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The return value is the number of fields in the specified PowerDoc object.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

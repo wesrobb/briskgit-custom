@@ -1,0 +1,55 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextGetPowerDoc</h2><div class="box_prototype"><strong>
+void txTextGetPowerDoc(DT_TXDOC text_doc, DT_PDDOC* power_doc)</strong></div><br /><strong>Short Description:</strong> <em>Get associated PowerDoc document</em><br /><br />
+
+<p>This function allows applications to get a pointer to the Power Engine document associated with the specified text document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Pointer to the handle of the associated Power Engine document.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+<p>The <em>power_doc</em> pointer returned by this function is the Power Engine document associated with the text document <em>text_doc</em>. Upon obtaining the <em>power_doc</em> pointer variable, applications can access, modify and render text documents using the lower level D-Type Power Engine functions. See D-Type Power Engine Manual for information on D-Type Power Engine functions and the <em>power_doc</em> handle.</p>
+
+
+<h3>Note 1</h3>
+<p>Note however that if a text document has been modified by calling one of D-Type Power Engine functions for changing the internal structure of Power Engine documents, there is no guarantee that D-Type Text Engine will be able to operate on it. Therefore, it is recommended that you refrain from modifying text documents using D-Type Power Engine functions unless you have no intention to further operate on them using D-Type Text Engine.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

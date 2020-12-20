@@ -1,0 +1,417 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Text Flows and Frames</h1>
+
+
+<h2>Table of Contents</h2>
+
+<ul>
+<li><a href="pd_frames.htm#toc_01">Overview of Text Flows and Frames</a></li>
+<li><a href="pd_frames.htm#toc_02">The <em>example_powerdoc_frames</em> Example</a></li>
+<li><a href="pd_frames.htm#toc_03">Passing Text Flows and Frames Between Successive CDTDocV8::Draw Calls</a></li>
+<li><a href="pd_frames.htm#toc_04">Conclusion</a></li>
+</ul>
+
+
+<h2><a name="toc_01">Overview of Text Flows and Frames</a></h2>
+
+<p>Both D-Type Power Engine and D-Type Text Engine are well suited for rendering high quality text. D-Type Power Engine's key rendering function, <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a>, can quickly and efficiently draw complex text that is suitable for both device dependent and device independent text layout. In D-Type Text Engine, the <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> function plays a similar role. In D-Type Engine 8, the CDTDocV8 C++ Wrapper Class provides a Draw method (CDTDocV8::Draw) which automatically calls either pdDocDraw or txTextDraw depending on the engine initialization level.</p>
+
+<h3>D-Type Power Engine: pdDocDraw</h3>
+
+<p>Before calling CDTDocV8::Draw, we must create a Power Engine document that contains at least one PowerDoc object representing text. At present, Power Engine support eight such objects: <a href="../../pd/objects/101.htm">Text Line</a>, <a href="../../pd/objects/102.htm">Text Arc</a>, <a href="../../pd/objects/130.htm">Text Path</a>, <a href="../../pd/objects/103.htm">Text Area</a>, <a href="../../pd/objects/104.htm">Rich Text Line</a>, <a href="../../pd/objects/105.htm">Rich Text Arc</a>, <a href="../../pd/objects/131.htm">Rich Text Path</a>  and <a href="../../pd/objects/106.htm">Rich Text Area</a>. Therefore, we start by creating one or more of these PowerDoc objects in accordance with <a href="../../pd/objects/index.htm">Guidelines For Creating PowerDoc Objects</a>. We typically use the <a href="../../pd/funcs/pdObjAdd.htm">pdObjAdd</a> function to add new text objects to our document and <a href="../../pd/funcs/pdPropAdd.htm">pdPropAdd</a> and <a href="../../pd/funcs/pdLinkAdd.htm">pdLinkAdd</a> to populate those objects with any required properties and links to other objects in the document. After this, we need to place (or pin) PowerDoc images of our text object(s) on a page by calling the <a href="../../pd/funcs/pdImgAddPlus.htm">pdImgAdd</a> function. These steps represent the document creation process and can be coded either manually or, more rapidly, by using PowerDoc Editor and saving the resulting Power Engine document as C/C++ source code. Regardless of the method we choose, once our document is constructed (which means that our text objects are created and placed on the page), we simply draw the text by calling the <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a> function.</p>
+
+<h3>D-Type Text Engine: txTextDraw</h3>
+
+<p>D-Type Text Engine allows application developers to create, format, lay out and render Unicode compliant text documents and handle cursor positioning, selection highlighting and text editing using a specialized API. For an overview of the process, refer to the <a href="../../tx/manual/intro.htm">D-Type Text Engine Introduction</a> document. Once our text document is created as explained in this document, we simply draw one of its pages by calling the <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> function.</p>
+
+
+<h3>CDTDocV8 C++ Wrapper Class: Draw</h3>
+
+<p>D-Type Engine 8 provides a CDTDocV8 C++ Wrapper Class which wraps both pdDocDraw and txTextDraw inside CDTDocV8::Draw. Depending on the engine initialization level, CDTDocV8::Draw calls either pdDocDraw or txTextDraw automatically. In this document, we will be using CDTDocV8::Draw to illustrate how Text Flows and Frames work, since this is the most universal method. Consequently, whenever we refer to CDTDocV8::Draw, we are also referring to pdDocDraw and txTextDraw.</p>
+
+
+<h3>What are Text Flows and Frames?</h3>
+
+<p>In many cases when we draw text objects we also need to know where and how their individual characters are located on the page so we can implement our own cursor movement, text selection and hit testing routines. In other words, we need to retrieve information that CDTDocV8::Draw generates during its text layout process.</p>
+
+<p>The CDTDocV8::Draw function, when called appropriately, can return this information in the form of <em>Text Flows</em> and <em>Frames</em>.</p>
+
+<p>The term Text Flow is easy to explain: this is any stream of characters formatted according to the user-specified parameters and laid out on a single page or on multiple pages. In Power Engine documents, Text Flows consist either of a single text fragment or, more frequently, many joined text fragments. Therefore, the length of a text flow can vary from a single character to many thousands of characters. Also, there can be more than one text flow on a single page or in a single document. Usually each text object has one text flow. Sometimes, however, a text object can have more than a single text flow (e.g. nested text flows which appear in complex text objects that contain embedded text sub-objects such as tables or complex mathematical formulas) and sometimes a single text flow can correspond to more than one text object (e.g. when the text is set to flow across many linked text areas).</p>
+
+<p>The term Frames refers to invisible polygons (or sometimes simply parallelograms or rectangles) that enclose letters (characters, glyphs, PowerGlyphs) that the CDTDocV8::Draw function renders on the page. Frames tell us exactly how the letters are positioned on the page. Each Frame provides the coordinates of the letter's bounding polygon and its index (location) and directionality in the corresponding Text Flow. A single Frame always corresponds to a single letter, and this is what allows applications to implement cursor movement, text selection and hit testing.</p>
+
+<p>The relationship between Text Flow and Frames is a simple one: certain Frames belong to certain Text Flows just as certain letters belong to certain text objects.</p>
+
+<p>The following illustration shows one particular Text Flow (the string "PowerDoc Frames - Test") and its Frames (22 in total, one for each letter).</p>
+
+<p class="center">
+<img src="../images/frames/frames.gif" width="587" height="59" alt="PowerDoc Frames - Test" /><br />
+Figure 1: A single Text Flow containing 22 Frames
+</p>
+
+<p>The nice thing about Frames is that they work reliably with any text rendered by the CDTDocV8::Draw function. This is true regardless of whether you have complex rich-text areas, rotated/skewed/transformed text areas, bidirectional text layout (mixed Latin and Arabic or Hebrew for example) or complex scripts and shaping rules (as in Indic). Consequently, to implement cursor movement, text selection or hit testing you don't have to know anything about text layout parameters (e.g. fonts and font sizes, script, directionality, shaping, alignment etc.) associated with a particular text object. Imagine, for example, a left-to-right English text paragraph that contains several embedded right-to-left Arabic text fragments. As mentioned earlier, in Arabic scripts the number of characters usually does not equal the number of rendered glyphs due to ligatures which occur when several characters join to form a single glyph. In addition, imagine that the font size and character spacing in this text paragraph changes from one fragment to another. Obviously, implementing cursor movement, text selection and hit testing within this text paragraph would be difficult to accomplish reliably without using Frames.</p>
+
+
+<p>Because CDTDocV8::Draw generates Text Flows and Frames during the actual text layout process, they always accurately and reliably describe the position, enclosing polygon and index of each character within a particular text flow. Also, Text Flows and Frames that you obtain while rendering one part of the page can be easily combined with Text Flows and Frames that you obtain while rendering another part of the page. This, for example, allows newly rendered Text Flows and Frames to be appended to the previously generated ones as the page is scrolled up, down, left or right. For more details on this technique, see the <a href="pd_frames.htm#toc_03">Passing Text Flows and Frames Between Successive CDTDocV8::Draw Calls</a> section of this document.</p>
+
+
+<h2><a name="toc_02">The <em>example_powerdoc_frames</em> Example</a></h2>
+
+<p>In order to demonstrate how to retrieve and process Text Flows and Frames that CDTDocV8::Draw generates during its text layout process, we have prepared an example called <em>example_powerdoc_frames</em>. This example ships with D-Type Engine 8 and is discussed here in more detail. The purpose of this example is to show you how to retrieve Frames and calculate the global bounding rectangle of a sample text line.</p>
+
+<p>To accomplish the above, we will first "render" our text line to a null-surface. The null-surface is not a real memory surface, it's an imaginary surface. However, when this surface is used and the appropriate flags are set, the CDTDocV8::Draw function will perform text layout operations and process all the characters on the page as if this was a real memory surface. This will then allow us to iterate through all of the returned Frames and calculate the global bounding rectangle that encloses them all. After that, we will draw the global bounding rectangle and call CDTDocV8::Draw once again, but this time to render our sample text line to a real memory surface.</p>
+
+
+<p>The source code that does virtually all the work related to retrieving and processing Text Flows and Frames is in <em>examples-cpp/example_powerdoc_frames/applet.cpp</em>. This file is extensively commented to help you understand how the entire process works. It begins with a series of comments followed by the necessary includes:</p>
+
+
+<div class="box_field"><pre>
+<span class="codecomment">/*
+   This example shows how to retrieve and process Text Flows and Frames that D-Type Engine
+   generates during its text layout operations.
+
+   The procedure consists of the following steps:
+
+   Step 1. Create a simple Text Line object
+
+   Step 2. Render this text line to a null-surface using the CDTDocV8::Draw function. The null-surface
+   is not a real memory surface but an imaginary surface. When this surface is specified and the
+   DT_PD_DOCDRAW_PARAMS structure initialized appropriately, the CDTDocV8::Draw function will perform
+   text layout operations and process all the characters on the page.
+
+   Step 3. Information about these processed characters is returned back to the application.
+   For each text object, there will be one text flow. Because we only have one text line in this
+   example, there will only be one text flow. This text flow will contain an array of frames.
+   Each frame corresponds to one character in the text line. We request that frames be returned
+   in DT_PD_FRAME_FORMAT1 format so that:
+
+     frame.Idx will give us the index of the character in the text line
+     frame.XMin, frame.YMin, frame.XMax and frame.YMax will give us the bounding box of the character
+
+   Step 4. The application then uses the above information to calculate the global minimum and
+   maximum (x,&nbsp;y) coordinates of the rectangle that will fully enclose all frames.
+
+   Step 5. The application calls CDTDocV8::Draw once again, but this time we render to a real
+   24-bpp RGB surface.
+
+   As we process frames one by one in step 3, we print information about each frame to an output
+   file called frames_debug.txt.
+
+   After step 5, we also draw the global enclosing rectangle and the frames themselves.
+   This helps visualize the process and confirm that our calculations were correct.
+
+   Note: For simplicity, this example assumes that all returned Frames are rectangles (i.e.
+   it ignores frame.XMid and frame.YMid). However, this can be easily enhanced to handle Frames
+   that are parallelograms.
+*/</span>&nbsp;
+
+
+#include &lt;fstream&gt;
+
+<span class="codecomment">// D-Type header file (level 3) </span>&nbsp;
+#include "dtype_l3.h"
+<span class="codecomment">// D-Type's platform independent window support </span>&nbsp;
+#include "dtwindow.h"
+<span class="codecomment">// D-Type's extra system utility functions </span>&nbsp;
+#include "dtxsystem.h"
+
+<span class="codecomment">// D-Type CPP Engine </span>&nbsp;
+#include "dtengine.cpp"
+</pre></div>
+
+<p>The next part of the file to look at is the InitDoc function that creates a simple Text Line object. As mentioned earlier, this part represents the document creation process and can be coded either manually or, more rapidly, by using PowerDoc Editor and saving the resulting Power Engine document as C/C++ source code. In this example, we used the C++ wrapper that ships with D-Type 8 to generate 3 PowerDoc objects (Body Color, Typography and Text Line), quickly populate them with the required PowerDoc properties and links, and finally pin a PowerDoc image of our Text Line object on page 0:</p>
+
+
+<div class="box_field"><pre>
+bool CDTApplet::InitDoc()
+{
+   if (!Doc.Init(Engine)) return false;
+
+   Doc.Erase();
+
+   <span class="codecomment">/* PART 1: Defining objects and their properties */</span>&nbsp;
+
+   <span class="codecomment">/* 3 PowerDoc Object(s) */</span>&nbsp;
+   CDTObj o0(Doc, "Body Color");
+   CDTObj o1(Doc, "Typography");
+   CDTObj o2(Doc, "Text Line");
+
+   <span class="codecomment">/* Properties for object 0 */</span>&nbsp;
+   o0 + CDTPropStr(pdRGBT, "75330A00");
+
+   <span class="codecomment">/* Properties for object 1 */</span>&nbsp;
+   o1 + CDTLink(pdBodyPtr, o0) + CDTPropInt(pdFontIndex, 0) + CDTPropInt(pdFontDw, 48) + CDTPropInt(pdFontDh, 48);
+
+   <span class="codecomment">/* Properties for object 2 */</span>&nbsp;
+   o2 + CDTLink(pdTypographyPtr, o1) + CDTPropStr(pdTextString_08, "PowerDoc Frames - Test");
+
+   <span class="codecomment">/* PART 2: Image placement */</span>&nbsp;
+
+   <span class="codecomment">/* Pin Image of object o2 on page 0 at coordinate X=100, Y=100 */</span>&nbsp;
+   o2.Pin(0, 100, 100, pdDrawTextLine);
+
+   return true;
+}
+</pre></div>
+
+
+<p>The final part of the program to look at is the DrawFrames function. Our application calls this function whenever our sample Text Line object is painted on the screen. This function has several parts and we will analyze each part separately.</p>
+
+<p>The first part of the DrawFrames function deals with the initialization of local variables which we will need during rendering:</p>
+
+
+<div class="box_field"><pre>
+bool CDTApplet::DrawFrames(bool debug)
+{
+   DT_SWORD is_first_frame = 1;
+   DT_SLONG i, j, frames_count = 0;
+   DT_PD_FRAME_FORMAT1 frames_helper_array[DV_MAX_FRAMES]; <span class="codecomment">/* A simple static array of PowerDoc Frames */</span>&nbsp;
+   <span class="codecomment">/* A static array is convenient for this test application, however in a real application we wouldn't use it. */</span>&nbsp;
+
+   DT_RECT_SLONG extent = {0, 0, 0, 0}; <span class="codecomment">/* This will be the global enclosing rectangle */</span>&nbsp;
+   DT_PD_DOCDRAW_PARAMS params; <span class="codecomment">/* Extended parameters for CDTDocV8::Draw */</span>&nbsp;
+   DT_PD_FRAME_FORMAT1 frame; <span class="codecomment">/* A single PowerDoc frame in DT_PD_FRAME_FORMAT1 format */</span>&nbsp;
+</pre></div>
+
+<p>The next part prepares the <em>params</em> structure. In this example we want to retrieve text flows with frames in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a>, so we set the Flows member to 1.</p>
+
+<div class="box_field"><pre>
+   <span class="codecomment">/* Extended parameters for rendering */</span>&nbsp;
+
+   <span class="codecomment">/* Tell the engine to perform text layout operations for any and all text objects and characters on the page, even if they are completely outside the visible portion of the page. */</span>&nbsp;
+   params.Flags = 1;
+
+   <span class="codecomment">/* Tell the engine that we want to retrieve text flows and frames resulting from its text layout operations (via params.FlowsArr.Len and params.FlowsArr.Ptr) and we want to retrieve them all in DT_PD_FRAME_FORMAT1 format. */</span>&nbsp;
+   params.Flows = 1;
+
+   <span class="codecomment">/* all other parameters are set to their default values */</span>&nbsp;
+   params.Origins = 0;
+   params.Boundaries = 0;
+   params.Background = 0;
+   params.Reserved = 0;
+   params.R = 255;
+   params.G = 255;
+   params.B = 255;
+   params.A = 255;
+   params.FlowsArr.Len = 0;
+   params.FlowsArr.Ptr = DV_NULL;
+   params.UserData = DV_NULL;
+</pre></div>
+
+<p>Now we can "render" our text line to a null-surface using the CDTDocV8::Draw function:</p>
+
+<div class="box_field"><pre>
+   <span class="codecomment">/* We call CDTDocV8::Draw to perform Step 2 described above. */</span>&nbsp;
+   if (Doc.Draw(Page, X, Y, 0, 0, DV_NULL, &amp;params) != 1) return false;
+
+   <span class="codecomment">/* (pointer to MemorySurface can be set to DV_NULL only when params.Flags=1) */</span>&nbsp;
+</pre></div>
+
+<p>Once again, we are not really rendering to any real surface. We are simply instructing the engine to perform all text layout operations and generate Text Flows and Frames resulting from these text layout operations. Once the CDTDocV8::Draw function returns, it will return information about Text Flows via the <em>params.FlowsLen</em> and <em>params.FlowsPtr</em> structure members (which serve as both input and output variables).</p>
+
+<p>Once we have obtained <em>params.FlowsLen</em> and <em>params.FlowsPtr</em>, we can iterate through all the returned Text Flows and, for each Text Flow, retrieve its array of Frames. As we iterate through Text Flows and Frames we calculate the global minimum and maximum (x,&nbsp;y) coordinates of the rectangle that will fully enclose all Frames. At the same time, we print information about each processed Frame to our debug file.</p>
+
+
+<div class="box_field"><pre>
+   std::ofstream debug_file; if (debug) debug_file.open("frames_debug.txt"); <span class="codecomment">/* We will print info about frames to this output file */</span>&nbsp;
+
+   <span class="codecomment">/* There should be 1 text flow returned. Let's print this. */</span>&nbsp;
+   debug_file &lt;&lt; "There are " &lt;&lt; params.FlowsArr.Len &lt;&lt; " text flow(s) on this page.\r\n";
+
+   <span class="codecomment">/* Now let's iterate through all the text flows (again, there will be only one in our case). */</span>&nbsp;
+   for (i = 0; i &lt; params.FlowsArr.Len; i++)
+   {
+      debug_file &lt;&lt; "--- Beginning of text flow " &lt;&lt; i &lt;&lt; " ---\r\n";
+      debug_file &lt;&lt; "Text flow " &lt;&lt; i &lt;&lt; " corresponds to PowerDoc image " &lt;&lt; params.FlowsArr.Ptr[i].Img &lt;&lt; "\r\n";
+      debug_file &lt;&lt; "There are " &lt;&lt; params.FlowsArr.Ptr[i].FramesLen &lt;&lt; " frame(s) in this text flow\r\n";
+
+      <span class="codecomment">/* Now let's iterate through all the frames in each text flow. */</span>&nbsp;
+
+      for (j = 0; j &lt; params.FlowsArr.Ptr[i].FramesLen; j++)
+      {
+         frame = params.FlowsArr.Ptr[i].Frames.Format1Ptr[j];
+
+         debug_file &lt;&lt; "  frame #" &lt;&lt; j &lt;&lt; " is for character #" &lt;&lt; frame.Idx &lt;&lt; ". Its bounding box is XMin=" &lt;&lt; frame.XMin &lt;&lt; ", YMin=" &lt;&lt; frame.YMin &lt;&lt; ", XMax=" &lt;&lt; frame.XMax &lt;&lt; ", YMax=" &lt;&lt; frame.YMax &lt;&lt; "\r\n";
+
+         if (frame.Idx &lt; 0)
+         {
+            <span class="codecomment">/* ignore empty (not valid) frames */</span>&nbsp;
+            <span class="codecomment">/* There are usually some empty frames at the end of the frames array because PowerDoc increases
+               the size of this array in chunks (to make memory reallocations more efficient). */</span>&nbsp;
+            <span class="codecomment">/* Any invalid frames have frame.Idx set to a negative value */</span>&nbsp;
+
+            debug_file &lt;&lt; "  --&gt; This is an empty (not valid) frame, so we are skipping it...\r\n";
+         }
+         else if (is_first_frame)
+         {
+            <span class="codecomment">/* this is the first valid frame - initialize extent (enclosing rectangle) */</span>&nbsp;
+            extent.xmn = frame.XMin;
+            extent.ymn = frame.YMin;
+            extent.xmx = frame.XMax;
+            extent.ymx = frame.YMax;
+            is_first_frame = 0;
+         }
+         else
+         {
+            <span class="codecomment">/* these are subsequent valid frames - recalculate extent (enclosing rectangle) */</span>&nbsp;
+            extent.xmn = DF_MIN(extent.xmn, frame.XMin);
+            extent.ymn = DF_MIN(extent.ymn, frame.YMin);
+            extent.xmx = DF_MAX(extent.xmx, frame.XMax);
+            extent.ymx = DF_MAX(extent.ymx, frame.YMax);
+         }
+
+         if (frame.Idx &gt;= 0 &amp;&amp; frames_count &lt; DV_MAX_FRAMES)
+         {
+            <span class="codecomment">/* store the frame in our helper array so we can draw it later */</span>&nbsp;
+            frames_helper_array[frames_count] = frame;
+            frames_count++;
+         }
+      }
+
+      <span class="codecomment">/* now we can free all frames in this text flow */</span>&nbsp;
+      Engine.Free(params.FlowsArr.Ptr[i].Frames.Format1Ptr);
+
+      debug_file &lt;&lt; "--- End of text flow " &lt;&lt; i &lt;&lt; " ---\r\n";
+   }
+
+   <span class="codecomment">/* now we can free all text flows */</span>&nbsp;
+   if (params.FlowsArr.Ptr != DV_NULL) Engine.Free(params.FlowsArr.Ptr);
+
+   <span class="codecomment">/* That's it. Now we know the size of the enclosing rectangle. */</span>&nbsp;
+   debug_file &lt;&lt; "The enclosing rectangle is: XMIN=" &lt;&lt; extent.xmn &lt;&lt; ", YMIN=" &lt;&lt; extent.ymn &lt;&lt; ", XMAX=" &lt;&lt; extent.xmx &lt;&lt; ", YMAX=" &lt;&lt; extent.ymx &lt;&lt; "\r\n";
+
+   debug_file.close();
+</pre></div>
+
+
+<p>In order to make memory reallocations more efficient, Power Engine allocates Frames in chunks. This means that even if we have only 10 Frames in a particular Text Flow, the engine might allocate some extra memory, which means there could be some unused (invalid or phantom) Frames at the end of the Frames array. To indicate that a Frame is invalid, the engine will set its Frame.Idx member to a negative value (-1). These Frames should be ignored by our application.</p>
+
+<p>Also, once we are done processing all the Frames in a particular Text Flow, we release their memory by calling CDTEngineV8::Free. Similarly, once we are done processing all the Text Flows, we release their memory by calling CDTEngineV8::Free.</p>
+
+
+<p>At the end of this process, the size of the enclosing rectangle is recorded in the <em>extent</em> structure.</p>
+
+<p>Now that or sample document has been rendered, there is one more thing we want to do: we want to draw the enclosing rectangle and the Frames themselves. This should confirm that our calculations were correct. We will draw the enclosing rectangle and the Frames using the CDTEngineV8::Shape_Rectangle function.</p>
+
+
+<div class="box_field"><pre>
+   <span class="codecomment">/* As the last step, draw the enclosing rectangle. */</span>&nbsp;
+   <span class="codecomment">/* This is only a test to confirm that all the characters are really inside the enclosing rectangle. */</span>&nbsp;
+
+   <span class="codecomment">/* Redirect all D-Type output to a memory surface (MDC) */</span>&nbsp;
+   Engine.OutputSetMDC(DV_SURFACE_FORMAT, 0, MemorySurface, 0, 0, MemorySurface.w, MemorySurface.h &lt; 0 ? -MemorySurface.h : MemorySurface.h);
+
+   Engine.Shape_Rectangle(0, 0, extent.xmn - X, extent.ymn - Y, extent.xmx - extent.xmn, extent.ymx - extent.ymn, 0, 1);
+
+   <span class="codecomment">/* Also draw the frames themselves */</span>&nbsp;
+   for (i = 0; i &lt; frames_count; i++)
+   {
+      DT_SLONG frame_x = frames_helper_array[i].XMin;
+      DT_SLONG frame_y = frames_helper_array[i].YMin;
+      DT_SLONG frame_w = frames_helper_array[i].XMax - frames_helper_array[i].XMin;
+      DT_SLONG frame_h = frames_helper_array[i].YMax - frames_helper_array[i].YMin;
+
+      Engine.Shape_Rectangle(0, 0, frame_x - X, frame_y - Y, frame_w, frame_h, 0, 0.15);
+   }
+
+   return true;
+}
+</pre></div>
+
+
+<p>Once we build or program and copy the resulting example <em>powerdoc_frames.exe</em> executable to the <em>exec/c-powerdoc/</em> directory, we can run it. We will see a simple text line that says "PowerDoc Frames - Test" (as in figure 1 above) and its enclosing rectangle. We will also see that each character in the string is enclosed by its Frame's bounding box.</p>
+
+<p>Finally, the program will output the <em>frames_debug.txt</em> file in the same directory. This file contains details about the Text Flows and Frames that we received after the first CDTDocV8::Draw call and looks as follows:</p>
+
+
+<div class="box_field"><pre>
+There are 1 text flow(s) on this page.
+--- Beginning of text flow 0 ---
+Text flow 0 corresponds to PowerDoc image 0
+There are 25 frame(s) in this text flow
+  frame #0 is for character #0. Its bounding box is XMin=200, YMin=86, XMax=261, YMax=234
+  frame #1 is for character #1. Its bounding box is XMin=261, YMin=86, XMax=309, YMax=234
+  frame #2 is for character #2. Its bounding box is XMin=309, YMin=86, XMax=375, YMax=234
+  frame #3 is for character #3. Its bounding box is XMin=375, YMin=86, XMax=418, YMax=234
+  frame #4 is for character #4. Its bounding box is XMin=418, YMin=86, XMax=450, YMax=234
+  frame #5 is for character #5. Its bounding box is XMin=450, YMin=86, XMax=520, YMax=234
+  frame #6 is for character #6. Its bounding box is XMin=520, YMin=86, XMax=568, YMax=234
+  frame #7 is for character #7. Its bounding box is XMin=568, YMin=86, XMax=610, YMax=234
+  frame #8 is for character #8. Its bounding box is XMin=610, YMin=86, XMax=642, YMax=234
+  frame #9 is for character #9. Its bounding box is XMin=642, YMin=86, XMax=697, YMax=234
+  frame #10 is for character #10. Its bounding box is XMin=697, YMin=86, XMax=730, YMax=234
+  frame #11 is for character #11. Its bounding box is XMin=730, YMin=86, XMax=776, YMax=234
+  frame #12 is for character #12. Its bounding box is XMin=776, YMin=86, XMax=852, YMax=234
+  frame #13 is for character #13. Its bounding box is XMin=852, YMin=86, XMax=895, YMax=234
+  frame #14 is for character #14. Its bounding box is XMin=895, YMin=86, XMax=931, YMax=234
+  frame #15 is for character #15. Its bounding box is XMin=931, YMin=86, XMax=963, YMax=234
+  frame #16 is for character #16. Its bounding box is XMin=963, YMin=86, XMax=995, YMax=234
+  frame #17 is for character #17. Its bounding box is XMin=995, YMin=86, XMax=1027, YMax=234
+  frame #18 is for character #18. Its bounding box is XMin=1027, YMin=86, XMax=1093, YMax=234
+  frame #19 is for character #19. Its bounding box is XMin=1093, YMin=86, XMax=1135, YMax=234
+  frame #20 is for character #20. Its bounding box is XMin=1135, YMin=86, XMax=1172, YMax=234
+  frame #21 is for character #21. Its bounding box is XMin=1172, YMin=86, XMax=1207, YMax=234
+  frame #22 is for character #22. Its bounding box is XMin=1207, YMin=86, XMax=1207, YMax=234
+  frame #23 is for character #-1. Its bounding box is XMin=0, YMin=0, XMax=0, YMax=0
+  --> This is an empty (not valid) frame, so we are skipping it...
+  frame #24 is for character #-1. Its bounding box is XMin=0, YMin=0, XMax=0, YMax=0
+  --> This is an empty (not valid) frame, so we are skipping it...
+--- End of text flow 0 ---
+The enclosing rectangle is: XMIN=200, YMIN=86, XMAX=1207, YMAX=234
+</pre></div>
+
+
+<h2><a name="toc_03">Passing Text Flows and Frames Between Successive CDTDocV8::Draw Calls</a></h2>
+
+<p>Our <em>powerdoc_frames.exe</em> program generates <strong>all</strong> Text Flows and Frames on the page. This is accomplished by setting both params.Flags and params.Flows to 1 before the first call to CDTDocV8::Draw. When we set params.Flags to 1, we basically ask the CDTDocV8::Draw function to perform text layout operations for any and all text objects and characters on the page, even if they are completely outside the visible portion of the page. And when we set params.Flows to 1, we simply tell the CDTDocV8::Draw function that we want to retrieve Text Flows and Frames resulting from such text layout operations (via the params.FlowsLen and params.FlowsPtr variables), and we want Frames in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> format (which for our sample application is adequate). Having initialized params.Flags and params.Flows in such a way, it now makes sense to instruct CDTDocV8::Draw to "render" text to a null-surface by passing the pointer to <em>MemorySurface</em> as DV_NULL. In this way, the function will not be able to render anything to any surface, however, it will perform all of the necessary text layout operations and return the resulting Text Flows and Frames to our application. The second call to CDTDocV8::Draw represents the actual rendering step and is initiated only after we have processed all the Text Flows and Frames, calculated the global bounding rectangle and created a real 24-bpp RGB memory surface for the output.</p>
+
+<p>This method works well but is not very efficient when we need to implement cursor movement, text selection and hit testing within the visible portion of the page. This is for two reasons: 1) all characters on the page must be processed and 2) because we call CDTDocV8::Draw twice (first to get Text Flows and Frames then to draw to a real surface), essentially the same text layout operations are performed twice.</p>
+
+<p>In such cases it is usually much more efficient to generate only <strong>visible</strong> Text Flows and Frames. We can do this by setting params.Flags to 0. This tells the CDTDocV8::Draw function to generate Text Flows and Frames only for text objects and characters that are within the visible portion of the page that is rendered by CDTDocV8::Draw. With this method, we simply render text to a real memory surface by a single call to CDTDocV8::Draw and, after rendering, retrieve the visible Text Flows and Frames. This makes sense, because there is rarely need to implement cursor movement, text selection and hit testing for characters that are outside the visible page area. And obviously this approach is very fast because CDTDocV8::Draw is called only once and only the visible characters are processed.</p>
+
+<p>But what happens, for example, if the page is displayed in a window and the user scrolls the page down by a small amount? If we are writing an efficient window based application, we don't want to repaint the entire window area again; instead we only want to paint the small (bottom) portion of the window that actually needs to be repainted after the scrolling routine has finished moving the appropriate portion of the window's video memory upwards. Obviously we will call CDTDocV8::Draw and only render the corresponding bottom portion of the page. However, we don't want to forget Text Flows and Frames that were generated when the window was initially painted (i.e. from a previous call to CDTDocV8::Draw). Some if not most of those Text Flows and Frames are still visible in our window. In other words, we want to be able to easily combine Text Flows and Frames that we obtained while rendering one part of the page with Text Flows and Frames that we will obtain after rendering another part of the page.</p>
+
+<p>This may sound like a very complex problem but fortunately the CDTDocV8::Draw function handles this automatically. There are only a few things that we need to remember.</p>
+
+<ul>
+
+<li><p>As already mentioned, we must set params.Flags to 0 to instruct the CDTDocV8::Draw function to generate Text Flows and Frames only for text areas and characters that are within the visible portion of the page.</p></li>
+
+<li><p>We still need to set params.Flows to 1 to tell the engine that we want to retrieve Text Flows and Frames in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> format. Or, we can set params.Flows to 2 to tell the engine that we want to retrieve Text Flows and Frames in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format. Regardless of the format, we use the params.FlowsLen and params.FlowsPtr variables to retrieve Text Flows and Frames.</p></li>
+
+<li><p><em>params.FlowsLen</em> and <em>params.FlowsPtr</em> are used as both input and output variables and can be passed from one CDTDocV8::Draw call to another. Before we initially draw the page, we must set <em>params.FlowsLen</em> to 0 and <em>params.FlowsPtr</em> to DV_NULL. Then we call the CDTDocV8::Draw function to draw a visible portion of our page to a real memory surface. The function will render visible text areas and characters and return to our application the corresponding Text Flows and Frames via the same <em>params.FlowsLen</em> and <em>params.FlowsPtr</em> variables. However, this time we will not iterate through all the returned Text Flows and Frames and immediately release their memory by calling CDTEngineV8::Free as in the above sample program. Also, we will not clear the <em>params.FlowsLen</em> and <em>params.FlowsPtr</em> variables before calling the CDTDocV8::Draw function again to render a different part of the same page. Instead, we will ensure that the value of these variables is passed unchanged to the next CDTDocV8::Draw call. When we call CDTDocV8::Draw again, the function will understand this and will be able to continue appending new Text Flows and Frames to the previously generated ones. This process of passing <em>params.FlowsLen</em> and <em>params.FlowsPtr</em> input/output variables from one CDTDocV8::Draw call to another can be repeated as many times as necessary. Each time a new portion of the page is rendered, a new set of Text Flows and Frames is appended to the existing ones (unless there are no more new Text Flows and/or Frames to be appended).</p></li>
+
+</ul>
+
+
+<p>Of course, we are free to release memory that the engine allocated for our Text Flows and Frames and set <em>params.FlowsLen</em> to 0 and <em>params.FlowsPtr</em> to DV_NULL whenever we have a reason to do so. For example, we will do this when the entire window area needs to be repainted such as when the user moves to a different page or changes text on the current page. Also, we will do this when the  corresponding document is about to be closed (destroyed).</p>
+
+
+<h2><a name="toc_04">Conclusion</a></h2>
+
+<p>We hope that this document and the corresponding <em>example_powerdoc_frames</em> example has helped you understand the concept of Text Flows and Frames in Power Engine. The <em>example_powerdoc_frames</em> is a very simple example that uses Frames to calculate the global bounding box of a text line. In real projects, for maximum flexibility and precision, we would use frames in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format rather than <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a>.</p>
+
+<p>Finally, the same basic concept shown here can be used to implement cursor movement, text selection and hit testing. For example, if we wanted to test if the cursor is over certain character in the specified text flow, we would simply iterate through all of its valid Frames and, for each Frame, test if the cursor is within its bounding polygon.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

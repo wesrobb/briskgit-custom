@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Control Configuration</h2>
+<h3 id="overview">Overview</h3>
+This objects holds various configuration parameters that can be referenced by any form control.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="fcCnfLib"><em><span class="field">fcCnfLib</span> (10015)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Configuration ID to select a library of controls.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfCharBox"><em><span class="field">fcCnfCharBox</span> (10016)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a character box. Character boxes are used to construct text boxes and list boxes.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfCtrlStyleOnFocus"><em><span class="field">fcCnfCtrlStyleOnFocus</span> (10020)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Control's style when the focus is received.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Display a focus box<br />
+1 = Do not display a focus box<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfButtonNormal"><em><span class="field">fcCnfButtonNormal</span> (10050)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a normal (i.e. not pushed) button.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfButtonPushed"><em><span class="field">fcCnfButtonPushed</span> (10051)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a pushed button.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfRadioButtonNormal"><em><span class="field">fcCnfRadioButtonNormal</span> (10060)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a normal (i.e. not pushed or selected) radio button.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfRadioButtonPushed"><em><span class="field">fcCnfRadioButtonPushed</span> (10061)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a pushed radio button.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfRadioButtonSelected"><em><span class="field">fcCnfRadioButtonSelected</span> (10062)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a selected radio button.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfCheckBoxNormal"><em><span class="field">fcCnfCheckBoxNormal</span> (10070)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a normal (i.e. not pushed or selected) check box.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfCheckBoxPushed"><em><span class="field">fcCnfCheckBoxPushed</span> (10071)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a pushed check box.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfCheckBoxSelected"><em><span class="field">fcCnfCheckBoxSelected</span> (10072)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a selected check box.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfSliderNormal"><em><span class="field">fcCnfSliderNormal</span> (10080)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a normal (i.e. not pushed) slider.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcCnfSliderPushed"><em><span class="field">fcCnfSliderPushed</span> (10081)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Configuration ID to represent a pushed slider.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Form Configuration");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdPropAdd(pd, obj[0], fcCnfLib, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfCtrlStyleOnFocus, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfCharBox, "6", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfButtonNormal, "14", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfButtonPushed, "13", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfSliderNormal, "2", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfSliderPushed, "3", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfRadioButtonNormal, "6", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfRadioButtonPushed, "7", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfRadioButtonSelected, "8", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfCheckBoxNormal, "3", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfCheckBoxPushed, "4", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcCnfCheckBoxSelected, "5", PD_BYTE_UNSIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Form Configuration");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + i(fcCnfLib, 0);<br />
+obj_0 + i(fcCnfCtrlStyleOnFocus, 0);<br />
+obj_0 + i(fcCnfCharBox, 6);<br />
+obj_0 + i(fcCnfButtonNormal, 14);<br />
+obj_0 + i(fcCnfButtonPushed, 13);<br />
+obj_0 + i(fcCnfSliderNormal, 2);<br />
+obj_0 + i(fcCnfSliderPushed, 3);<br />
+obj_0 + i(fcCnfRadioButtonNormal, 6);<br />
+obj_0 + i(fcCnfRadioButtonPushed, 7);<br />
+obj_0 + i(fcCnfRadioButtonSelected, 8);<br />
+obj_0 + i(fcCnfCheckBoxNormal, 3);<br />
+obj_0 + i(fcCnfCheckBoxPushed, 4);<br />
+obj_0 + i(fcCnfCheckBoxSelected, 5);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

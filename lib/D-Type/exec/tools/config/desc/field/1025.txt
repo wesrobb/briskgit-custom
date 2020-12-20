@@ -1,0 +1,6 @@
+Width of a text area in document units. Must not be negative. The value 0 is special and means an infinite width; in this configuration the text never wraps and just outputs on one infinitely long text line (the only text line in that text area).
+
+{strong}Sample values:{/strong}
+
+500 = Width of 500 document units
+1000 = Width of 1000 document units

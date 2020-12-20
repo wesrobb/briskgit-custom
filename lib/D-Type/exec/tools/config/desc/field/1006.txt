@@ -1,0 +1,8 @@
+A system dependent font index used to reference a font.
+
+{strong}Sample values:{/strong}
+
+0 = CMU Sans Serif, Medium
+1 = CMU Concrete Roman, Roman
+2 = CMU Bright Roman, Roman
+3 = CMU Bright SemiBold, SemiBold

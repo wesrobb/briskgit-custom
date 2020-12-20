@@ -1,0 +1,8 @@
+Vertical alignment of text inside a text area, when the text flow ends or breaks in that text area.
+
+{strong}Supported values:{/strong}
+
+0 = Top
+1 = Middle
+2 = Bottom
+3 = Justified

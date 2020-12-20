@@ -1,0 +1,173 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Step by Step: How to Configure D-Type for the Highest Text Quality</h1>
+
+<h2>Suggested Configurations For Device Independent Text</h2>
+
+<h3>Option B4 (Power Engine Only) &mdash; enhanced whole pixel positioning enabled, horizontal and vertical hinting enabled</h3>
+
+<h4>Step 1: QUALITY</h4>
+
+<p>Set Typesetter's quality level to <strong>6 (DV_QUALITY_HINT_FILTER_2)</strong>, which is a high quality setting with a filter called Hint Filter #2.</p>
+
+<p>This can be done at run-time by calling the <a href="../../dt/funcs/dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a> function or during the initialization of D-Type Engine by setting up the C section of the main D-Type initialization file (<em>dtype.inf</em> by default) as shown below:</p>
+
+<div class="box_field">
+<pre>
+# C) PARAMETERS FOR D-TYPE FONT ENGINE
+
+# 1. Size of the bitmap cache in RAM, in bytes
+#    (Must be greater than parameter B1 * B2)
+#
+# 2. Maximum number of bitmaps to store in the bitmap cache
+#
+# 3. Maximum number of transformations to store in the transformation cache
+#
+# 4. Bitmap cache compression: 0=Disable Compression, 1=Enable Compression
+#
+<strong># 5. Quality:  0=Medium, 1=High, 2=Very High
+#              3=Dispersion Filter 1, 4=Dispersion Filter 2
+#              5=Hint Filter 1, 6=Hint Filter 2, 7=Hint Filter 3, 8=Hint Filter 4
+#              9=LCD_RGB_SUB_1, 10=LCD_RGB_INT_1, 11=LCD_BGR_SUB_1, 12=LCD_BGR_INT_1
+#             13=LCD_RGB_SUB_2, 14=LCD_RGB_INT_2, 15=LCD_BGR_SUB_2, 16=LCD_BGR_INT_2
+#             17=LCD_RGB_SUB_3, 18=LCD_RGB_INT_3, 19=LCD_BGR_SUB_3, 20=LCD_BGR_INT_3
+#             21=LCD2_RGB_SUB_1, 22=LCD2_RGB_INT_1, 23=LCD2_BGR_SUB_1, 24=LCD2_BGR_INT_1
+#             25=LCD2_RGB_SUB_2, 26=LCD2_RGB_INT_2, 27=LCD2_BGR_SUB_2, 28=LCD2_BGR_INT_2</strong>
+#
+# 6. Glyph alignment method: 0=Old, 1=Reserved, 2=New, 514=New(2)+CJK(512)
+#
+# 7. Font size subscale for fractional sizing, both horizontal and vertical.
+#
+# Notes:
+#
+# * Larger cache means better performance but higher consumption of RAM.
+#
+# * Bitmap cache compression is extremely fast and effective. If enabled, bitmaps
+#   will be stored in a compressed format and will consume 3-10 times less space
+#   in the bitmap cache than non-compressed bitmaps. This is highly recommended when
+#   the size of the bitmap cache is small (e.g. in memory constrained environments).
+
+{
+2650000
+8000
+5000
+1
+<strong>6</strong>
+514
+1
+}
+</pre>
+</div>
+
+
+<h4>Step 2 (Optional): BACKGROUND</h4>
+
+<p>For a more interesting and enjoyable reading experience, we suggest that you set your background to resemble the surface of a sheet of paper, as shown below. To do so, fill it with a very soft pattern fill (we suggest pattern fill 12 from pattern group 3 &mdash; see <a href="../../dt/manual/patterns.htm">Pattern Fills</a>) using the RGB color value FF&nbsp;F8&nbsp;EE.</p>
+
+<p class="center">
+<img src="../images/quality/paper.gif" width="550" height="100" border="1" alt="Background like a sheet of paper" vspace="5" /><br />Background like a sheet of paper
+</p>
+
+
+<p>Whenever possible, render to D-Type's Memory Surface (see <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>). This will give you great speed and excellent alpha-blending capabilities.</p>
+
+
+<h4>Step 3: FONTS</h4>
+
+<p>Use only good quality fonts to render your text. Verdana (.ttf), Tahoma (.ttf), Century Gothic (.ttf), Lucida (.ttf), Palatino (.ttf), Utopia (.pfb), Helvetica (.pfb), Adobe Garamond Pro (.otf), HSans MM (.dtf) and similar high quality font are highly recommended. Verdana and Lucida, for example, are very legible sans-serif fonts that are ideal for screen reading. Ensure your fonts are added to the Font Catalog as hinted or auto-hinted. Auto-hinting will make even poorly hinted or non-hinted fonts look very nice as long as their outlines are well designed. In other words, great looking fonts do not have to be manually hinted at all (if used with D-Type Engine). However, their outlines and metrics must be well designed.</p>
+
+
+<h4>Step 4: POSITIONING MODE</h4>
+
+
+<p>Set Typesetter's positioning mode to <strong>13 (Enhanced Int X, Int Y) (")</strong>.</p>
+
+<p>If you are using D-Type Standard Engine, this can be done by calling the <a href="../../dt/funcs/dtTypesetterSetPositioning.htm">dtTypesetterSetPositioning</a> function. If you are using D-Type PowerDoc Engine, this can be done by setting the <em>pdPositioning</em> property of the text object's <a href="../../pd/objects/005.htm">Text Layout</a> to <strong>13 (Enhanced Int X, Int Y)</strong>.</p>
+
+
+<h4>Step 5: HINTING MODE</h4>
+
+
+<p>Set Typesetter's hinting mode to <strong>0 (DV_HINTING_ENGINE_DEFAULT_A)</strong>.</p>
+
+<p>If you are using D-Type Standard Engine, this can be done by calling the <a href="../../dt/funcs/dtTypesetterSetHinting.htm">dtTypesetterSetHinting</a> function. If you are using D-Type PowerDoc Engine, this can be done by setting the <em>pdHinting</em> property of the text object's <a href="../../pd/objects/005.htm">Text Layout</a> to <strong>0</strong>.</p>
+
+
+<h4>Step 6: OUTPUT MODE</h4>
+
+<p>Draw text in device independent mode.</p>
+
+
+<p>If you are using D-Type Standard Engine, this can be done by calling the <a href="../../dt/funcsx/dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a> function and setting the <em>kern_mode</em> parameter to <strong>-1 (")</strong>. If you are using D-Type PowerDoc Engine, this can be done by setting the text object's <em>pdDeviceMode</em> property to <strong>0</strong> and setting the <em>pdKerning</em> property of the text object's <a href="../../pd/objects/005.htm">Text Layout</a> to <strong>1</strong>.</p>
+
+
+<h4>Result</h4>
+
+<p>If you have followed all of the above recommendations, your text should appear as in the following examples.</p>
+
+<p class="center">
+<img src="../images/quality/di_4_a.gif" width="450" height="400" border="1" alt="Lucida Sans" vspace="5" /><br />Lucida Sans rendered at the size of 10, 12 and 14 pixels.
+</p>
+
+<br />
+
+<p class="center">
+<img src="../images/quality/di_4_b.gif" width="450" height="400" border="1" alt="Verdana" vspace="5" /><br />Verdana rendered at the size of 10, 12 and 14 pixels.
+</p>
+
+<br />
+
+<p class="center">
+<img src="../images/quality/di_4_c.gif" width="450" height="400" border="1" alt="Palatino" vspace="5" /><br />Palatino rendered at the size of 10, 12 and 14 pixels.
+</p>
+
+<br />
+
+<p class="center">
+<img src="../images/quality/di_4_d.gif" width="450" height="400" border="1" alt="Utopia" vspace="5" /><br />Utopia rendered at the size of 10, 12 and 14 pixels.
+</p>
+
+<!--
+<p>You can also <a href="quality_di_4.pdc">download</a> the above examples in the PowerDoc document format (<a href="quality_di_4.pdc">quality_di_4.pdc</a>).</p>
+-->
+
+
+<h4>Other Settings to Try</h4>
+
+<p><strong>Quality</strong><br />Try also the following quality levels: <strong>2 (DV_QUALITY_VERYHIGH), 5 (DV_QUALITY_HINT_FILTER_1), 7 (DV_QUALITY_HINT_FILTER_3), 8 (DV_QUALITY_HINT_FILTER_4) or one of the quality levels optimized for LCD screens (DV_QUALITY_LCD_...)</strong>. See <a href="../../dt/funcs/dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a> for details.</p>
+
+
+<p><strong>Custom Gray (Alpha) Values</strong><br />
+Try a different gray-scale table: <em>gssqrt2.gsl</em> or <em>gssqrt3.gsl</em> for example. A custom gray-scale can be specified at run-time by calling the <a href="../../dt/funcs/dtRasterizerSetGrayscale.htm">dtRasterizerSetGrayscale</a> function or during the initialization of D-Type Engine by setting up the A section of the main D-Type initialization file appropriately. The "best" choice will depend highly on your monitor's gamma.</p>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

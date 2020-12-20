@@ -1,0 +1,5 @@
+PowerFont Record is a special object that contains a complete description of a PowerGlyph design. PowerGlyphs designs are like regular glyph shapes found in outline fonts, but are constructed using PowerDoc objects. Each PowerFont Record corresponds to exactly one PowerGlyph design.
+
+PowerRecords are the building blocks used to construct the {a href="../objects/010.htm"}PowerFont{/a} object.
+
+{strong}Designated Rendering Function:{/strong} NONE

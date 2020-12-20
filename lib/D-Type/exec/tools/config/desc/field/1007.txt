@@ -1,0 +1,7 @@
+Width of a font or PowerFont in document units. If negative, font glyphs will be mirrored vertically.
+
+{strong}Sample values:{/strong}
+
+12 = Font width of 12 document units
+48 = Font width of 48 document units
+-48 = Font width of 48 document units, mirrored vertically

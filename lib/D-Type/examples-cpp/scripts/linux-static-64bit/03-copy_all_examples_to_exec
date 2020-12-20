@@ -1,0 +1,21 @@
+##!/bin/csh
+
+echo -------------------------------------------------------------------------------
+echo Copy executables to the appropriate exec directory
+echo -------------------------------------------------------------------------------
+
+cp example_color_rasterizer ../../../exec/a-rasterizer/example_color_rasterizer_linux
+cp example_basic_animation ../../../exec/b-foundation/example_basic_animation_linux
+cp example_basic_output ../../../exec/b-foundation/example_basic_output_linux
+cp example_font_converter ../../../exec/b-foundation/example_font_converter_linux
+cp example_layout_extension ../../../exec/b-foundation/example_layout_extension_linux
+cp example_powerdoc_output ../../../exec/c-powerdoc/example_powerdoc_output_linux
+cp example_powerdoc_frames ../../../exec/c-powerdoc/example_powerdoc_frames_linux
+cp example_powerdoc_viewer ../../../exec/c-powerdoc/example_powerdoc_viewer_linux
+cp example_text_animation ../../../exec/d-text/example_text_animation_linux
+cp example_text_output ../../../exec/d-text/example_text_output_linux
+cp example_text_application ../../../exec/d-text/example_text_application_linux
+cp example_textpro_builder1 ../../../exec/e-textpro/example_textpro_builder1_linux
+cp example_textpro_builder2 ../../../exec/e-textpro/example_textpro_builder2_linux
+
+echo -------------------------------------------------------------------------------

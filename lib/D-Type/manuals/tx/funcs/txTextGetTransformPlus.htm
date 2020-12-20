@@ -1,0 +1,58 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextGetTransformPlus</h2><div class="box_prototype"><strong>
+void txTextGetTransformPlus(DT_TXDOC text_doc, DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Get text document's transform - 3x3 transformation matrix</em><br /><br />
+<h2>txTextGetTransform</h2><div class="box_prototype"><strong>
+void txTextGetTransform(DT_TXDOC text_doc, DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Get text document's transform - 2x2 transformation matrix</em><br /><br />
+
+<p>The txTextGetTransformPlus (or txTextGetTransform) function returns the text document's current transformation matrix.</p>
+
+<p>This matrix is respected when the document is drawn by calling the <a href="txTextDraw.htm">txTextDraw</a> function and is set by calling <a href="txTextSetTransformPlus.htm">txTextSetTransformPlus</a> (or <a href="txTextSetTransformPlus.htm">txTextSetTransform</a>).</p>
+
+<p>The only difference between txTextGetTransformPlus and txTextGetTransform is that txTextGetTransformPlus uses a 3x3 transformation matrix while txTextGetTransform uses a 2x2 transformation matrix. Therefore, txTextGetTransform is more limited (i.e. this function cannot be used to retrieve the full perspective transform associated with a text document).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For txTextGetTransformPlus, this is a 3x3 transformation matrix. This matrix represents a 2D perspective (or projective) transform to apply to the specified text document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+<p>For txTextGetTransform, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of a 2D perspective transform to apply to the specified text document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="txTextSetTransformPlus.htm">txTextSetTransformPlus</a>, <a href="txTextSetTransformPlus.htm">txTextSetTransform</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

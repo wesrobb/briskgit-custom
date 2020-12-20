@@ -1,0 +1,109 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>PropAddAsRef</strong></div><br />
+
+<p>The PropAddAsRef function adds a PowerDoc property to the PowerDoc object <em>obj</em>. This function is compatible with <a href="PropAdd.htm">PropAdd</a>, which means that the properties created by this function can be used in the same capacity as if they were created by <a href="PropAdd.htm">PropAdd</a>. However, unlike <a href="PropAdd.htm">PropAdd</a> which adds a property by value, this functions only adds a reference to another existing property in the document (which is called the <em>target property</em> or <em>referenced property</em>). In this way, the newly added property is a virtual copy of the target property and occupies a very small amount of storage space in the object <em>obj</em> (only the amount it takes to store the reference). The value of this property always equals the value of its target property. In other words, whenever the value of the target property changes, the value of the referencing property created by this function also changes to that same value.</p>
+
+<p>The target property can be located anywhere in the document (i.e. it can be in the same object or it can be in some other PowerDoc object) and can even be a property reference itself.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property to be added. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="PropAdd.htm">PropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ref_obj</em></p>
+</td><td>
+<p>Index of the PowerDoc object that holds the referenced (target) property.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ref_name</em></p>
+</td><td>
+<p>A numerical value that identifies the referenced (target) property in the object <em>ref_obj</em>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>See <a href="PropAdd.htm">PropAdd</a>.</p>
+
+
+<h3>Comments</h3>
+<p>See <a href="PropAdd.htm">PropAdd</a>.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

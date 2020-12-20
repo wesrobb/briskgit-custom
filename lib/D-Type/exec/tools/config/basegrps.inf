@@ -1,0 +1,37 @@
+0|Line
+1|Arc
+2|B-Spline Curve
+3|Bezier Curve
+4|Polyline
+5|Library Polyline
+6|Rectangle
+7|Circle/Ellipse
+8|True Circle/Ellipse
+9|Slice
+10|Shape/Polygon
+11|Library Shape
+12|Glyph
+13|Character
+14|PowerGlyph
+15|Text Line
+16|Text Arc
+17|Text Path
+18|Text Area
+19|Text Design
+20|Rich Text Line
+21|Rich Text Arc
+22|Rich Text Path
+23|Rich Text Area
+24|Rich Text Design
+25|Grid
+26|Pattern
+27|Gradient
+28|Bitmap Image
+29|Library Bitmap Image
+30|Alpha Masking
+31|Miscellaneous
+32|Form Controls - Basic
+33|Form Controls - Advanced
+34|Guides - Solid
+35|Guides - Dashed
+36|_Demos

@@ -1,0 +1,128 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>TypesetterSetTypeEffectsTransformed</strong></div><br />
+
+<p>This function supplies <em>type</em> to the Typesetter of the specified Standard Engine instance. Type is a set of typographical properties that are applied to the glyphs/characters during rendering. These properties are:</p>
+
+<ul>
+<li>font index</li>
+<li>transformation &mdash; size, skew, rotation etc.</li>
+<li>outline appearance (normal, outlined, dilated) and related parameters.</li>
+</ul>
+
+<p>This function is very similar to <a href="TypesetterSetTypeEffects.htm">TypesetterSetTypeEffects</a>. However, <a href="TypesetterSetTypeEffectsTransformed.htm">TypesetterSetTypeEffectsTransformed</a> allows application to apply an additional two-dimensional transformation matrix to the existing transformation within the <a href="../../dt/manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> structure before the resulting transformation is supplied to the Typesetter.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>type</em></p>
+</td><td>
+<p>See <a href="TypesetterSetTypeEffects.htm">TypesetterSetTypeEffects</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>An additional transformation matrix to apply to the existing transformation supplied with the <em>type</em> attribute and defined by <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a>. If <em>transform</em> is set to DV_NULL, no additional transformation is applied and the function has the same effect as <a href="TypesetterSetTypeEffects.htm">TypesetterSetTypeEffects</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>A hint to the Typesetter describing application's preference in handling the resulting transformation and whether it should return the resulting transformation back to the application by updating the <em>type</em> parameter. The following values are supported:</p>
+<p><em>flag</em> = 0 &mdash; always set the resulting transformation using a two-dimensional matrix representation; do not update the <em>type</em> parameter upon return</p>
+
+<p><em>flag</em> = 1 &mdash; if the resulting transformation is trivial (e.g. simple scale or skew), use raw transformation parameters rather than a two-dimensional matrix; do not update the <em>type</em> parameter upon return</p>
+
+<p><em>flag</em> = 2 &mdash; always set the resulting transformation using a two-dimensional matrix representation; then return the resulting transformation back to the application by updating the <em>type</em> parameter</p>
+
+<p><em>flag</em> = 3 &mdash; if the resulting transformation is trivial (e.g. simple scale or skew), use raw transformation parameters rather than a two-dimensional matrix;  then return the resulting transformation back to the application by updating the <em>type</em> parameter</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>See <a href="TypesetterSetTypeEffects.htm">TypesetterSetTypeEffects</a>.</p>
+
+
+<h3>Comments</h3>
+
+<p>Raw transformation parameters will produce a better and sharper looking glyphs/characters than a two-dimensional matrix. Therefore, we recommend setting the <em>flag</em> parameter to 1 or 3.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

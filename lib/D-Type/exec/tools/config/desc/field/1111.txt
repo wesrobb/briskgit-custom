@@ -1,0 +1,3 @@
+Link to the {a href="../objects/006.htm"}Text Ruler (Horizontal){/a} object.
+
+This links associates a text ruler with the current text fragment. The Text Ruler (Horizontal) object supplies indents and tab stop positions to be respected during the text layout process.

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>Function Prototypes</h2>
+
+
+<h3>D-Type Engine</h3>
+
+<p><strong>Engine Construction and Destruction</strong></p>
+	<ul>
+	<li><a href="dtEngineIniViaStream.htm">dtEngineIniViaStream</a> &mdash; Create and initialize D-Type Standard Engine - via stream</li>
+	<li><a href="dtEngineExt.htm">dtEngineExt</a> &mdash; Deinitialize and destroy D-Type Standard Engine</li>
+	</ul>
+
+<p><strong>Engine Info</strong></p>
+	<ul>
+	<li><a href="dtEngineGetVersion.htm">dtEngineGetVersion</a> &mdash; Get D-Type Standard Engine version</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<p><strong>Setting Up Output Parameters</strong></p>
+	<ul>
+	<li><a href="dtOutputSetAsMDC.htm">dtOutputSetMDC</a> &mdash; Set Output to memory surface (MDC)</li>
+	<li><a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> &mdash; Set Output to memory surface (MDC) - deprecated form</li>
+	<li><a href="dtOutputSetAsHDC.htm">dtOutputSetAsHDC</a> &mdash; Set Output to Windows Device Context (HDC) - Windows only</li>
+	<li><a href="dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> &mdash; Set Output style (color, transparency and special effect such as shadow, pattern fill, emboss, emboldening etc.)</li>
+	<li><a href="dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a> &mdash; Set Output style (advanced version)</li>
+	</ul>
+
+<p><strong>Getting Parameters</strong></p>
+	<ul>
+	<li><a href="dtOutputGetStyleAttribs.htm">dtOutputGetStyleAttribs</a> &mdash; Get Output style (color, transparency and special effect such as shadow, pattern fill, emboss, emboldening etc.)</li>
+	<li><a href="dtOutputGetStyleEffects.htm">dtOutputGetStyleEffects</a> &mdash; Get Output style (advanced version)</li>
+	</ul>
+
+
+<h3>Rasterizer</h3>
+
+<p><strong>Setting Up Output Parameters</strong></p>
+	<ul>
+	<li><a href="dtRasterizerSetFillRule.htm">dtRasterizerSetFillRule</a> &mdash; Set Rasterizer's fill rule</li>
+	<li><a href="dtRasterizerSetGrayscale.htm">dtRasterizerSetGrayscale</a> &mdash; Set Rasterizer's alpha levels (grayscale)</li>
+	</ul>
+
+<p><strong>Getting Parameters</strong></p>
+	<ul>
+	<li><a href="dtRasterizerGetFillRule.htm">dtRasterizerGetFillRule</a> &mdash; Get Rasterizer's fill rule</li>
+	<li><a href="dtRasterizerGetGrayscale.htm">dtRasterizerGetGrayscale</a> &mdash; Get Rasterizer's alpha levels (grayscale)</li>
+	</ul>
+
+<p><strong>Reinitialization/Reconfiguration</strong></p>
+	<ul>
+	<li><a href="dtRasterizerRealloc.htm">dtRasterizerRealloc</a> &mdash; Reallocate and/or switch Rasterizer</li>
+	</ul>
+
+
+<h3>Typesetter</h3>
+
+<p><strong>Setting Up Output Parameters</strong></p>
+	<ul>
+	<li><a href="dtTypesetterSetHinting.htm">dtTypesetterSetHinting</a> &mdash; Set Typesetter's hinting mode</li>
+	<li><a href="dtTypesetterSetPositioning.htm">dtTypesetterSetPositioning</a> &mdash; Set Typesetter's positioning mode</li>
+	<li><a href="dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> &mdash; Set Typesetter's subpixel levels</li>
+	<li><a href="dtTypesetterSetCacheCompression.htm">dtTypesetterSetCacheCompression</a> &mdash; Set Typesetter's bitmap cache compression</li>
+	<li><a href="dtTypesetterSetCachePolicy.htm">dtTypesetterSetCachePolicy</a> &mdash; Set Typesetter's bitmap cache policy</li>
+	<li><a href="dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a> &mdash; Set Typesetter's quality</li>
+	<li><a href="dtTypesetterSetHintMin.htm">dtTypesetterSetHintMin</a> &mdash; Set minimum pixel size when Typesetter scales narrow horizontal and vertical glyph features in hinted fonts to small sizes</li>
+	<li><a href="dtTypesetterSetSizeSubscale.htm">dtTypesetterSetSizeSubscale</a> &mdash; Set Typesetter's size subscale</li>
+	<li><a href="dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> &mdash; Set Typesetter's type</li>
+	<li><a href="dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a> &mdash; Set Typesetter's type (advanced version)</li>
+	<!--<li></li>-->
+	<li><a href="dtTypesetterSetTypeEffectsTransformed.htm">dtTypesetterSetTypeEffectsTransformed</a> &mdash; Set Typesetter's type using an additional transformation matrix (advanced version)</li>
+	</ul>
+
+<p><strong>Getting Parameters</strong></p>
+	<ul>
+	<li><a href="dtTypesetterGetHinting.htm">dtTypesetterGetHinting</a> &mdash; Get Typesetter's hinting mode</li>
+	<li><a href="dtTypesetterGetPositioning.htm">dtTypesetterGetPositioning</a> &mdash; Get Typesetter's positioning mode</li>
+	<li><a href="dtTypesetterGetSubpixels.htm">dtTypesetterGetSubpixels</a> &mdash; Get Typesetter's subpixel levels</li>
+	<li><a href="dtTypesetterGetCacheCompression.htm">dtTypesetterGetCacheCompression</a> &mdash; Get Typesetter's bitmap cache compression</li>
+	<li><a href="dtTypesetterGetCachePolicy.htm">dtTypesetterGetCachePolicy</a> &mdash; Get Typesetter's bitmap cache policy</li>
+	<li><a href="dtTypesetterGetQuality.htm">dtTypesetterGetQuality</a> &mdash; Get Typesetter's quality</li>
+	<li><a href="dtTypesetterGetHintMin.htm">dtTypesetterGetHintMin</a> &mdash; Get minimum pixel size when Typesetter scales narrow horizontal and vertical glyph features in hinted fonts to small sizes</li>
+	<li><a href="dtTypesetterGetSizeSubscale.htm">dtTypesetterGetSizeSubscale</a> &mdash; Get Typesetter's size subscale</li>
+	<li><a href="dtTypesetterGetTypeAttribs.htm">dtTypesetterGetTypeAttribs</a> &mdash; Get Typesetter's current type</li>
+	<li><a href="dtTypesetterGetTypeEffects.htm">dtTypesetterGetTypeEffects</a> &mdash; Get Typesetter's current type (advanced version)</li>
+	</ul>
+
+<!--
+<p><strong>Special</strong></p>
+	<ul>
+	<li></li>
+	<li><a href="../../dt/funcs/dtTypesetterTransformTypeEffects.htm">dtTypesetterTransformTypeEffects</a> &mdash; Transform type using a transformation matrix (advanced version)</li>
+	</ul>
+-->
+
+<p><strong>Reinitialization/Reconfiguration</strong></p>
+	<ul>
+	<li><a href="dtTypesetterRealloc.htm">dtTypesetterRealloc</a> &mdash; Reallocate Typesetter</li>
+	</ul>
+
+
+<h3>Pattern Catalog</h3>
+
+<p><strong>Getting Information</strong></p>
+	<ul>
+	<li><a href="dtPatternGetNrOfGroups.htm">dtPatternGetNrOfGroups</a> &mdash; Get number of pattern groups in Pattern Catalog</li>
+	<li><a href="dtPatternGetGroupCount.htm">dtPatternGetGroupCount</a> &mdash; Get number of pattern fills in a pattern group</li>
+	<li><a href="dtPatternGetBitmap.htm">dtPatternGetBitmap</a> &mdash; Get pattern fill's bitmap data</li>
+	</ul>
+
+
+<h3>Font Catalog</h3>
+
+<p><strong>Finding Fonts</strong></p>
+	<ul>
+	<li><a href="dtFontGetCounter.htm">dtFontGetCounter</a> &mdash; Get count of font slots in Font Catalog</li>
+	<li><a href="dtFontTest.htm">dtFontTest</a> &mdash; Test font slot and return its font index</li>
+	<li><a href="dtFontFind.htm">dtFontFind</a> &mdash; Find font index using unique font identification string</li>
+	<li><a href="dtFontFindMMInstancePlus.htm">dtFontFindMMInstance</a> &mdash; Find font index of a Multiple-Master font instance</li>
+	<li><a href="dtFontFindMMInstancePlus.htm">dtFontFindMMInstancePlus</a> &mdash; Find font index of a Multiple-Master font instance</li>
+	</ul>
+
+<p><strong>Adding/Removing Fonts</strong></p>
+	<ul>
+	<li><a href="dtFontAddViaStream.htm">dtFontAddViaStream</a> &mdash; Add new font to Font Catalog via a single stream and return its font index</li>
+	<li><a href="dtFontAddViaStreams.htm">dtFontAddViaStreams</a> &mdash; Add new font to Font Catalog via a set of streams and return its font index</li>
+	<li><a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a> &mdash; Add new font as a Multiple-Master font instance and return its font index</li>
+	<li><a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstancePlus</a> &mdash; Add new font as a Multiple-Master font instance and return its font index</li>
+	<li><a href="dtFontRemove.htm">dtFontRemove</a> &mdash; Remove font from Font Catalog</li>
+	<li><a href="dtFontRemoveAll.htm">dtFontRemoveAll</a> &mdash; Remove all fonts in Font Catalog</li>
+	</ul>
+
+<p><strong>Activation/Deactivation</strong></p>
+	<ul>
+	<li><a href="dtFontMakeActive.htm">dtFontMakeActive</a> &mdash; Activate font</li>
+	<li><a href="dtFontMakeInactive.htm">dtFontMakeInactive</a> &mdash; Deactivate font</li>
+	<li><a href="dtFontMakeInactiveAll.htm">dtFontMakeInactiveAll</a> &mdash; Deactivate all fonts in Font Catalog</li>
+	</ul>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtFontSaveToStream.htm">dtFontSaveToStream</a> &mdash; Save font to stream with optional glyph subsetting, in the D-Type format</li>
+	</ul>
+
+<p><strong>Getting Information</strong></p>
+	<ul>
+	<li><a href="dtFontGetSysStatus.htm">dtFontGetSysStatus</a> &mdash; Get font's system status</li>
+	<li><a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> &mdash; Get number of axes, base designs and instances in font</li>
+	<li><a href="dtFontGetMMInstData.htm">dtFontGetMMInstData</a> &mdash; Get default axis values for all named font instances in font</li>
+	<li><a href="dtFontGetDim.htm">dtFontGetDim</a> &mdash; Get number of base designs in font</li>
+	<li><a href="dtFontGetStringValue.htm">dtFontGetStringValue</a> &mdash; Get a string value from font</li>
+	<li><a href="dtFontGetStringValues.htm">dtFontGetStringValues</a> &mdash; Get string values from font in multiple languages</li>
+	<li><a href="dtFontGetNumericValue.htm">dtFontGetNumericValue</a> &mdash; Get a numeric value from font</li>
+	<li><a href="dtFontGetGlyphSubsts.htm">dtFontGetGlyphSubsts</a> &mdash; Get glyph substitutions as defined in font</li>
+	<li><a href="dtFontGetNrOfGlyphs.htm">dtFontGetNrOfGlyphs</a> &mdash; Get number of glyphs in font</li>
+	<li><a href="dtFontGetMetrics.htm">dtFontGetMetrics</a> &mdash; Get global font metrics</li>
+	<li><a href="dtFontGetGlyphIndex.htm">dtFontGetGlyphIndex</a> &mdash; Get font dependent glyph index based on given character code</li>
+	</ul>
+
+<p><strong>Special</strong></p>
+	<ul>
+	<li><a href="dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a> &mdash; Instruct font drivers to send human-readable descriptions of errors encountered in bad fonts to your own function(s). Call this function before adding a new font to Font Catalog.</li>
+	</ul>
+
+
+<h3>Extent</h3>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtExtentDoTransform.htm">dtExtentDoTransform</a> &mdash; Get bounding box of a scaled extent</li>
+	</ul>
+
+
+<h3>Glyph</h3>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a> &mdash; Render glyph to Output - floating point version</li>
+	<li><a href="dtGlyphDoOutput.htm">dtGlyphDoOutputFrac</a> &mdash; Render glyph to Output - fractional version</li>
+	<li><a href="dtGlyphDoTransform.htm">dtGlyphDoTransform</a> &mdash; Scale glyph - floating point version</li>
+	<li><a href="dtGlyphDoTransform.htm">dtGlyphDoTransformFrac</a> &mdash; Scale glyph - fractional version</li>
+	</ul>
+
+<p><strong>Getting Information</strong></p>
+	<ul>
+	<li><a href="dtGlyphGetMetrics.htm">dtGlyphGetMetrics</a> &mdash; Get glyph metrics</li>
+	<li><a href="dtGlyphGetMetricsPlus.htm">dtGlyphGetMetricsPlus</a> &mdash; Get glyph metrics - horizontal and vertical</li>
+	<li><a href="dtGlyphGetOutline.htm">dtGlyphGetOutline</a> &mdash; Get glyph outline</li>
+	<li><a href="dtGlyphGetKern.htm">dtGlyphGetKern</a> &mdash; Get kerning for two adjacent glyphs</li>
+	<li><a href="dtGlyphGetExtras.htm">dtGlyphGetExtras</a> &mdash; Get extra data that might be associated with a glyph</li>
+	</ul>
+
+
+<h3>Character</h3>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> &mdash; Render character to Output - floating point version</li>
+	<li><a href="dtGlyphDoOutput.htm">dtCharDoOutputFrac</a> &mdash; Render character to Output - fractional version</li>
+	<li><a href="dtGlyphDoTransform.htm">dtCharDoTransform</a> &mdash; Scale character - floating point version</li>
+	<li><a href="dtGlyphDoTransform.htm">dtCharDoTransformFrac</a> &mdash; Scale character - fractional version</li>
+	</ul>
+
+<p><strong>Getting Information</strong></p>
+	<ul>
+	<li><a href="dtGlyphGetMetrics.htm">dtCharGetMetrics</a> &mdash; Get character metrics</li>
+	<li><a href="dtGlyphGetMetricsPlus.htm">dtCharGetMetricsPlus</a> &mdash; Get character metrics - horizontal and vertical</li>
+	<li><a href="dtGlyphGetOutline.htm">dtCharGetOutline</a> &mdash; Get character outline</li>
+	<li><a href="dtGlyphGetKern.htm">dtCharGetKern</a> &mdash; Get kerning for two adjacent characters</li>
+	<li><a href="dtGlyphGetExtras.htm">dtCharGetExtras</a> &mdash; Get extra data that might be associated with a character</li>
+	</ul>
+
+
+<h3>Shape</h3>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtShapesDoOutput.htm">dtShapesDoOutput</a> &mdash; Render custom shapes to Output</li>
+	<li><a href="dtShapesDoOutput.htm">dtShapesDoOutputFrac</a> &mdash; Render custom shapes to Output - fractional version</li>
+	<!--
+	<li><a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> &mdash; Render custom shape to Output - floating point version - deprecated form</li>
+	<li><a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutputFrac</a> &mdash; Render custom shape to Output - fractional version - deprecated</li>
+	<li><a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutputPlus</a> &mdash; Render custom shape to Output (enhanced) - floating point version - deprecated</li>
+	<li><a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutputFracPlus</a> &mdash; Render custom shape to Output (enhanced) - fractional version - deprecated</li>
+	-->
+	</ul>
+
+
+<h3>Bitmap</h3>
+
+<p><strong>Output</strong></p>
+	<ul>
+	<li><a href="dtBitmapDoOutput.htm">dtBitmapDoOutput</a> &mdash; Render grayscale bitmap to Output</li>
+	<li><a href="dtBitmapInvert.htm">dtBitmapInvert</a> &mdash; Invert grayscale bitmap</li>
+	</ul>
+
+<p><strong>Compression/Decompression</strong></p>
+	<ul>
+	<li><a href="dtBitmapCompress.htm">dtBitmapCompress</a> &mdash; Compress grayscale bitmap data</li>
+	<li><a href="dtBitmapDecompress.htm">dtBitmapDecompress</a> &mdash; Decompress grayscale bitmap data</li>
+	</ul>
+
+<p><strong>Destruction</strong></p>
+	<ul>
+	<li><a href="dtBitmapFree.htm">dtBitmapFree</a> &mdash; Free grayscale bitmap</li>
+	</ul>
+
+
+<h3>General Purpose Functions</h3>
+
+<p><strong>Memory</strong></p>
+	<ul>
+	<li><a href="dtFree.htm">dtFree</a> &mdash; Free memory allocated by the engine</li>
+	</ul>
+
+
+<h3>Special Functions</h3>
+
+<p>Functions listed in this section are available only in special releases of D-Type Standard Engine.</p>
+
+<p><strong>Output Bitmap Images</strong></p>
+	<ul>
+	<li><a href="dtImageDoOutput.htm">dtImageDoOutput</a> &mdash; Render G, GA, RGB or RGBA bitmap image to Output</li>
+	</ul>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTWindow</h1>
+
+<h2>Event_MouseButtonUp</h2>
+
+<div class="box_prototype"><strong>virtual void Event_MouseButtonUp(DT_SLONG button, DT_SLONG x, DT_SLONG y)</strong></div><br />
+
+<p>This virtual function is called when a user releases a mouse button while the mouse pointer is inside the window. The function's <em>button</em> parameter provides a platform independent code of the mouse button that was released, while the <em>x</em> and <em>y</em> parameters provide the (x,&nbsp;y) coordinates of the mouse pointer at that moment. Your application can override this function in your own class in order to process this event.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>button</em></p>
+</td><td>
+<p>Platform independent code of the mouse button that was released. See CDTWindow::Event_MouseButtonDown for the list of available mouse button codes.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>x coordinate of the mouse pointer when the mouse button was released, in pixels and relative to the origin of the window.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>y coordinate of the mouse pointer when the mouse button was released, in pixels and relative to the origin of the window.</p>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

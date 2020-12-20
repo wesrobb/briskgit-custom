@@ -1,0 +1,90 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterSetSubpixels</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterSetSubpixels(DT_DTENGINE engine, DT_UBYTE subpixels, DT_UBYTE flag)</strong></div><br /><strong>Short Description:</strong> <em>Set Typesetter's subpixel levels</em><br /><br />
+
+<p>This function controls subpixel precision and glyph caching when the Typesetter processes glyphs and characters.</p>
+
+<p>When D-Type Engine is initialized, the default number of subpixel positions is set to 8.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subpixels</em></p>
+</td><td>
+<p>Number of sub-pixel positions (or offsets) in one dimension.</p>
+
+<ul>
+<li>If zero, the glyph caching subsystem is disabled and the number of sub-pixel positions set to the highest possible value.</li>
+<li>If non-zero, the glyph caching subsystem is enabled and the number of sub-pixel positions set to <em>subpixels</em>.</li>
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>As mentioned earlier, D-Type Font Engine relies on D-Type Rasterizer to render glyphs. Because D-Type Rasterizer is a grayscale rasterizer designed to enhance screen resolution, glyphs/characters can be placed at either integral or floating point (fractional) coordinates. When glyphs/characters are placed at integral coordinates, it is said that whole-pixel positioning is used. Similarly, when glyphs/characters are placed at floating point (or fractional) coordinates, it is said that fractional positioning is used.</p>
+
+<p>Each positioning method has certain advantages. For example, if the whole-pixel positioning is used, glyphs will render faster due to better utilization of the bitmap cache. However, if the fractional positioning is used, spacing between glyphs will look better and more accurate because the placement of individual glyphs is not restricted to integral coordinates.</p>
+
+<p>The above mentioned utilization of the bitmap cache is actually a very important factor to consider when rendering at floating point coordinates. With the whole-pixel positioning, a given glyph is always represented by a single grayscale bitmap image regardless of its position on the screen. That same image is used many times when the glyph is rendered at different positions on the screen. Because of this, caching and rendering of those glyphs is very effective and quick.</p>
+
+<p>However, when glyphs are rendered at floating point coordinates, a given glyph may have several different bitmap images depending on its position on the screen. For example, a glyph rendered at the floating point position (120.5,&nbsp;60.85) will not have quite the same bitmap image when it is rendered again at position (120.1,&nbsp;60.33). The two bitmap images will exhibit subtle sub-pixel differences. Because of this, both grayscale bitmap images will be stored in the bitmap cache. If subsequently the same glyph is rendered at some other floating point position, yet another grayscale bitmap may be generated and stored in the bitmap cache. But there are also situations when an existing bitmap image from the bitmap cache will be reused. For example, if the same glyph is rendered at the floating point position (250.1,&nbsp;145.33), a grayscale bitmap previously used for position (120.1,&nbsp;60.33) will be reused since both positions have the same sub-pixel offset.</p>
+
+<p>An obvious question that comes to mind is: Is it economical to use D-Type's glyph caching subsystem for fractionally positioned glyphs? Obviously, cached glyphs are faster to output, however, the more sub-pixel offsets, the more grayscale bitmaps the engine must generate and the more memory will be required to store those bitmaps. If somehow fractional positioning could be limited to only several sub-pixel offsets, caching of these characters would be much more effective.</p>
+
+<p>The <a href="dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> function is one way to control sub-pixel positioning. For example, by setting the <em>subpixels</em> parameter to 4, the output will always be restricted to at most 4 sub-pixel offsets in the horizontal direction and at most 4 sub-pixel offsets in the vertical direction. This means that the maximum number of grayscale bitmaps the engine can generate for any fully fractionally positioned glyph is 16 (or 4 multiplied by 4). Similarly, if <em>subpixels</em> is set to 8, the maximum number of grayscale bitmaps per any fully fractionally positioned glyph is 64. The value <em>subpixels</em> = 8 is the default setting for D-Type Font Engine.</p>
+
+<p>If <em>subpixels</em> = 8 is not an adequate value, applications can call <a href="dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> to set the number of sub-pixels offsets to a lower or higher value. Lower values will result in less accurate positioning but more effective utilization of the bitmap cache (and quicker output), while higher values will result in more accurate positioning but less effective utilization of the bitmap cache (and therefore slower output). Because of this, values larger than 8 are not recommended.</p>
+
+<p>If your application requires a high number of sub-pixels offsets, it is best to set <em>subpixels</em> to 0. Although this will completely disable the bitmap caching subsystem (and therefore result in the slowest output), the positioning will be very accurate. This approach is also suitable in animations since caching glyphs that constantly change transformations does not make a lot of sense.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

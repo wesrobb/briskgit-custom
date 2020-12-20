@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: Text Metrics</h1>
+
+
+<p><strong>Q-2-1. When I draw glyphs using <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a> or <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a>, will the top-left corner of my character appear at the screen point (x,&nbsp;y)?</strong></p>
+
+
+<p>No, most likely it will not. The origin of a character is not its top left corner, but an initial reference point chosen by the font manufacturer. In virtually all Latin characters, this point is located at the base line of the glyph and very close to its left edge. The origin is made to coincide with the screen point (x,&nbsp;y) when the character is drawn using <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a> or <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a>. Therefore, two characters with a different font size but equal Y coordinate will always be drawn on the same base line.</p>
+
+<p><strong>Q-2-2. I understand the font size in D-Type API is specified in pixels. What if I need to use points? What is the relationship between points and pixels?</strong></p>
+
+<p>On a 72dpi device, points and pixels are equal. A typical VGA monitor has a resolution of 96dpi. Therefore, to convert points (pts) to pixels, you must multiply the point value by 96/72 (or 1.3333). On a 300dpi laser printer, the multiplication factor would be 300/72 (or 4.1666).</p>
+
+<p>Similarly, to convert pixels to points, just divide the pixel value by 1.3333.</p>
+
+<p><strong>Q-2-3. How do I handle <em>size_h</em> and <em>size_v</em> within the <a href="../../dt/manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure? When I specify <em>size_h</em>, is that the cell height or the average character height?</strong></p>
+
+<p>Font width and height is really the width and height of the so-called &quot;em-square&quot;. In traditional typography, the em-square is an imaginary box that traditionally encloses the capital letter M. However, in digital fonts the em-square does not have to enclose any particular glyph. The actual value for the width and height of the em-square (which we also call base font width and base font height) is chosen by the font manufacturer and is arbitrary.</p>
+
+<p>For example, if the font size is 50x30 pixels, this means that the base font width should be set to 50 pixels and the base font height to 30 pixels. All glyphs in the font are then scaled relative to this size. It is important to understand that 50x30 is not the size of any particular glyph in the font, it is only a way to measure the global font size.</p>
+
+<p>Some font software does not support different font widths and heights &mdash; you can only specify one size (typically font height in points). With that software glyph expansion or compression is not possible. With D-Type font engine, this is trivial. In addition, negative font widths and/or heights can be used to output <em>mirrored</em> glyphs.</p>
+
+
+<p><strong>Q-2-4. What is D-Type's equivalent of the Windows <em>GetTextMetrics</em>function?</strong></p>
+
+<p>In Windows, global font information, such as font width, height, descent etc. can be retrieved via the <em>GetTextMetrics</em> function:</p>
+
+<p>Example:</p>
+
+<div class="box_field">
+<pre>
+SelectFont(hDC, hfont);
+GetTextMetrics(hDC, (LPTEXTMETRIC)&amp;tm);
+height = (int)tm.height;
+descent = (int)tm.descent;
+</pre>
+</div>
+
+<p>In D-Type API, the equivalent information can be obtained by calling the <a href="../../dt/funcs/dtFontGetMetrics.htm">dtFontGetMetrics</a> function. All return values are in font units. For more information, see the manual.</p>
+
+
+<p><strong>Q-2-5. I don't have knowledge of font units. What is the relationship between font units and pixels?</strong></p>
+
+<p>Typically, you create a new font size by setting the <em>size_h</em> and <em>size_v</em> values within the <a href="../../dt/manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Transformation specified using raw transformation parameters */</span>&nbsp;
+typedef struct
+{
+   size_h, size_v;
+   skew_h, skew_v;
+   rotation;
+
+} DT_TRANSFORM_PARAMS;
+</pre>
+</div>
+
+<p>where <em>size_h</em> and <em>size_v</em> are specified in pixels.</p>
+
+<p>If you call the <a href="../../dt/funcs/dtFontGetMetrics.htm">dtFontGetMetrics</a> function, you can obtain the <em>font_xbs</em> and <em>font_ybs</em> values:</p>
+
+<p><a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> dtFontGetMetrics(DT_DTENGINE engine, <a href="../../dt/manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_index, <a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a>* fnt_xbs, <a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a>* fnt_ybs, <a href="../../dt/manual/structs.htm#DT_RECT_SWORD">DT_RECT_SWORD</a>* extent)</p>
+
+<p>It is important to know that <em>font_xbs</em> and <em>font_ybs</em> measure the same feature as <em>size_h</em> and <em>size_v</em>. However, <em>font_xbs</em> and <em>font_ybs</em> are measured in font units while <em>size_h</em> and <em>size_v</em> are measured in pixels. Therefore, the scaling factor that can be used to convert font units to pixels is:</p>
+
+<p><em>fx = size_h / font_xbs (for horizontal scaling)</em><br />
+<em>fy = size_v / font_ybs (for vertical scaling)</em></p>
+
+
+<p><strong>Q-2-6. I need something like the TEXTMETRIC structure. I need to be able to calculate:</strong></p>
+
+<p><strong>1) the width and height of a font, in pixels, per point size</strong><br />
+<strong>2) the X and Y extents, calculated in pixel units, that bounds a single character</strong><br />
+<strong>3) the width of a character as defined in the font, in pixels</strong><br />
+<strong>4) the maximum character width, in pixels</strong><br />
+<strong>5) the maximum character height, in pixels</strong><br />
+<strong>6) the width of text string in font units</strong><br />
+<strong>7) the width of text string in pixels</strong></p>
+
+
+<p>Most of the calculations concerning pixel values are very easy to perform once the horizontal and vertical scaling factor for converting font units to pixels are known. See the above answer for information on how to obtain those factors.</p>
+
+
+<p>1) the width and height of a font, in pixels, per the point size<br />
+<br />
+This point is trivial. These are exactly the <em>size_h</em> and <em>size_v</em> parameters defined within the <a href="../../dt/manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure. Unlike Windows, D-Type does not use points. If you wish to use points, please see Q-2-2.<br /></p>
+
+<p><em>2)</em> The X and Y extents, calculated in pixel units, that bounds a single character<br />
+<br />
+Call the <a href="../../dt/funcs/dtGlyphGetMetrics.htm">dtCharGetMetrics</a> function to obtain the X and Y extents of the character in font units (the <em>extent</em> parameter returned via the <a href="../../dt/manual/structs.htm#DT_RECT_SWORD">DT_RECT_SWORD</a> structure). Then, apply the scaling factors <em>fx</em> and <em>fy</em> to get minimum and maximum X and Y extents for a single character in pixels.</p>
+
+<p><em>3)</em> the width of a character as defined in the font, in pixels<br />
+<br />
+Again, use the <a href="../../dt/funcs/dtGlyphGetMetrics.htm">dtCharGetMetrics</a> function to obtain <em>advance_width</em> for a single character and multiply by <em>fx</em>.<em><br />
+<br />
+advance_width_pixels = fx * advance_width</em><br /></p>
+
+<p><em>4)</em> The maximum character width, in pixels<br />
+<br />
+This is simply the distance between the character's maximum and minimum x coordinate expressed in pixels, or<em><br />
+<br />
+fx * (extent.xmx - extent.xmn)</em><br /></p>
+
+<p><em>5)</em> The maximum character height, in pixels<br />
+<br />
+This is the distance between the character's maximum and minimum y coordinate expressed in pixels, or<em><br />
+<br />
+fy * (extent.ymx - extent.ymn)</em><br /></p>
+
+<p><em>6)</em> The width of text string in font units<br />
+<br />
+If you are not using kerning or additional character spacing, simply sum the advance widths of all characters in the string. If you are using additional character spacing, add this value to each advance width. Finally, if you are using kerning, call <em>dtCharGetKern</em> for each kern-pair, adjust the advance width accordingly and then sum.<br /></p>
+
+<p><em>7)</em> The width of text string in pixels<br />
+<br />
+The process is very similar to the previous procedure, but the result must be converted to pixels by multiplying by <em>fx</em>.<br />
+<br />
+Alternatively, you can use the <a href="../../dt/funcsx/dtxGlyphsGetBound.htm">dtxCharsGetBound</a> or dtxGlyphsGetBound function and just read the returned <em>advance_width</em> value.</p>
+
+<p><strong>Q-2-7. How to calculate the approximate pixel distance of my text row from the previous one?</strong></p>
+
+<p>The simplest method of calculating the y coordinate of the base line corresponding to the current text row is to add the maximum height of the font that appears in the current row to the y coordinate of the base line corresponding the previous row.</p>
+
+<p>Example:</p>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> type = {1, 0, 0, 0, 0, {{100, 100, 0, 0, 0}}};
+<span class="codecomment">/*
+    Same as
+    type.font_index = 1;
+    type.thickness = 0;
+    type.segment = 0;
+    type.reserved = 0;
+    type.descriptor = 0;
+    type.transform.params.size_h = 100;
+    type.transform.params.size_v = 100;
+    type.transform.params.skew_h = 0;
+    type.transform.params.skew_v = 0;
+    type.transform.params.rotation = 0;
+*/</span>&nbsp;
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> x = 0, y = 0;
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> i;
+
+<span class="codecomment">/* Select type */</span>&nbsp;
+dtTypesetterSetTypeAttribs(engine, &amp;type);
+
+for (i = 0; i &lt; 3; i++)
+{
+     y += type.transform.params.size_v;
+
+     dtxCharsDoOutput(engine, x, y, 0, DV_TEXTMODE_DEVICE_2, DV_NULL, "Hello World");
+}
+</pre>
+</div>
+
+<p>An alternative method is to determine the minimum and maximum y extent of the row. For more information see Q-2-8.</p>
+
+
+<p><strong>Q-2-8. How do I determine the height of my font in pixels, based on the minimum and maximum y coordinate?</strong></p>
+
+<p>The <a href="../../dt/funcs/dtFontGetMetrics.htm">dtFontGetMetrics</a> function returns global font information, including its maximum Y extent (<em>extent.ymx</em>) and minimum Y extent (<em>extent.ymn</em>).</p>
+
+<p>Assuming that more than a single type is used in each text row, the first step is to determine the maximum of all maximum Y extents in the row. We can call this value <em>RowYMax</em>. Similarly, we determine the minimum of all minimum Y extents in the row and call it <em>RowYMin</em>.</p>
+
+<p>Finally, the distance (<em>RowYMax</em> &mdash; <em>RowYMin</em>) is the height of a text row. Since this distance is in font units, the last step is to convert that value to pixels by multiplying by <em>fy</em>.</p>
+
+
+<p><strong>Q-2-9. Why in some cases characters from 2 different fonts appear to have a slightly different size, although their pixel size set up via the <a href="../../dt/manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure is the same.</strong></p>
+
+<p>Sometimes the size of different fonts might slightly differ depending on how font designers define the base font size (or em-square). As mentioned earlier, the em-square is an imaginary box that traditionally encloses the capital letter M and is chosen independently by each font manufacturer. In some cases font designers may choose to make certain fonts appear smaller than others at the same size. However, this effect is normal and in some cases desirable. For example, the <em>Courier</em> font is usually designed to look slightly smaller than <em>Arial</em> or <em>Times</em> at the same pixel size, because this is a monospaced font that requires more horizontal space than non-monospaced fonts such as <em>Arial</em> or <em>Times</em>.</p>
+
+<p><strong>Q-2-10. I understand the <em>advance_width</em> parameter returned by <a href="../../dt/funcsx/dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a> and dtxGlyphsDoOutput (or <a href="../../dt/funcsx/dtxGlyphsGetBound.htm">dtxCharsGetBound</a> and dtxGlyphsGetBound) can be used to determine the width of my text string in pixels. But what about a 90&deg; orientation where the width and height will be reversed?</strong></p>
+
+<p>The <em>advance_width</em> is a vector which represents the width of a text string. The orientation of this vector will change if your text is rotated, but its pixel value remains constant. Therefore, the <em>advance_width</em> always represents the width of your text string, regardless of the rotation.</p>
+
+<p><strong>Q-2-11. The <em>advance_width</em> returned by the <a href="../../dt/funcsx/dtxGlyphsGetBound.htm">dtxCharsGetBound</a> (or dtxGlyphsGetBound) function is what I need, but I don't know exactly where text begins in the bitmap.</strong></p>
+
+<p>The x coordinate of the origin of the text string is exactly -bmp.x pixels away from the left edge of the bitmap. Similarly, the y coordinate of the origin is exactly bmp.y pixels away from the top edge. So, the text string is located at the coordinates (-bmp.x, bmp.y) inside the bitmap.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

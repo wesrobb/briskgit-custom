@@ -1,0 +1,1 @@
+For List Boxes, this is the index of the first visible row in the list. For Text Boxes, this is the index of the first visible character.

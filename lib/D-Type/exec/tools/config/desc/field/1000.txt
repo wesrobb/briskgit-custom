@@ -1,0 +1,7 @@
+Transparency. The value 0 means minimum intensity, 255 means maximum intensity.
+
+{strong}Sample values:{/strong}
+
+0 = Fully opaque
+127 = 50% transparent
+255 = Fully transparent

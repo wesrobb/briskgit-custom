@@ -1,0 +1,47 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdEngineExt</h2><div class="box_prototype"><strong>
+void pdEngineExt(DT_PDENGINE engine)</strong></div><br /><strong>Short Description:</strong> <em>Deinitialize and destroy D-Type Power Engine</em><br /><br />
+
+<p>The pdEngineExt function deinitializes and destroys the Power Engine instance created by <a href="pdEngineIniViaStream.htm">pdEngineIniViaStream</a>. Since each Power Engine instance has its own internal instance of D-Type Standard Engine, this function also deinitializes and destroys that instance. The pdEngineExt function must be called before the application terminates for each instance of D-Type Power Engine.</p>
+
+<p>As mentioned earlier, a Power Engine instance can be referenced by multiple documents. This means that before a Power Engine instance is destroyed using this function, all of its document instances must first be destroyed by calling the <a href="pdDocExt.htm">pdDocExt</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the Power Engine instance to be destroyed.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdEngineIniViaStream.htm">pdEngineIniViaStream</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

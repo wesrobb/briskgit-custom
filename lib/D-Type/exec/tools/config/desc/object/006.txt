@@ -1,0 +1,3 @@
+The Text Ruler (Horizontal) object supplies indents and tab stops to be respected during the text layout process. The text layout engine uses tab stops to advance to the next tab stop position when processing tab characters. As such, the Text Ruler (Horizontal) object can be used to build the following higher-level text objects: {a href="../objects/130.htm"}Text Path{/a}, {a href="../objects/103.htm"}Text Area{/a}, {a href="../objects/131.htm"}Rich Text Path{/a}, {a href="../objects/106.htm"}Rich Text Area{/a}.
+
+{strong}Designated Rendering Function:{/strong} NONE

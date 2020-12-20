@@ -1,0 +1,5 @@
+The Horizontal Slider object is a visual and interactive control whose purpose is to represents a relative position and/or coverage (percentage) of a certain feature on a finite scale. The lower limit of this scale is always zero, while the upper limit is specified by the fcSliderLimit property. The control allows users to interactively change the feature's position by moving the slider in the horizontal direction (e.g. using a mouse or keyboard).
+
+The Horizontal Slider object can also be used as a Horizontal Progress Bar. In this case only the feature's coverage (percentage) is relevant while its position is ignored and usually set to 0 (or omitted).
+
+{strong}Designated Rendering Function:{/strong} fcDrawHSlider (10005)

@@ -1,0 +1,101 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetGlyphSubsts</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontGetGlyphSubsts(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SWORD script_id, DT_ID_SWORD feature_id, DT_SWORD reserved, DT_AT_GLYPH_SUBSTS_SET* substs_set)</strong></div><br /><strong>Short Description:</strong> <em>Get glyph substitutions as defined in font</em><br /><br />
+
+<p>This function returns glyph substitutions for the specified script and glyph substitution feature, as defined in the specified font.</p>
+
+<p>This function is a member of D-Type's Advanced Typography API. For additional details on glyph substitutions, please see the <a href="../manual/atstructs.htm">Advanced Typography Structures</a> section of this document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>script_id</em></p>
+</td><td>
+<p>Index of the script for which the glyph substitutions are to be retrieved. At present, this can be one of the following:</p>
+<ul>
+<li><p><em>script_id</em> = 0 (DV_AT_SCRIPT_NONE) &mdash; No specific script</p></li>
+<li><p><em>script_id</em> = 1 (DV_AT_SCRIPT_LATN) &mdash; Latin script</p></li>
+<li><p><em>script_id</em> = 2 (DV_AT_SCRIPT_CYRL) &mdash; Cyrillic script</p></li>
+<li><p><em>script_id</em> = 3 (DV_AT_SCRIPT_GREK) &mdash; Greek script</p></li>
+<li><p><em>script_id</em> = 4 (DV_AT_SCRIPT_HEBR) &mdash; Hebrew script</p></li>
+<li><p><em>script_id</em> = 5 (DV_AT_SCRIPT_ARAB) &mdash; Arabic script</p></li>
+<li><p><em>script_id</em> = 6 (DV_AT_SCRIPT_HANI) &mdash; Han</p></li>
+<li><p><em>script_id</em> = 7 (DV_AT_SCRIPT_KANA) &mdash; Hiragana/Katakana</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>feature_id</em></p>
+</td><td>
+<p>Index of the glyph substitution feature for which the glyph substitutions are to be retrieved. At present, this can be one of the following:</p>
+<ul>
+<li><p><em>feature_id</em> = 0 (DV_AT_GSUBST_NONE) &mdash; No specific feature</p></li>
+<li><p><em>feature_id</em> = 1 (DV_AT_GSUBST_INIT) &mdash; Initial forms</p></li>
+<li><p><em>feature_id</em> = 2 (DV_AT_GSUBST_MEDI) &mdash; Medial forms</p></li>
+<li><p><em>feature_id</em> = 3 (DV_AT_GSUBST_FINA) &mdash; Final forms</p></li>
+<li><p><em>feature_id</em> = 4 (DV_AT_GSUBST_LIGA) &mdash; Ligatures</p></li>
+<li><p><em>feature_id</em> = 5 (DV_AT_GSUBST_RLIG) &mdash; Required ligatures</p></li>
+<li><p><em>feature_id</em> = 6 (DV_AT_GSUBST_DLIG) &mdash; Discretionary ligatures</p></li>
+<li><p><em>feature_id</em> = 7 (DV_AT_GSUBST_HLIG) &mdash; Historical ligatures</p></li>
+<li><p><em>feature_id</em> = 8 (DV_AT_GSUBST_VERT) &mdash; Vertical Alternates</p></li>
+<li><p><em>feature_id</em> = 9 (DV_AT_GSUBST_VRT2) &mdash; Vertical Alternates and Rotation</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>substs_set</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/types.htm#DT_AT_GLYPH_SUBSTS_SET">DT_AT_GLYPH_SUBSTS_SET</a> type that will receive glyph substitutions for the specified script and glyph substitution feature, as defined in the specified font.</p>
+<p>For details, see the <a href="../manual/atstructs.htm">Advanced Typography Structures</a> section.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value is 1 if the function was successful. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

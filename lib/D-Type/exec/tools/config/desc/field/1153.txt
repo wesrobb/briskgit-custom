@@ -1,0 +1,9 @@
+Pixel Stitching. This property is respected only when polygons/shapes are rendered using the Reference RGBA Rasterizer. In all other cases it is ignored.
+
+{strong}Supported values:{/strong}
+
+0 = Default
+1 = Coarse
+2 = Average
+3 = Fine
+4 = Best

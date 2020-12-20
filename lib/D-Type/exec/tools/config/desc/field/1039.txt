@@ -1,0 +1,1 @@
+Number of items in horizontal direction. Depending on the context, the items can be pixels, rows, grid lines etc.

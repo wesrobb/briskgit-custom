@@ -1,0 +1,70 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxBufferDecompress</h2><div class="box_prototype"><strong>
+DT_SWORD fxBufferDecompress(DT_AUX_INFO* info, DT_UBYTE* raw_addr, DT_SLONG* raw_len, const DT_UBYTE* compr_addr, DT_SLONG compr_len)</strong></div><br /><strong>Short Description:</strong> <em>Decompress data in buffer</em><br /><br />
+
+<p>This function attempts to decompress <em>compr_len</em> bytes of data in the buffer pointed by <em>compr_addr</em>, placing the result in the buffer pointed by <em>raw_addr</em>. The data compression format is specified by the <em>FileFormat</em> member variable of the <em>info</em> structure.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raw_addr</em></p>
+</td><td>
+<p>A valid pointer to a user-supplied buffer to which the function will decompress the data.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raw_len</em></p>
+</td><td>
+<p>On entry, <em>raw_len</em> points to a value describing the size of the buffer to which the function will decompress the data, in bytes. Your application should ensure that this value is large enough to hold the entire decompressed data. On exit, this value will be updated to hold the actual length of the decompressed data, in bytes.</p>
+</td></tr>
+
+<tr><td>
+<p><em>compr_addr</em></p>
+</td><td>
+<p>A valid pointer to a buffer that holds compressed data.</p>
+</td></tr>
+
+<tr><td>
+<p><em>compr_len</em></p>
+</td><td>
+<p>Size of the compressed data, in bytes.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The function returns 1 if successful and 0 otherwise.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

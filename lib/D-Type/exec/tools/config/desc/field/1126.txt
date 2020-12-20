@@ -1,0 +1,8 @@
+Vertical alignment of glyphs/characters within the current text row.
+
+{strong}Supported values:{/strong}
+
+0 = Baseline - character is vertically aligned with the baseline (the default behaviour for most programs)
+1 = Top - character's ascender is vertically aligned with the top edge of the current text row
+2 = Middle - character's mid y point (a point that is half way between the ascender and descender) is vertically aligned with the mid y point of the current text row
+3 = Bottom - character's descender is vertically aligned with the bottom edge of the current text row

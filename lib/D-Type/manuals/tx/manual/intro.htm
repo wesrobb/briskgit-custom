@@ -1,0 +1,589 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Introduction</h1>
+
+
+<h2 id="toc_01">Overview</h2>
+
+<p>
+D-Type Unicode Text Engine is a portable library for laying out, rendering and editing high-quality Unicode text. It is designed to be powerful, fast, flexible, elegant and above all extremely easy to use. With only a few key functions, it allows application developers to easily create, format, lay out and render text in virtually any script and language and handle cursor positioning, selection highlighting and text editing.
+</p>
+
+<h2 id="toc_02">Availability</h2>
+
+<p>
+D-Type Unicode Text Engine is written in industry standard C++ and is portable to virtually any hardware or operating system environment. The engine can be purchased in a binary form that is suitable for quick deployment on Windows (as a dynamic link library), Linux, Mac OS X, iOS and/or Android (as a shared library or object code) or, alternatively, licensed in source form on any platform. Although D-Type Unicode Text Engine is written entirely in C++, it features a C-style public API (Application Programming Interface). This is to ensure that the library's functions can be called from a variety of programming languages and development frameworks in use today.
+</p>
+
+<p>
+D-Type Unicode Text Engine is a completely self-contained engine, which means that it does not require any other third party libraries or fonts to be installed in order to function properly.
+</p>
+
+<h2 id="toc_03">Features</h2>
+
+<h3>General</h3>
+
+<ul>
+<li>Super fast. Written in industry standard C++.</li>
+<li>Scalable vector based text output. Text can be zoomed in/out and smoothly displayed at any size or screen resolution.</li>
+<li>Ultra-high quality rendering with anti-aliasing and sub-pixel precision.</li>
+<li>Available for any platform. Immediately deployable on Windows, Linux and Mac OS X.</li>
+<li>Produces identical results on all platforms.</li>
+<li>Self-contained. Does not require any other third party libraries or fonts.</li>
+<li>Comes with a basic set of Unicode fonts. Supports all industry standard font formats (TrueType, OpenType, Type 1, CFF, D-Type).</li>
+</ul>
+
+<h3>Layout and Formatting</h3>
+
+<ul>
+<li>Implicit bidirectional analysis and reordering.</li>
+<li>Support for left-to-right scripts and right-to-left scripts such as Arabic or Hebrew.</li>
+<li>Automatically handles cursor positioning and movement, selection highlighting and text editing.</li>
+<li>Automatically displays selection highlights.</li>
+<li>A rich set of text styling/formatting attributes (bold, italic, underline, outline, strike-out, superscript, subscript, compression, expansion, soft shadows, blur, emboss, glow, transparency, custom defined styles).</li>
+<li>Standard text layout capabilities (e.g. letter and line spacing, kerning, justification etc).</li>
+<li>Vertical text justification (top, middle, bottom, justified).</li>
+<li>Advanced typography and shaping engine for complex scripts (e.g. Arabic, Thai, Indic).</li>
+<li>Advanced text rendering algorithms for enhanced glyph positioning and text legibility.</li>
+</ul>
+
+<h3>Advanced</h3>
+
+<ul>
+<li>Support for standard hyphenation. This results in better text wrapping behavior and more professionally justified text, especially when displayed in narrow columns. Out of the box D-Type Text Engine ships with hyphenation dictionaries for English, French, German, Spanish and 20 other languages. Support for additional (custom) hyphenation dictionaries can be easily configured.</li>
+<li>Automatic text flow across multiple linked textflow areas.</li>
+<li>A full 3x3 transformation matrix can be applied to any textflow area independently. This includes 2D perspective transformations and affine transformations such as scaling, skewing, rotation.</li>
+<li>Support for both horizontal and vertical writing direction with either horizontal or vertical glyph orientation.</li>
+<li>Horizontal and Vertical text writing progression. Sixteen different types of text progression are supported (e.g. Left-to-Right &amp; Top-to-Bottom, Top-to-Bottom &amp; Left-to-Right, Top-to-Bottom &amp; Right-to-Left etc.)</li>
+<li>When mixing left-to-right and right-to-left text, the user can choose bidirectional reordering or bidirectional rotation. Bidirectional reordering works well in the horizontal and vertical writing mode. Bidirectional rotation works well in the vertical writing mode.</li>
+<li>Support for non-rectangular text areas i.e. text areas with a custom (user-defined) left and right edge.</li>
+</ul>
+
+<h2 id="toc_04">Why To Use It?</h2>
+
+<p>
+Text layout and rendering that incorporates advanced styling and formatting, bidirectional text support, font handling, various Unicode algorithms, contextual shaping, cursor handling, selection highlighting and automatic text flow is a very complex task. Most programmers don't have the necessary skills, knowledge, know-how and time to develop and maintain their own text composition engines. D-Type Unicode Text Engine is currently the only product of this kind available on the market. No other library can match the performance, quality, flexibility, portability, reliability, technical elegance and simplicity of D-Type Unicode Text Engine.
+</p>
+
+<h2 id="toc_05">How To Use It?</h2>
+
+<p>
+Before we can start using D-Type Unicode Text Engine, we need to initialize its rendering engine. We do this by calling the <tt>txEngineIniViaStream</tt> function. This call is usually done only once, at the beginning of the application's initialization routine. Here is one way to do this:
+</p>
+
+<div class="box_field"><pre>
+DT_STREAM_FILE(sd, "dtype.inf");
+
+if (txEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) == 0) return;
+</pre></div>
+
+<p>
+Assuming that the initialization was successful, our rendering engine will be represented by the <tt>engine</tt> variable. We can now proceed to <a href="intro.htm#toc_05_01">Step 1</a>.
+</p>
+
+<h3 id="toc_05_01">Step 1: Make Text Document</h3>
+
+<p>
+Once we have initialized the rendering engine, we are ready to create a new Unicode text document (or as many of them as we need). Here is one way to do this:
+</p>
+
+<div class="box_field"><pre>
+DT_STREAM_FILE(sd, "C:\\TextFiles\\sample.txt");
+
+if (txTextIniViaStream(&amp;text_doc, engine, TX_AUTO, &amp;sd,
+                       TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT,
+                       DV_NULL, DV_NULL, DV_NULL) &lt; 0) return;
+</pre></div>
+
+<p>
+Basically, we simply call the <tt>txTextIniViaStream</tt> function. This function creates for us a sample text document (represented by the <tt>text_doc</tt> variable) by reading plain UTF-8 text stored in the <a href="http://www.d-type.com/files/sample.txt">sample.txt</a> file on our hard disk. We typically pass the <tt>TX_IMPORT_UNICODE_BIDI</tt> and <tt>TX_IMPORT_UNICODE_SCRIPT</tt> flags to indicate that we want to apply Unicode's implicit bidirectional reordering algorithm and auto-detect Unicode scripts (such as Latin, Arabic, Thai etc.) so that complex scripts can be shaped properly.
+</p>
+
+<p>
+The above is not the only way to create a new text document. We can do this by getting plain text from memory:
+</p>
+
+<div class="box_field"><pre>
+const DT_CHAR* text_utf8 = "Saturn is the most distant of the five planets known to ancient stargazers.";
+
+DT_STREAM_MEMORY(sd, (DT_UBYTE*)text_utf8, strlen(text_utf8));
+
+if (txTextIniViaStream(&amp;text_doc, engine, TX_UTF8, &amp;sd,
+                       TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT,
+                       DV_NULL, DV_NULL, DV_NULL) &lt; 0) return;
+</pre></div>
+
+<p>
+or by loading it from a web server (for which we need to specify its URL):
+</p>
+
+<div class="box_field"><pre>
+DT_STREAM_URL(sd, "http://www.d-type.com/text/sample.txt");
+
+if (txTextIniViaStream(&amp;text_doc, engine, TX_AUTO, &amp;sd,
+                       TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT,
+                       DV_NULL, DV_NULL, DV_NULL) &lt; 0) return;
+</pre></div>
+
+<p>
+At this point, D-Type Unicode Text Engine has already performed the bidirectional analysis and reordering, gathered the necessary fonts, processed complex scripts and completed the majority of necessary layout calculations. So it has everything it needs to generate the output. Actually, we could already jump to <a href="intro.htm#toc_05_04">Step 4</a> and render our text.
+</p>
+
+<p>
+Note: In the above sample code, we used either <tt>TX_UTF8</tt> or <tt>TX_AUTO</tt> to specify the type of text file. These are not the only options. Presently the following types of text are supported:
+</p>
+
+<div class="box_field"><pre>
+TX_AUTO      <span class="codecomment">/* Auto-detect */</span>&nbsp;
+TX_ANSI      <span class="codecomment">/* Ansi */</span>&nbsp;
+TX_UCS2_LE   <span class="codecomment">/* UCS-2 Big Endian */</span>&nbsp;
+TX_UCS2_BE   <span class="codecomment">/* UCS-2 Little Endian */</span>&nbsp;
+TX_UTF8      <span class="codecomment">/* UTF-8 */</span>&nbsp;
+TX_UCS4_LE   <span class="codecomment">/* UCS-4 Little Endian */</span>&nbsp;
+TX_UCS4_BE   <span class="codecomment">/* UCS-4 Big Endian */</span>&nbsp;
+TX_UTF16_LE  <span class="codecomment">/* UTF-16 Little Endian */</span>&nbsp;
+TX_UTF16_BE  <span class="codecomment">/* UTF-16 Big Endian */</span>&nbsp;
+TX_UTF32_LE  <span class="codecomment">/* UTF-32 Little Endian */</span>&nbsp;
+TX_UTF32_BE  <span class="codecomment">/* UTF-32 Big Endian */</span>&nbsp;
+</pre></div>
+
+
+<h3 id="toc_05_02">Step 2 (Optional): Text Styling/Formatting</h3>
+
+<p>
+Once our text document has been created, we may want to style it and/or format it. This is an optional step because not all types of applications need to do this. For example, applications that only display plain text (e.g. terminal programs or database applications) can completely skip this step. However, if we want to render rich text, this step is something we will do often.
+</p>
+
+<p>
+So, let's say that we want to underline the fragment <em>"There are 12 pages in this document."</em> from our <a href="http://www.d-type.com/files/sample.txt">sample.txt</a> file. This fragment begins at character position 166 and ends at character position 202. To apply the underline style, we simply call the <tt>txTextSetAttribs</tt> function and pass the predefined <tt>attrUnderline</tt> style to this character range:
+</p>
+
+<div class="box_field"><pre>
+txTextSetAttribs(text_doc, 166, 202, attrUnderline, 0);
+</pre></div>
+
+<p>
+The result will be as illustrated below:
+</p>
+
+<p class="center">
+<img src="../images/step2a.gif" border="1" alt="Result of Step 2: Underlined text" width="388" height="298" />
+</p>
+
+<p>
+Similarly, if we want to apply synthetic bold to the words <em>"Previous"</em>, <em>"Next Page"</em>, <em>"C++"</em>, <em>"Sample.txt"</em> and <em>"TextFiles/UNICODE_UTF-8/"</em>, we apply the predefined <tt>attrBold</tt> style:
+</p>
+
+<div class="box_field"><pre>
+txTextSetAttribs(text_doc, 211, 219, attrBold, 0); <span class="codecomment">/* "Previous" */</span>&nbsp;
+txTextSetAttribs(text_doc, 224, 233, attrBold, 0); <span class="codecomment">/* "Next Page" */</span>&nbsp;
+txTextSetAttribs(text_doc, 325, 328, attrBold, 0); <span class="codecomment">/* "C++" */</span>&nbsp;
+txTextSetAttribs(text_doc, 463, 473, attrBold, 0); <span class="codecomment">/* "Sample.txt" */</span>&nbsp;
+txTextSetAttribs(text_doc, 490, 514, attrBold, 0); <span class="codecomment">/* "TextFiles/UNICODE_UTF-8/" */</span>&nbsp;
+</pre></div>
+
+<p>
+The result of this is shown below:
+</p>
+
+<p class="center">
+<img src="../images/step2b.gif" border="1" alt="Result of Step 2: Emboldened text" width="388" height="298" />
+</p>
+
+<p>
+But what if we want to apply a completely unique style? For example, let's say that we want to style the tile of our document using our own font, color and a nice soft drop shadow? No problem, we just create this style ourselves, and then apply it to the title (between character positions 0 and 60) using the same <tt>txTextSetAttribs</tt> function. Here is one way to do this:
+</p>
+
+<div class="box_field"><pre>
+const DT_TX_ATTRIBS myattr_GentiumBigRedWithShadow[] =
+{
+   {TX_ATTR_FONT_UNIQUEID, "F0010_GENTI__NS0" <span class="codecomment">/* Gentium font id */</span>},
+   {TX_ATTR_FONT_WIDTH,    "55" <span class="codecomment">/* size in doc units */</span>},
+   {TX_ATTR_FONT_HEIGHT,   "55" <span class="codecomment">/* size in doc units */</span>},
+   {TX_ATTR_BODY_RGBT,     "A0000000"},
+   {TX_ATTR_SHADOW_RGBT,   "CCCCCC00"},
+   {TX_ATTR_SHADOW_DX,     "5" <span class="codecomment">/* dx offset in doc units */</span>},
+   {TX_ATTR_SHADOW_DY,     "5" <span class="codecomment">/* dy offset in doc units */</span>},
+   {TX_ATTR_SHADOW_EP,     "0308" <span class="codecomment">/* effect=03, parameter=08 */</span>},
+   {TX_ATTR_END,           "" <span class="codecomment">/* mandatory end-of-array */</span>}
+};
+
+txTextSetAttribs(text_doc, 0, 60, myattr_GentiumBigRedWithShadow, 0);
+</pre></div>
+
+<p>
+The result:
+</p>
+
+<p class="center">
+<img src="../images/step2c.gif" border="1" alt="Result of Step 2: Custom style applied to title" width="388" height="319" />
+</p>
+
+<p>
+The choice of the style name is entirely up to us. In the above example, we decided to call it <tt>myattr_GentiumBigRedWithShadow</tt> but we could have also selected a name that is more appropriate for our application (for example <tt>myattr_MainTitle</tt> or <tt>myattr_HeaderLevel1</tt>).
+</p>
+
+<p>
+Let's just say that we use the <tt>txTextSetAttribs</tt> function whenever we need to style or format a run of text. This is true regardless of what style/format we wish to apply or how long the text run is. For example, if we want to justify our entire document (which begins at character position 0 and ends at position 7711), we will proceed in the same way.
+</p>
+
+<div class="box_field"><pre>
+txTextSetAttribs(text_doc, 0, 7711, attrJustified, 0);
+</pre></div>
+
+<p>
+Finally, the result:
+</p>
+
+<p class="center">
+<img src="../images/step2d.gif" border="1" alt="Result of Step 2: Justified text" width="388" height="319" />
+</p>
+
+<p>
+Notice how all the paragraphs are now justified. Also, notice that applying one style (or format) over another existing style (or format) does not destroy that previously applied style (or format). The effect is cumulative.
+</p>
+
+
+<h3 id="toc_05_03">Step 3 (Optional): Automatic Text Flow</h3>
+
+<p>
+This step establishes an automatic text flow across linked textflow areas. This is a truly optional step. Not all applications will need or want to do this. However, applications that want to use more than a single textflow area may find this step useful.
+</p>
+
+<p>
+The idea here is that a single text document may span multiple textflow areas. The flow of text from one area to another is then handled automatically by D-Type Unicode Text Engine. Additionally, each textflow area can have its own independent position, size, page, and even a 3x3 transformation matrix.
+</p>
+
+<p>
+The list of textflow areas is defined by creating an array of <tt>DT_TX_TEXTFLOW_AREA</tt> structures. Each structure represents one textflow area and contains parameters such as the area's (x,&nbsp;y) location (in document units), width and height (in document units), type (rectangular, circular, diamond-like etc.), row spacing calculation method (e.g. typographical or mathematical), global text direction (e.g. Left-to-Right &amp; Top-to-Bottom, Top-to-Bottom &amp; Left-to-Right, Top-to-Bottom &amp; Right-to-Left etc.), bidirectional text display method (bidirectional reordering or bidirectional rotation), device mode (e.g. device dependent, device independent, mixed) and, optionally, a transformation matrix (affine or 2D perspective).
+</p>
+
+<p>
+For brevity, we will not describe each of the above parameters in details. These details are available in D-Type technical documentation. Instead, here is some sample code to illustrate the technique. We start by creating a few transformation matrices...
+</p>
+
+<div class="box_field"><pre>
+<span class="codecomment">/* affine transform matrix A */</span>&nbsp;
+DT_FLOAT tm_2x2_a[4] = {1.0, -0.3, 0.0, 1.4};
+<span class="codecomment">/* affine transform matrix B */</span>&nbsp;
+DT_FLOAT tm_2x2_b[4] = {1.3, 0.1, -0.4, 0.9};
+<span class="codecomment">/* 2D perspective transform matrix A */</span>&nbsp;
+DT_FLOAT tm_3x3_a[9] = {0.4, -0.006, -155.0,
+                        0.0,  0.555, -120.0,
+                        0.0, -0.001,    1.0};
+<span class="codecomment">/* 2D perspective transform matrix B */</span>&nbsp;
+DT_FLOAT tm_3x3_b[9] = {2.3,   0.0, 0.0,
+                        0.0,   1.9, 0.0,
+                        0.002, 0.0, 1.0};
+</pre></div>
+
+<p>
+...and then we create an array of <tt>DT_TX_TEXTFLOW_AREA</tt> structures:
+</p>
+
+<div class="box_field"><pre>
+DT_TX_TEXTFLOW_AREA textflow_areas[6] =
+{
+   { 10,  10,  800, 850,  TX_RECT,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM0, DV_NULL},
+   {200,  10,  650, 630,  TX_RECT,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM2, tm_2x2_a},
+   { 10,  10,  880, 880,  TX_CIRC,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM0, DV_NULL},
+   { 10, 280,  600, 690,  TX_RECT,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM2, tm_2x2_b},
+   {430, 130,  800, 630,  TX_RECT,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM3, tm_3x3_a},
+   { 10,  10, 1400, 480,  TX_RECT,  TX_TYPOROW, 0, 0, TX_LAY_DEVICE_B,  TX_TM3, tm_3x3_b},
+};
+</pre></div>
+
+<p>
+Once this is done, we simply call the <tt>txTextSetFlow</tt> function to pass our array to D-Type Unicode Text Engine:
+</p>
+
+<div class="box_field"><pre>
+txTextSetFlow(text_doc, 6, textflow_areas, 0);
+</pre></div>
+
+<p>
+And that's it. The result is 6 linked textflow areas with text flowing from one area to another. The following 6 illustrations demonstrate this:
+</p>
+
+
+<div class="clear" />
+
+<div class="box_left box_half">
+<p align="center">
+<strong>Textflow Area #0</strong><br /><img src="../images/step3a.gif" border="1" alt="Textflow Area #0" width="292" height="287" />
+</p>
+</div>
+
+<div class="box_right box_half">
+<p align="center">
+<strong>Textflow Area #1</strong><br /><img src="../images/step3b.gif" border="1" alt="Textflow Area #1" width="288" height="287" />
+</p>
+</div>
+
+<div class="clear" />
+
+<div class="box_left box_half">
+<p align="center">
+<strong>Textflow Area #2</strong><br /><img src="../images/step3c.gif" border="1" alt="Textflow Area #2" width="292" height="287" />
+</p>
+</div>
+
+<div class="box_right box_half">
+<p align="center">
+<strong>Textflow Area #3</strong><br /><img src="../images/step3d.gif" border="1" alt="Textflow Area #3" width="288" height="287" />
+</p>
+</div>
+
+<div class="clear" />
+
+<div class="box_left box_half">
+<p align="center">
+<strong>Textflow Area #4</strong><br /><img src="../images/step3e.gif" border="1" alt="Textflow Area #4" width="292" height="287" />
+</p>
+</div>
+
+<div class="box_right box_half">
+<p align="center">
+<strong>Textflow Area #5</strong><br /><img src="../images/step3f.gif" border="1" alt="Textflow Area #5" width="288" height="287" />
+</p>
+</div>
+
+<div class="clear" />
+
+
+<h3 id="toc_05_04">Step 4: Rendering (Output)</h3>
+
+<p>
+This is the final step. To draw a textflow area, we first call the <tt>txTextSetTransform</tt> function to set the transformation matrix for out text document. This matrix allows us to easily scale, stretch, rotate and/or skew our entire text document.
+</p>
+
+<div class="box_field"><pre>
+DT_TM2X2 tm = {{1.0, 0.0}, {0.0, 1.0}};
+txTextSetTransform(text_doc, tm);
+</pre></div>
+
+<p>
+Once the transformation matrix is set, we call the <tt>txTextDraw</tt> function and specify a few parameters: <tt>area</tt> which is the index of the textflow area, <tt>x</tt> and <tt>y</tt> offset of the textflow area on the screen and <tt>format</tt> and <tt>subformat</tt> which identify the type of the memory surface we are rendering to (e.g. grayscale, RGB, RGBA etc.)
+</p>
+
+<div class="box_field"><pre>
+DT_MDC dc_mem; <span class="codecomment">/* memory surface to render to */</span>&nbsp;
+
+dc_mem.w = 490;  <span class="codecomment">/* surface width in pixels */</span>&nbsp;
+dc_mem.h = 490,  <span class="codecomment">/* surface height in pixels */</span>&nbsp;
+dc_mem.m = DV_NULL; <span class="codecomment">/* txTextDraw will allocate bitmap's memory for us */</span>&nbsp;
+
+txTextDraw(text_doc, area, x, y, format, subformat, &amp;dc_mem, DV_NULL, 1);
+</pre></div>
+
+<p>
+This will create an RGB image with dimensions of 490x490 pixels. (<a href="http://www.d-type.com/files/output.png">View the output image.</a>)
+</p>
+
+<p>
+We can also save our text document in D-Type PowerDoc format. This then allows us to open our document in D-Type PowerDoc Editor, which is very useful for troubleshooting and inspection:
+</p>
+
+<div class="box_field"><pre>
+txTextSaveToFile(text_doc, 0, "text_doc.pdc");
+</pre></div>
+
+
+<h3 id="toc_05_05">Extra: Cursor Positioning, Selection Highlighting</h3>
+
+<p>
+In the above example, when we called <tt>txTextDraw</tt>, we set the last parameter to 1.
+</p>
+
+<div class="box_field"><pre>
+txTextDraw(text_doc, area, x, y, format, subformat, &amp;dc_mem, DV_NULL, 1);
+</pre></div>
+
+<p>
+This means that in addition to rendering the text, we also want to render the cursor and any highlighted text selections. For example, if a portion of the first paragraph had been selected while performing a text edit operation, the highlighted selection might have appeared as in this illustration:
+</p>
+
+<p class="center">
+<img src="../images/seltext.gif" border="1" alt="Highlighted text selection" width="388" height="319" />
+</p>
+
+<p>
+That's nice, but how do we enable text edit operations? It's quite simple actually. D-Type Unicode Text Engine provides a few functions to process mouse actions and text commands. For example, we can call the <tt>txTextHit</tt> function when the user clicks inside (or outside) a textflow area.
+</p>
+
+<div class="box_field"><pre>
+txTextHit(text_doc, hit_type, x, y, &amp;extent, flags);
+</pre></div>
+
+<p>
+The <tt>x</tt> and <tt>y</tt> parameters represent the (x,&nbsp;y) location of the mouse on the screen. The <tt>hit_type</tt> parameter is the type of mouse action and can be one of the following:
+</p>
+
+<div class="box_field"><pre>
+TX_HIT_RELEASE       <span class="codecomment">/* Mouse button released */</span>&nbsp;
+TX_HIT_MOVE          <span class="codecomment">/* Mouse move */</span>&nbsp;
+TX_HIT_NORMAL        <span class="codecomment">/* Normal mouse button click */</span>&nbsp;
+TX_HIT_DOUBLE        <span class="codecomment">/* Double mouse button click - selects a word */</span>&nbsp;
+TX_HIT_TRIPLE        <span class="codecomment">/* Triple mouse button click - selects a paragraph */</span>&nbsp;
+TX_HIT_SHIFT         <span class="codecomment">/* Mouse button click with the Shift key */</span>&nbsp;
+TX_HIT_CTRL          <span class="codecomment">/* Mouse button click with the Ctrl key */</span>&nbsp;
+TX_HIT_ALT           <span class="codecomment">/* Mouse button click with the Alt key */</span>&nbsp;
+TX_HIT_CTRLALT       <span class="codecomment">/* Mouse button click with the Ctrl+Alt key */</span>&nbsp;
+</pre></div>
+
+<p>
+When called, the <tt>txTextHit</tt> function will interpret the action as required. This may result in a cursor movement, selection highlighting or any other text edit operation that a mouse action can invoke. However, the end-user application does not need to know what operation, if any, was invoked.
+</p>
+
+<p>
+The only thing that the <tt>txTextHit</tt> function returns is the <tt>extent</tt> parameter. This is a rectangle that describes the smallest enclosing box of the screen area that needs to be repainted following a text edit operation. After that, we can call <tt>txTextDraw</tt> again and repaint the area defined by <tt>extent</tt>. It's that simple.
+</p>
+
+<p>
+Now, <tt>txTextHit</tt> is not the only function that can invoke text edit operations. We also have <tt>txTextCommand</tt> and <tt>txTextSetSelect</tt>. The first one, <tt>txTextCommand</tt>, allows us to send various text commands to D-Type Unicode Text Engine and looks as follows:
+</p>
+
+<div class="box_field"><pre>
+txTextCommand(text_doc, command, &amp;extent, flags);
+</pre></div>
+
+<p>
+Here the <tt>command</tt> parameter identifies the text command we wish to send and presently can be one of the following:
+</p>
+
+<div class="box_field"><pre>
+TX_CMD_RESET                      <span class="codecomment">/* Deselect all text and remove cursor */</span>&nbsp;
+</pre><pre>
+TX_CMD_SELECTWORD                 <span class="codecomment">/* Select entire word */</span>&nbsp;
+TX_CMD_SELECTWORDS                <span class="codecomment">/* Select entire words (extend existing selections) */</span>&nbsp;
+TX_CMD_SELECTLINE                 <span class="codecomment">/* Select entire line */</span>&nbsp;
+TX_CMD_SELECTPARAGRAPH            <span class="codecomment">/* Select entire paragraph */</span>&nbsp;
+TX_CMD_SELECTPARAGRAPHS           <span class="codecomment">/* Select entire paragraphs (extend existing selections) */</span>&nbsp;
+TX_CMD_SELECTAREA                 <span class="codecomment">/* Select entire text area */</span>&nbsp;
+TX_CMD_SELECTTEXT                 <span class="codecomment">/* Select all text */</span>&nbsp;
+</pre>
+<pre>
+TX_CMD_LEFT                       <span class="codecomment">/* Go to previous visible character */</span>&nbsp;
+TX_CMD_RIGHT                      <span class="codecomment">/* Go to next visible character */</span>&nbsp;
+TX_CMD_UP                         <span class="codecomment">/* Go to previous row */</span>&nbsp;
+TX_CMD_DOWN                       <span class="codecomment">/* Go to next row */</span>&nbsp;
+TX_CMD_SHIFT_LEFT                 <span class="codecomment">/* Shift + Go to previous visible character */</span>&nbsp;
+TX_CMD_SHIFT_RIGHT                <span class="codecomment">/* Shift + Go to next visible character */</span>&nbsp;
+TX_CMD_SHIFT_UP                   <span class="codecomment">/* Shift + Go to previous row */</span>&nbsp;
+TX_CMD_SHIFT_DOWN                 <span class="codecomment">/* Shift + Go to next row */</span>&nbsp;
+
+TX_CMD_SET                        <span class="codecomment">/* Set cursor to closest visible position */</span>&nbsp;
+TX_CMD_CURRCHAR                   <span class="codecomment">/* Go to current character */</span>&nbsp;
+TX_CMD_CURRTEXT                   <span class="codecomment">/* Same as TX_CMD_CURRCHAR but safer (checks bounds in case the text is changed externally) */</span>&nbsp;
+
+TX_CMD_PREVCHAR                   <span class="codecomment">/* Go to previous character */</span>&nbsp;
+TX_CMD_PREVWORD                   <span class="codecomment">/* Go to previous word */</span>&nbsp;
+TX_CMD_PREVLINE                   <span class="codecomment">/* Go to previous text line */</span>&nbsp;
+TX_CMD_PREVPARAGRAPH              <span class="codecomment">/* Go to previous paragraph */</span>&nbsp;
+TX_CMD_PREVAREA                   <span class="codecomment">/* Go to previous text area */</span>&nbsp;
+TX_CMD_NEXTCHAR                   <span class="codecomment">/* Go to next character */</span>&nbsp;
+TX_CMD_NEXTWORD                   <span class="codecomment">/* Go to next word */</span>&nbsp;
+TX_CMD_NEXTLINE                   <span class="codecomment">/* Go to next text line */</span>&nbsp;
+TX_CMD_NEXTPARAGRAPH              <span class="codecomment">/* Go to next paragraph */</span>&nbsp;
+TX_CMD_NEXTAREA                   <span class="codecomment">/* Go to next text area */</span>&nbsp;
+
+TX_CMD_SHIFT_PREVCHAR             <span class="codecomment">/* Shift + Go to previous character */</span>&nbsp;
+TX_CMD_SHIFT_PREVWORD             <span class="codecomment">/* Shift + Go to previous word */</span>&nbsp;
+TX_CMD_SHIFT_PREVLINE             <span class="codecomment">/* Shift + Go to previous text line */</span>&nbsp;
+TX_CMD_SHIFT_PREVPARAGRAPH        <span class="codecomment">/* Shift + Go to previous paragraph */</span>&nbsp;
+TX_CMD_SHIFT_PREVAREA             <span class="codecomment">/* Shift + Go to previous text area */</span>&nbsp;
+TX_CMD_SHIFT_NEXTCHAR             <span class="codecomment">/* Shift + Go to next character */</span>&nbsp;
+TX_CMD_SHIFT_NEXTWORD             <span class="codecomment">/* Shift + Go to next word */</span>&nbsp;
+TX_CMD_SHIFT_NEXTLINE             <span class="codecomment">/* Shift + Go to next text line */</span>&nbsp;
+TX_CMD_SHIFT_NEXTPARAGRAPH        <span class="codecomment">/* Shift + Go to next paragraph */</span>&nbsp;
+TX_CMD_SHIFT_NEXTAREA             <span class="codecomment">/* Shift + Go to next text area */</span>&nbsp;
+
+TX_CMD_STARTWORD                  <span class="codecomment">/* Go to start of word */</span>&nbsp;
+TX_CMD_STARTLINE                  <span class="codecomment">/* Go to start of text line */</span>&nbsp;
+TX_CMD_STARTPARAGRAPH             <span class="codecomment">/* Go to start of paragraph */</span>&nbsp;
+TX_CMD_STARTAREA                  <span class="codecomment">/* Go to start of text area */</span>&nbsp;
+TX_CMD_STARTTEXT                  <span class="codecomment">/* Go to start of text */</span>&nbsp;
+TX_CMD_ENDWORD                    <span class="codecomment">/* Go to end of word */</span>&nbsp;
+TX_CMD_ENDLINE                    <span class="codecomment">/* Go to end of text line */</span>&nbsp;
+TX_CMD_ENDPARAGRAPH               <span class="codecomment">/* Go to end of paragraph */</span>&nbsp;
+TX_CMD_ENDAREA                    <span class="codecomment">/* Go to end of text area */</span>&nbsp;
+TX_CMD_ENDTEXT                    <span class="codecomment">/* Go to end of text */</span>&nbsp;
+
+TX_CMD_SHIFT_STARTWORD            <span class="codecomment">/* Shift + Go to start of word */</span>&nbsp;
+TX_CMD_SHIFT_STARTLINE            <span class="codecomment">/* Shift + Go to start of text line */</span>&nbsp;
+TX_CMD_SHIFT_STARTPARAGRAPH       <span class="codecomment">/* Shift + Go to start of paragraph */</span>&nbsp;
+TX_CMD_SHIFT_STARTAREA            <span class="codecomment">/* Shift + Go to start of text area */</span>&nbsp;
+TX_CMD_SHIFT_STARTTEXT            <span class="codecomment">/* Shift + Go to start of text */</span>&nbsp;
+TX_CMD_SHIFT_ENDWORD              <span class="codecomment">/* Shift + Go to end of word */</span>&nbsp;
+TX_CMD_SHIFT_ENDLINE              <span class="codecomment">/* Shift + Go to end of text line  */</span>&nbsp;
+TX_CMD_SHIFT_ENDPARAGRAPH         <span class="codecomment">/* Shift + Go to end of paragraph */</span>&nbsp;
+TX_CMD_SHIFT_ENDAREA              <span class="codecomment">/* Shift + Go to end of text area */</span>&nbsp;
+TX_CMD_SHIFT_ENDTEXT              <span class="codecomment">/* Shift + Go to end of text */</span>&nbsp;
+</pre></div>
+
+<p>
+As before, the <tt>extent</tt> parameter is a rectangle that describes the smallest enclosing box of the screen area that needs to be repainted.
+</p>
+
+<p>
+The second function, <tt>txTextSetSelect</tt>, is a little bit more explicit. This function allows us to set a text selection. The function is as follows:
+</p>
+
+<div class="box_field"><pre>
+txTextSetSelect(text_doc, first_char[], last_char[], array_len, &amp;extent, flags);
+</pre></div>
+
+<p>
+Here <tt>first_char</tt> and <tt>last_char</tt> is an array of start and end positions of the selected character range(s) while <tt>extent</tt> has the same meaning as before.
+</p>
+
+<p>
+Finally, we have two more functions: <tt>txTextGetSelect</tt> and <tt>txTextCopy</tt>. The <tt>txTextGetSelect</tt> function allows us to retrieve an array of start and end positions of the currently selected character range(s) and looks as follows:
+</p>
+
+<div class="box_field"><pre>
+txTextGetSelect(text_doc, first_char[], last_char[], max_array_len);
+</pre></div>
+
+<p>
+The <tt>txTextCopy</tt> function allows us to extract plain text from the currently selected character range(s) and copy it to a user-supplied buffer. The function looks as follows:
+</p>
+
+<div class="box_field"><pre>
+txTextCopy(text_doc, buffer, max_buffer_len, buffer_format);
+</pre></div>
+
+<p>
+And finally the <tt>txTextPaste</tt> function allows us to paste another Unicode text document into the currently selected character range. This function looks as follows:
+</p>
+
+<div class="box_field"><pre>
+txTextPaste(text_doc, text_doc2, flags);
+</pre></div>
+
+<p>
+Here <tt>text_doc</tt> is the destination text document and <tt>text_doc2</tt> is the source text document.
+</p>
+
+
+<p>For more details see the <a href="../funcs/index.htm">C/C++ Functions</a> section in D-Type Text Engine Manual.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

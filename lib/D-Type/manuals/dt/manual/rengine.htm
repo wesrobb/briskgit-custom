@@ -1,0 +1,79 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Grayscale Rasterizer Overview</h1>
+
+<p>D-Type Grayscale Rasterizer (or simply D-Type Rasterizer) represents the foundation of D-Type Engine. Its function is to render high quality anti-aliased grayscale bitmaps using an arbitrary user-supplied polygon description as the input. During the rasterization process, the coverage of the polygon on each pixel in the bitmap is converted to a shade (intensity) of gray. The amount of coverage is directly related to the intensity of gray. That is, pixels that are not covered by the polygon become white, partially covered pixels become gray (more coverage means more gray) while completely covered pixels become black. This process is what creates high quality anti-aliased bitmaps with smooth edges.</p>
+
+<p>D-Type Rasterizer additionally improves quality by utilizing subpixel accuracy and sophisticated anti-aliasing algorithms that support up to 256 shades of gray.</p>
+
+<p>D-Type Rasterizer is heavily optimized for speed and, internally, makes no use of the floating-point math. This, combined with many other optimizations, makes D-Type Rasterizer almost certainly the fastest grayscale rasterizer in the world.</p>
+
+
+<p>As of version 4.0.4.0, D-Type Engine ships with two different rasterizer: the <em>Ultra-Fast Grayscale Rasterizer</em> and the <em>Perfect Grayscale Rasterizer</em>. D-Type Engine version 4.6.1.1 adds yet two more rasterizers: the <em>Universal Rasterizer &mdash; Black &amp; White</em> and the <em>Universal Rasterizer &mdash; Grayscale</em>. Finally, D-Type Engine version 5 introduces the <em>Extreme Grayscale Rasterizer</em>, a special version of the Perfect Grayscale Rasterizer.</p>
+
+<p>The following are the main characteristics of each rasterizer:</p>
+
+<ol>
+
+<li>
+<p>The <strong>Ultra-Fast Grayscale Rasterizer</strong> is D-Type's fastest grayscale rasterizer. Generally, when rendering a shape of width W and height H, its rendering speed S is a function of the largest of the two values. Mathematically, this can be expressed as:</p>
+
+<p class="center">S = <em>f</em>(MAX(W, H))</p>
+
+<p>Although this rasterizer uses an approximative formula to calculate the coverage of the outline on each pixel, this formula is still very accurate and well suited for rendering shapes and text of very high quality. In fact, this was the only rasterizer available before the release of D-Type Engine 4.0.4.0.</p>
+</li>
+
+<li>
+<p>The <strong>Perfect Grayscale Rasterizer</strong> is D-Type's most accurate grayscale rasterizer. Generally, when rendering a shape of width W and height H, its rendering speed S is a function of the sum of the two values. Mathematically, this can be expressed as:</p>
+
+<p class="center">S = <em>f</em>(W + H)</p>
+
+<p>With virtually all vectorial shapes, this rasterizer calculates the exact coverage of the outline on each pixel. In other words, this is a perfect anti-aliaser. As a results, the rendering quality of this rasterizer is absolutely amazing.</p>
+</li>
+
+<li>
+<p>The <strong>Universal Rasterizer &mdash; Grayscale</strong> is our "sharp" grayscale rasterizer. It is not a perfect anti-aliaser, however its accuracy and rendering speed is very close to the Perfect Grayscale Rasterizer's. We call it "sharp" because it is configured to produce sharper looking text than the Ultra-Fast Grayscale Rasterizer or the Perfect Grayscale Rasterizer. It accomplishes this by forcing horizontal and vertical stems in characters to snap to whole pixel boundaries. However, the sharper looking text is also more distorted and less faithful to the original font design than with the Ultra-Fast or Perfect Rasterizer.</p>
+</li>
+
+<li>
+<p>The <strong>Universal Rasterizer &mdash; Black &amp; White</strong> is a special rasterizer that only provides two levels of gray: black and white. This rasterizer is intended for rendering shapes and text on devices that have limited support or are not capable of displaying any shades of gray (e.g. black and white printers or monochrome displays). The Universal Rasterizer &mdash; Black &amp; White features excellent dropout prevention to ensure that small or narrow features do not disappear completely when rendered using only two levels of gray. This is also a very fast rasterizer; its rendering speed S can be approximately expressed as:</p>
+
+<p class="center">S = <em>f</em>(W + H) when dropout prevention is enabled</p>
+<p class="center">S = <em>f</em>(MAX(W, H)) when dropout prevention is disabled</p>
+
+<p>Although the Universal Rasterizer &mdash; Black &amp; White only produces two levels of gray, black and white, its output is still represented as an 8-bpp grayscale bitmap. This way applications do not need to handle the output of this rasterizer any differently than if it was produced by one of the above grayscale rasterizers. Moreover, this allows applications to post-manipulate the bitmap's 8-bit grayscale data and use various quality filters on these bitmaps just as if they were standard 8-bpp grayscale bitmaps (for example, see the <a href="../funcs/dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a> function).</p>
+
+</li>
+
+<li>
+<p>The <strong>Extreme Grayscale Rasterizer</strong> is a special version of the Perfect Grayscale Rasterizer. It operates the same way as the Perfect Grayscale Rasterizer but further improves the performance by allocating only one contiguous memory block (buffer) per rasterization call.</p>
+</li>
+
+</ol>
+
+<p>In practice, the Perfect Rasterizer is just a little bit slower than the Ultra-Fast Rasterizer while its quality is a little bit higher than of the Ultra-Fast Rasterizer. This means that applications that require the fastest possible rendering speed (e.g. games and animations) may want to initialize and use the Ultra-Fast Rasterizer. Similarly, applications that require the best possible quality (e.g. text renderers) may want to initialize and use the Perfect Rasterizer. However, both rasterizers are highly recommended and well suited for both purposes. Unless explicitly specified, the default rasterizer is the Ultra-Fast Rasterizer.</p>
+
+<p>For details on how to specify the rasterizer during the initialization of D-Type Engine, please review the structure of the <a href="inifiles.htm#inf">dtype.inf</a> file in the <a href="inifiles.htm">Initialization Files</a> section of this document. For details on how to change the rasterizer at run-time, please see the <a href="../funcs/dtRasterizerRealloc.htm">dtRasterizerRealloc</a> function.</p>
+
+
+<p>D-Type Rasterizer plays a key role in <a href="fengine.htm">D-Type Font Engine</a> and <a href="sengine.htm">D-Type Shape Engine</a>. Whether your application uses D-Type Font Engine to render text or individual glyphs, or just D-Type Shape Engine to render custom shapes, D-Type Rasterizer is in charge of the rasterization process.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

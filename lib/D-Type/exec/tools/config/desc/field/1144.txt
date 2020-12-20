@@ -1,0 +1,7 @@
+An array containing Y coordinates of segment's control points (variable length, 2 bytes per coordinate).
+
+{strong}Sample values:{/strong}
+
+"0, 100, 350, 200"
+"200, 200, -200, -200, 100"
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"

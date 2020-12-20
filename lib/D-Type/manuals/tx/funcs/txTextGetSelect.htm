@@ -1,0 +1,71 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextGetSelect</h2><div class="box_prototype"><strong>
+DT_SWORD txTextGetSelect(DT_TXDOC text_doc, DT_SLONG first_char[], DT_SLONG last_char[], DT_SLONG max_array_len)</strong></div><br /><strong>Short Description:</strong> <em>Get text selection(s)</em><br /><br />
+
+<p>This function retrieves the boundaries of the active text selection(s).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>first_char</em></p>
+</td><td>
+<p>An output array of start positions of the selected character range(s).</p>
+</td></tr>
+
+<tr><td>
+<p><em>last_char</em></p>
+</td><td>
+<p>An output array of end positions of the selected character range(s).</p>
+</td></tr>
+
+<tr><td>
+<p><em>max_array_len</em></p>
+</td><td>
+<p>The size of the <em>first_char</em> and <em>last_char</em> arrays, i.e. the maximum number of selected character ranges these two arrays can hold.</p>
+<p>When the text document is configured to support only a single selected character range (i.e. a single text selection), it is sufficient for <em>max_array_len</em> to be 1. When the text document is enabled to support multiple (non-contiguous) or block (rectangular) text selections, your application should use larger <em>first_char</em> and <em>last_char</em> arrays and set the <em>max_array_len</em> value accordingly.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>When the text document is configured to support only a single selected character range (i.e. a single text selection), this value will be 1. When the text document is enabled to support multiple (non-contiguous) or block (rectangular) text selections, this value will be the number of currently selected character ranges. See the <a href="txTextSetParams.htm">txTextSetParams</a> function for details on how to enable multiple and block selections. The value 0 means that there are no selected character ranges in the text document.</p>
+
+<h3>Note</h3>
+<p>In D-Type Text Engine API, the cursor is a single text selection with equal start and end position (i.e. the length of the selected character range is zero).</p>
+
+<h3>Related Functions</h3>
+<p><a href="txTextSetSelect.htm">txTextSetSelect</a></p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

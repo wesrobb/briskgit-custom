@@ -1,0 +1,13 @@
+DT_ID_SLONG obj[2];
+
+obj[0] = pdObjAdd(pd, 0, "TextLine Shadow Style");
+{strong}obj[1] = pdObjAdd(pd, 0, "TextLine Shadow");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "80808078", PD_HEX);
+pdPropAdd(pd, obj[0], pdEP, "030A", PD_HEX);
+
+/* Properties for object 1 */
+{strong}pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[1], pdShadowDx, "5", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[1], pdShadowDy, "5", PD_WORD_SIGNED);{/strong}

@@ -1,0 +1,8 @@
+Text encoding format. If this property is not specified, then the value 0 (Unicode character codes) is assumed.
+
+{strong}Supported values:{/strong}
+
+0 = Unicode character codes
+1 = Glyph codes (font dependent)
+2 = Unicode PowerChar codes - reserved for future use
+3 = PowerGlyph codes (font dependent)

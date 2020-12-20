@@ -1,0 +1,3 @@
+This object holds an entire outline font file. It is used for storing (embedding) D-Type, TrueType, OpenType, Type 1, PostScript Type 3 or Bare CFF fonts in the document.
+
+{strong}Designated Rendering Function:{/strong} NONE

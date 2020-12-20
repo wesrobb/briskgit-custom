@@ -1,0 +1,401 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Text Layout (Automatic)</h2>
+<h3 id="overview">Overview</h3>
+This objects holds parameters that provide precise control over automatic text layout. As such, the Automatic Text Layout object can be used to build the following text objects: <a href="101.htm">Text Line</a>, <a href="102.htm">Text Arc</a>, <a href="130.htm">Text Path</a>, <a href="103.htm">Text Area</a>, <a href="104.htm">Rich Text Line</a>, <a href="105.htm">Rich Text Arc</a>, <a href="131.htm">Rich Text Path</a>, <a href="106.htm">Rich Text Area</a>.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdAlign"><em><span class="field">pdAlign</span> (1019)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Alignment of a text line.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Left: The text line is aligned left.<br />
+<br />
+1 = Center: The text line is centered.<br />
+<br />
+2 = Right: The text line is aligned right.<br />
+<br />
+3 = Justify Type A / Left: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.<br />
+<br />
+4 = Justify Type B / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align left.<br />
+<br />
+5 = Justify Type A / Center: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.<br />
+<br />
+6 = Justify Type B / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then center.<br />
+<br />
+7 = Justify Type A / Right: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.<br />
+<br />
+8 = Justify Type B / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align right.<br />
+<br />
+9 = Justify Type B / Justify Type A / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.<br />
+<br />
+10 = Justify Type B / Justify Type A / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.<br />
+<br />
+11 = Justify Type B / Justify Type A / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAlignEnd"><em><span class="field">pdAlignEnd</span> (1062)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Alignment of the last text line in a paragraph.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Left: The text line is aligned left.<br />
+<br />
+1 = Center: The text line is centered.<br />
+<br />
+2 = Right: The text line is aligned right.<br />
+<br />
+3 = Justify Type A / Left: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.<br />
+<br />
+4 = Justify Type B / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align left.<br />
+<br />
+5 = Justify Type A / Center: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.<br />
+<br />
+6 = Justify Type B / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then center.<br />
+<br />
+7 = Justify Type A / Right: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.<br />
+<br />
+8 = Justify Type B / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then align right.<br />
+<br />
+9 = Justify Type B / Justify Type A / Left: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align left.<br />
+<br />
+10 = Justify Type B / Justify Type A / Center: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.<br />
+<br />
+11 = Justify Type B / Justify Type A / Right: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then align right.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdKerning"><em><span class="field">pdKerning</span> (1020)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Text kerning.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Disable Kerning<br />
+1 = Enable Standard Kerning<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdSpacingLetter"><em><span class="field">pdSpacingLetter</span> (1021)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Amount of spacing to be added after a character or glyph, in document units. Both positive and negative values are valid.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = character spacing of 10 document units<br />
+40 = character spacing of 40 document units<br />
+-10 = character spacing of -10 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdSpacingRow"><em><span class="field">pdSpacingRow</span> (1022)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p>
+Amount of spacing to be added after a text line, in document units.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = spacing of 10 document units<br />
+15 = spacing of 15 document units<br />
+-5 = spacing of -5 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdSpacingBaseline"><em><span class="field">pdSpacingBaseline</span> (1112)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p>
+Amount of spacing from the previous baseline, in document units. This provides a means of manually setting the line height in text areas and rich text areas. This value must be non-negative. The value -1 is special and indicates that the line height is to be calculated automatically.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+48 = spacing of 48 document units<br />
+16 = spacing of 16 document units<br />
+-1 = calculate the baseline spacing automatically<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPositioning"><em><span class="field">pdPositioning</span> (1053)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="016.htm#pdPositioning">Text Layout (Manual)</a></small></p>
+<p>
+Sets one of the positioning modes. The positioning mode tells the Typesetter how to position glyphs. See D-Type Standard Engine Manual for details.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Engine Default A (same as 8)<br />
+<br />
+1 = Engine Default B (same as 9)<br />
+<br />
+2 = User Default A (same as 4)<br />
+<br />
+3 = User Default B (same as 5)<br />
+<br />
+4 = Frac X, Frac Y<br />
+Both X and Y coordinates of origin points are placed at fractional positions. As a result, spacing between characters looks reasonably consistent in both the horizontal and vertical direction.<br />
+<br />
+5 = Frac X, Int Y<br />
+X coordinates of origin points are placed at fractional positions, while Y coordinates are snapped to the closest whole pixel positions. As a result, spacing between characters looks reasonably consistent in horizontal direction and somewhat inconsistent in vertical direction.<br />
+<br />
+6 = Int X, Frac Y<br />
+X coordinates of origin points are snapped to the closest whole pixel positions, while Y coordinates are placed at fractional positions. As a result, spacing between characters looks somewhat inconsistent in horizontal direction and reasonably consistent in vertical direction.<br />
+<br />
+7 = Int X, Int Y<br />
+Both X and Y coordinates of origin points are snapped to the closest whole pixel positions. As a result, spacing between characters looks somewhat inconsistent in both the horizontal and vertical direction.<br />
+<br />
+8 = Auto A<br />
+Same as 4 for standard font sizes, but disables fractional pixel positioning in the X and/or Y direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.<br />
+<br />
+9 = Auto B<br />
+Same as 5 for standard font sizes, but disables fractional pixel positioning in the X direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.<br />
+<br />
+The above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.<br />
+<br />
+When rendering Text Lines, Rich Text Lines, Text Areas and Rich Text Areas, the following values are also supported:<br />
+<br />
+10 = Enhanced Frac X, Frac Y<br />
+This positioning mode is similar to mode 4 but designed to further enhance spacing between glyphs based on the context. This mode can noticeably improve glyph spacing when compared with mode 4 and is highly recommended.<br />
+<br />
+11 = Enhanced Frac X, Int Y<br />
+This positioning mode is similar to mode 5 but designed to further enhance spacing between glyphs based on the context. This mode can noticeably improve glyph spacing when compared with mode 5 and is highly recommended.<br />
+<br />
+12 = Enhanced Int X, Frac Y<br />
+This positioning mode is similar to mode 6 but designed to further enhance spacing between glyphs based on the context. This mode can significantly improve glyph spacing when compared with mode 6 and is highly recommended.<br />
+<br />
+13 = Enhanced Int X, Int Y<br />
+This positioning mode is similar to mode 7 but designed to further enhance spacing between glyphs based on the context. This mode can significantly improve glyph spacing when compared with mode 7 and is highly recommended.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdHinting"><em><span class="field">pdHinting</span> (1100)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="016.htm#pdHinting">Text Layout (Manual)</a></small></p>
+<p>
+Sets one of the hinting modes. The hinting mode tells the Typesetter how to interact with the pixel grid when rendering glyphs. See D-Type Standard Engine Manual for details.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Engine Default A (same as 8)<br />
+<br />
+1 = Engine Default B (same as 9)<br />
+<br />
+2 = User Default A (same as 4)<br />
+<br />
+3 = User Default B (same as 6)<br />
+<br />
+4 = X On, Y On<br />
+Both X and Y edges are snapped to the pixel grid. As a result, both X and Y edges look reasonably sharp.<br />
+<br />
+5 = X On, Y Off<br />
+Only X edges are snapped to the pixel grid. As a result, X edges look reasonably sharp, while Y edges look somewhat blurry.<br />
+<br />
+6 = X Off, Y On<br />
+Only Y edges are snapped to the pixel grid. As a result, X edges look somewhat blurry, while Y edges look reasonably sharp.<br />
+<br />
+7 = X Off, Y Off<br />
+Neither X nor Y edges are snapped to the pixel grid. As a result, both X and Y edges look somewhat blurry.<br />
+<br />
+8 = Auto A<br />
+Same as 4 for standard font sizes, but disables hinting in the X and/or Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.<br />
+<br />
+9 = Auto B<br />
+Same as 6 for standard font sizes, but disables hinting in the Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.<br />
+<br />
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDx"><em><span class="field">pdDx</span> (1027)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="013.htm#pdDx">Group Member</a></small></p>
+<p>
+Horizontal offset in document units.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDy"><em><span class="field">pdDy</span> (1028)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="013.htm#pdDy">Group Member</a></small></p>
+<p>
+Vertical offset in document units.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdSpacingFont"><em><span class="field">pdSpacingFont</span> (1090)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Amount of spacing to be added after a character or glyph, in font units. Both positive and negative values are valid.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdRelativeDirection"><em><span class="field">pdRelativeDirection</span> (1074)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="016.htm#pdRelativeDirection">Text Layout (Manual)</a></small></p>
+<p>
+Text direction relative to the global text direction.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+0 = Same as global text direction<br />
+1 = Opposite to global text direction<br />
+2 = Same as global text direction (nested, level 1)<br />
+3 = Opposite to global text direction (nested, level 1)<br />
+4 = Same as global text direction (nested, level 2)<br />
+5 = Opposite to global text direction (nested, level 2)<br />
+6 = Same as global text direction (nested, level 3)<br />
+7 = Opposite to global text direction (nested, level 3)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdRelativeOrientation"><em><span class="field">pdRelativeOrientation</span> (1105)</em> &nbsp; <small class="label">PD_LONG_UNSIGNED</small></h4>
+<p>
+Relative text orientation (Portrait or Landscape) and baseline, for horizontal and vertical text layout.<br />
+<br />
+This is a 32-bit value that consists of the following 4 bytes:<br />
+<br />
+<u>BYTE 3</u> - Reserved for future use. All bits in this byte must be set to 0.<br />
+<br />
+<u>BYTE 2</u> - Relative text orientation and baseline for vertical text layout (text in columns). The bits in this byte are interpreted as follows:<br />
+<br />
+Bit 7: Relative text orientation - If unset (0), the orientation is Portrait. If set (1), the orientation is Landscape. Portrait means that the glyph's x-axis (in font design space) is parallel with the baseline. Landscape means that the glyph's x-axis (in font design space) is perpendicular to the baseline.<br />
+Bit 6: Reserved for future use - Must be set to 0.<br />
+Bit 5: Reserved for future use - Must be set to 0.<br />
+Bit 4: Reserved for future use - Must be set to 0.<br />
+Bit 3: Reserved for future use - Must be set to 0.<br />
+Bit 2: Reserved for future use - Must be set to 0.<br />
+Bit 1 &amp; 0: Baseline - These two bits represent a single 2-bit value which, depending on the relative text orientation, identifies one of the 4 available baselines.<br />
+<br />
+In Portrait Mode (when Bit 7 is unset), the available baselines are:<br />
+<br />
+00 (0) - Default - coincides with glyph's zero y coordinate (in font design space).<br />
+01 (1) - Shifted (Middle) - above the Default baseline, shifted by an amount that equals half the distance between the font's ascend and descend.<br />
+10 (2) - Top - coincides with glyph's ascend (in font design space).<br />
+11 (3) - Bottom - coincides with glyph's descend (in font design space).<br />
+<br />
+In Landscape Mode (when Bit 7 is set), the available baselines are:<br />
+<br />
+00 (0) - Default - coincides with glyph's mid-x point (in font design space). The definition of the mid-x point depends on the currently active algorithm for calculating the glyph mid-x points in vertical text layout. If the active algorithm is "Glyph Width" the mid-x point is half way between the glyph's minimum and maximum x coordinate. If the active algorithm is "Advance Width" the mid-x point is half way between the glyph's left and right side-bearing. Note that the left side-bearing coincides with the x coordinate 0 while the right side-bearing coincides with the glyph's advance width.<br />
+01 (1) - Shifted (Left) - to the left of the Default baseline, shifted by an amount that equals half the font's em square.<br />
+10 (2) - Center - same as the Default baseline.<br />
+11 (3) - Right - to the right of the Default baseline, shifted by an amount that equals half the font's em square.<br />
+<br />
+<u>BYTE 1</u> - Relative text orientation and baseline for horizontal text layout (text in rows). The bits in this byte are interpreted precisely the same as in BYTE 2. The only difference is that they control the relative text orientation and baseline in horizontal text layout (e.g. when text is laid out in rows), unlike the bits in BYTE 2 which control the relative text orientation and baseline in vertical text layout (e.g. when text is laid out in columns).<br />
+<br />
+<u>BYTE 0</u> - Flags and presets. This byte contains the following bits:<br />
+<br />
+Bit 7: Advanced Configuration Mode - If unset (0), Advanced Configuration Mode is off. If set (1), Advanced Configuration Mode is on. In Advanced Configuration Mode, bits in BYTE 1 and 2 are respected and presets are ignored. When Advanced Configuration Mode is off, bits in BYTE 1 and 2 are ignored and instead presets are used. See below the list of available presets.<br />
+Bit 6: Reserved for future use - Must be set to 0.<br />
+Bit 5: Reserved for future use - Must be set to 0.<br />
+Bit 4: Flip Mode - If unset (0), Flip Mode is off. If set (1), Flip Mode is on. Flip Mode simply rotates glyphs 180 degrees. This bit is always respected i.e. regardless of whether Advanced Configuration Mode is on or off.<br />
+Bit 3, 2, 1 &amp; 0: Presets - These four bits represent a single 4-bit value, which identifies one of the 16 available presets.<br />
+<br />
+0000 (0) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Portrait + Default Baseline<br />
+0001 (1) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Landscape + Default Baseline<br />
+0010 (2) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Landscape + Default Baseline<br />
+0011 (3) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Portrait + Default Baseline<br />
+0100 (4) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Portrait + Shifted Baseline<br />
+0101 (5) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Landscape + Shifted Baseline<br />
+0110 (6) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Landscape + Shifted Baseline<br />
+0111 (7) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Portrait + Shifted Baseline<br />
+1000 (8) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Portrait + Shifted Baseline<br />
+1001 (9) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Landscape + Shifted Baseline<br />
+1010 (10) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Landscape + Shifted Baseline<br />
+1011 (11) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Portrait + Shifted Baseline<br />
+1100 (12) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Portrait + Default Baseline<br />
+1101 (13) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Landscape + Default Baseline<br />
+1110 (14) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Landscape + Default Baseline<br />
+1111 (15) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Portrait + Default Baseline<br />
+<br />
+Value 0010 (2) is particularly useful for Unicode scripts that are typically written in portrait mode when the text is in horizontal layout (rows) and landscape mode when the text is in vertical layout (columns). Such scripts primarily include CJK scripts (Chinese/Japanese/Korean) and sometimes Latin or Cyrillic.<br />
+<br />
+Value 1000 (8) is particularly useful for Unicode scripts that are always written in portrait mode, regardless of whether the text is in horizontal layout (rows) or vertical layout (columns). Such scripts include Arabic, Indic or any scripts that have horizontally joined characters. Value 8 also works well for Latin or Cyrillic scripts and can be applied to mirrored Unicode characters such as the parenthesis, square and curly brackets etc.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0" = Preset #0: Portrait orientation and Default Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.<br />
+<br />
+"6" = Preset #6: Portrait orientation and Shifted Baseline with horizontal layout; Landscape orientation and Shifted Baseline with vertical layout.<br />
+<br />
+"8" = Preset #8: Portrait orientation and Default Baseline with horizontal layout; Portrait orientation and Shifted Baseline with vertical layout.<br />
+<br />
+"18" = Flip Mode &amp; Preset #2: Glyphs are rotated 180 degrees; Portrait orientation and Default Baseline with horizontal layout; Landscape orientation and Default Baseline with vertical layout.<br />
+<br />
+"22" = Flip Mode &amp; Preset #6: Glyphs are rotated 180 degrees; Portrait orientation and Shifted Baseline with horizontal layout; Landscape orientation and Shifted Baseline with vertical layout.<br />
+<br />
+"896" = Advanced Configuration: Portrait orientation and Bottom Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.<br />
+<br />
+"912" = Flip Mode &amp; Advanced Configuration: Glyphs are rotated 180 degrees; Portrait orientation and Bottom Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.<br />
+<br />
+"33664" = Advanced Configuration: Landscape orientation and Right Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.<br />
+<br />
+"33680" = Flip Mode &amp; Advanced Configuration: Glyphs are rotated 180 degrees; Landscape orientation and Right Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdSpacingFactor"><em><span class="field">pdSpacingFactor</span> (1115)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Line Height Multiple, multiplied by 1024.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+512 = 0.5<br />
+1024 = 1.0<br />
+1536 = 1.5<br />
+2048 = 2.0<br />
+2560 = 2.5<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdVAlignRow"><em><span class="field">pdVAlignRow</span> (1126)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+Vertical alignment of glyphs/characters within the current text row.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Baseline - character is vertically aligned with the baseline (the default behaviour for most programs)<br />
+1 = Top - character's ascender is vertically aligned with the top edge of the current text row<br />
+2 = Middle - character's mid y point (a point that is half way between the ascender and descender) is vertically aligned with the mid y point of the current text row<br />
+3 = Bottom - character's descender is vertically aligned with the bottom edge of the current text row<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Text Layout - Automatic");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdPropAdd(pd, obj[0], pdSpacingRow, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[0], pdSpacingLetter, "10", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[0], pdKerning, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdAlign, "3", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdHinting, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdPositioning, "1", PD_BYTE_UNSIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Text Layout - Automatic");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + i(pdSpacingRow, 5);<br />
+obj_0 + i(pdSpacingLetter, 10);<br />
+obj_0 + i(pdKerning, 1);<br />
+obj_0 + i(pdAlign, 3);<br />
+obj_0 + i(pdHinting, 1);<br />
+obj_0 + i(pdPositioning, 1);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,7 @@
+This object represents a true mathematical circle or ellipse.
+
+While constructing the true circle/ellipse object, an optional shadow and/or outline may be specified.
+
+{strong}Designated Rendering Function:{/strong} pdDrawTrueEllipse (7), pdDrawTrueCircle (7)
+
+Note: Although pdBodyPtr is a key link, it is not mandatory. This means it is possible to construct a true mathematical circle or an ellipse that has no body, only an outline and/or a shadow.

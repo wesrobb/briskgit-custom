@@ -1,0 +1,224 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Line Definition (Full)</h2>
+<h3 id="overview">Overview</h3>
+This object represents a full set of line definition properties. It is used as a building block when constructing the <a href="111.htm">Line</a> object.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdStylePtr"><em><span class="field">pdStylePtr</span> (1002)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="002.htm#pdStylePtr">Shadow Definition</a>, <a href="012.htm#pdStylePtr">Outline Definition</a>, <a href="015.htm#pdStylePtr">Line Definition (Standard)</a>, <a href="017.htm#pdStylePtr">Line Definition (Minimal)</a>, <a href="120.htm#pdStylePtr">Gradient</a></small></p>
+<p>
+Link to the <a href="001.htm">Surface Definition</a> object.<br />
+<br />
+This link supplies style attributes. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdLineThickness"><em><span class="field">pdLineThickness</span> (1003)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="012.htm#pdLineThickness">Outline Definition</a>, <a href="015.htm#pdLineThickness">Line Definition (Standard)</a>, <a href="017.htm#pdLineThickness">Line Definition (Minimal)</a></small></p>
+<p>
+Line, outline or underline thickness in document units, multiplied by 100. Must be positive, except when used for glyph or character outlines. In this case, a negative value indicates that the glyph/character outline should be expanded rather than thickened.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+350 = Line (or outline) thickness of 3.5 document units<br />
+80 = Line (or outline) thickness of 0.8 document units<br />
+-275 = Outline expansion of 2.75 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineSegment"><em><span class="field">pdLineSegment</span> (1052)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="012.htm#pdLineSegment">Outline Definition</a>, <a href="015.htm#pdLineSegment">Line Definition (Standard)</a>, <a href="017.htm#pdLineSegment">Line Definition (Minimal)</a></small></p>
+<p>
+This property is used to subdivide lines and outlines into a number of smaller segments so that the line (or outline) appears dashed. The value of this property indicates the desired length of a single segment, in document units. Each segment then consists of a dash and a gap. The dash size can be specified via the pdLineDashSize property. If the dash size is not specified, then the default dash size will be used, which is approximately two thirds of the segment's length.<br />
+<br />
+This property should be set to zero if segments are not desired. In this case the line (or outline) will appear solid and continuous.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+30 = a segment that is 30 document units long<br />
+0 = no segments (line/outline is solid and continuous)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineDashSize"><em><span class="field">pdLineDashSize</span> (1156)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="012.htm#pdLineDashSize">Outline Definition</a>, <a href="015.htm#pdLineDashSize">Line Definition (Standard)</a>, <a href="017.htm#pdLineDashSize">Line Definition (Minimal)</a></small></p>
+<p>
+The size of the dash, a quantity in the 0 - 65,535 range. This quantity should be understood as a percentage of the line segment length; therefore 0 means 0% of the line segment length while 65,535 means 100% of the line segment length.<br />
+<br />
+The value 0 is special and means "default dash size". In this case the dash uses approximately two thirds of the segment's length, while the gap uses the remaining one third. Therefore, if the segment is 30 document units long, then each dash will be approximately 20 document units long while each gap will be approximately 10 units long.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+0 = default dash size<br />
+9830 = dash size is 15% of the line segment length<br />
+13107 = dash size is 20% of the line segment length<br />
+32768 = dash size is 50% of the line segment length<br />
+52428 = dash size is 80% of the line segment length<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineStart"><em><span class="field">pdLineStart</span> (1056)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="015.htm#pdLineStart">Line Definition (Standard)</a></small></p>
+<p>
+When applicable, line's start style.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+Standard Styles:<br />
+<br />
+ 0 = Flat<br />
+ 1 = Round outside<br />
+ 2 = Round inside<br />
+ 3 = Peak outside<br />
+ 4 = Peak inside<br />
+ 5 = Square outside<br />
+ 6 = Square inside<br />
+<br />
+Extended styles using special symbols (apply to straight lines only):<br />
+<br />
+ 100 = Arrowhead whose size is relative to the line's length<br />
+ 101 = Arrowhead whose size is relative to the line's thickness<br />
+ 110 = Dot whose size is relative to the line's thickness<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineEnd"><em><span class="field">pdLineEnd</span> (1057)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="015.htm#pdLineEnd">Line Definition (Standard)</a></small></p>
+<p>
+When applicable, line's end style.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+Standard Styles:<br />
+<br />
+ 0 = Flat<br />
+ 1 = Round outside<br />
+ 2 = Round inside<br />
+ 3 = Peak outside<br />
+ 4 = Peak inside<br />
+ 5 = Square outside<br />
+ 6 = Square inside<br />
+<br />
+Extended styles that apply to straight lines only:<br />
+<br />
+ 100 = Arrowhead whose size is relative to the line's length<br />
+ 101 = Arrowhead whose size is relative to the line's thickness<br />
+ 110 = Dot whose size is relative to the line's thickness<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineStartTheta"><em><span class="field">pdLineStartTheta</span> (1058)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+When applicable, line's start arrowhead angle in degrees. Must be between 0 and 180.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = angle of 10 degrees<br />
+30 = angle of 30 degrees<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineEndTheta"><em><span class="field">pdLineEndTheta</span> (1059)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+When applicable, line's end arrowhead angle in degrees. Must be between 0 and 180.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = angle of 10 degrees<br />
+30 = angle of 30 degrees<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineStartSize"><em><span class="field">pdLineStartSize</span> (1060)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+When applicable, size of line's start arrowhead or dot, in percentages. Must be between 0 and 100.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = The relative size of the line's arrowhead or dot is 10%<br />
+20 = The relative size of the line's arrowhead or dot is 20%<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLineEndSize"><em><span class="field">pdLineEndSize</span> (1061)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p>
+When applicable, size of line's end arrowhead or dot, in percentages. Must be between 0 and 100.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = The relative size of the line's arrowhead or dot is 10%<br />
+20 = The relative size of the line's arrowhead or dot is 20%<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLinePerimeterGrow"><em><span class="field">pdLinePerimeterGrow</span> (1178)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="012.htm#pdLinePerimeterGrow">Outline Definition</a>, <a href="015.htm#pdLinePerimeterGrow">Line Definition (Standard)</a></small></p>
+<p>
+Perimeter line grow in document units, multiplied by 100.<br />
+<br />
+Applies ony to the Rectangle, Circle/Ellipse, True Circle/Ellipse, Slice, Arc and Grid object.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[2];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Line Style");<br />
+<strong>obj[1] = pdObjAdd(pd, 0, "Line Definition");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+<strong>pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdLineThickness, "1500", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineSegment, "10", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineStart, "100", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineEnd, "100", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineStartSize, "10", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineStartTheta, "40", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineEndSize, "20", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineEndTheta, "165", PD_BYTE_UNSIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Line Style");<br />
+local obj_1 = o("Line Definition");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_o + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + l(pdStylePtr, obj_0);<br />
+obj_1 + i(pdLineThickness, 1500);<br />
+obj_1 + i(pdLineSegment, 10);<br />
+obj_1 + i(pdLineStart, 100);<br />
+obj_1 + i(pdLineEnd, 100);<br />
+obj_1 + i(pdLineStartSize, 10);<br />
+obj_1 + i(pdLineStartTheta, 40);<br />
+obj_1 + i(pdLineEndSize, 20);<br />
+obj_1 + i(pdLineEndTheta, 165);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

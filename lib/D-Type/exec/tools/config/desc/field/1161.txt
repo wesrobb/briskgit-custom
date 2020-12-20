@@ -1,0 +1,6 @@
+PowerGlyphs Attributes
+
+Bit 0: 1 = this PowerGlyph supports a dynamic width (using pdIndentLeft, pdIndentRight, pdMarginLeft, pdMarginRight)
+Bit 1: 2 = reserved
+Bit 2: 4 = the width of this PowerGlyph must not exceed container width
+Bit 4: 8 = this PowerGlyph is a breakable table

@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Text Layout Extension Scripts</h1>
+
+
+<p>D-Type Text Layout Extension supports the same scripts as the underlying HarfBuzz text shaping engine. Additionally, D-Type Text Layout Extension adds a small list of private scripts reserved for application-specific purposes. The list of defined script codes follows:</p>
+
+
+<div class="box_field">
+<pre>
+enum ScriptCodes
+{
+    <span class="codecomment">/* public scripts */</span>&nbsp;
+    zyyyScriptCode =  0, <span class="codecomment">/* Common */</span>&nbsp;
+    zinhScriptCode =  1, <span class="codecomment">/* Inherited */</span>&nbsp;
+    qaaiScriptCode =  zinhScriptCode, <span class="codecomment">/* manually added alias, for API stability */</span>&nbsp;
+    arabScriptCode =  2, <span class="codecomment">/* Arabic */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    armnScriptCode =  3, <span class="codecomment">/* Armenian */</span>&nbsp;
+    bengScriptCode =  4, <span class="codecomment">/* Bengali */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    bopoScriptCode =  5, <span class="codecomment">/* Bopomofo */</span>&nbsp;
+    cherScriptCode =  6, <span class="codecomment">/* Cherokee */</span>&nbsp;
+    coptScriptCode =  7, <span class="codecomment">/* Coptic */</span>&nbsp;
+    cyrlScriptCode =  8, <span class="codecomment">/* Cyrillic */</span>&nbsp;
+    dsrtScriptCode =  9, <span class="codecomment">/* Deseret */</span>&nbsp;
+    devaScriptCode = 10, <span class="codecomment">/* Devanagari */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp; <span class="codecomment">/* (Hindi, Sanskrit) */</span>&nbsp;
+    ethiScriptCode = 11, <span class="codecomment">/* Ethiopic */</span>&nbsp;
+    georScriptCode = 12, <span class="codecomment">/* Georgian */</span>&nbsp;
+    gothScriptCode = 13, <span class="codecomment">/* Gothic */</span>&nbsp;
+    grekScriptCode = 14, <span class="codecomment">/* Greek */</span>&nbsp;
+    gujrScriptCode = 15, <span class="codecomment">/* Gujarati */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    guruScriptCode = 16, <span class="codecomment">/* Gurmukhi */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    haniScriptCode = 17, <span class="codecomment">/* Han */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    hangScriptCode = 18, <span class="codecomment">/* Hangul */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    hebrScriptCode = 19, <span class="codecomment">/* Hebrew */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    hiraScriptCode = 20, <span class="codecomment">/* Hiragana */</span>&nbsp;
+    kndaScriptCode = 21, <span class="codecomment">/* Kannada */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    kanaScriptCode = 22, <span class="codecomment">/* Katakana */</span>&nbsp;
+    khmrScriptCode = 23, <span class="codecomment">/* Khmer */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    laooScriptCode = 24, <span class="codecomment">/* Lao */</span>&nbsp;
+    latnScriptCode = 25, <span class="codecomment">/* Latin */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    mlymScriptCode = 26, <span class="codecomment">/* Malayalam */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    mongScriptCode = 27, <span class="codecomment">/* Mongolian */</span>&nbsp;
+    mymrScriptCode = 28, <span class="codecomment">/* Myanmar */</span>&nbsp;
+    ogamScriptCode = 29, <span class="codecomment">/* Ogham */</span>&nbsp;
+    italScriptCode = 30, <span class="codecomment">/* Old Italic */</span>&nbsp;
+    oryaScriptCode = 31, <span class="codecomment">/* Oriya */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    runrScriptCode = 32, <span class="codecomment">/* Runic */</span>&nbsp;
+    sinhScriptCode = 33, <span class="codecomment">/* Sinhala */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    syrcScriptCode = 34, <span class="codecomment">/* Syriac */</span>&nbsp;
+    tamlScriptCode = 35, <span class="codecomment">/* Tamil */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    teluScriptCode = 36, <span class="codecomment">/* Telugu */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    thaaScriptCode = 37, <span class="codecomment">/* Thaana */</span>&nbsp;
+    thaiScriptCode = 38, <span class="codecomment">/* Thai */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    tibtScriptCode = 39, <span class="codecomment">/* Tibetan */</span>&nbsp; <span class="codecomment">/* */</span>&nbsp;
+    cansScriptCode = 40, <span class="codecomment">/* Unified Canadian Aboriginal Symbols */</span>&nbsp;
+    yiiiScriptCode = 41, <span class="codecomment">/* Yi syllables */</span>&nbsp;
+    tglgScriptCode = 42, <span class="codecomment">/* Tagalog */</span>&nbsp;
+    hanoScriptCode = 43, <span class="codecomment">/* Hanunoo */</span>&nbsp;
+    buhdScriptCode = 44, <span class="codecomment">/* Buhid */</span>&nbsp;
+    tagbScriptCode = 45, <span class="codecomment">/* Tagbanwa */</span>&nbsp;
+    braiScriptCode = 46, <span class="codecomment">/* Braille New script in Unicode 4 */</span>&nbsp;
+    cprtScriptCode = 47, <span class="codecomment">/* Cypriot New script in Unicode 4 */</span>&nbsp;
+    limbScriptCode = 48, <span class="codecomment">/* Limbu New script in Unicode 4 */</span>&nbsp;
+    linbScriptCode = 49, <span class="codecomment">/* Linear B New script in Unicode 4 */</span>&nbsp;
+    osmaScriptCode = 50, <span class="codecomment">/* Osmanya New script in Unicode 4 */</span>&nbsp;
+    shawScriptCode = 51, <span class="codecomment">/* Shavian New script in Unicode 4 */</span>&nbsp;
+    taleScriptCode = 52, <span class="codecomment">/* Tai Le New script in Unicode 4 */</span>&nbsp;
+    ugarScriptCode = 53, <span class="codecomment">/* Ugaritic New script in Unicode 4 */</span>&nbsp;
+    hrktScriptCode = 54, <span class="codecomment">/* Katakana or Hiragana New script code in Unicode 4.0.1 */</span>&nbsp;
+    bugiScriptCode = 55,
+    glagScriptCode = 56,
+    kharScriptCode = 57,
+    syloScriptCode = 58,
+    taluScriptCode = 59,
+    tfngScriptCode = 60,
+    xpeoScriptCode = 61,
+    baliScriptCode = 62,
+    batkScriptCode = 63,
+    blisScriptCode = 64,
+    brahScriptCode = 65,
+    chamScriptCode = 66,
+    cirtScriptCode = 67,
+    cyrsScriptCode = 68,
+    egydScriptCode = 69,
+    egyhScriptCode = 70,
+    egypScriptCode = 71,
+    geokScriptCode = 72,
+    hansScriptCode = 73,
+    hantScriptCode = 74,
+    hmngScriptCode = 75,
+    hungScriptCode = 76,
+    indsScriptCode = 77,
+    javaScriptCode = 78,
+    kaliScriptCode = 79,
+    latfScriptCode = 80,
+    latgScriptCode = 81,
+    lepcScriptCode = 82,
+    linaScriptCode = 83,
+    mandScriptCode = 84,
+    mayaScriptCode = 85,
+    meroScriptCode = 86,
+    nkooScriptCode = 87,
+    orkhScriptCode = 88,
+    permScriptCode = 89,
+    phagScriptCode = 90,
+    phnxScriptCode = 91,
+    plrdScriptCode = 92,
+    roroScriptCode = 93,
+    saraScriptCode = 94,
+    syreScriptCode = 95,
+    syrjScriptCode = 96,
+    syrnScriptCode = 97,
+    tengScriptCode = 98,
+    vaiiScriptCode = 99,
+    vispScriptCode = 100,
+    xsuxScriptCode = 101,
+    zxxxScriptCode = 102,
+    zzzzScriptCode = 103,
+    cariScriptCode = 104,
+    jpanScriptCode = 105,
+    lanaScriptCode = 106,
+    lyciScriptCode = 107,
+    lydiScriptCode = 108,
+    olckScriptCode = 109,
+    rjngScriptCode = 110,
+    saurScriptCode = 111,
+    sgnwScriptCode = 112,
+    sundScriptCode = 113,
+    moonScriptCode = 114,
+    mteiScriptCode = 115,
+    armiScriptCode = 116,
+    avstScriptCode = 117,
+    cakmScriptCode = 118,
+    koreScriptCode = 119,
+    kthiScriptCode = 120,
+    maniScriptCode = 121,
+    phliScriptCode = 122,
+    phlpScriptCode = 123,
+    phlvScriptCode = 124,
+    prtiScriptCode = 125,
+    samrScriptCode = 126,
+    tavtScriptCode = 127,
+    zmthScriptCode = 128,
+    zsymScriptCode = 129,
+    bamuScriptCode = 130,
+    lisuScriptCode = 131,
+    nkgbScriptCode = 132,
+    sarbScriptCode = 133,
+    bassScriptCode = 134,
+    duplScriptCode = 135,
+    elbaScriptCode = 136,
+    granScriptCode = 137,
+    kpelScriptCode = 138,
+    lomaScriptCode = 139,
+    mendScriptCode = 140,
+    mercScriptCode = 141,
+    narbScriptCode = 142,
+    nbatScriptCode = 143,
+    palmScriptCode = 144,
+    sindScriptCode = 145,
+    waraScriptCode = 146,
+    afakScriptCode = 147,
+    jurcScriptCode = 148,
+    mrooScriptCode = 149,
+    nshuScriptCode = 150,
+    shrdScriptCode = 151,
+    soraScriptCode = 152,
+    takrScriptCode = 153,
+    tangScriptCode = 154,
+    woleScriptCode = 155,
+    khojScriptCode = 156,
+    tirhScriptCode = 157,
+
+    <span class="codecomment">/* private scripts */</span>&nbsp;
+    p016ScriptCode = 239,
+    p015ScriptCode = 240,
+    p014ScriptCode = 241,
+    p013ScriptCode = 242,
+    p012ScriptCode = 243,
+    p011ScriptCode = 244,
+    p010ScriptCode = 245,
+    p009ScriptCode = 246,
+    p008ScriptCode = 247,
+    p007ScriptCode = 248,
+    p006ScriptCode = 249,
+    p005ScriptCode = 250,
+    p004ScriptCode = 251,
+    p003ScriptCode = 252,
+    p002ScriptCode = 253,
+    p001ScriptCode = 254,
+
+    <span class="codecomment">/* any script */</span>&nbsp;
+    a000ScriptCode = 255,
+
+    <span class="codecomment">/* counts */</span>&nbsp;
+    scriptCodeCountPublic = 158,
+    scriptCodeCountPrivate = 16,
+    scriptCodeCountUnused = 82,
+    scriptCodeCount = 256
+};
+</pre>
+</div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

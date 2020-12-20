@@ -1,0 +1,182 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtxGlyphsGetBound</h2><div class="box_prototype"><strong>
+DT_FLOAT dtxGlyphsGetBound(DT_DTENGINE engine, DT_ID_UBYTE crop_type, DT_FLOAT x, DT_FLOAT y, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG glyph_arr[], const DT_SLONG glyph_arr_displacement[], const DT_SLONG glyph_arr_advance[], DT_FLOAT start_advance, DT_BMP* bmp)</strong></div><br /><strong>Short Description:</strong> <em>Get bounding box of a straight line of glyphs</em><br /><br />
+
+<h2>dtxCharsGetBound</h2><div class="box_prototype"><strong>
+DT_FLOAT dtxCharsGetBound(DT_DTENGINE engine, DT_ID_UBYTE crop_type, DT_FLOAT x, DT_FLOAT y, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG chars_arr[], DT_BMP* bmp)</strong></div><br /><strong>Short Description:</strong> <em>Get bounding box of a straight line of characters</em><br /><br />
+
+<p>These functions retrieve the bounding box of the text string rendered by <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a> and <a href="dtxGlyphsDoOutput.htm">dtxGlyphsDoOutput</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>crop_type</em></p>
+</td><td>
+<ul>
+<li><p>If <em>crop_type</em> = 0 (DV_CROP_HMAX_VMAX_PADDED), the function calculates the bounding box based on the largest glyph width and the tallest glyph height in the font used to draw the string text (as supplied by the Typesetter). In addition, the width of the bounding box is padded to a 4-byte alignment boundary. This calculation method is very fast, but not extremely accurate.</p></li>
+<li><p><em>crop_type</em> = 1 (DV_CROP_HMAX_VMAX) is the same as <em>crop_type</em> = 0, but the width of the bounding box is exact (i.e. not padded to a 4-byte alignment boundary).</p></li>
+<li><p>If <em>crop_type</em> = 2 (DV_CROP_HMIN_VMAX), the function calculates the bounding box based on the actual glyph widths in the string and the tallest glyph height in the font used to draw the string text (as supplied by the Typesetter). This calculation method is somewhat slower because the actual width of each glyph in the string must be retrieved, calculated and converted to pixels.</p></li>
+<li><p>If <em>crop_type</em> = 3 (DV_CROP_HMAX_VMIN), the function calculates the bounding box based on the largest glyph width in the font used to draw the string text (as supplied by the Typesetter) and the actual glyph heights in the string. This calculation method is somewhat slower because the actual height of each glyph in the string must be retrieved, calculated and converted to pixels.</p></li>
+<li><p>If <em>crop_type</em> = 4 (DV_CROP_HMIN_VMIN), the function calculates the bounding box based on the actual glyph widths and the actual glyph heights in the string. This calculation method is somewhat slower because the actual width and height of each glyph in the string must be retrieved, calculated and converted to pixels.</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+</td></tr>
+
+<tr><td>
+<p><em>spacing</em></p>
+
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+
+<tr><td>
+<p><em>mode</em></p>
+
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+
+<tr><td>
+<p><em>tm</em></p>
+
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+
+<tr><td>
+<p><em>glyph_arr</em></p>
+
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+
+<tr><td>
+<p><em>chars_arr</em></p>
+
+</td><td><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></td></tr>
+
+<tr><td>
+<p><em>glyph_arr_displacement</em></p>
+</td><td>
+<p><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr_advance</em></p>
+</td><td>
+<p><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></p>
+</td></tr>
+
+<tr><td>
+<p><em>start_advance</em></p>
+</td><td>
+<p><p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></p>
+</td></tr>
+
+<tr><td>
+<p><em>bmp</em></p>
+</td><td>
+<p>A valid pointer to the structure that will receive information about the retrieved bounding box:</p>
+
+<ul>
+<li><p><em>memory_bitmap.m</em> &mdash; Since the function does not render the bitmap, this value will be set to DV_NULL.</p></li>
+<li><p><em>memory_bitmap.l</em> &mdash; Since the function does not render the bitmap, this value will be set to 0.</p></li>
+<li><p><em>memory_bitmap.w</em> &mdash; width of the bounding box in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+<li><p><em>memory_bitmap.h</em> &mdash; height of the bounding box in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+<li><p><em>memory_bitmap.x</em> &mdash; horizontal distance between the left edge of the bounding box and the origin point of the text line as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure, in pixels</p></li>
+<li><p><em>memory_bitmap.y</em> &mdash; vertical distance between the origin point of the text line and the top edge of the bounding box as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure, in pixels</p></li>
+</ul>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>See <a href="dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p>
+
+
+<h3>Example</h3>
+
+<ul>
+
+<li>
+<p>When <em>crop_type</em> = 0 (DV_CROP_HMAX_VMAX_PADDED)</p>
+<p class="center">
+<img src="../images/img5.gif" width="576" height="274" vspace="8" alt="DV_CROP_HMAX_VMAX_PADDED" />
+</p>
+<p><tt>AdvanceWidth=284</tt><br />
+<tt>bmp.x=-12, bmp.y=88, bmp.w=320, bmp.h=112, bmp.m=DV_NULL, bmp.l=0</tt></p>
+</li>
+
+<li>
+<p>When <em>crop_type</em> = 1 (DV_CROP_HMAX_VMAX)</p>
+<p class="center">
+<img src="../images/img14.gif" width="576" height="274" vspace="8" alt="DV_CROP_HMAX_VMAX" />
+</p>
+<p><tt>AdvanceWidth=284</tt><br />
+<tt>bmp.x=-12, bmp.y=88, bmp.w=317, bmp.h=112, bmp.m=DV_NULL, bmp.l=0</tt></p>
+</li>
+
+<li>
+<p>When <em>crop_type</em> = 2 (DV_CROP_HMIN_VMAX)</p>
+<p class="center">
+<img src="../images/img15.gif" width="576" height="274" vspace="8" alt="DV_CROP_HMIN_VMAX" />
+</p>
+<p><tt>AdvanceWidth=284</tt><br />
+<tt>bmp.x=3, bmp.y=88, bmp.w=275, bmp.h=112, bmp.m=DV_NULL, bmp.l=0</tt></p>
+</li>
+
+<li>
+<p>When <em>crop_type</em> = 3 (DV_CROP_HMAX_VMIN)</p>
+<p class="center">
+<img src="../images/img16.gif" width="576" height="274" vspace="8" alt="DV_CROP_HMAX_VMIN" />
+</p>
+<p><tt>AdvanceWidth=284</tt><br />
+<tt>bmp.x=-12, bmp.y=82, bmp.w=317, bmp.h=102, bmp.m=DV_NULL, bmp.l=0</tt></p>
+</li>
+
+<li>
+<p>When <em>crop_type</em> = 4 (DV_CROP_HMIN_VMIN)</p>
+<p class="center">
+<img src="../images/img17.gif" width="576" height="274" vspace="8" alt="DV_CROP_HMIN_VMIN" />
+</p>
+<p><tt>AdvanceWidth=284</tt><br />
+<tt>bmp.x=3, bmp.y=82, bmp.w=275, bmp.h=102, bmp.m=DV_NULL, bmp.l=0</tt></p>
+</li>
+
+</ul>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

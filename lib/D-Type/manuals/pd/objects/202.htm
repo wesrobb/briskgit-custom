@@ -1,0 +1,120 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Listbox Column</h2>
+<h3 id="overview">Overview</h3>
+This object supplies a column definition for any secondary columns in the <a href="305.htm">List Box</a> object.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<br />
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="fcListColOffset"><em><span class="field">fcListColOffset</span> (10103)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p>
+Offset of the list's column in document units.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcAlign"><em><span class="field">fcAlign</span> (10104)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="304.htm#fcAlign">Text Box</a>, <a href="305.htm#fcAlign">List Box</a></small></p>
+<p>
+Alignment of a text line within a text box or list box column.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Left: The text line is aligned left.<br />
+<br />
+1 = Center: The text line is centered.<br />
+<br />
+2 = Right: The text line is aligned right.<br />
+<br />
+3 = Justified Type A-L: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then left justify.<br />
+<br />
+4 = Justified Type B-L: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then left justify.<br />
+<br />
+5 = Justified Type A-C: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then center.<br />
+<br />
+6 = Justified Type B-C: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then center.<br />
+<br />
+7 = Justified Type A-R: Justify the text line by inserting extra spacing after each character. If this is not possible (e.g. the text line contains a single character), then right justify.<br />
+<br />
+8 = Justified Type B-R: Justify the text line by inserting extra spacing only after the space characters. If this is not possible (e.g. the text line does not have any space characters), then right justify.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcValue_08"><em><span class="field">fcValue_08</span> (10005)</em> &nbsp; <small class="label">PD_ASC</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcValue_08">Button</a>, <a href="302.htm#fcValue_08">Radio Button</a>, <a href="303.htm#fcValue_08">Check Box</a>, <a href="304.htm#fcValue_08">Text Box</a>, <a href="305.htm#fcValue_08">List Box</a></small></p>
+<p>
+Control's value in ANSI format (1 byte per character). Any form control can have a value. Most controls (e.g. buttons, radio buttons, check boxes, text boxes) need a value to function in a useful way. Some controls, however, can function without a value (e.g. sliders).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcValue_16"><em><span class="field">fcValue_16</span> (10012)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcValue_16">Button</a>, <a href="302.htm#fcValue_16">Radio Button</a>, <a href="303.htm#fcValue_16">Check Box</a>, <a href="304.htm#fcValue_16">Text Box</a>, <a href="305.htm#fcValue_16">List Box</a></small></p>
+<p>
+Control's value in Unicode format (2 bytes per character). Any form control can have a value. Most controls (e.g. buttons, radio buttons, check boxes, text boxes) need a value to function in a useful way. Some controls, however, can function without a value (e.g. sliders).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcValue_24"><em><span class="field">fcValue_24</span> (10013)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcValue_24">Button</a>, <a href="302.htm#fcValue_24">Radio Button</a>, <a href="303.htm#fcValue_24">Check Box</a>, <a href="304.htm#fcValue_24">Text Box</a>, <a href="305.htm#fcValue_24">List Box</a></small></p>
+<p>
+Control's value in Unicode format (3 bytes per character). Any form control can have a value. Most controls (e.g. buttons, radio buttons, check boxes, text boxes) need a value to function in a useful way. Some controls, however, can function without a value (e.g. sliders).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcValue_32"><em><span class="field">fcValue_32</span> (10014)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcValue_32">Button</a>, <a href="302.htm#fcValue_32">Radio Button</a>, <a href="303.htm#fcValue_32">Check Box</a>, <a href="304.htm#fcValue_32">Text Box</a>, <a href="305.htm#fcValue_32">List Box</a></small></p>
+<p>
+Control's value in Unicode format (4 bytes per character). Any form control can have a value. Most controls (e.g. buttons, radio buttons, check boxes, text boxes) need a value to function in a useful way. Some controls, however, can function without a value (e.g. sliders).<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Listbox Column");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+<strong>pdPropAdd(pd, obj[0], fcListColOffset, "800", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[0], fcAlign, "2", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], fcValue_08, "$100.00\r$5,500.00\r$9,850.00\r$800.00\r$200.00\r$8,550.00", PD_ASC);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Listbox Column");<br />
+<br />
+obj_0 + i(fcListColOffset, 800);<br />
+obj_0 + i(fcAlign, 2);<br />
+obj_0 + p(fcValue_08, "$100.00\r$5,500.00\r$9,850.00\r$800.00\r$200.00\r$8,550.00", PD_ASC);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

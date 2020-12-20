@@ -1,0 +1,93 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtOutputSetAsHDC</h2><div class="box_prototype"><strong>
+DT_SWORD dtOutputSetAsHDC(DT_DTENGINE engine, DT_HDC hdc, DT_SWORD clip_x, DT_SWORD clip_y, DT_SWORD clip_w, DT_SWORD clip_h)</strong></div><br /><strong>Short Description:</strong> <em>Set Output to Windows Device Context (HDC) - Windows only</em><br /><br />
+
+<p>This function connects the Output of the specified Standard Engine instance with the supplied Windows compatible Device Context (HDC). In this way, any output primitives (e.g. glyphs, shapes, bitmaps) that are sent to the Output (e.g. using the <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="dtShapeDoOutput.htm">dtShapeDoOutput</a> or <a href="dtBitmapDoOutput.htm">dtBitmapDoOutput</a> function) will be rendered in that Device Context. Furthermore, this function sets the clipping rectangle associated with the memory surface so that output primitives that are completely outside the clipping rectangle are not processed/rendered when they are sent to the Output.</p>
+
+<p>This function has limited capabilities as is supported only on Windows.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>hdc</em></p>
+</td><td>
+<p>Windows compatible Device Context (<a href="../manual/types.htm#DT_HDC">DT_HDC</a>). Alternatively, this value can be set to 0. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_x</em></p>
+</td><td>
+<p>X coordinate of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_y</em></p>
+</td><td>
+<p>Y coordinate of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_w</em></p>
+</td><td>
+<p>Width of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_h</em></p>
+</td><td>
+<p>Height of the clipping rectangle in pixels.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="dtOutputSetAsHDC.htm">dtOutputSetAsHDC</a> tells D-Type Engine to redirect all D-Type output to a Windows Device Context (HDC). This type of drawing is only available on Windows 95/98/NT/2000/XP. Thus, Windows applications can draw directly to the screen, into a window or to the printer. However, this method is not very fast and not recommended due to limitations of the Windows graphics system.</p>
+
+<p>When <em>hdc</em> is set to 0, the above mentioned device context redirection is disabled. In this case, clipping coordinates are ignored and all output primitives are processed (even if they are completely outside the clipping region). In some applications, this is useful for retrieving plain 8-bit grayscale memory bitmap data via the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure.</p>
+
+
+<h3>Note 1</h3>
+<p>Rendering to Windows compatible Device Context does not support transparency and true alpha blending. If you wish to draw transparent text or shapes, you should use Memory Surfaces (<a href="../manual/structs.htm#DT_MDC">DT_MDC</a>) instead. For more information, see the <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function.</p>
+
+
+<h3>Note 2</h3>
+<p>Although Windows applications can render to a Windows compatible Device Context, it is best to avoid this rendering method. Rendering to Memory Surfaces (<a href="../manual/structs.htm#DT_MDC">DT_MDC</a>) is far superior and faster. In addition, rendering to Memory Surfaces is cross platform.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

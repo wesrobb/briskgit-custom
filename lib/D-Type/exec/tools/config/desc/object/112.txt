@@ -1,0 +1,7 @@
+This object represents a standard rectangle. In Power Engine API, rectangles can have flat or rounded corners.
+
+While constructing the rectangle object, an optional shadow and/or outline may be specified.
+
+{strong}Designated Rendering Function:{/strong} pdDrawRect (6)
+
+Note: Although pdBodyPtr is a key link, it is not mandatory. This means it is possible to construct a rectangle that has no body, only an outline and/or a shadow.

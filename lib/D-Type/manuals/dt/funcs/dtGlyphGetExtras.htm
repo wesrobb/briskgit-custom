@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtGlyphGetExtras</h2><div class="box_prototype"><strong>
+DT_UBYTE* dtGlyphGetExtras(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_ULONG glyph_index, DT_UWORD flags, const DT_SLONG params[], DT_SLONG* len, DT_UWORD* xtra_bits)</strong></div><br /><strong>Short Description:</strong> <em>Get extra data that might be associated with a glyph</em><br /><br />
+
+<h2>dtCharGetExtras</h2><div class="box_prototype"><strong>
+DT_UBYTE* dtCharGetExtras(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_ULONG char_code, DT_UWORD flags, const DT_SLONG params[], DT_SLONG* len, DT_UWORD* xtra_bits)</strong></div><br /><strong>Short Description:</strong> <em>Get extra data that might be associated with a character</em><br /><br />
+
+<p>This function retrieves extra data (or extras) associated with a single glyph represented by a Unicode character code (or font dependent glyph index) that might be available in the specified font. Extras presently include PNG, JPEG or TIFF images stored in the font's OpenType sbix table, color glyph layer data stored in the COLR and CPAL tables and SVG document data stored in the SVG table. In the future, other types of extras might be supported as well. Please note that not all fonts have extras. Currently only certain OpenType fonts contain extras (e.g. fonts that provide support for colored glyphs or emojis). However, even in those fonts, there is no guarantee that every single glyph will have extras. If a glyph does not have any extras, it is represented using standard outlines.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>char_code</em></p>
+</td><td>
+<p>Unicode character code of the glyph for which the extras will be retrieved.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_index</em></p>
+</td><td>
+<p>Font dependent index of the glyph for which the extras will be retrieved.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A value that identifies what extras to retrieve. At present this can be:</p>
+<ul>
+<li>0 &mdash; don't retrieve any extras, only return the bitmask value via the <em>xtra_bits</em> parameter</li>
+<li>1 &mdash; retrieve sbix extras and return the bitmask value via the <em>xtra_bits</em> parameter</li>
+<li>2 &mdash; retrieve COLR/CPAL extras and return the bitmask value via the <em>xtra_bits</em> parameter</li>
+<li>3 &mdash; retrieve SVG extras and return the bitmask value via the <em>xtra_bits</em> parameter</li>
+</ul>
+<p>Note that only one type of extra data at a time can be retrieved using this function. In other words, it is not possible to return, for example, both sbix and COLR/CPAL extras in one function call. However, the <em>xtra_bits</em> parameter always contains a bitmask value representing all types of extras available for the specified glyph. To retrieve multiple types of extras for the same glyph, multiple function calls are necessary.</p>
+</td></tr>
+
+<tr><td>
+<p><em>params</em></p>
+</td><td>
+<p>An optional array of parameters specific to the type of extras retrieved. If no additional parameters need to be passed, <em>params</em> can be set to DV_NULL. See the comments below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>len</em></p>
+</td><td>
+<p>A valid pointer to the DT_SLONG type that will receive the total length of the retrieved extra data in the buffer.</p>
+</td></tr>
+
+<tr><td>
+<p><em>xtra_bits</em></p>
+</td><td>
+<p>A valid pointer to the DT_UWORD type that will receive the bitmask value which specifies what glyph extras are available.</p>
+<ul>
+<li>bit 0 (1) &mdash; The glyph has a bitmap image stored in the font's sbix OpenType table. The image can be in PNG, JPEG or TIFF format.</li>
+<li>bit 1 (2) &mdash; The glyph has color glyph layers stored in the font's COLR and CPAL OpenType tables.</li>
+<li>bit 2 (4) &mdash; The glyph has SVG data stored in the font's SVG table.</li>
+</ul>
+<p>Other bits are reserved for future.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value is a pointer to the buffer that stores extra glyph data. This buffer is dynamically allocated and must be freed by calling <a href="dtFree.htm">dtFree</a> when no longer needed. If no extra glyph data can be retrieved, this value will be DV_NULL and <em>len</em> will hold 0.</p>
+
+<h3>Comments</h3>
+
+<p>1) To only check what glyph extras are available, set <em>flags</em> to 0 when calling the function. In this case the function will set the <em>xtra_bits</em> accordingly and return DV_NULL. The <em>len</em> parameter will hold the value 0.</p>
+
+<p>2) To retrieve sbix extras and also check what glyph extras are available, set <em>flags</em> to 1 when calling the function. In this case the function will set the <em>xtra_bits</em> accordingly and return a pointer to a dynamically allocated buffer that holds the extra data, if the requested data is available. The size of the buffer will be returned via the <em>len</em> parameter. The format of the data in the buffer will be as follows:</p>
+
+<dl>
+<dt><p><strong>10-Byte Header</strong></p></dt>
+<dd>
+<ul>
+<li><strong>DT_UBYTE</strong> &mdash; Format of the bitmap image. 1 = JPEG, 2 = PNG, 3 = TIFF. Little endian byte ordering.</li>
+<li><strong>DT_UBYTE</strong> &mdash; Reserved for future use.</li>
+<li><strong>DT_UWORD</strong> &mdash; The PPEM size for which this bitmap was designed.</li>
+<li><strong>DT_UWORD</strong> &mdash; The device pixel density (in PPI) for which this bitmap was designed (e.g 96 PPI, 192 PPI etc). Little endian byte ordering.</li>
+<li><strong>DT_SWORD</strong> &mdash; The horizontal (x-axis) offset from the left edge of the graphic to the glyph's origin. That is, the x-coordinate of the point on the baseline at the left edge of the glyph. Little endian byte ordering.</li>
+<li><strong>DT_SWORD</strong> &mdash; The vertical (y-axis) offset from the bottom edge of the graphic to the glyph's origin. That is, the y-coordinate of the point on the baseline at the bottom edge of the glyph. Little endian byte ordering.</li>
+</ul>
+</dd>
+
+<dt><p><strong>Actual Data</strong> &mdash; Immediately after the header, the actual image data follows.</p>
+<dd>
+<ul>
+<li><strong>DT_UBYTE[]</strong> &mdash; An array of bytes representing the actual bitmap image. The length of this array is <em>len</em> - 10, i.e. <em>len</em> minus the size of the header.</li>
+</ul>
+</dd>
+</dl>
+
+<p>When calling the function to retrieve sbix extras, the <em>params</em> parameter currently has no purpose and should be set to DV_NULL. If sbix data is not available for the specified glyph, the function will return DV_NULL and set <em>len</em> to 0.
+
+
+<p>3) To retrieve COLR/CPAL extras and also check what glyph extras are available, set <em>flags</em> to 2 when calling the function and, optionally, set the first element of the <em>params</em> array to the index of the desired color palette. The index 0 is always valid and means the first (default) palette. If the first (default) palette is to be used, <em>params</em> can also be set to DV_NULL. The function will set the <em>xtra_bits</em> accordingly and return a pointer to a dynamically allocated buffer that holds the extra data, if the requested data is available. The size of the buffer will be returned via the <em>len</em> parameter. The format of the data in the buffer will be as follows:</p>
+
+<dl>
+<dt><p><strong>6-Byte Header</strong></p></dt>
+<dd>
+<ul>
+<li><strong>DT_UBYTE</strong> &mdash; Format of the COLR/CPAL data. This value is always 100. Little endian byte ordering.</li>
+<li><strong>DT_UBYTE</strong> &mdash; Reserved for future use.</li>
+<li><strong>DT_UWORD</strong> &mdash; N or number of color glyph layers. Little endian byte ordering.</li>
+<li><strong>DT_UWORD</strong> &mdash; Number of available color palettes. Little endian byte ordering.</li>
+</ul>
+</dd>
+
+<dt><p><strong>Actual Data</strong> &mdash; Immediately after the header, the buffer contains N records, each representing one glyph layer. Glyph layers are stored in the bottom-to-top order. Each record is 8 bytes in size has the following format:</p></dt>
+<dd>
+<ul>
+<li><strong>DT_UWORD</strong> &mdash; Font dependent glyph index of this glyph layer. Little endian byte ordering.</li>
+<li><strong>DT_UWORD</strong> &mdash; An ID of the color that follows. Little endian byte ordering. The ID value 0xFFFF indicates that the text foreground color (defined by a higher-level client) should be used. Otherwise the color that follows must be used.</li>
+<li><strong>DT_UBYTE[4]</strong> &mdash; BGRA color value of this glyph layer. The BGRA color values are not pre-multiplied.</li>
+</ul>
+</dd>
+</dl>
+
+<p>If COLR/CPAL data is not available for the specified glyph, the function will return DV_NULL and set <em>len</em> to 0.
+
+<p>4) To retrieve SVG extras and also check what glyph extras are available, set <em>flags</em> to 3 when calling the function. In this case the function will set the <em>xtra_bits</em> accordingly and return a pointer to a dynamically allocated buffer that holds the extra data, if the requested data is available. The size of the buffer will be returned via the <em>len</em> parameter. The format of the data in the buffer will be as follows:</p>
+
+<dl>
+<dt><p><strong>10-Byte Header</strong></p></dt>
+<dd>
+<ul>
+<li><strong>DT_UBYTE</strong> &mdash; Format of the SVG data. This value is always 200. Little endian byte ordering.</li>
+<li><strong>DT_UBYTE</strong> &mdash; Reserved for future use.</li>
+<li><strong>DT_UWORD</strong> &mdash; The first glyph ID for the range covered by this SVG document. Little endian byte ordering.</li>
+<li><strong>DT_UWORD</strong> &mdash; The last glyph ID for the range covered by this SVG document. Little endian byte ordering.</li>
+<li><strong>DT_UWORD</strong> &mdash; The glyph ID of the glyph for which SVG data is requested. Little endian byte ordering.</li>
+<li><strong>DT_UWORD</strong> &mdash; Reserved for future and currently set to 0. Little endian byte ordering.</li>
+</ul>
+</dd>
+
+<dt><p><strong>Actual Data</strong> &mdash; Immediately after the header, the actual SVG data follows.</p>
+<dd>
+<ul>
+<li><strong>DT_UBYTE[]</strong> &mdash; An array of bytes representing the actual SVG document. The length of this array is <em>len</em> - 10, i.e. <em>len</em> minus the size of the header.
+<p>SVG documents stored in this array may be either plain text or gzip-encoded, and applications that support the SVG table must support both.
+The gzip format is defined in RFC 1952, &quot;GZIP file format specification version 4.3&quot;, available at <a href="http://www.ietf.org/rfc/rfc1952.txt">http://www.ietf.org/rfc/rfc1952.txt</a>. Within a gzip-encoded SVG document, the deflate compression method (defined at <a href="http://www.ietf.org/rfc/rfc1951.txt">http://www.ietf.org/rfc/rfc1951.txt</a>) must be used. Thus, the first three bytes of the gzip-encoded document will be 0x1F, 0x8B, 0x08.</p>
+<p>Whether compressed or plain-text transfer encoding is used, the <em>len</em> parameter always indicates the length of the encoded data, not the decoded document.</p>
+<p>The character encoding of the (uncompressed) SVG document is required by the OpenType specification to be UTF-8.</p>
+<p>For details on how to interpret the actual SVG data returned in this array, please refer to the &quot;SVG Documents&quot; section of the official OpenType specification at <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/svg">https://docs.microsoft.com/en-us/typography/opentype/spec/svg</a>
+</li>
+</ul>
+</dd>
+</dl>
+
+<p>When calling the function to retrieve SVG extras, the <em>params</em> parameter currently has no purpose and should be set to DV_NULL. If SVG data is not available for the specified glyph, the function will return DV_NULL and set <em>len</em> to 0.
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

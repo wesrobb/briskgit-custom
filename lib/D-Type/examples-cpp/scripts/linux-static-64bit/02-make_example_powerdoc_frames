@@ -1,0 +1,11 @@
+##!/bin/csh
+
+echo -------------------------------------------------------------------------------
+echo Build example_powerdoc_frames
+echo -------------------------------------------------------------------------------
+
+c++ -c -std=c++0x -nostdlib -fno-exceptions -fno-rtti -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -Wdouble-promotion -Wformat=2 -ffunction-sections -fdata-sections -fno-common -pedantic -I ../../../includes/core-cpp/ -I ../../../includes/extras/ -I ../../../includes/utils/ -O3 ../../../examples-cpp/example_powerdoc_frames/main.cpp
+c++ -Wl,--gc-sections -o example_powerdoc_frames main.o ../../../engine/libs/x64-linux_64-static/gcc/dtypestd.o ../../../engine/libs/x64-linux_64-static/gcc/dtypepwr.o ../../../engine/libs/x64-linux_64-static/gcc/dtypelay.a ../../../engine/libs/x64-linux_64-static/gcc/dtypeaux.a ../../../other/libs/x64-linux_64-static/gcc/dtwindow.a -fno-exceptions -fno-rtti -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -pedantic -Isource -L/usr/X11R6/lib -lX11 -lrt -pthread
+
+echo Done.
+echo -------------------------------------------------------------------------------

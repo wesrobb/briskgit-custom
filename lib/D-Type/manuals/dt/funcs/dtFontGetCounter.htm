@@ -1,0 +1,51 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetCounter</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontGetCounter(DT_DTENGINE engine)</strong></div><br /><strong>Short Description:</strong> <em>Get count of font slots in Font Catalog</em><br /><br />
+
+<p>This function returns the current number (count) of font slots in the Font Catalog of the specified Standard Engine instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value is the number of currently utilized (allocated) font slots in the Font Catalog of the specified Standard Engine instance. Each font slot serves as a container for one font index (font or font instance). However, the number of font slots in the Font Catalog can be larger than the number of valid font indexes (fonts and font instances). This is because some font slots may be empty (i.e. may not hold any font indexes). You can use the <a href="dtFontTest.htm">dtFontTest</a> function to determine if a specified font slot contains a valid font of font instance and, if so, retrieve its font index.</p>
+
+
+<h3>Comment</h3>
+
+<p>Applications can use <a href="dtFontGetCounter.htm">dtFontGetCounter</a> in conjunction with <a href="dtFontTest.htm">dtFontTest</a> and/or <a href="dtFontGetSysStatus.htm">dtFontGetSysStatus</a> to enumerate all fonts and font instances in the Font Catalog.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

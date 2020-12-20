@@ -1,0 +1,115 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxAnimWrite</h2><div class="box_prototype"><strong>
+DT_SLONG fxAnimWrite(DT_AUX_INFO* info, const DT_UBYTE* bitmap_ptr, const DT_UBYTE* alpha_ptr, DT_SLONG bitmap_padding, DT_SLONG alpha_padding, DT_SLONG cx, DT_SLONG cy, DT_SLONG cw, DT_SLONG ch, DT_SLONG quality, DT_UWORD flags, DT_SLONG delay)</strong></div><br /><strong>Short Description:</strong> <em>Write animation frame</em><br /><br />
+
+<p>This function adds a new frame to an animated image that was opened by <a href="fxAnimStart.htm">fxAnimStart</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_ptr</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>alpha_ptr</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_padding</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>alpha_padding</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cx</em></p>
+</td><td>
+<p>The x-coordinate of the animation frame, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cy</em></p>
+</td><td>
+<p>The y-coordinate of the animation frame, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cw</em></p>
+</td><td>
+<p>The width of the animation frame, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ch</em></p>
+</td><td>
+<p>The height of the animation frame, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>quality</em></p>
+</td><td>
+<p>Bitmap quality. Currently this value is respected only if image format is DV_AUX_FILEFORMAT_GIF. In this case values over 75 will activate dithering.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask value.</p>
+<ul>
+<li>bit 0 (1) &mdash; Flip the bitmap vertically</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>delay</em></p>
+</td><td>
+<p>A non-negative integer that defines the animation delay for this animation frame, in 1/100 seconds.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

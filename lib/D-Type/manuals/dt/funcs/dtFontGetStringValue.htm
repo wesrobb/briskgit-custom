@@ -1,0 +1,541 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetStringValue</h2><div class="box_prototype"><strong>
+DT_SLONG dtFontGetStringValue(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SWORD string_id, DT_UBYTE* string_buffer, DT_SLONG max_string_len)</strong></div><br /><strong>Short Description:</strong> <em>Get a string value from font</em><br /><br />
+
+<p>This function retrieves various string values that may be defined in the referenced font. Some of these values are format specific while others are format independent and/or have a more general purpose.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>string_id</em></p>
+</td><td>
+<p>Identifies the string to retrieve.</p>
+</td></tr>
+
+<tr><td>
+<p><em>string_buffer</em></p>
+</td><td>
+<p>A valid pointer to a user-supplied buffer to which the function will copy the string value.</p>
+</td></tr>
+
+<tr><td>
+<p><em>max_string_len</em></p>
+</td><td>
+<p>Size of the user-supplied buffer, i.e. the maximum number of bytes that can be stored in the buffer.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was not successful, the return value is 0. If the function was successful, the return value is the actual length of the retrieved string, in bytes. If the string exceeds <em>max_string_len</em> bytes in length, only the first <em>max_string_len</em> bytes will be copied (i.e. the string will be truncated).</p>
+
+<p>What is copied to the <em>string_buffer</em> depends on <em>string_id</em>. At present, the following IDs are supported:</p>
+
+<h4>Standard Return Values</h4>
+
+<ul>
+
+<li>
+<p>If <em>string_id</em> = 1001 (DV_SVAL_ASC_FONTNAME), the function returns the font name in ASCII format. This value is defined in all currently supported font formats and is always expected to be available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1002 (DV_SVAL_ASC_FAMILYNAME), the function returns the font family name in ASCII format. This value is defined in all currently supported font formats and is always expected to be available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1003 (DV_SVAL_ASC_SUBFAMILYNAME), the function returns the font subfamily (or style) name in ASCII format. This value is defined in all currently supported font formats and is always expected to be available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1004 (DV_SVAL_ASC_COPYRIGHT), the function returns the font copyright notice in ASCII format. This value is defined in all currently supported font formats but may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1005 (DV_SVAL_ASC_VERSION), the function returns the font version string in ASCII format. This value is defined in all currently supported font formats but may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1006 (DV_SVAL_ASC_POSTSCRIPTNAME), the function returns the PostScript name for the font in ASCII format. This value is defined in all currently supported font formats but may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1007 (DV_SVAL_ASC_UNIQUEID), the function returns a unique font identifier for the font in ASCII format. This value is defined in all currently supported font formats but may not be always available. The exact meaning of this value is font format specific.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1008 (DV_SVAL_ASC_TRADEMARK), the function returns a trademark notice for the font in ASCII format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1009 (DV_SVAL_ASC_MANUFACTURER), the function returns the name of the manufacturer of the font in ASCII format. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1010 (DV_SVAL_ASC_DESIGNER), the function returns the name of the designer of the font in ASCII format. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1011 (DV_SVAL_ASC_DESCRIPTION), the function returns the description of the font in ASCII format. This can contain revision information, usage recommendations, history, features, etc. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1012 (DV_SVAL_ASC_SAMPLE), the function returns a sample text string for the font in ASCII format. This can be the font name, or any other text that the designer thinks is the best sample to display the font in. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1013 (DV_SVAL_ASC_TYPOFAMILYNAME), the function returns the typographic family name for the font in ASCII format, as defined by the OpenType specification (Name ID 16):</p>
+
+<blockquote><em>
+Typographic Family name: The typographic family grouping doesn't impose any constraints on the number of faces within it, in contrast with the 4-style family grouping (ID 1), which is present both for historical reasons and to express style linking groups. If name ID 16 is absent, then name ID 1 is considered to be the typographic family name. (In earlier versions of the specification, name ID 16 was known as "Preferred Family".)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1014 (DV_SVAL_ASC_TYPOSUBFAMILYNAME), the function returns the typographic subfamily name for the font in ASCII format, as defined by the OpenType specification (Name ID 17):
+
+<blockquote><em>
+Typographic Subfamily name: This allows font designers to specify a subfamily name within the typographic family grouping. This string must be unique within a particular typographic family. If it is absent, then name ID 2 is considered to be the typographic subfamily name. (In earlier versions of the specification, name ID 17 was known as "Preferred Subfamily".)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1015 (DV_SVAL_ASC_WWSFAMILYNAME), the function returns the WWS family name for the font in ASCII format, as defined by the OpenType specification (Name ID 21):
+
+<blockquote><em>
+WWS Family Name. Used to provide a WWS-conformant family name in case the entries for IDs 16 and 17 do not conform to the WWS model. (That is, in case the entry for ID 17 includes qualifiers for some attribute other than weight, width or slope.) If bit 8 of the fsSelection field is set, a WWS Family Name entry should not be needed and should not be included. Conversely, if an entry for this ID is include, bit 8 should not be set. (See OS/2 'fsSelection' field for details.) Examples of name ID 21: "Minion Pro Caption" and "Minion Pro Display". (Name ID 16 would be "Minion Pro" for these examples.)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1016 (DV_SVAL_ASC_WWSSUBFAMILYNAME), the function returns the WWS subfamily name for the font in ASCII format, as defined by the OpenType specification (Name ID 22):
+
+<blockquote><em>
+WWS Subfamily Name. Used in conjunction with ID 21, this ID provides a WWS-conformant subfamily name (reflecting only weight, width and slope attributes) in case the entries for IDs 16 and 17 do not conform to the WWS model. As in the case of ID 21, use of this ID should correlate inversely with bit 8 of the fsSelection field being set. Examples of name ID 22: "Semibold Italic", "Bold Condensed". (Name ID 17 could be "Semibold Italic Caption", or "Bold Condensed Display", for example.)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+
+<li>
+<p>If <em>string_id</em> = 1101 (DV_SVAL_UNI_FONTNAME), the function returns the font name in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1102 (DV_SVAL_UNI_FAMILYNAME), the function returns the font family name in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1103 (DV_SVAL_UNI_SUBFAMILYNAME), the function returns the font subfamily (or style) name in Unicode format. This value is only defined in D-Type, TrueType, and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1104 (DV_SVAL_UNI_COPYRIGHT), the function returns the font copyright notice in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1105 (DV_SVAL_UNI_VERSION), the function returns the font version string in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1106 (DV_SVAL_UNI_POSTSCRIPTNAME), the function returns the PostScript name for the font in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1107 (DV_SVAL_UNI_UNIQUEID), the function returns a unique font identifier for the font in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available. The exact meaning of this value is font format specific.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1108 (DV_SVAL_UNI_TRADEMARK), the function returns a trademark notice for the font in Unicode format. This value is only defined in D-Type, TrueType and OpenType (with TrueType or CFF outlines) fonts and may not be always available.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1109 (DV_SVAL_UNI_MANUFACTURER), the function returns the name of the manufacturer of the font in Unicode format. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1110 (DV_SVAL_UNI_DESIGNER), the function returns the name of the designer of the font in Unicode format. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1111 (DV_SVAL_UNI_DESCRIPTION), the function returns the description of the font in Unicode format. This can contain revision information, usage recommendations, history, features, etc. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1112 (DV_SVAL_UNI_SAMPLE), the function returns a sample text string for the font in Unicode format. This can be the font name, or any other text that the designer thinks is the best sample to display the font in. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1113 (DV_SVAL_UNI_TYPOFAMILYNAME), the function returns the typographic family name for the font in Unicode format, as defined by the OpenType specification (Name ID 16):</p>
+
+<blockquote><em>
+Typographic Family name: The typographic family grouping doesn't impose any constraints on the number of faces within it, in contrast with the 4-style family grouping (ID 1), which is present both for historical reasons and to express style linking groups. If name ID 16 is absent, then name ID 1 is considered to be the typographic family name. (In earlier versions of the specification, name ID 16 was known as "Preferred Family".)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1114 (DV_SVAL_UNI_TYPOSUBFAMILYNAME), the function returns the typographic subfamily name for the font in Unicode format, as defined by the OpenType specification (Name ID 17):
+
+<blockquote><em>
+Typographic Subfamily name: This allows font designers to specify a subfamily name within the typographic family grouping. This string must be unique within a particular typographic family. If it is absent, then name ID 2 is considered to be the typographic subfamily name. (In earlier versions of the specification, name ID 17 was known as "Preferred Subfamily".)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1115 (DV_SVAL_UNI_WWSFAMILYNAME), the function returns the WWS family name for the font in Unicode format, as defined by the OpenType specification (Name ID 21):
+
+<blockquote><em>
+WWS Family Name. Used to provide a WWS-conformant family name in case the entries for IDs 16 and 17 do not conform to the WWS model. (That is, in case the entry for ID 17 includes qualifiers for some attribute other than weight, width or slope.) If bit 8 of the fsSelection field is set, a WWS Family Name entry should not be needed and should not be included. Conversely, if an entry for this ID is include, bit 8 should not be set. (See OS/2 'fsSelection' field for details.) Examples of name ID 21: "Minion Pro Caption" and "Minion Pro Display". (Name ID 16 would be "Minion Pro" for these examples.)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1116 (DV_SVAL_UNI_WWSSUBFAMILYNAME), the function returns the WWS subfamily name for the font in Unicode format, as defined by the OpenType specification (Name ID 22):
+
+<blockquote><em>
+WWS Subfamily Name. Used in conjunction with ID 21, this ID provides a WWS-conformant subfamily name (reflecting only weight, width and slope attributes) in case the entries for IDs 16 and 17 do not conform to the WWS model. As in the case of ID 21, use of this ID should correlate inversely with bit 8 of the fsSelection field being set. Examples of name ID 22: "Semibold Italic", "Bold Condensed". (Name ID 17 could be "Semibold Italic Caption", or "Bold Condensed Display", for example.)
+</em></blockquote>
+
+<p>See https://www.microsoft.com/typography/otspec/name.htm#nameIDs for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+
+<li>
+<p>If <em>string_id</em> = 1201 (DV_SVAL_ASC_MMDESIGNNAMES), the function returns the names of the base Multiple-Master font designs. This value should only be available in Multiple-master fonts (D-Type or Type 1). It is returned in the following format:</p>
+<p class="center">&lt;FirstBaseDesignName&gt;&lt;SecondBaseDesigName&gt;...&lt;LastBaseDesignName&gt;</p>
+
+<p>Example:</p>
+
+<p class="center">&lt;Weight_0 Width_0&gt;&lt;Weight_1 Width_0&gt;&lt;Weight_0 Width_1&gt;&lt;Weight_1 Width_1&gt;<br />&nbsp;</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1202 (DV_SVAL_ASC_FONTMATRIX), the function returns the font's Type 1 transform matrix as a string in ASCII format. This string is returned for Type 1, Type 3 and bare CFF fonts. In properly constructed Type 1, Type 3 and bare CFF fonts, this string will contain 6 float point numbers separated by a white space character<sup>[<a href="dtFontGetStringValue.htm#note1">1</a>]</sup> as shown below:</p>
+
+<p class="center">xx xy yx yy dx dy</p>
+
+<p>Most Type 1, Type 3 and bare CFF fonts have a trivial transform matrix, which is a simple scaling matrix. For example:</p>
+<p>0.001 0 0 0.001 0 0 &mdash; simple scaling transform matrix (both xx and yy scale are 0.001)</p>
+
+<p>However, some fonts (called Synthetic Fonts) have a non-zero xy parameter which Adobe Type Manager (ATM) then uses to render them as oblique (italic). For example:</p>
+
+<p>0.001 -0.21255656 0 0.001 0 0 &mdash; xx and yy scale is 0.001 while xy is -0.21255656 which corresponds to a horizontal skew angle of 12 degrees to the right since TAN(-12 degrees) = -0.21255656</p>
+
+<p>At present, D-Type Font Engine ignores xy, yx, dx and dy transform parameters when rendering Type 1, Type 3 and bare CFF fonts. In most cases these parameters are 0 anyway. However, applications that wish to support oblique Synthetic Fonts can retrieve the yx parameter and calculate the horizontal skew angle in degrees as ATAN(xy), then set the <em>skew_h</em> parameter of the <a href="../manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure accordingly.</p>
+
+<p>Note: D-Type Solutions is not aware of any Type 1, Type 3 or bare CFF fonts on the market that use a non-trivial transform matrix (i.e. a transform matrix in which both the xy and yx parameters are specified as non-zero). Also, the Adobe Type 1 Font Format Specification book does not describe how to properly handle fonts in such cases. For example, it is unclear how the kerning, advance width and other glyph metrics are affected (if affected at all) when the font uses a non-trivial transform matrix.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1203 (DV_SVAL_ASC_MMAXISTYPES), the function returns the font's Type 1 Multiple-Master axis types as a string in ASCII format. This string is only returned for Type 1 Multiple-Master fonts. In properly constructed Type 1 fonts, this string will contain 1 or more  axis types. If multiple axis types are present, they will be separated by a white space character<sup>[<a href="dtFontGetStringValue.htm#note1">1</a>]</sup>.</p>
+
+<p>Example 1:</p>
+
+<p class="center">[/Weight]</p>
+
+<p>Example 2:</p>
+
+<p class="center">[/Weight /Width]</p>
+
+<p>Example 3:</p>
+
+<p class="center">[/Weight /Width /OpticalSize]</p>
+
+<p>This string is taken directly from the Type 1 font program and corresponds to the argument of the /BlendAxisTypes keyword. For more details, please refer to the Type 1 Font Format Supplement book (Technical Specification #5015) published by Adobe Systems Incorporated. In particular, Section 3: Multiple Master Font Extension and Section 3.5: Multiple Master keywords and Procedures describe this keyword and its arguments in more detail.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1204 (DV_SVAL_ASC_MMDESIGNPOSITIONS), the function returns the font's Type 1 Multiple-Master design positions as a string in ASCII format. This string is only returned for Type 1 Multiple-Master fonts.</p>
+
+<p>Example 1:</p>
+
+<p class="center">[[0][1]]</p>
+
+<p>Example 2:</p>
+
+<p class="center">[[0 0 ][1 0 ][0 1 ][1 1 ]]</p>
+
+<p>Example 3:</p>
+
+<p class="center">[[0 0 0][0 1 0][1 0 0][1 1 0][0 0 1][0 1 1][1 0 1][1 1 1]]</p>
+
+<p>In the above examples square brackets specify an array. Individual array elements are separated by a white space character<sup>[<a href="dtFontGetStringValue.htm#note1">1</a>]</sup>.</p>
+
+<p>This string is taken directly from the Type 1 font program and corresponds to the argument of the /BlendDesignPositions keyword. For more details, please refer to the Type 1 Font Format Supplement book (Technical Specification #5015) published by Adobe Systems Incorporated. In particular, Section 3: Multiple Master Font Extension and Section 3.5: Multiple Master keywords and Procedures describe this keyword and its arguments in more detail.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1205 (DV_SVAL_ASC_MMDESIGNMAP), the function returns the font's Type 1 Multiple-Master design map as a string in ASCII format. This string is only returned for Type 1 Multiple-Master fonts.</p>
+
+<p>Example 1:</p>
+
+<p class="center">[[[200 0][400 0.5][600 0.85][900 1]]]</p>
+
+<p>Example 2:</p>
+
+<p class="center">[ [[50 0][1450 1]] [[50 0][1450 1]] ]</p>
+
+<p>Example 3:</p>
+
+<p class="center">[ [[200 0][500 .5][900 1]] [[300 0][700 1]] [[6 0][11 .5][72 1]] ]</p>
+
+<p>In the above examples square brackets specify an array. Individual array elements are separated by a white space character<sup>[<a href="dtFontGetStringValue.htm#note1">1</a>]</sup>.</p>
+
+<p>This string is taken directly from the Type 1 font program and corresponds to the argument of the /BlendDesignMap keyword. For more details, please refer to the Type 1 Font Format Supplement book (Technical Specification #5015) published by Adobe Systems Incorporated. In particular, Section 3: Multiple Master Font Extension and Section 3.5: Multiple Master keywords and Procedures describe this keyword and its arguments in more detail.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> = 1206 (DV_SVAL_ASC_FONTMATRIXGROUPS), the function returns an array of font matrix groups as a string in ASCII format. This string is only returned for bare CID-keyed CFF fonts. In properly constructed bare CID-keyed CFF fonts, each font matrix group in the array contains a Type 1 font transformation matrix (6 float point numbers) and a group index (a positive integer enclosed by &lt;&nbsp;and&nbsp;&gt;), as shown below:</p>
+
+<p class="center">xx xy yx yy dx dy &lt;group_index&gt;</p>
+
+<p>The meaning of the xx xy yx yy dx dy parameters is the same as for DV_SVAL_ASC_FONTMATRIX. The last parameter, group_index, is a positive integer whose only purpose at the moment is to uniquely identify the font matrix group.</p>
+
+<p>All the parameters within a single font matrix group are separated by a white space character<sup>[<a href="dtFontGetStringValue.htm#note1">1</a>]</sup>. If the string contains multiple font matrix groups, a white space character will also serve as the group separator.</p>
+
+<p>Here is an example of what a string containing a single font matrix group might look like:</p>
+
+<p class="center">0.0018 0.0 0.0 0.00018 0.0 0.0 &lt;0&gt;</p>
+
+<p>Here is an example of what a string containing two font matrix group might look like:</p>
+
+<p class="center">0.0018 0.0 0.0 0.00018 0.0 0.0 &lt;0&gt; 0.003 0.0 0.0 0.00075 0.0 0.0 &lt;1&gt;</p>
+
+<p>Although CID-keyed CFF fonts may theoretically contain multiple font matrix groups (up to 256 actually), D-Type Solutions is not aware of any such fonts on the market. Thus, it is expected that for virtually all CID-keyed CFF fonts, a single font matrix group will be returned.</p>
+
+<p>Should CID-keyed CFF fonts with more than one font matrix group be encountered in the future, the group_index parameter will make it possible to associate each font transformation matrix with one or more glyphs in a font. Until then, group_index can be ignored.</p>
+
+<p>At present, D-Type Font Engine ignores font matrix groups when rendering CID-keyed CFF fonts. This is because the CFF Font Format Specification does not provide information necessary to unambiguously interpret font transformation matrices in these groups. For example, it is presently unclear whether/how these matrices interact with the font's Type 1 transform matrix (obtained via DV_SVAL_ASC_FONTMATRIX).</p>
+</li>
+</ul>
+
+
+<h4>Additional Return Values For Multiple-Master and Variable Fonts</h4>
+
+<ul>
+<li>
+<p>If <em>string_id</em> is in the range [2000..2499] ([DV_SVAL_ASC_MMAXIS_NAME_000..2499]) or [2500..2999] ([DV_SVAL_UNI_MMAXIS_NAME_000..2999]), the function returns the name of each font axis in a variable font. See the following example. In this example we actually use a helper GetFontString function (built on top of dtFontGetStringValue), since this function can handle both ASCII and Unicode strings that may be present in a font.</p>
+
+<div class="box_field">
+<pre>
+/*
+
+Globals used in this example:
+
+* DTypeEngInst - A valid D-Type Font Engine Instance Handle
+* FontIndex - A valid D-Type index of the MM or variable font in question
+
+Note that in a real program these would not be globals.
+
+*/
+
+// Two helper functions (GetStringId and GetFontString)
+
+inline DT_ID_SWORD GetStringId(DT_SWORD start_mm_id, DT_SLONG mm_axis) const
+{
+    return static_cast&lt;DT_ID_SWORD&gt;(start_mm_id + mm_axis);
+}
+
+void GetFontString(DT_SWORD font_index, DT_ID_SWORD string_id_asc, DT_ID_SWORD string_id_uni, DT_UBYTE* buffer, DT_SLONG max_string_len) const
+{
+    if (buffer == DV_NULL) return;
+
+    buffer[0] = 0;
+
+    if (font_index &lt; 0 || max_string_len &lt; 4) return;
+
+    max_string_len--; /* because we need one extra element at the end for 0 */
+
+    DT_SLONG i, j, len;
+
+    /* First try to get ASCII string */
+
+    if (string_id_asc != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_asc, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+        if (len &gt; 0) { buffer[len] = 0; return; }
+    }
+
+    /* If not found, try Unicode */
+
+    if (string_id_uni != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_uni, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+
+        /* Convert Unicode to ASCII */
+
+        for (i = j = 0; i &lt; len; i += 2, j++)
+        {
+            DT_UBYTE b = buffer[i]; buffer[i] = buffer[i + 1]; buffer[i + 1] = b; /* BE -&gt; LE swap */
+            DT_UWORD char_code = DF_READ_UWORD_LE(buffer + i); if (char_code &gt; 255) char_code = '?';
+            buffer[j] = static_cast&lt;DT_UBYTE&gt;(char_code);
+        }
+
+        buffer[j] = 0;
+    }
+}
+
+// Get font axis names
+
+const DT_FLOAT one_over_65536 = 0.0000152587890625;
+DT_SLONG i;
+DT_SLONG inst_count = 0;
+DT_SWORD font_dim /*unused*/, font_axes = dtFontGetMMAxisInfo(DTypeEngInst, FontIndex, &font_dim, &inst_count);
+DT_CHAR font_buffer[1024];
+
+for (i = 0; i &lt; font_axes; i++)
+{
+   GetFontString(FontIndex, GetStringId(DV_SVAL_ASC_MMAXIS_NAME_000, i), GetStringId(DV_SVAL_UNI_MMAXIS_NAME_000, i), (DT_UBYTE*)(font_buffer), 1024);
+   printf("Axis %ld: Axis Name = %s : Default Value = %.2f\r", i, font_buffer, inst_data[k] * one_over_65536);
+}
+</pre>
+</div>
+</li>
+
+<li>
+<p>If <em>string_id</em> is in the range [3000..3499] ([DV_SVAL_ASC_MMINSTANCE_NAME_000..3499]) or [3500..3999] ([DV_SVAL_UNI_MMINSTANCE_NAME_000..3999]), the function returns named font instance names in a font (assuming that named font instances are stored in the font file). See the following example. In this example we actually use a helper GetFontString function (built on top of dtFontGetStringValue), since this function can handle both ASCII and Unicode strings that may be present in a font.</p>
+
+<div class="box_field">
+<pre>
+/*
+
+Globals used in this example:
+
+* DTypeEngInst - A valid D-Type Font Engine Instance Handle
+* FontIndex - A valid D-Type index of the MM or variable font in question
+
+Note that in a real program these would not be globals.
+
+*/
+
+// Two helper functions (GetStringId and GetFontString)
+
+inline DT_ID_SWORD GetStringId(DT_SWORD start_mm_id, DT_SLONG mm_axis) const
+{
+    return static_cast&lt;DT_ID_SWORD&gt;(start_mm_id + mm_axis);
+}
+
+void GetFontString(DT_SWORD font_index, DT_ID_SWORD string_id_asc, DT_ID_SWORD string_id_uni, DT_UBYTE* buffer, DT_SLONG max_string_len) const
+{
+    if (buffer == DV_NULL) return;
+
+    buffer[0] = 0;
+
+    if (font_index &lt; 0 || max_string_len &lt; 4) return;
+
+    max_string_len--; /* because we need one extra element at the end for 0 */
+
+    DT_SLONG i, j, len;
+
+    /* First try to get ASCII string */
+
+    if (string_id_asc != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_asc, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+        if (len &gt; 0) { buffer[len] = 0; return; }
+    }
+
+    /* If not found, try Unicode */
+
+    if (string_id_uni != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_uni, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+
+        /* Convert Unicode to ASCII */
+
+        for (i = j = 0; i &lt; len; i += 2, j++)
+        {
+            DT_UBYTE b = buffer[i]; buffer[i] = buffer[i + 1]; buffer[i + 1] = b; /* BE -&gt; LE swap */
+            DT_UWORD char_code = DF_READ_UWORD_LE(buffer + i); if (char_code &gt; 255) char_code = '?';
+            buffer[j] = static_cast&lt;DT_UBYTE&gt;(char_code);
+        }
+
+        buffer[j] = 0;
+    }
+}
+
+// Get named font instance names
+
+DT_SLONG i;
+DT_SLONG inst_count = 0;
+DT_SWORD font_dim /*unused*/, font_axes = dtFontGetMMAxisInfo(DTypeEngInst, FontIndex, &font_dim, &inst_count);
+DT_CHAR font_buffer[1024];
+
+for (i = 0; i &lt; inst_count; i++)
+{
+   /* copy font instance names to font_buffer */
+   GetFontString(FontIndex, GetStringId(DV_SVAL_ASC_MMINSTANCE_NAME_000, i), GetStringId(DV_SVAL_UNI_MMINSTANCE_NAME_000, i), (DT_UBYTE*)font_buffer, 1024);
+
+   if (font_buffer[0] == 0) break; /* unexpected (bad font?) */
+
+   printf("Instance #%ld: Name = %s\r", i, font_buffer);
+}
+</pre>
+</div>
+</li>
+</ul>
+
+
+<h3 id="note1">Note 1</h3>
+
+<p>
+When parsing or searching for white space characters in strings that are taken directly from Type 1 fonts, please be prepared to use a robust parsing function. This is because in Type 1 font programs the term "white space character" refers to a whole family of space characters such as: a single space character, a single tab character, multiple space characters, multiple tab characters, as well as various combinations of single or multiple space and/or tab characters. These combinations, while rare, may exist in certain Type 1 fonts.<br /></small>
+</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

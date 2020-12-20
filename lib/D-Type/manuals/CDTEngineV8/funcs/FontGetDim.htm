@@ -1,0 +1,100 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>FontGetDim</strong></div><br />
+
+<p><strong>Note: This function is deprecated. Use <a href="FontGetMMAxisInfo.htm">FontGetMMAxisInfo</a> instead.</strong></p>
+
+<p>This function returns the number of Multiple-Master base designs in the specified font.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value represents the number of Multiple-Master base designs in the font referenced by <em>font_index</em>. If the referenced font is a Single-Master font, the return value is always 1. If the referenced font, however, is a Multiple-Master font (e.g. D-Type or Adobe Type 1) the return value is a positive number greater than 1.</p>
+
+
+<h3>Comments</h3>
+
+<p>For Multiple-Master fonts, the return value is usually 2, 4 or 8. In most cases the base designs are organized in groups of 2, where each group represents one <em>design axis</em> such as weight, width, optical size etc. In this case, each base design represents one <em>extreme</em> in the dynamic range of possible instances along the design axis. For example, if one of the design axes is width, the base designs typically represent the narrowest possible and widest possible design for this font. Virtually all Adobe Type 1 fonts are organized in this way.</p>
+
+<p>Although the number of base designs in a font is usually a multiple of 2, this is not a requirement for D-Type fonts. This is because D-Type Font Engine does not see design axes but individual base designs, where each design can contribute independently in the final interpolation process.</p>
+
+<p>Multiple-Master fonts with more than 8 base designs are very complex and virtually nonexistent.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,5 @@
+This objects represents a text design. In Power Engine API, a text design is an array of manually positioned characters or glyphs. As such, text designs are very suitable for drawing arbitrary text compositions (i.e. text compositions in which the (x, y) location of each glyph/character on the page is manually specified by the user rather than automatically calculated by the text layout engine).
+
+{strong}Designated Rendering Function:{/strong} pdDrawTextDesign (26)
+
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.

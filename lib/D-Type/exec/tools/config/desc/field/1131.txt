@@ -1,0 +1,8 @@
+Pattern Raster Operation.
+
+{strong}Supported values:{/strong}
+
+0 = None
+1 = Invert
+2 = X-Mirror
+3 = Invert and X-Mirror

@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dcRasterizerBSplineTo</h2><div class="box_prototype"><strong>
+void dcRasterizerBSplineTo(DT_DCRASTER dcr, DT_FLOAT x1, DT_FLOAT y1, DT_FLOAT x2, DT_FLOAT y2, DT_SLONG seg)</strong></div><br /><strong>Short Description:</strong> <em>BSplineTo command</em><br /><br />
+<h2>dcRasterizerBSplineToFrac</h2><div class="box_prototype"><strong>
+void dcRasterizerBSplineToFrac(DT_DCRASTER dcr, DT_SFRAC_L x1, DT_SFRAC_L y1, DT_SFRAC_L x2, DT_SFRAC_L y2, DT_SLONG seg)</strong></div><br /><strong>Short Description:</strong> <em>BSplineToFrac command</em><br /><br />
+
+<h2>dcRasterizerBSplineTo2</h2><div class="box_prototype"><strong>
+void dcRasterizerBSplineTo2(DT_DCRASTER dcr, DT_FLOAT x1, DT_FLOAT y1, DT_FLOAT x2, DT_FLOAT y2, DT_SLONG seg, const DT_UBYTE color1[], const DT_UBYTE color2[])</strong></div><br /><strong>Short Description:</strong> <em>BSplineTo2 command</em><br /><br />
+<h2>dcRasterizerBSplineToFrac2</h2><div class="box_prototype"><strong>
+void dcRasterizerBSplineToFrac2(DT_DCRASTER dcr, DT_SFRAC_L x1, DT_SFRAC_L y1, DT_SFRAC_L x2, DT_SFRAC_L y2, DT_SLONG seg, const DT_UBYTE color1[], const DT_UBYTE color2[])</strong></div><br /><strong>Short Description:</strong> <em>BSplineToFrac2 command</em><br /><br />
+
+<p>The dcRasterizerBSplineTo, dcRasterizerBSplineToFrac, dcRasterizerBSplineTo2 and dcRasterizerBSplineToFrac2 functions instruct D-Type Direct Color Rasterizer to add a new B-Spline curve segment to the current contour.</p>
+
+<p>dcRasterizerBSplineToFrac is identical to dcRasterizerBSplineTo except that its coordinates are 24.8 signed fractional values. For more details on fractional units, see the <a href="../manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<p>dcRasterizerBSplineTo2 is identical to dcRasterizerBSplineTo except that it supports colour at the curve's control and end points (with certain D-Type Rasterizers only). dcRasterizerBSplineToFrac2 is identical to dcRasterizerBSplineToFrac except that it supports colour at the curve's control and end points (with certain D-Type Rasterizers only).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>dcr</em></p>
+</td><td>
+<p>Handle of the previously created D-Type Direct Color Rasterizer instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x1</em></p>
+</td><td>
+<p>X coordinate of the control point of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y1</em></p>
+</td><td>
+<p>Y coordinate of the control point of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x2</em></p>
+</td><td>
+<p>End X coordinate of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y2</em></p>
+</td><td>
+<p>End Y coordinate of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>seg</em></p>
+</td><td>
+<p>Minimum number of curve subdivisions. Higher values will result in smoother looking curves but will take more time to compute. Set to 0 to automatically calculate the optimum value.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color1</em></p>
+</td><td>
+<p>Color/transparency of the curve's control point. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only. See <em>color</em> in <a href="dcRasterizerLineTo.htm">dcRasterizerLineTo2</a> or <a href="dcRasterizerLineTo.htm">dcRasterizerLineToFrac2</a> for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color2</em></p>
+</td><td>
+<p>Color/transparency of the curve's end point. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only. See <em>color</em> in  <a href="dcRasterizerLineTo.htm">dcRasterizerLineTo2</a> or <a href="dcRasterizerLineTo.htm">dcRasterizerLineToFrac2</a> for details.</p>
+</td></tr>
+
+</table>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

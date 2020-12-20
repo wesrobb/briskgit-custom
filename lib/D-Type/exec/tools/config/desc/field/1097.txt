@@ -1,0 +1,16 @@
+For images that contain an alpha channel (pdImageDataGrayAlpha and pdImageDataRGBAlpha), this is the interpretation of the alpha channel. For monochrome images (pdImageDataMono) this is the interpretation of the bits (pixels) in each byte.
+
+{strong}Supported values:{/strong}
+
+For GA and RGBA images
+
+0 = Ignore the 2nd byte in GA images and 4th byte in RGBA images. Assuming that the channels are not reordered using the pdOrderingArr property, this will result in the alpha channel being ignored.
+1 = Alpha channel represents transparency. This is true even if the channels are reordered using the pdOrderingArr property.
+2 = Alpha channel represents opacity. This is true even even if the channels are reordered using the pdOrderingArr property.
+
+For monochrome images
+
+0 = Bits (pixels) in each byte are ordered left to right; 1 represent black, 0 represent white
+1 = Bits (pixels) in each byte are ordered left to right; 1 represent white, 0 represent black
+2 = Bits (pixels) in each byte are ordered right to left; 1 represent black, 0 represent white
+3 = Bits (pixels) in each byte are ordered right to left; 1 represent white, 0 represent black

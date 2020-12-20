@@ -1,0 +1,59 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtBitmapDoOutput</h2><div class="box_prototype"><strong>
+void dtBitmapDoOutput(DT_DTENGINE engine, const DT_BMP* memory_bitmap, DT_SRAST_L x, DT_SRAST_L y)</strong></div><br /><strong>Short Description:</strong> <em>Render grayscale bitmap to Output</em><br /><br />
+
+<p>This function draws an 8-bit grayscale memory bitmap at coordinates (X, Y) of the current Output. The Output provides the destination surface (which can be either D-Type's Memory Device Context surface or Windows compatible Device Context surface) and style attributes that are applied to the bitmap when it is rendered.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_bitmap</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure that contains information about the plain 8-bit grayscale memory bitmap. This must be a regular (non-LCD) and non-compressed bitmap. LCD optimized and/or compressed bitmaps are not supported by this function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>X</em></p>
+</td><td>
+<p>X coordinate of the bitmap's origin point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>Y</em></p>
+</td><td>
+<p>Y coordinate of the bitmap's origin point, in pixels.</p>
+</td></tr>
+
+</table>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

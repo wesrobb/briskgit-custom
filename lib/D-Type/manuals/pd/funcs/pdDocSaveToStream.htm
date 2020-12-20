@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSaveToStream</h2><div class="box_prototype"><strong>
+DT_SLONG pdDocSaveToStream(DT_PDDOC power_doc, DT_STREAM_DESC* sd)</strong></div><br /><strong>Short Description:</strong> <em>Save document to stream</em><br /><br />
+
+<p>The pdDocSaveToStream function saves the Power Engine document specified by the document instance <em>power_doc</em> to a file. The file will be in the native uncompressed PowerDoc format.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the Power Engine document to be saved.</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the output file to be created. The file will be in the native uncompressed PowerDoc format. Native PowerDoc files usually are usually recognized by their <em>.pdc</em> extension. If the specified output file already exists, it will be overwritten.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns a negative number.</p>
+
+
+<h3>Comments</h3>
+<p>PowerDoc files created by this function can be read using the <a href="pdDocAppendFromStream.htm">pdDocAppendFromStream</a> function.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdDocAppendFromStream.htm">pdDocAppendFromStream</a></p>
+
+
+<h3>Note 1</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

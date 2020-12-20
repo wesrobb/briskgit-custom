@@ -1,0 +1,478 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtImageDoOutput</h2><div class="box_prototype"><strong>
+DT_SWORD dtImageDoOutput(DT_DTENGINE engine, const DT_UBYTE* img_m, DT_UWORD img_w, DT_UWORD img_h, DT_SLONG img_pitch, DT_UBYTE img_bits_per_pixel, DT_UBYTE reserved, DT_UBYTE transparency, DT_UBYTE quality, DT_UBYTE alpha_treatment, DT_UBYTE edge_smoothing, const DT_UBYTE background_arr[], const DT_UBYTE channel_ordering_arr[], const DT_UBYTE rr[], const DT_UBYTE gg[], const DT_UBYTE bb[], DT_SLONG x, DT_SLONG y, DT_SLONG w, DT_SLONG h, const DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Render G, GA, RGB or RGBA bitmap image to Output</em><br /><br />
+
+<p>This function draws a bitmap image (i.e. a picture created by a pattern of pixels) within a holding rectangle whose left corner is at coordinates (X, Y) of the current Output. The image's holding rectangle can have any width and height (which does not need to equal the width and height of the bitmap image itself) and can be additionally transformed using a 2x2 transformation matrix.</p>
+
+<p>Bitmap images can be used to represent photographs, icons, complex graphics etc. This function supports bitmap images in RGBA (32&nbsp;bits per pixel), RGB (24&nbsp;bits per pixel), GA (16&nbsp;bits per pixel), G (8&nbsp;bits per pixel) and monochrome (1&nbsp;bit per pixel) format, and can process various image format variations. Also, this function supports a number of rendering parameters, such as the quality level, edge smoothing, transparency, duotone output etc.</p>
+
+<p>This functions works only if the Output is connected to a supported Memory Surface (MDC or Memory Device Context) by calling the <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function. The list of memory surfaces supported by this function is listed below.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img_m</em></p>
+</td><td>
+<p>Pointer to memory where bitmap image data is stored. The length of the bitmap image data in memory must be <em>img_pitch</em>&nbsp;*&nbsp;<em>img_h</em> bytes.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img_w</em></p>
+</td><td>
+<p>The width of the bitmap image in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img_h</em></p>
+</td><td>
+<p>The height of the bitmap image in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img_pitch</em></p>
+</td><td>
+<p>The distance, in bytes, between the beginning of two neighbouring pixel rows. This parameter makes it possible to render bitmap images that have some padding (extra bytes) at the end of each bitmap row.</p>
+
+<p>This parameter works with G, GA, RGB and RGBA images but not with monochrome images. Monochrome images must not have any padding.</p>
+
+<p>A valid pitch value must be at least <em>img_w</em> * <em>bytes_per_pixel</em> bytes, where <em>bytes_per_pixel</em> is 1 for G, 2 for GA, 3 for RGB and 4 for RGBA images. A pitch value that is exactly <em>img_w</em> * <em>bytes_per_pixel</em> bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than <em>img_w</em> * <em>bytes_per_pixel</em> bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is <em>img_pitch</em> - <em>img_w</em> * <em>bytes_per_pixel</em>). Note that D-Type Engine does not read or use these extra bytes. A pitch value that is smaller than <em>img_w</em> * <em>bytes_per_pixel</em> is not valid and will be interpreted as <em>img_w</em> * <em>bytes_per_pixel</em> instead.</p>
+
+<p>One exception to the above rule is the value 0. Passing <em>img_pitch</em> as 0 is valid and has the same effect as passing <em>img_w</em> * <em>bytes_per_pixel</em> for the same parameter, i.e. it is a simple and convenient way to indicate that the pixel rows are contiguous.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img_bits_per_pixel</em></p>
+</td><td>
+<p>Format of the bitmap image, i.e. how many bits are used for each pixel. Must be 1 for monochrome, 8 for G, 16 for GA, 24 for RGB and 32 for RGBA images.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transparency</em></p>
+</td><td>
+<p>Image transparency. The value 0 means minimum intensity, 255 means maximum intensity. Note that this transparency does not replace but is in addition to any per-pixel transparency that may be defined in bitmap images with an alpha channel (i.e. GA and RGBA images).</p>
+<div class="box_field">
+<p>Sample values:</p>
+<ul>
+<li>0 = Fully opaque</li>
+<li>127 = 50% transparent</li>
+<li>255 = Fully transparent</li>
+</ul>
+</div>
+</td></tr>
+
+<tr><td>
+<p><em>quality</em></p>
+</td><td>
+<p>Image rendering quality level.</p>
+<div class="box_field">
+<p>Supported values:</p>
+<ul>
+<li>0 = Low Quality But Fast Rendering</li>
+<li>1 = High Quality But Slower Rendering</li>
+<li>2 = Very High Quality But Slower Rendering</li>
+<li>3 = Very High Quality (More Blur) But Slower Rendering</li>
+</ul>
+</div>
+</td></tr>
+
+<tr><td>
+<p><em>alpha_treatment</em></p>
+</td><td>
+<p>For images that contain an alpha channel (GA and RGBA), this is the interpretation of the image's alpha channel. For monochrome images this is the interpretation of the bits (pixels) in each byte.</p>
+
+<div class="box_field">
+<p>Supported values:</p>
+<p>For GA and RGBA images</p>
+<ul>
+<li>0 = Ignore the 2nd byte in GA images and 4th byte in RGBA images. Assuming that the channels are not reordered using the <em>channel_ordering_arr</em> parameter, this will result in the alpha channel being ignored.</li>
+<li>1 = Alpha channel represents transparency. This is true even if the channels are reordered using the <em>channel_ordering_arr</em> parameter.</li>
+<li>2 = Alpha channel represents opacity. This is true even even if the channels are reordered using the <em>channel_ordering_arr</em> parameter.</li>
+</ul>
+<p>For monochrome images</p>
+<ul>
+<li>0 = Bits (pixels) in each byte are ordered left to right; 1 represent black, 0 represent white</li>
+<li>1 = Bits (pixels) in each byte are ordered left to right; 1 represent white, 0 represent black</li>
+<li>2 = Bits (pixels) in each byte are ordered right to left; 1 represent black, 0 represent white</li>
+<li>3 = Bits (pixels) in each byte are ordered right to left; 1 represent white, 0 represent black</li>
+</ul>
+</div>
+
+</td></tr>
+
+<tr><td>
+<p><em>edge_smoothing</em></p>
+</td><td>
+<p>Edge smoothing algorithm.</p>
+<div class="box_field">
+<p>Supported values:</p>
+<ul>
+<li>0 = Edge smoothing is off</li>
+<li>1 = Edge smoothing is on, inward (does not change the image boundary)</li>
+<li>2 = Edge smoothing is on, outward (extends the image boundary by a small amount)</li>
+</ul>
+</div>
+<p>Edge smoothing can be enabled to improve the appearance of the pixels at the very edges of bitmap images that are rotated or skewed using the <em>transform</em> 2x2 transformation matrix. For other situations (i.e. when images are simply scaled) it is best to set <em>edge_smoothing</em> to 0 as this can improve the rendering speed.</p>
+</td></tr>
+
+<tr><td>
+<p><em>background_arr</em></p>
+</td><td>
+<p>Background color bytes when edge smoothing is enabled. This array has 4 bytes. This array is respected only when edge smoothing is enabled, as follows:</p>
+
+<ul>
+<li>In RGBA images all 4 bytes are used; these 4 bytes represent the background color of an image.</li>
+<li>In RGB images the first three bytes are used; these 3 bytes represent the background color of an image. The fourth byte is unused and should be set to 255.</li>
+<li>In GA images the first two bytes are used; these 2 bytes represent the background color of an image. The last two bytes are unused and should be set to 255.</li>
+<li>In G images only the first byte is used; this byte represent the background color of an image. The last three bytes are unused and should be set to 255.</li>
+</ul>
+
+<p>Note that the <em>channel_ordering_arr</em> parameter described below affects the bytes in this array the same way as the bytes of the image itself.</p>
+<p>If edge smoothing is not enabled, <em>background_arr</em> can be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>channel_ordering_arr</em></p>
+</td><td>
+<p>An array that specifies the order of the bytes (color channels) in each pixel in the bitmap image. This works with all supported bitmap image formats that have at least 2 bytes (color channels) per pixel, making it possible to render bitmap images in which individual pixels are stored using a pattern of GA, RGB or RGBA bytes in any order.</p>
+
+<p>The number of elements in the array must equal <em>bytes_per_pixel</em>, where <em>bytes_per_pixel</em>&nbsp;=&nbsp;<em>img_bits_per_pixel</em>&nbsp;/&nbsp;8. The value of each element is the index of the corresponding color channel in each pixel and must not be smaller than 0 or greater than bytes_per_pixel - 1.</p>
+
+<p>It the value of some of the <em>channel_ordering_arr</em> elements is out of range, D-Type Engine will use the modulo <em>bytes_per_pixel</em> arithmetic to index the channels.</p>
+
+<p>If the color channels are defined in the standard order, <em>channel_ordering_arr</em> can be set to DV_NULL.</p>
+
+<div class="box_field">
+<p>Sample values for GA bitmap images:</p>
+<ul>
+<li>0, 1 = G channel's index is 0, A channel's index is 1</li>
+<li>1, 0 = G channel's index is 1, A channel's index is 0</li>
+</ul>
+<p>Sample values for RGB bitmap images:</p>
+<ul>
+<li>0, 1, 2 = R channel's index is 0, G channel's index is 1, B channel's index is 2</li>
+<li>2, 1, 0 = R channel's index is 2, G channel's index is 1, B channel's index is 0</li>
+<li>1, 2, 0 = R channel's index is 1, G channel's index is 2, B channel's index is 0</li>
+<li>0, 2, 2 = R channel's index is 0, G channel's index is 2, B channel's index is 2 (in other words G and B color channels map to the same value)</li>
+<li>1, 1, 1 = R channel's index is 1, G channel's index is 1, B channel's index is 1 (in other words all color channels map to the same value, resulting in grayscale output)</li>
+</ul>
+<p>Sample values for RGBA bitmap images:</p>
+<ul>
+<li>0, 1, 2, 3 = R channel's index is 0, G channel's index is 1, B channel's index is 2, A channel's index is 3</li>
+<li>2, 1, 0, 3 = R channel's index is 2, G channel's index is 1, B channel's index is 0, A channel's index is 3</li>
+<li>1, 2, 3, 0 = R channel's index is 1, G channel's index is 2, B channel's index is 3, A channel's index is 0</li>
+<li>3, 2, 1, 0 = R channel's index is 3, G channel's index is 2, B channel's index is 1, A channel's index is 0</li>
+</ul>
+</div>
+</td></tr>
+
+<tr><td>
+<p><em>rr</em></p>
+</td><td>
+<p>An array consisting of exactly 2 elements representing the initial and final intensity of red. This array can be used to render monochrome and grayscale images as duotone. If duotone output is not desired, or if rendering RGB(A) images, this pointer can be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>gg</em></p>
+</td><td>
+<p>An array consisting of exactly 2 elements representing the initial and final intensity of green. This array can be used to render monochrome and grayscale images as duotone. If duotone output is not desired, or if rendering RGB(A) images, this pointer can be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bb</em></p>
+</td><td>
+<p>An array consisting of exactly 2 elements representing the initial and final intensity of blue. This array can be used to render monochrome and grayscale images as duotone. If duotone output is not desired, or if rendering RGB(A) images, this pointer can be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>X coordinate of the image's holding rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Y coordinate of the image's holding rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>w</em></p>
+</td><td>
+<p>Width of the image's holding rectangle, in pixels. Must be positive.</p>
+</td></tr>
+
+<tr><td>
+<p><em>h</em></p>
+</td><td>
+<p>Height of the image's holding rectangle, in pixels. Must be positive.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>An additional transformation matrix to apply when rendering the image, as defined by DT_TM2X2. The origin of the transformation is at (<em>x</em>, <em>y</em>). If <em>transform</em> is set to DV_NULL, no additional transformation is applied during rendering.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the image was successfully drawn, the return value is 1. If the image was not drawn because the Output holds an unsupported memory surface, the function returns -1. In case of some other error, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The following table illustrates memory surface formats supported by this function.</p>
+
+
+
+
+
+<table class="table_data">
+
+<tr>
+<th>Format<br />(bits-per-pixel)</th><th>Subformat</th>
+
+
+<th>Description</th>
+</tr>
+
+
+
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>TTTTTTTT</tt></strong><br />
+8-bit alpha surface. Eight bits (1 byte) are used to represent transparency. 256 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;B.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">10</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">12</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">13</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">14</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">15</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;B.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>xBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (1-5-5-5). Five bits are used for each color component. The first bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>BBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (6-5-5). Six bits are used for red; five bits are used for green and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-6-5). Six bits are used for green; five bits are used for red and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-6). Six bits are used for blue; five bits are used for red and green. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRx</tt></strong><br />
+16-bit RGB surface (5-5-5-1). Five bits are used for each color component. The last bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>BBBBBxGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-1-5-5). Five bits are used for each color component. The bit between red and green component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">6</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGxRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-1-5). Five bits are used for each color component. The bit between green and blue component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Standard 24-bit RGB surface. Eight bits (1 byte) are used for each color component. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR xxxxxxxx</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>xxxxxxxx BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+
+
+
+<tr><td colspan="3">
+
+<p><strong>Legend</strong>:<br />
+
+g = bits used to describe gray<br />
+R = bits used to describe red, G = bits used to describe green, B = bits used to describe blue<br />
+T = bits used to describe transparency (0=fully opaque, 255=fully transparent)<br />
+
+x = unused bits</p>
+
+<p><strong>Note 1:</strong> RGB and alpha values are stored only for pixels that are actually rendered by D-Type. Your application must ensure that the surface is cleared with appropriate values before rendering.
+
+</p>
+
+
+
+</td></tr>
+
+</table>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

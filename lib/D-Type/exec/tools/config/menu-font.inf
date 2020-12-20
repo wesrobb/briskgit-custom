@@ -1,0 +1,156 @@
+!GLOBAL_INVERT_MODE=1
+!GLOBAL_INVERT_C1=255
+!GLOBAL_INVERT_C2=192
+!GLOBAL_INVERT_C3=128
+!GLOBAL_INVERT_C4=0
+!GLOBAL_FADE_VALUE=202
+!GLOBAL_FADE_STEPS=0
+!GLOBAL_UI_SCALE=100
+!GLOBAL_TEXT_FONT_ID=-1
+!GLOBAL_TEXT_RGBT_ENABLED=00000000
+!GLOBAL_TEXT_RGBT_DISABLED=88888800
+
+!MENU_ORIENTATION=1
+!MENU_BODY_RGBT=FFFFF015
+!MENU_SHADOW_RGBT=FFFFFFFF
+!MENU_OUTLINE_RGBT=AA000000
+
+# --- Menu 0: Top Menu ---
+{
+1|10000|File
+2|10001|Font
+3|10001|Edit
+4|10002|View
+5|10003|Help
+}
+
+!MENU_ORIENTATION=0
+!MENU_BODY_RGBT=FFFFFF15
+!MENU_SHADOW_RGBT=000000D0
+!MENU_OUTLINE_RGBT=00000000
+
+# --- Menu 1: File ---
+{
+0|10050|Load Font...|l
+0|10051|Load Font Advanced...|a
+0|10004|
+#0|10055|New Font List...
+0|10056|Load Font List...
+0|10057|Save Font List...
+0|10009|
+0|10052|Save As D-Type Font...|s
+0|10053|Save As D-Type Subset...
+0|10005|
+0|10054|Close
+}
+
+# --- Menu 2: Font ---
+{
+0|10102|Previous|p
+0|10104|Next|n
+0|10103|Choose...
+}
+
+# --- Menu 3: Edit ---
+{
+0|10090|Copy to Clipboard|c
+0|10091|Insert into Document|i
+0|10010|
+0|10092|Insert Using Chosen Font
+}
+
+# --- Menu 4: View ---
+{
+0|10012|As Outline|o
+0|10013|As Glyph Table|g
+0|10014|As Character Table|t
+0|10006|
+0|10100|Settings...
+0|10007|
+0|310|Zoom Out|-
+0|311|Zoom In|+
+6|10018|Custom Zoom
+0|10008|
+7|10011|Outline Display
+10|10360|Character Table Display
+0|10015|
+0|10330|Color Glyph Layers
+0|10331|Bitmap Glyph Images
+0|10332|SVG Native Glyphs
+}
+
+# --- Menu 5: Help ---
+{
+0|10400|About D-Type Font Utility...
+0|403|What's New
+0|404|Legal
+}
+
+# --- Menu 6: Custom Zoom ---
+{
+0|301|50%|1
+0|302|75%|2
+0|303|100%|3
+0|304|150%|4
+0|305|200%|5
+0|306|250%|6
+0|307|300%|7
+0|308|400%|8
+0|309|500%|9
+0|300|Set Zoom Factor...|0
+}
+
+# --- Menu 7: Outline Display ---
+{
+11|10021|Extras
+8|10019|Hint Display
+9|10020|Point Display
+}
+
+# --- Menu 8: Hint Display ---
+{
+0|10350|No Hints|e
+0|10351|Horizontal Hints|h
+0|10352|Vertical Hints|v
+0|10353|Horizontal and Vertical Hints|b
+}
+
+# --- Menu 9: Point Display ---
+{
+0|10354|No Labels|m
+0|10355|Point Indices|j
+0|10356|Point X Coordinates|w
+0|10357|Point Y Coordinates|y
+0|10358|Horizontal Zones|q
+0|10359|Vertical Zones|r
+}
+
+# --- Menu 10: Character Table Display ---
+{
+0|10361|Unicode Plane 0 (BMP)|d
+0|10362|Unicode Plane 1 (SMP)|f
+0|10363|Unicode Plane 2 (SIP)
+0|10364|Unicode Plane 3
+0|10365|Unicode Plane 4
+0|10366|Unicode Plane 5
+0|10367|Unicode Plane 6
+0|10368|Unicode Plane 7
+0|10369|Unicode Plane 8
+0|10370|Unicode Plane 9
+0|10371|Unicode Plane 10
+0|10372|Unicode Plane 11
+0|10373|Unicode Plane 12
+0|10374|Unicode Plane 13
+0|10375|Unicode Plane 14 (SSP)
+0|10376|Unicode Plane 15 (SPUA-A)
+0|10377|Unicode Plane 16 (SPUA-B)
+}
+
+# --- Menu 11: Background Display ---
+{
+0|10340|No Extras
+0|10341|Glyph In Background - Opaque
+0|10342|Glyph In Background - Translucent
+0|10343|Glyph In Foreground - Opaque
+0|10344|Glyph In Foreground - Translucent
+}

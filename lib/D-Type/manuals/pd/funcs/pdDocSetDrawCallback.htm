@@ -1,0 +1,102 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetDrawCallback</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetDrawCallback(DT_PDDOC power_doc, DT_SWORD (*user_draw_func)(DT_PD_DOCDRAW_CANVAS* canvas, DT_SLONG fn_draw, const DT_TM3X3 tm, DT_SWORD flag))</strong></div><br /><strong>Short Description:</strong> <em>Set document's draw callback function</em><br /><br />
+
+<p>The pdDocSetDrawCallback function registers a callback function for rendering user-defined PowerDoc objects. This function will be called by D-Type Engine automatically any time user-defined rendering functions are encoutered on the page that is drawn by calling <a href="pdDocDraw.htm">pdDocDraw</a>. A user-defined rendering function is any rendering function (i.e. any custom numerical value) that is not on the list of <a href="../index/pd_fndraw.htm">Basic PowerDoc Rendering Functions</a> or <a href="../index/fc_fndraw.htm">PowerDoc Rendering Functions To Render Form Controls</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_draw_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called during execution. Your function must be declared as follows: </p>
+
+<p class="center"><em>
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> your_user_draw_func(<a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a>* canvas, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> fn_draw, const <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> transform, <a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> flag)
+</em></p>
+
+<p>where <em>your_user_draw_func</em> is the name of your own C function, <em>canvas</em> a pointer to the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a> structure that will supply all the information necessary to render a PowerDoc image of the encountered user-defined PowerDoc object, <em>fn_draw</em> a numerical value of the rendering function associated with this PowerDoc image and <em>transform</em> the final transformation matrix that you must apply to the rendered PowerDoc image. The <em>flag</em> parameter is a special flag reserved for future use and is curently set to 0.</p>
+
+<p>Your function should return one of the following values:</p>
+
+<ul>
+<li>1 to indicate that the user-defined object was successfully drawn;</li>
+<li>0 to indicate that the user-defined object was not processed by your function;</li>
+<li>-1 to indicate that the user-defined object was not drawn because it was outside the canvas;</li>
+<li>-2 to indicate that the user-defined object was not properly defined;</li>
+<li>-3 to indicate that there was not enough memory to process the user-defined object;</li>
+<li>-99 to indicate that an unexpected or unknown error occurred.</li>
+</ul>
+
+<p>Setting the <em>user_draw_func</em> parameter to DV_NULL when calling pdDocSetDrawCallback will permanently unregister a previously registered callback function. Once this is done, <a href="pdDocDraw.htm">pdDocDraw</a> will no longer initiate any callbacks for rendering user-defined PowerDoc objects.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+
+<h3>Comments</h3>
+<p>Review the comments section of the <a href="pdDocDraw.htm">pdDocDraw</a> function.</p>
+
+<h3>Note 1</h3>
+<p>This is an advanced function that can be used to extend the functionality of D-Type Power Engine. Additional technical information about this function is available to customers with a support contract.</p>
+
+
+<h3>Note 2</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+<h3>Related Functions</h3>
+<p><a href="pdDocDraw.htm">pdDocDraw</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>FontMakeInactive</strong></div><br />
+
+<p>This function deactivates a font in the Font Catalog of the specified Standard Engine instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Index of the font to be deactivated.</p>
+</td></tr>
+
+<tr><td>
+<p><em>respect_multireference</em></p>
+</td><td>
+<p>A flag that tells the Font Engine when/how to deactivate the referenced font.</p>
+
+<ul>
+<li><p>If <em>respect_multireference</em> = 0, the Font Engine will always deactivate the referenced font and, if applicable, all of its Multiple-Master font instances.</p></li>
+<li><p>If <em>respect_multireference</em> = 1, the Font Engine will deactivate the referenced font only if it does not have any Multiple-Master font instances. If the referenced font has at least one Multiple-Master font instance, the font will not be deactivated.</p></li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns 1. Otherwise the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>Applications can call <a href="FontMakeInactive.htm">FontMakeInactive</a> to deactivate (but not remove) the referenced font in the Font Catalog. This function should be used whenever there is a chance that the referenced font will not be used for a longer period of time. The result is that the Font Engine will release any resources previously allocated for that font. Effectively, the font goes to sleep and uses virtually no memory. However, the font is not permanently removed form the Font Catalog. This means the font retains its unique font index. The font will be activated again either automatically by the Font Engine when it is used next time or explicitly by the application when the <a href="FontMakeActive.htm">FontMakeActive</a> function is called.</p>
+
+<p>When a font or font instance should be permanently removed from the Font Catalog, applications should use the <a href="FontRemove.htm">FontRemove</a> function.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

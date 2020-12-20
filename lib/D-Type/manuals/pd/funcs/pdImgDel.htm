@@ -1,0 +1,56 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdImgDel</h2><div class="box_prototype"><strong>
+void pdImgDel(DT_PDDOC power_doc, DT_SLONG img)</strong></div><br /><strong>Short Description:</strong> <em>Delete existing image</em><br /><br />
+
+<p>The <strong>pdImgDel</strong> function deletes an existing PowerDoc image.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img</em></p>
+</td><td>
+<p>Image's index in the Power Engine document.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+<p>When this function returns, the PowerDoc image referenced by <em>img</em> will be deleted and removed from the <em>Image Allocation Array</em> and all images with a serial number (i.e. index) larger than <em>img</em> will have their serial number decreased by one. <strong>When applicable, it is your application's responsibility to ensure that its internal image references remain valid after this change.</strong></p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdImgDelete.htm">pdImgDelete</a>, <a href="pdImgDelAll.htm">pdImgDelAll</a><br />
+<a href="pdImgAddPlus.htm">pdImgAdd</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

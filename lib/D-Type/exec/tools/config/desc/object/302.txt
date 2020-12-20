@@ -1,0 +1,5 @@
+The Radio Button object is an on/off switch that may be toggled by the user. Radio buttons are similar to check boxes except that when several share the same control name, they are mutually exclusive: when one is switched "on", all others with the same name are switched "off". In other words, multiple radio buttons with the same name represent the same feature (or state).
+
+{strong}Designated Rendering Function:{/strong} fcDrawRadioButton (10001)
+
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.

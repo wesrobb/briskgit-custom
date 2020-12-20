@@ -1,0 +1,426 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>OutputSetMDC</strong></div><br />
+
+<div class="box_prototype"><strong>OutputSetAsMDC</strong></div><br />
+
+<p>This function connects the Output of the specified Standard Engine instance with a Memory Surface (MDC or Memory Device Context) created and supplied by your application. In this way, any output primitives (e.g. glyphs, shapes, bitmaps) that are sent to the Output (e.g. using the <a href="GlyphDoOutput.htm">GlyphDoOutput</a>, <a href="ShapeDoOutput.htm">ShapeDoOutput</a> or <a href="BitmapDoOutput.htm">BitmapDoOutput</a> function) will be rendered in memory that belongs to that surface. Furthermore, this function sets the clipping rectangle associated with the memory surface so that output primitives that are completely outside the clipping rectangle are not processed/rendered when they are sent to the Output.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>format</em></p>
+</td><td>
+<p>Specifies the format, or number of bits-per-pixel, of the surface. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subformat</em></p>
+</td><td>
+<p>Color configuration of the pixel. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_surface</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure that describes the surface. Alternatively, this value can be set to DV_NULL. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_x</em></p>
+</td><td>
+<p>X coordinate of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_y</em></p>
+</td><td>
+<p>Y coordinate of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_w</em></p>
+</td><td>
+<p>Width of the clipping rectangle in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>clip_h</em></p>
+</td><td>
+<p>Height of the clipping rectangle in pixels.</p>
+</td></tr>
+
+</table>
+
+<a name="surfaces"></a>
+<p>The <em>format</em> parameter specifies the number of bits-per-pixel and is used to calculate the amount of memory required to store the surface; <em>subformat</em> defines the configuration of a single pixel and is used to calculate the maximum number of colors in the surface. The following table illustrates various pixel configurations supported by D-Type.</p>
+
+
+
+
+
+<table class="table_data">
+
+<tr>
+
+<th>format<br />(bits-per-pixel)</th><th>subformat</th>
+<th>Description</th>
+</tr>
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">-2</p>
+</td><td>
+<p><strong><tt>iiiiiiii</tt></strong><br />
+8-bit indexed color surface. Eight bits (1 byte) are used to represent color indices. Up to 256 colors.<br /><br />
+This is the only surface type that provides basic support for rendering in indexed color mode. In this mode, alpha-blending (composing) is disabled. This means that anti-aliased pixels that are rendered by the engine do not interact with the background; they are simply copied onto the surface. In this process any existing pixels in the background are destroyed. As a result, the output is anti-aliased but not blended with the background.</p>
+<p>Unless otherwise noted, all other surface types listed below support full alpha-blending (composing).</p>
+</td></tr>
+
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>TTTTTTTT</tt></strong><br />
+8-bit alpha surface. Eight bits (1 byte) are used to represent transparency. 256 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;B.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">10</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">12</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">13</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">14</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">15</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;B.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>xBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (1-5-5-5). Five bits are used for each color component. The first bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>BBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (6-5-5). Six bits are used for red; five bits are used for green and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-6-5). Six bits are used for green; five bits are used for red and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-6). Six bits are used for blue; five bits are used for red and green. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRx</tt></strong><br />
+16-bit RGB surface (5-5-5-1). Five bits are used for each color component. The last bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>BBBBBxGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-1-5-5). Five bits are used for each color component. The bit between red and green component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">6</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGxRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-1-5). Five bits are used for each color component. The bit between green and blue component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Standard 24-bit RGB surface. Eight bits (1 byte) are used for each color component. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR xxxxxxxx</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>xxxxxxxx BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR TTTTTTTT</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is used for transparency. 16,777,216 colors, 255 alpha values.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR OOOOOOOO</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is used for opacity. 16,777,216 colors, 255 alpha values.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>TTTTTTTT BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is used for transparency. 16,777,216 colors, 255 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>OOOOOOOO BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is used for opacity. 16,777,216 colors, 255 alpha values.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">6</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR TTTTTTTT</tt></strong><br />
+Same as 32-2, but pixels are not anti-aliased in the RGB channel.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">7</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR OOOOOOOO</tt></strong><br />
+Same as 32-3, but pixels are not anti-aliased in the RGB channel.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">8</p>
+</td><td>
+<p><strong><tt>TTTTTTTT BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Same as 32-4, but pixels are not anti-aliased in the RGB channel.</p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">9</p>
+</td><td>
+<p><strong><tt>OOOOOOOO BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Same as 32-5, but pixels are not anti-aliased in the RGB channel.</p>
+</td></tr>
+
+
+
+<tr><td colspan="3">
+
+<p><strong>Legend</strong>:<br />
+i = bits used to describe color indices, the current palette specifies how gray-values are mapped to color indices<br />
+
+g = bits used to describe gray<br />
+R = bits used to describe red, G = bits used to describe green, B = bits used to describe blue<br />
+T = bits used to describe transparency (0=fully opaque, 255=fully transparent)<br />
+O = bits used to describe opacity (0=fully transparent, 255=fully opaque)<br />
+
+x = unused bits</p>
+
+<p><strong>Note 1:</strong> RGB and alpha values are stored only for pixels that are actually rendered by D-Type. Your application must ensure that the surface is cleared with appropriate values before rendering.
+For modes 32-2, 32-4, 32-6 and 32-8 the surface's alpha values should be set to 255. For modes 32-3, 32-5, 32-7 and 32-9 the surface's alpha values should be set to 0.
+
+</p>
+
+<p><strong>Note 2:</strong> Modes 32-6, 32-7, 32-8 and 32-9 are suitable for devices that support hardware alpha blending.</p>
+
+
+</td></tr>
+
+</table>
+
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="OutputSetAsMDC.htm">OutputSetAsMDC</a> function tells D-Type Engine to redirect all D-Type output to a surface that is created by your application and stored in memory (off-screen). This type of drawing is very fast and supports transparency and alpha blending. However, your application is responsible for creating the surface, copying its bytes to the screen (or other output device) and destroying it. On Windows, the <strong>DrawDibDraw</strong> function can be used to copy the surface bytes to the screen. For details, look at D-Type's Helper Library For Platform Independent Window Display which implements this.</p>
+
+<p>If <em>memory_surface</em> is set to DV_NULL, the above mentioned memory redirection is disabled. In this case, clipping coordinates are ignored and all output primitives are processed (even if they are completely outside the clipping region). In some applications, this is useful for retrieving plain 8-bit grayscale memory bitmap data via the <a href="../../dt/manual/structs.htm#DT_BMP">DT_BMP</a> structure.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

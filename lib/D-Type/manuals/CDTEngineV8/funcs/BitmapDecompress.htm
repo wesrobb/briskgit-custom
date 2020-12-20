@@ -1,0 +1,105 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>BitmapDecompress</strong></div><br />
+
+<p>This function decompresses compressed grayscale bitmap data.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>bitmap_addr</em></p>
+</td><td>
+<p>A valid pointer to the memory buffer at which the compressed grayscale bitmap data begins.</p>
+
+<p><em>Note:</em> If decompressing grayscale bitmap data of glyph images in the bitmap cache obtained by <a href="GlyphDoOutput.htm">GlyphDoOutput</a>, <a href="GlyphDoOutputFrac.htm">GlyphDoOutputFrac</a>, <a href="GlyphDoOutput.htm">CharDoOutput</a> or <a href="CharDoOutputFrac.htm">CharDoOutputFrac</a>, simply set this parameter to <em>memory_bitmap.m</em></p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_len</em></p>
+</td><td>
+<p>Length of the corresponding <strong>non-compressed</strong> bitmap data (actual length), in bytes. <u>It is imperative that applications supply this parameter correctly since this is the only way for the decompression algorithm to determine when the decompression cycle is over.</u></p>
+
+<p><em>Note:</em> If decompressing grayscale bitmap data of glyph images in the bitmap cache obtained by <a href="GlyphDoOutput.htm">GlyphDoOutput</a>, <a href="GlyphDoOutputFrac.htm">GlyphDoOutputFrac</a>, <a href="GlyphDoOutput.htm">CharDoOutput</a> or <a href="CharDoOutputFrac.htm">CharDoOutputFrac</a>, simply set this parameter to <em>memory_bitmap.l</em></p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is a pointer to a memory buffer at which the plain 8-bpp grayscale bitmap data (non-compressed) begins. This buffer is dynamically allocated and must be released later by calling the <a href="BitmapFree.htm">BitmapFree</a> function. If not successful (e.g. an out of memory condition occurs), the return value will be DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="BitmapDecompress.htm">BitmapDecompress</a> function can be used to decompress compressed grayscale bitmap data of glyph images in the bitmap cache. This data can be obtained by calling <a href="GlyphDoOutput.htm">GlyphDoOutput</a>, <a href="GlyphDoOutputFrac.htm">GlyphDoOutputFrac</a>, <a href="GlyphDoOutput.htm">CharDoOutput</a> and <a href="CharDoOutputFrac.htm">CharDoOutputFrac</a> when the bitmap cache compression is enabled.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

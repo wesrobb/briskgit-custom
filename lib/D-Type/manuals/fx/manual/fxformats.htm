@@ -1,0 +1,35 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>D-Type External Format Plugin Formats</h1>
+
+<p>At present, D-Type External Format Plugin provides support for JPEG, PNG/APNG, GIF and ZLIB file formats. These are all very commonly used compressed file formats. To use these formats with D-Type External Format Plugin API functions, the caller must initialize the <a href="fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure and set the <em>FileFormat</em> member variable to one of the following values:</p>
+
+<ul>
+<li><p><strong>DV_AUX_FILEFORMAT_JPG</strong> &mdash; Standard JPEG format. Supported by <a href="../funcs/fxImageRead.htm">fxImageRead</a> and <a href="../funcs/fxImageWrite.htm">fxImageWrite</a> functions.</p></li>
+<li><p><strong>DV_AUX_FILEFORMAT_PNG</strong> &mdash; Standard PNG format. Supported by <a href="../funcs/fxImageRead.htm">fxImageRead</a> and <a href="../funcs/fxImageWrite.htm">fxImageWrite</a> functions.</p></li>
+<li><p><strong>DV_AUX_FILEFORMAT_APNG</strong> &mdash; APNG format (animated PNG; an extension of the standard PNG format). Supported by <a href="../funcs/fxImageWrite.htm">fxImageWrite</a>, <a href="../funcs/fxAnimStart.htm">fxAnimStart</a> and <a href="../funcs/fxAnimWrite.htm">fxAnimWrite</a> functions.</p></li>
+<li><p><strong>DV_AUX_FILEFORMAT_GIF</strong> &mdash; Standard GIF format. Supported by <a href="../funcs/fxImageWrite.htm">fxImageWrite</a>, <a href="../funcs/fxAnimStart.htm">fxAnimStart</a> and <a href="../funcs/fxAnimWrite.htm">fxAnimWrite</a> functions.</p></li>
+<li><p><strong>DV_AUX_FILEFORMAT_ZLIB</strong> &mdash; Standard ZLIB format. Supported by <a href="../funcs/fxBufferGetBound.htm">fxBufferGetBound</a>, <a href="../funcs/fxBufferCompress.htm">fxBufferCompress</a> and <a href="../funcs/fxBufferDecompress.htm">fxBufferDecompress</a> functions.</p></li>
+</ul>
+
+
+<p>D-Type External Format Plugin might define additional file formats in the future.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

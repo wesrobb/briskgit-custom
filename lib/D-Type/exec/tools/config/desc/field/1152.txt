@@ -1,0 +1,3 @@
+An array containing Y coordinates for manual positioning (variable length, 1 byte per coordinate).
+
+Same as pdPosArrY_32 but uses 1 byte per coordinate.

@@ -1,0 +1,99 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>PropGet</strong></div><br />
+
+<p>The PropGet function retrieves the value of the PowerDoc property referenced by the <em>name</em> identifier. This value is always returned in the property's native binary format.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="PropAdd.htm">PropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>len</em></p>
+</td><td>
+<p>A pointer to a variable that will hold the length, in bytes, of the retrieved binary data.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>A pointer to the binary data that represents the value of the PowerDoc property referenced by the <em>name</em> identifier. This data is inside an internal read-only buffer managed by D-Type Power Engine and must not be freed. Also, the buffer is only for reading the data; applications should not write to it.</p>
+
+<p>This pointer is valid only until the next call to one of D-Type functions that operate on the same PowerDoc Engine instance. This is because subsequent function calls might change the contents (and internal memory representation) of the PowerDoc document. Therefore, your application should not permanently record the value of the returned  pointer. In addition, your application does not own memory pointed by this pointer and should not attempt to write to it or free it. Instead, your application should either immediately consume (read) the memory content or copy it to its own buffer for later use.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

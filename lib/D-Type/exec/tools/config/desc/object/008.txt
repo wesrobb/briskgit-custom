@@ -1,0 +1,6 @@
+This object represents a raw bitmap. The bitmap's pixels can be stored in RGBA, RGB, GA, G or monochrome format. The Bitmap Image Data object does not have a visual representation, however, it is the key building block used in the construction of the {a href="../objects/121.htm"}Bitmap Image{/a} object.
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note: pdImageDataRGB, pdImageDataRGBAlpha, pdImageDataGray and pdImageDataGrayAlpha cannot be used at the same time. pdImageDataRGBAlpha takes precedence over pdImageDataRGB. pdImageDataRGB takes precedence over pdImageDataGrayAlpha. pdImageDataGrayAlpha takes precedence over pdImageDataGray. Finally, pdImageDataGray takes precedence over pdImageDataMono.
+

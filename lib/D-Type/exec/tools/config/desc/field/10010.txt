@@ -1,0 +1,1 @@
+An ID used to group several form controls. Controls with the same fcGroupID belong to the same group.

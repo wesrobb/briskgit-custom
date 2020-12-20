@@ -1,0 +1,1 @@
+Slider's position. Must not exceed fcSliderLimit.

@@ -1,0 +1,224 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>How To Use D-Type Streams And Stream Macros?</h1>
+
+
+<p>Rather than setting the members of the <a href="structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure one by one, application developers can use the <strong><a href="structs.htm#DT_STREAM_FILE">DT_STREAM_FILE</a></strong>, <strong><a href="structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a></strong> or <strong><a href="structs.htm#DT_STREAM_URL">DT_STREAM_URL</a></strong> macros to easily create streams that represent files on disk, files in memory (RAM) or files on a local or remote web server. The examples below show how to use these macros.</p>
+
+
+<h2>File Streams</h2>
+
+<h3>File Streams For Reading</h3>
+
+<p>The following example shows how to use a file stream to initialize D-Type Engine:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_FILE(sd, "dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) != 1) exit(0);
+</pre>
+</div>
+
+
+<p>The following example shows how to use a file stream to add a font to D-Type Engine's Font Catalog:</p>
+
+<div class="box_field">
+<pre>
+DT_ID_SWORD font_format_id = DV_FONT_OPENTYPE_TTF_WINUNICODE;
+DT_CHAR* fuid = DV_NULL;
+DT_SWORD fcnr = 0;
+DT_ID_SWORD cmap_id = -1;
+DT_ID_UBYTE caching = 128;
+DT_ID_UBYTE hinting = 1;
+
+DT_STREAM_FILE(sd, "/fonts/Hydrogen.ttf");
+DT_ID_SWORD font_index = dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id, caching, hinting, &amp;sd);
+</pre>
+</div>
+
+<p><em>Note:</em> The <em>_file_name</em> macro parameter must contain a path that is valid at least until the font represented by <em>font_index</em> is permanently removed from the Font Catalog. Remember that D-Type Font Engine will attempt to access this font at various stages during the execution of your application. If <em>_file_name</em> is invalid or becomes inaccessible while the font is still in use, the corresponding font will become inaccessible to D-Type Font Engine. As a result, your font or some of its glyphs may not render, you may not be able to retrieve various font information etc.</p>
+
+
+<h3>File Streams For Writing</h3>
+
+<p>The following example shows how to use a file stream to generate a font:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_FILE(sd, "output.dtf");
+dtFontSaveToStream(engine, font_index, 0, &amp;sd, DV_NULL, DV_NULL);
+</pre>
+</div>
+
+
+<h2>Memory Streams</h2>
+
+<h3>Memory Streams For Reading</h3>
+
+<p>The following example shows how to use a memory stream to add a font to D-Type Engine's Font Catalog:</p>
+
+<div class="box_field">
+<pre>
+DT_ID_SWORD font_format_id = DV_FONT_TYPE1_WINUNICODE;
+DT_CHAR* fuid = DV_NULL;
+DT_SWORD fcnr = 0;
+DT_ID_SWORD cmap_id = -1;
+DT_ID_UBYTE caching = 128;
+DT_ID_UBYTE hinting = 1;
+
+<span class="codecomment">/* First open a font file from disk */</span>&nbsp;
+FILE* f = fopen("fonts/pfb/zombie.pfb", "rb");
+if (f == DV_NULL) exit(0);
+
+<span class="codecomment">/* Determine the file size */</span>&nbsp;
+fseek(f, 0, SEEK_END);
+DT_SLONG mem_len = ftell(f);
+rewind(f);
+
+<span class="codecomment">/* Allocate memory for this font file */</span>&nbsp;
+DT_UBYTE* mem_addr = (DT_UBYTE*)malloc(mem_len);
+if (mem_addr == DV_NULL)
+{
+    fclose(f);
+    exit(0);
+}
+
+<span class="codecomment">/* Copy font data to memory and close the file */</span>&nbsp;
+fread(mem_addr, 1, mem_len, f);
+fclose(f);
+
+<span class="codecomment">/* Finally, create a memory stream and pass it to D-Type's dtFontAddViaStream function */</span>&nbsp;
+DT_STREAM_MEMORY(sd, mem_addr, mem_len);
+DT_ID_SWORD font_index = dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id, caching, hinting, &amp;sd);
+</pre>
+</div>
+
+<p><em>Note 1:</em> The font file in memory must be in exactly the same format as if it was on disk.</p>
+
+<p><em>Note 2:</em> The font file must remain at the memory location pointed by the <em>_mem_addr</em> macro parameter at least until the font represented by <em>font_index</em> is permanently removed from the Font Catalog. In other words, this font can be discarded from this memory address only after being permanently removed from the Font Catalog. Remember that D-Type Font Engine will attempt to access this font at various stages during the execution of your application. If <em>_mem_addr</em> becomes invalid while the font is still in use, you will cause access violations in D-Type Font Engine resulting in crashes, memory corruption or other serious problems.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Remove the font from the Font Catalog */</span>&nbsp;
+dtFontRemove(engine, font_index);
+
+<span class="codecomment">/* Now it's OK to release the font from memory */</span>&nbsp;
+free(mem_addr);
+</pre>
+</div>
+
+
+<h3>Memory Streams For Writing</h3>
+
+<p>When a memory based stream is used for writing, D-Type Engine allocates the actual memory buffer for the stream. This memory buffer is always dynamically allocated and must be released by calling the <a href="../funcs/dtFree.htm">dtFree</a> (or <a href="../../pd/funcs/pdFree.htm">pdFree</a> or <a href="../../tx/funcs/txFree.htm">txFree</a>) function when the stream is no longer needed. To initialize the <a href="structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure, applications can use the existing <strong><a href="structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a></strong> macro. Since D-Type Engine will set the address of the memory buffer and its size, the value of the <em>_mem_addr</em> and <em>_mem_len</em> parameters passed to the <strong><a href="structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a></strong> macro is not important. However, we recommend setting <em>_mem_addr</em> to DV_NULL and <em>_mem_len</em> to 0.</p>
+
+<p>The following example shows how to use a memory stream to generate a font:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_MEMORY(sd, DV_NULL, 0);
+if (dtFontSaveToStream(engine, font_index, 0, &amp;sd, DV_NULL, DV_NULL) != 1) exit(0);
+
+<span class="codecomment">/* At this point we have a font in memory.
+   The sd.stream_locator.mem_w.addr member variable points to a memory buffer that contains
+   the output D-Type font file. This memory buffer was dynamically allocated by D-Type Engine.
+   The sd.stream_locator.mem_w.len member variable indicates the size of the memory file in bytes.
+*/</span>&nbsp;
+
+<span class="codecomment">/* Open a font file on disk */</span>&nbsp;
+FILE* f = fopen("output.dtf", "wb");
+if (f == DV_NULL) exit(0);
+
+<span class="codecomment">/* Copy font data from memory to file */</span>&nbsp;
+fwrite(sd.stream_locator.mem_w.addr, 1, sd.stream_locator.mem_w.len, f);
+
+<span class="codecomment">/* Close the file */</span>&nbsp;
+fclose(f);
+
+<span class="codecomment">/* Release memory buffer allocated by D-Type Engine */</span>&nbsp;
+dfFree(sd.stream_locator.mem_w.addr);
+
+</pre>
+</div>
+
+
+<h2>URL Streams</h2>
+
+<h3>URL Streams For Reading</h3>
+
+
+<p>The following example shows how to use URL, FURL and MURL streams to initialize D-Type Engine:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_URL(sd, "http://www.remotefontserver.com/config/dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) != 1) exit(0);
+</pre>
+</div>
+
+<br />
+
+<div class="box_field">
+<pre>
+DT_STREAM_FURL(sd, "system/tmp/www_~http://www.remotefontserver.com/config/dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) != 1) exit(0);
+</pre>
+</div>
+
+<br />
+
+<div class="box_field">
+<pre>
+DT_STREAM_MURL(sd, "http://www.remotefontserver.com/config/dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) != 1) exit(0);
+</pre>
+</div>
+
+
+<p>The following example shows how to use a MURL stream to add a font to D-Type Engine's Font Catalog:</p>
+
+<div class="box_field">
+<pre>
+DT_ID_SWORD font_format_id = DV_FONT_OPENTYPE_CFF_WINUNICODE;
+DT_CHAR* fuid = DV_NULL;
+DT_SWORD fcnr = 0;
+DT_ID_SWORD cmap_id = -1;
+DT_ID_UBYTE caching = 128;
+DT_ID_UBYTE hinting = 1;
+
+DT_STREAM_MURL(sd, "http://www.remotefontserver.com:8080/fonts/FreeSansBold.otf");
+DT_ID_SWORD font_index = dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id, caching, hinting, &amp;sd);
+</pre>
+</div>
+
+<p><em>Note 1:</em> The above examples are almost identical to the examples showing how to use file streams. The only difference is that the files are now stored on a remote web server and accessed by their URL (Uniform Resource Locator).</p>
+
+<p><em>Note 2:</em> URL, FURL and MURL stream types are only available on platforms that support Berkeley sockets (e.g. Linux, Mac OS X, Windows).</p>
+
+<p><em>Note 3:</em> With the URL stream type, the <em>_url</em> macro parameter must contain a URL that is valid at least until the font represented by <em>font_index</em> is permanently removed from the Font Catalog. Remember that D-Type Font Engine will attempt to access this font at various stages during the execution of your application. If <em>_url</em> is invalid or becomes inaccessible (e.g. due to server or connectivity problems) while the font is still in use, the corresponding font will become inaccessible to D-Type Font Engine. As a result, your font or some of its glyphs may not render, you may not be able to retrieve various font information etc.</p>
+
+
+<h3>URL Streams For Writing</h3>
+
+<p>This combination is not possible. The URL stream type can be used only for reading.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

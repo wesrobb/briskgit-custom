@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Introduction</h1>
+
+<p>
+Commonly used scripts such as Latin, Greek or Cyrillic are easy to display. All you need to do is render their characters in a simple linear progression from left to right and the resulting text is correctly displayed. Unfortunately, not all world's scripts are that simple. Many scripts, just to be displayed correctly, require special processing such as character reordering, contextual shaping, ligatures, positioning adjustments etc. These scripts are also known as complex scripts. Arabic, Indic and Thai are among those scripts. And even Latin scripts often use ligatures and various types of positioning adjustments (e.g. kerning) to enhance the appearance of displayed text.
+</p>
+
+<p>
+The <a href="http://www.unicode.org/">Unicode Standard</a> alone does not help software developers with the task of laying out text. Unicode deals with the units of textual content (characters) and provides a good solution for the computer representation, storage and interchange of text. However, Unicode does not deal with the units of textual display (glyphs) and does not provide a solution to the problem of actual text layout, shaping and advanced typography. Obviously, a global, efficient and portable Unicode based text layout/shaping engine is necessary to help developers with this quite challenging task.<sup>[<a href="intro.htm#note1" name="ref1">1</a>]</sup>
+</p>
+
+<p>
+To better understand the problems that layout/shaping engines must overcome, here are just some of the complications associated with the display of various world's scripts:
+</p>
+
+<p>
+<strong>Directionality</strong> &mdash; Arabic and Hebrew are read from right to left. Consequently, the order of characters differs in presentation from storage. Character positioning, cursor movement and text selection in bidirectional context (the context in which left-to-right and right-to-left text runs coexist) is typically the biggest challenge to overcome. The characters are not laid out in a simple linear progression from left to right. In other words, the logical order of characters (the order in which the user enters text as a sequence of keystrokes) can be different from the visual order (the order in which glyphs are represented to the user)
+</p>
+
+<p class="center"><small><img src="../images/img_148_2.png" alt="Bidirectional Text" width="415" height="110" border="0" /><br />
+In bidirectional text the trailing edge of one character is not necessarily adjacent to the leading edge of the next character. The above example shows one logically contiguous selection of characters (but visually disjointed).</small></p>
+
+<p>
+<strong>Contextual Forms</strong> &mdash; Arabic scripts are not only read from right to left; they also require special processing necessary to display contextual forms properly. For example, the visual appearance of a character in Arabic scripts can change greatly depending on its position within a word and the characters that surround it. Most (but not all) characters have four different visual forms: <em>isolated</em> (when the character is alone), <em>initial</em> (beginning of a word), <em>middle</em> (within the word) and <em>final</em> (end of word).<sup>[<a href="intro.htm#note2" name="ref2">2</a>]</sup> This means that layout/shaping engines must not only shape those forms properly but also detect word boundaries within a given run of text.<sup>[<a href="intro.htm#note3" name="ref3">3</a>]</sup>
+</p>
+
+<p class="center"><small><img src="../images/img_149_2.png" alt="Contextual text shaping in Arabic scripts" width="290" height="100" border="0" /><br />
+The above example shows an Arabic text sample without any special processing (in which characters are in their isolated form) and then the same text sample again with contextual shaping enabled (in which characters take their proper form depending on whether they are at the beginning, in the middle or at the end of the word).</small></p>
+
+<p>
+<strong>Ligatures</strong> &mdash; With Latin, Greek, Cyrillic and even Chinese/Korean/Japanese scripts, there is often a direct one-to-one mapping between a character and its glyph. However, in Arabic, Indic and other complex scripts, several characters can combine together to create a whole new glyph. These special glyphs are then called <em>ligatures</em>. Although Latin scripts can also make use of ligatures, most Latin ligatures are optional and designed to improve the aesthetic appearance of certain character combinations. However, in Arabic and many other complex scripts, certain ligatures are mandatory. In those cases it is unacceptable to present certain character combinations without using the appropriate ligature.
+</p>
+
+<p class="center"><small><img src="../images/img_150_2.png" alt="Ligatures in Arabic and Latin scripts" width="470" height="105" border="0" /><br />
+Ligatures are not only used in complex scripts such as Arabic but sometimes in Latin scripts too. The first ligature in the above illustration is the Arabic Lam-Alef ligature which is mandatory for Arabic scripts. The remaining ligatures are some of the Latin standard and discretionary ligatures.</small></p>
+
+<p>
+<strong>Glyph Reordering</strong> &mdash; The South Asian family of scripts (Indic) exhibit rendering complications that are not found in any other script. Letters are drawn in a different order from that in which they are typed or stored in memory, glyphs are inserted or rearranged and complex ligatures are formed. The actual amount of pre-processing necessary to convert a series of Unicode Devanagari characters into a series of glyphs is extensive. It should therefore come as no surprise that the Unicode Standard had to dedicate more than twelve pages just describing the proper processing of Devanagari characters.
+</p>
+
+<p class="center"><small><img src="../images/img_151_2.png" alt="Complex glyph rearrangements and ligatures in Indic scripts" width="500" height="105" border="0" /><br />
+Contextual shaping for Indic scripts must deal with complex glyph rearrangements and ligatures.</small></p>
+
+<p>
+<strong>Multiple Code Points</strong> &mdash; The difficulty with contextual shaping is that a given character, for all of its various glyph forms, usually has only one defined code point in the Unicode Standard. Similarly, ligatures often do not have a Unicode code point.<sup>[<a href="intro.htm#note4" name="ref4">4</a>]</sup> It is the responsibility of the layout/shaping engine to determine, at run time depending on the context, the appropriate visual form of each character in the text.
+</p>
+
+<p>
+D-Type Text Layout Extension thanks to the underlying <a href="http://www.freedesktop.org/wiki/Software/HarfBuzz">HarfBuzz text shaping engine</a> solves all of these problems in a simple and straightforward way. All complex script rendering is done in a uniform and consistent manner. The application is responsible for supplying to the Text Layout Extension an array of Unicode character codes in reading or logical order while the extension returns an array of glyphs to display in the correct visual order along with the coordinates necessary to properly position those glyphs and, additionally, character indices to map each glyph back to the input text array. Then, these positioned glyphs can be very easily rendered using <a href="../../dt/manual/fengine.htm">D-Type Font Engine</a>.
+</p>
+
+<p>
+The benefit of this approach is that software developers do not have to be familiar with various complex scripts or any of the shaping rules that might be applicable to each script. Regardless of the script, the Text Layout Extension is always utilized in the same consistent way. It is only important to be aware of the following basic concepts:
+</p>
+
+<ul>
+<li><p>The Text Layout Extension, or more precisely the underlying HarfBuzz text shaping engine, is designed to process a sequence of Unicode characters which is in a single font, script and direction. Developers can use the Unicode bidirectional algorithm built into the Text Layout Extension to determine the direction of the text or give the user direct control over bidirectional text layout.</p></li>
+
+<li><p>The sequence of input characters is always passed to the Text Layout Extension in reading or logical order.</p></li>
+
+<li><p>Developers should not assume a simple one-to-one mapping between input characters and output glyphs. In other words, the size of the resulting glyph array can be (and with complex scripts usually is) different than the size of the input Unicode character array.</p></li>
+
+<li><p>When it is necessary to map output glyphs back to the initial sequence of input characters (e.g. for cursor movement and text selection), developers should use the returned array of character indices.</p></li>
+</ul>
+
+<p>
+As mentioned above, D-Type Text Layout Extension internally relies on the <a href="http://www.freedesktop.org/wiki/Software/HarfBuzz">HarfBuzz text shaping engine</a>, a popular open source portable and platform independent layout engine capable of shaping many complex Unicode scripts including Arabic, Bengali, Devanagari, Gujarati, Gurmukhi, Han, Hebrew, Kannada, Malayalam, Oriya, Tamil, Telugu and Thai. The HarfBuzz text shaping engine uses layout tables found in font files and the knowledge of generic script shaping rules to lay out complex scripts.
+</p>
+
+<!--
+<p>
+The ICU LayoutEngine supports complex scripts in the following ways:
+</p>
+
+<ul>
+<li>If the font contains OpenType tables, the LayoutEngine uses those tables.</li>
+<li>If the font contains Apple Advanced Typography (AAT) tables, the LayoutEngine uses those tables.</li>
+<li>For Arabic and Hebrew text, if OpenType tables are not present, the LayoutEngine uses Unicode presentation forms.</li>
+<li>For Thai text, the LayoutEngine uses either the Microsoft or Apple Thai forms.</li>
+</ul>
+
+<p>
+For more information about the ICU LayoutEngine, please visit the <a href="http://userguide.icu-project.org/layoutengine">ICU LayoutEngine</a> web site and take a look at the applicable documentation.
+</p>
+
+<p>
+The HarfBuzz text shaping engine itself, however, does not provide an interface to access the necessary layout tables in the font files. Depending on how the fonts are accessed, this interface must be written by the client (developer). In other words, the developer is responsible for opening, closing and managing the actual fonts (e.g. from file or memory), accessing and, optionally, caching their layout tables and supplying those tables to the HarfBuzz text shaping engine when requested. In the past, this was the only way for software developers to use the HarfBuzz text shaping engine in conjunction with D-Type Font Engine.
+</p>
+-->
+
+<p>
+<!--With D-Type Text Layout Extension, fortunately, this is no longer necessary.-->
+D-Type Text Layout Extension takes care of all the font specific tasks and interaction with the HarfBuzz text shaping engine. Software developers can now use one simple extension to display all supported complex scripts without the need to write their own font access interfaces. D-Type Text Layout Extension is an extension of D-Type Font Engine that makes it possible to easily render complex scripts, hiding from the developer all the complexity associated with the text shaping process and the need to interface with the HarfBuzz text shaping engine directly.
+</p>
+
+<p>
+For software developers who use or plan to use D-Type rendering technology, D-Type Text Layout Extension brings the following benefits:
+</p>
+
+<div class="box_bkg4">
+
+<ul>
+<li><strong>No need to access fonts.</strong> Developers don't have to manage or access the font files themselves. D-Type Text Layout Extension uses the same font IDs as D-Type Font Engine.</li>
+
+<li><strong>Caching of font layout tables.</strong> D-Type Text Layout Extension caches frequently used layout tables that are found in font tables so that subsequent access to the same tables is efficient and quick.</li>
+
+<li><strong>Caching of layout instances.</strong> D-Type Text Layout Extension caches layout instances for various complex scripts so that the same shaping rules can be applied to different text runs quickly and efficiently.</li>
+
+<li><strong>Small, compact, portable.</strong> The entire D-Type Text Layout Extension, which includes the latest HarfBuzz text shaping engine, font access interfaces and the caching sub-system fits in less than 450KB of machine code.<sup>[<a href="intro.htm#note5" name="ref5">5</a>]</sup></li>
+
+<li><strong>Easy, single package solution.</strong> All you need to render complex world's script is D-Type Font Engine and D-Type Text Layout Extension. Together, these two libraries act as a single library.</li>
+
+</ul>
+
+</div>
+
+<p>
+The most recent D-Type Text Layout Extension includes HarfBuzz text shaping engine 1.3.2 that was released on September 27, 2016. As new HarfBuzz text shaping engine releases become available, the Text Layout Extension will be updated to support the most recent version.
+</p>
+
+<small>
+________________<br /><br />
+
+[<a id="note1" href="intro.htm#ref1">1</a>] On Windows platform, application developers can use the Win32 Text APIs or Uniscribe to display the complex scripts that are supported by Windows. One problem with this approach, however, is that the solution works only on Windows. Software developers who write cross-platform software have no way of porting their code to other platforms (e.g. Linux or Mac).
+<br />
+<br />
+
+[<a id="note2" href="intro.htm#ref2">2</a>] In reality the situation is actually a little bit more complicated. Arabic is a cursive script in which letters in a word are often connected to each other. The initial form indicates that no letter is attached to the letter from the right (i.e. there is no attaching character before it, but there is one following the character). But the initial form does not necessarily mean that the character in at the beginning of a word; it only indicates that the character is not at the end of the word.
+<br />
+<br />
+
+[<a id="note3" href="intro.htm#ref3">3</a>] Detecting word boundaries is not always a trivial task. Although most scripts use a space character as a word separator, there are scripts in which words appear without a space between them. Thai is probably the best example of such a script.
+<br />
+<br />
+
+[<a id="note4" href="intro.htm#ref4">4</a>] There are exceptions however. For historical reasons (older software did not have contextual text shaping capabilities), the Unicode standard encodes the initial, medial, final and isolated forms of Arabic letters separately in the U+Fxxx range, called Arabic Presentation Forms. The use of such presentation forms is deprecated but not uncommon. For the same historical reasons, even certain Latin ligatures have a defined Unicode code point.
+<br />
+<br />
+
+[<a id="note5" href="intro.htm#ref5">5</a>] The size of the extension varies depending on the platform. Additionally, the size is expected to grow as the size of the HarfBuzz text shaping engine grows.
+</small>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,169 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>TypesetterSetCachePolicy</strong></div><br />
+
+<p>This function activates certain rules/restrictions that are respected when the Typesetter makes decisions on whether to store glyph images in the bitmap cache. These rules/restrictions are designed to help utilize the bitmap cache more effectively. For example, application developers may instruct the Typesetter not to cache glyph images that exceed certain size.</p>
+
+<p>When D-Type Engine is initialized, the bitmap cache policy is not set. Consequently, no restrictions are set either. This means that any and all glyph images that fit in the bitmap cache will be cached.</p>
+
+<p>Therefore, call this function if you wish to set your own, more restrictive, bitmap cache policy.</p>
+
+<p>Note that the Typesetter can render glyph images regardless of whether they are cached or not. The bitmap cache merely improves the rendering speed when the same glyph image is rendered more than once.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>max_bitmap_bytes</em></p>
+</td><td>
+
+<ul>
+<li><p>If non-negative, this is the maximum bitmap size, in bytes, of a 8-bpp glyph image that is to be stored in the bitmap cache. Glyph images that exceed this size will not be stored in the bitmap cache.</p></li>
+<li><p>If <em>max_bitmap_bytes</em> is -1 (or any other negative value), this restriction is disabled.</p></li>
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>reserved1</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved2</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved3</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved4</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>Currently the only supported restriction is the restriction on the size of a glyph image. However, in the future additional restrictions may be added.</p>
+
+<p>Note that <a href="TypesetterSetSubpixels.htm">TypesetterSetSubpixels</a> can completely disable the bitmap cache. Obviously, when the bitmap cache is disabled no glyph images can be cached either (regardless of how you set the bitmap cache policy by calling this function).</p>
+
+
+<h3>Example 1</h3>
+
+<div class="box_field"><pre>
+dtTypesetterSetCachePolicy(engine, 0, -1, -1, -1, -1, 0);
+</pre></div>
+
+<p>No glyph images will be stored in the bitmap cache (since any valid 8-bpp image will exceed 0 bytes in size).</p>
+
+
+<h3>Example 2</h3>
+
+<div class="box_field"><pre>
+dtTypesetterSetCachePolicy(engine, 10000, -1, -1, -1, -1, 0);
+</pre></div>
+
+<p>Only glyph images that are 10,000 bytes or less will be stored in the bitmap cache. This means, for example, that a 90x90 pixel 8-bpp glyph image (or smaller) will be stored in the bitmap cache (as long as it fits in it and the bitmap cache is not disabled), while a 110x110 pixel image (or larger) will never be stored in the cache.</p>
+
+
+<h3>Example 3</h3>
+
+<div class="box_field"><pre>
+dtTypesetterSetCachePolicy(engine, -1, -1, -1, -1, -1, 0);
+</pre></div>
+
+<p>All glyph images that fit in the bitmap cache will be stored there.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

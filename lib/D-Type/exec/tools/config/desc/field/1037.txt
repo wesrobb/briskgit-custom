@@ -1,0 +1,6 @@
+Length of an arc in degrees. Must be between 0 and 360.
+
+{strong}Sample values:{/strong}
+
+180 = Length of 180 degrees
+240 = Length of 240 degrees

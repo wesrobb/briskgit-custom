@@ -1,0 +1,3 @@
+Perimeter line grow in document units, multiplied by 100.
+
+Applies ony to the Rectangle, Circle/Ellipse, True Circle/Ellipse, Slice, Arc and Grid object.

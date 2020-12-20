@@ -1,0 +1,13 @@
+A flag that indicates whether and how the text is locked for user interactions.
+
+{strong}Supported values:{/strong}
+
+0 = Text is not locked (all user interactions are enabled)
+
+1 = Text is completely locked (all user interactions are disabled)
+
+2 = Text is locked for both editing and formatting/styling (but a user can still move the cursor and make text selections)
+
+3 = Text is locked for editing but not for formatting/styling (and a user can still move the cursor and make text selections)
+
+4 = Text is locked for formatting/styling but not for editing (and a user can still move the cursor and make text selections)

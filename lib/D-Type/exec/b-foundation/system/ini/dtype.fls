@@ -1,0 +1,87 @@
+# *** D-TYPE INITIAL FONT LIST V7.5 ***
+#
+# This file contains a list of fonts that will be added to D-Type Engine's Font Catalog as
+# soon as the corresponding D-Type Engine instance is initialized. Each row in this list
+# consists of the following parameters:
+#
+# * font_format_id - Font Format ID. This is an ID that specifies the font format:
+#
+#     0 : D-Type font (.dtf)
+#     3 : OpenType font (.ttf or .otf) and font collections (.ttc) with TrueType outlines
+#     5 : OpenType font (.otf) and font collections (.ttc) with CFF outlines
+#     8 : Adobe Type 1 font (.pfb or .pfa)
+#    12 : Adobe Type 3 PostScript font (.ps)
+#    16 : Bare CFF font (.cff)
+#
+#   Other values are also supported. See the manual for details.
+#
+# * fuid - Unique Font Identifier
+#
+#   This is an optional but recommended string that uniquely identifies the font.
+#   If not needed, set to NULL. Otherwise, the string must consist of precisely
+#   16 ASCII characters.
+#
+# * fcnr - Font Collection Number
+#
+#   When the font file is a font collection, this is the index of a font in that
+#   collection. Set to 0 to add the first font in the collection or if the font file
+#   is not a collection.
+#
+# * cmap_id - Reserved for future. Must be set to -1.
+#
+# * caching - Font Access and Caching. The following values are recommended:
+#
+#     0 : legacy method
+#   128 : standard method
+#
+# * hinting - Font Hinting. This parameter can have one of the following values:
+#
+#     0 : disable hinting
+#     1 : use native hinting when available; auto-hinting otherwise
+#     2 : use auto-hinting exclusively
+#     3 : use native hinting when available; compact auto-hinting otherwise
+#     4 : use compact auto-hinting exclusively
+#
+# * nr_of_streams - Number of streams that will supply the font data.
+#
+#   Most font formats contain all font data in a single stream (file). Therefore, this
+#   parameter is typically 1. Some font formats (e.g. Type 1) may supply additional
+#   font data via additional streams. In this case nr_of_streams will be greater than 1.
+#   See the manual for details on how those font formats utilize the additional streams.
+#
+# * stream_sequence - A sequence of nr_of_streams stream descriptors that supply font data.
+#
+#   Each stream descriptor consists of the following two parameters:
+#
+#     * stream_id - identifies the stream type:
+#
+#         0 : Default Stream Type. Same as File Stream.
+#         1 : File Stream
+#         2 : Memory Stream
+#         3 : URL Stream
+#         5 : FURL Stream (File-Backed URL Stream)
+#         6 : MURL Stream (Memory-Backed URL Stream)
+#
+#     * stream_locator - stream type specific locator (e.g. file path or URL).
+#
+#   Regardless of the font format, the first stream descriptor in the array always
+#   supplies vital font data. 
+#
+# * reserved  - Reserved for future. Must be set to NULL.
+#
+# The parameters in each row must be separated by a single comma and specified in precisely
+# the same order as listed above.
+
+{
+0,F0010_HSANSS_SS0,0,-1,128,1,1,0,../../fonts/format/dtf/HSansSM-Regular.dtf,NULL
+3,F0011_HINDUN_NS0,0,-1,128,1,1,0,../../fonts/format/ttf/HindUnic.ttf,NULL
+5,F0011_CMCONC_SS0,0,-1,128,1,1,0,../../fonts/format/otf/cmunorm.otf,NULL
+8,F0011_TEX10__SS0,0,-1,128,1,1,0,../../fonts/format/pfb/Tpw.pfb,NULL
+3,F1040_INVISB_NS0,0,-1,128,1,1,0,../../fonts/format/ttf/Invisibl.ttf,NULL
+3,F0010_DENMRK_SS0,0,-1,128,1,1,0,../../fonts/format/ttf/Denmark.ttf,NULL
+8,F0011_SYMBL7_SS0,0,-1,128,1,1,0,../../fonts/format/pfb/Sym.pfb,NULL
+3,F0016_OL54___NS0,0,-1,128,1,1,0,../../fonts/format/ttf/Ol54.ttf,NULL
+3,F0010_BACHR__SS0,0,-1,128,1,1,0,../../fonts/format/ttf/Bachr.ttf,NULL
+}
+
+# END OF FILE

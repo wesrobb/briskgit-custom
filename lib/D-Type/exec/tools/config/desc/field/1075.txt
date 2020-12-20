@@ -1,0 +1,59 @@
+Global text direction and bidirectional text display method.
+
+{strong}Supported values:{/strong}
+
+A) Horizontal Layout (Text in Rows) and Bidirectional Reordering:
+
+0 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)
+1 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)
+2 = Left-to-Right, Bottom-to-Top
+3 = Right-to-Left, Bottom-to-Top
+4 = Same as 0 but swap Portrait & Landscape
+5 = Same as 1 but swap Portrait & Landscape
+6 = Same as 2 but swap Portrait & Landscape
+7 = Same as 3 but swap Portrait & Landscape
+
+B) Vertical Layout (Text in Columns) and Bidirectional Reordering:
+
+8 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)
+9 = Bottom-to-Top, Right-to-Left
+10 = Top-to-Bottom, Left-to-Right
+11 = Bottom-to-Top, Left-to-Right
+12 = Same as 8 but swap Portrait & Landscape
+13 = Same as 9 but swap Portrait & Landscape
+14 = Same as 10 but swap Portrait & Landscape
+15 = Same as 11 but swap Portrait & Landscape
+
+C) Horizontal Layout (Text in Rows) and Bidirectional Rotation:
+
+16 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)
+17 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)
+18 = Left-to-Right, Bottom-to-Top
+19 = Right-to-Left, Bottom-to-Top
+20 = Same as 16 but swap Portrait & Landscape
+21 = Same as 17 but swap Portrait & Landscape
+22 = Same as 18 but swap Portrait & Landscape
+23 = Same as 19 but swap Portrait & Landscape
+
+D) Vertical Layout (Text in Columns) and Bidirectional Rotation:
+
+24 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)
+25 = Bottom-to-Top, Right-to-Left
+26 = Top-to-Bottom, Left-to-Right
+27 = Bottom-to-Top, Left-to-Right
+28 = Same as 24 but swap Portrait & Landscape
+29 = Same as 25 but swap Portrait & Landscape
+30 = Same as 26 but swap Portrait & Landscape
+31 = Same as 27 but swap Portrait & Landscape
+
+{strong}Notes:{/strong}
+
+D-Type Engine can display text in horizontal writing mode (text in rows) and vertical writing mode (text in columns). In horizontal writing mode, the global text progression can be Letf-to-Right/Top-to-Bottom, Right-to-Left/Top-to-Bottom, Letf-to-Right/Bottom-to-Top or Right-to-Left/Bottom-to-Top. In vertical writing mode, the global text progression can be Top-to-Bottom/Right-to-Left, Bottom-to-Top/Right-to-Left, Top-to-Bottom/Left-to-Right or Bottom-to-Top/Left-to-Right.
+
+Additionally, D-Type Engine can display bidirectional text (e.g. a mixture of left-to-right text such as English or Chinese and right-to-left text such as Arabic or Hebrew) using two different methods: the first method is Bidirectional Reordering, the second method is Bidirectional Rotation. Visually, these two methods produce quite different output. However, both are suitable for displaying text that was processed by the Unicode Bidirectional Algorithm (BiDi).
+
+With Bidirectional Reordering the characters are reordered for display depending on the relative direction of the containing text fragment. Thus, a left-to-right text fragment has its characters ordered (visually) in the opposite order from a right-to-left text fragment. While reading bidirectional text, from start to end, the reader must alternate the reading direction (left-to-right/right-to-left in horizontal writing mode or top-to-bottom/bottom-to-top in vertical writing mode) each time a change of direction occurs. This is also the progression of the cursor as it advances from one character to another. This means that with Bidirectional Reordering, the order in which the characters are displayed is not the same as the order in which they are stored in memory (logical or storage order).
+
+With Bidirectional Rotation all characters are ordered uniformly (e.g. from left-to-right in horizontal writing mode or top-to-bottom in vertical writing mode) regardless of whether the containing text fragment has a left-to-right or right-to-left direction. However, their rotation depends on the relative direction of the containing text fragment. More specifically, characters that are part of a left-to-right text fragment are rotated 180 degrees relative to the characters that are part of a right-to-left text fragment. Thus, while reading bidirectional text, from start to end, the reader must rotate the display surface or tilt his/her head (clockwise or counterclockwise) each time a change of direction occurs. However, the reading direction and the progression of the cursor remain uniform. This also means that with Bidirectional Rotation, the order in which the characters are displayed is the same as the order in which they are stored in memory.
+
+Bidirectional Reordering is frequently used in horizontal writing mode and also works well in vertical writing mode. Bidirectional Rotation is typically not used in horizontal writing mode due to the fact that almost all Unicode scripts, when displayed in horizontal writing mode, have their orientation set to portrait (meaning that the glyph's x-axis in font design space is parallel with the baseline). Using Bidirectional Rotation in this case would require the user to rotate the display surface by 180 degrees (clockwise or counterclockwise) each time a change of direction is encountered -- which is, needles to say, far from practical. However, Bidirectional Rotation works well in vertical writing mode. This is due to the fact that vertical writing is used mostly with CJK scripts (Chinese/Japanese/Korean) which typically have their orientation set to landscape (meaning that the glyph's x-axis in font design space is perpendicular to the baseline). Non-CJK scripts, such as Latin or Arabic then have their orientation set to portrait. Under this scheme, the reading direction and the progression of the cursor is always top-to-bottom. When reading the majority of content (i.e. CJK text), there is no need to rotate the display surface. However, when a left-to-right text fragment (e.g. English) is encountered, the reader rotates the display surface by 90 degrees clockwise. Similarly, when a right-to-left text fragment (e.g. Arabic) is encountered, the reader rotates the display surface by 90 degrees counterclockwise. In all three cases (Chinese, English and Arabic) the characters are ordered from top to bottom and the reader is never expected to alter the reading direction (which would otherwise be required if Bidirectional Reordering was used). This is not to say that Bidirectional Reordering cannot be used in vertical writing mode. However, Bidirectional Rotation might work better in certain applications as rotating the display surface by 90 degrees clockwise or counterclockwise relative to the vertical baseline is sometimes considered a more practical way of reading vertical bidirectional text.

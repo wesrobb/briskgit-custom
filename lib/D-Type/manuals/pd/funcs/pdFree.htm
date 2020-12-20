@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdFree</h2><div class="box_prototype"><strong>
+void pdFree(void* mem_addr)</strong></div><br /><strong>Short Description:</strong> <em>Free memory allocated by the engine</em><br /><br />
+
+<p>The pdFree function is used to release memory allocated by D-Type Power Engine. Any memory allocated by a call to one of D-Type Power Engine functions is owned by D-Type Power Engine and must be freed by pdFree.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>mem_addr</em></p>
+</td><td>
+<p>Memory address at which the memory block to be released begins. This must be a valid pointer to a memory buffer that was previously allocated by one of D-Type Power Engine's memory allocation functions (e.g. <a href="pdDocSaveToStream.htm">pdDocSaveToStream</a> using a <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure that supplies a memory based stream).</p>
+</td></tr>
+
+</table>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

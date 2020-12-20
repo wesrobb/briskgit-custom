@@ -1,0 +1,115 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetGlyphCallback</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetGlyphCallback(DT_PDDOC power_doc, DT_SWORD (*user_glyph_func)(DT_ID_ULONG glyph_index, const DT_PD_ORIGIN_L* glyph_origin, const DT_PD_FLOW* glyph_flow, void* user_param), void* user_param)</strong></div><br /><strong>Short Description:</strong> <em>Set document's glyph callback function - L</em><br /><br />
+
+<p>The pdDocSetGlyphCallback function registers a callback function to be called during the text layout operations performed by <a href="pdDocDraw.htm">pdDocDraw</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_glyph_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called as <a href="pdDocDraw.htm">pdDocDraw</a> performs its text layout operations. Your function must be declared as follows: </p>
+
+<p class="center"><em>
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> your_user_glyph_func(<a href="../../dt/manual/types.htm#DT_ID_ULONG">DT_ID_ULONG</a> glyph_index, const <a href="../manual/pdstructs.htm#DT_PD_ORIGIN">DT_PD_ORIGIN</a>* glyph_origin, const <a href="../manual/pdstructs.htm#DT_PD_FLOW">DT_PD_FLOW</a>* glyph_flow, void* user_param)
+</em></p>
+
+<p>where <em>your_user_glyph_func</em> is the name of your own C function, <em>glyph_index</em> an index of the glyph generated during the text layout process, <em>glyph_origin</em> is a pointer to a structure that provides its position in pixels (in 24.8 signed fractional format) and some other optional information (e.g. typographical attributes), and <em>glyph_flow</em> is a pointer to a structure that provides all the available information about the glyph's text flow and frame. The <em>user_param</em> parameter is a pointer to your own data type that you will receive during the callback.</p>
+
+<p>Your function is called once for each glyph that is generated during the text layout process. Therefore, there will be as many callbacks as there are glyphs to be rendered. The <em>glyph_flow</em> parameter can be used to identify the glyph's text flow and obtain its frame. Since each glyph triggers one callback, your callback function receives one frame at a time. Consequently, the <em>frames_len</em> parameter of the <a href="../manual/pdstructs.htm#DT_PD_FLOW">DT_PD_FLOW</a> structure is always set to 1.</p>
+
+<p>Your function receives information about the glyph's text flow and frame via the <em>glyph_flow</em> pointer only when the <em>Flows</em> member of the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure that you pass to the <a href="pdDocDraw.htm">pdDocDraw</a> function is set to 1, 2, 10 or 20. Depending on how you set the value of the <em>Flows</em> member, the glyph's frame will be supplied to you in either <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> or <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format. If, however, you set the <em>Flows</em> member to 0 or do not pass the <a href="pdDocDraw.htm">pdDocDraw</a> function a pointer to the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure, then <em>glyph_flow</em> will be supplied to you as DV_NULL. Also, <em>glyph_flow</em> can be supplied to you as DV_NULL if out-of-memory conditions occur or if your callback function instructs <a href="pdDocDraw.htm">pdDocDraw</a> to stop generating text flows and frames. Thus, your callback function should always check the <em>glyph_flow</em> value for DV_NULL and handle this situation gracefully.</p>
+
+<p>See the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">D-Type Workshop</a> section for more information on how to set the members of the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure before calling <a href="pdDocDraw.htm">pdDocDraw</a>. </p>
+
+<p>Note that both the <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> and <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> structures provide two important indexes:</p>
+
+<ul>
+<li><em>Idx</em> which is the index of the corresponding character in the text (i.e. this index maps the glyph back to the input text), and</li>
+<li><em>Row</em> which is the index of the row in which this glyph will appear when the text is rendered.</li>
+</ul>
+
+<p>Your function should return one of the following values:</p>
+
+<ul>
+<li>-2 = to instruct <a href="pdDocDraw.htm">pdDocDraw</a> not to render this glyph;</li>
+<li>-1 = to instruct <a href="pdDocDraw.htm">pdDocDraw</a> to render this glyph but stop generating text flows and frames until the current text layout process is over;</li>
+<li>1 = to instruct <a href="pdDocDraw.htm">pdDocDraw</a> to render this glyph.</li>
+</ul>
+
+<p>The consequence of returning -2 is that the glyph will not be rendered (leaving a gap in the output) without any effect on the text layout process. The consequence of returning -1 is that <em>glyph_flow</em> will be supplied to you as DV_NULL in any subsequent callbacks resulting from the same <a href="pdDocDraw.htm">pdDocDraw</a> call.</p>
+
+<p>Regardless of the return value, the text layout process continues; there is no way for your callback function to immediately terminate or alter the text layout process.</p>
+
+<p>Setting the <em>user_glyph_func</em> parameter to DV_NULL when calling pdDocSetGlyphCallback will permanently unregister a previously registered callback function. Once this is done, any subsequent calls to <a href="pdDocDraw.htm">pdDocDraw</a> will no longer initiate any callbacks during their text layout operations.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_param</em></p>
+</td><td>
+<p>A void pointer to your own data type that you will receive during the callback. This pointer is passed back to your function during the callback to help you track the state of execution or provide other information useful to your application. This pointer is not accessed or modified by D-Type Engine in any way; it is simply sent back to your function as supplied. You can set this parameter to DV_NULL if you have no need for it.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+
+<h3>Note</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+<h3>Related Functions</h3>
+<p><a href="pdDocDraw.htm">pdDocDraw</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

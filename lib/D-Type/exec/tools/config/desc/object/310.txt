@@ -1,0 +1,3 @@
+The Rich List Box object is a visual and interactive form control that offers users a single option or multiple options from which to choose.
+
+{strong}Designated Rendering Function:{/strong} fcDrawRichListBox (10009)

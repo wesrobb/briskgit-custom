@@ -1,0 +1,336 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Power Engine Structures</h1>
+
+<p>In addition to the <a href="../../dt/manual/types.htm">basic data types</a> and some of the <a href="../../dt/manual/structs.htm">D-Type Standard Engine Structures</a>, D-Type Power Engine also defines and utilizes the following structure types:</p>
+
+<h2><strong id="DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</strong></h2>
+
+<p>This structure can be used by applications to implement cursor movement, text selection and hit testing. The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* The Frame structure - Format 2 (arbitrary 4-point polygon with 24.8 fractional pixel coordinates) */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG Idx;                               <span class="codecomment">/* Frame's Logical ID */</span>&nbsp;
+    DT_SLONG Row;                               <span class="codecomment">/* Frame's Row */</span>&nbsp;
+    DT_SFRAC_L X1, Y1, X2, Y2, X3, Y3, X4, Y4;  <span class="codecomment">/* Frame's corner points in 24.8 fractional pixels (4-point polygon) */</span>&nbsp;
+    DT_UBYTE Misc, Rsvd;
+
+} DT_PD_FRAME_FORMAT2;
+</pre>
+</div>
+
+<p>This structure holds information about a single letter (character, glyph, PowerGlyph) rendered by D-Type Power Engine. This structure is referred to as the letter's <em>frame</em>. <em>Idx</em> is the index of the letter within its text flow and <em>Row</em> is its row in that text flow. <em>X1</em>, <em>Y1</em>, <em>X2</em>, <em>Y2</em>, <em>X3</em>, <em>Y3</em>, <em>X4</em> and <em>Y4</em> represent the coordinates of the letter's bounding quadrilateral in 24.8 fractional pixels, while <em>Misc</em> describes the letter's writing direction (left-to-right or right-to-left) and, in the future, other attributes. <em>Rsvd</em> is reserved for future use.</p>
+
+<p>For more information on using frames, please see the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">Workshop</a> section.</p>
+
+
+<h2><strong id="DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</strong></h2>
+
+<p>This is another structure that can be used by applications to implement cursor movement, text selection and hit testing. This structure type is similar to <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a>, but more limited. This is because it can only describe the letter's frame as a parallelogram and not an arbitrary quadrilateral. Also, the precision that this structure offers is more limited since the pixel coordinates are expressed in whole pixel units rather than 24.8 fractional pixels. This structure type is still in use today but, due to these limitations, may be deprecated in the future.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* The Frame structure - Format 1 (parallelogram) */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG Idx;                                  <span class="codecomment">/* Frame's Logical ID */</span>&nbsp;
+    DT_SLONG Row;                                  <span class="codecomment">/* Frame's Row */</span>&nbsp;
+    DT_SRAST_L XMin, YMin, XMax, YMax, XMid, YMid; <span class="codecomment">/* Frame's corner points in pixels (parallelogram) */</span>&nbsp;
+    DT_UBYTE Misc, Rsvd;
+
+} DT_PD_FRAME_FORMAT1;
+</pre>
+</div>
+
+<p>As with <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a>, <em>Idx</em> is the index of the letter within its text flow and <em>Row</em> is its row in that text flow. <em>XMin</em>, <em>YMin</em>, <em>XMax</em>, <em>YMax</em>, <em>XMid</em> and <em>YMid</em> represent the  coordinates of the letter's bounding parallelogram in pixels and should be interpreted as follows:</p>
+
+(<em>XMin</em>, <em>YMin</em>) &mdash; top-left corner of the parallelogram<br />
+(<em>XMax</em>, <em>YMax</em>) &mdash; bottom-right corner of the parallelogram<br />
+(<em>XMid</em>, <em>YMid</em>) &mdash; top-right corner of the parallelogram. The opposite, bottom-left corner of the parallelogram is then located at the following coordinates: (<em>XMin</em>&nbsp;+&nbsp;<em>XMax</em>&nbsp;-&nbsp;<em>XMid</em>,&nbsp;<em>YMin</em>&nbsp;+&nbsp;<em>YMax</em>&nbsp;-&nbsp;<em>YMid</em>).
+
+<p><em>Misc</em> describes the letter's writing direction (left-to-right or right-to-left) and, in the future, other attributes. <em>Rsvd</em> is reserved for future use.</p>
+
+<p>For more information on using frames, please see the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">Workshop</a> section.</p>
+
+
+<h2><strong id="DT_PD_FRAMES">DT_PD_FRAMES</strong></h2>
+
+<p>This is a union type that represents a pointer to either <a href="pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> or <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a>. It is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* The Frames union */</span>&nbsp;
+typedef union
+{
+    DT_PD_FRAME_FORMAT1* Format1Ptr; <span class="codecomment">/* Frames in Format 1 */</span>&nbsp;
+    DT_PD_FRAME_FORMAT2* Format2Ptr; <span class="codecomment">/* Frames in Format 2 */</span>&nbsp;
+
+} DT_PD_FRAMES;
+</pre>
+</div>
+
+
+<h2><strong id="DT_PD_FLOW">DT_PD_FLOW</strong></h2>
+
+<p>This structure is used by applications that implement cursor movement, text selection and hit testing. This structure provides essential information about a single text flow and its array of frames. The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* The Text Flow structure */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG ParentFlow;     <span class="codecomment">/* Flow's parent Flow index */</span>&nbsp;
+    DT_SLONG ParentFrame;    <span class="codecomment">/* Flow's parent Frame index */</span>&nbsp;
+    DT_SLONG LocalNumber;    <span class="codecomment">/* Flow's local identifier */</span>&nbsp;
+    DT_SLONG Img;            <span class="codecomment">/* Flow's PowerDoc Image */</span>&nbsp;
+    DT_ID_SLONG ParentObj;   <span class="codecomment">/* Flow's parent PowerDoc Object */</span>&nbsp;
+    DT_PD_FRAMES Frames;     <span class="codecomment">/* Flow's array of Frames (named union) */</span>&nbsp;
+    DT_SLONG FramesLen;      <span class="codecomment">/* Number of Frames in the array */</span>&nbsp;
+
+} DT_PD_FLOW;
+</pre>
+</div>
+
+<p>This structure holds information about a single text flow rendered by D-Type Power Engine. <em>ParentFlow</em> and <em>ParentFrame</em> link this text flow to its parent text flow and frame, if any. This hierarchical organization makes it possible to describe nested text flows. <em>LocalNumber</em> is the text flow's local identifying number. Although this number is not unique globally, it uniquely describes the text flow within its current nesting level. <em>Img</em> links the text flow to its associated PowerDoc Image, while <em>Obj</em> links the text flow to its parent PowerDoc object. Finally, <em>Frames</em> provides the text flow's array of frames (which can be in either <a href="pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> or <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format), while <em>FramesLen</em> tells how many frames there are in this array.</p>
+
+<p>For more information on using text flows, please see the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">Workshop</a> section.</p>
+
+
+<h2><strong id="DT_PD_ENGINE_PARAMS">DT_PD_ENGINE_PARAMS</strong></h2>
+
+<p>This structure is used by the <a href="../funcs/pdEngineSetParams.htm">pdEngineSetParams</a> and <a href="../funcs/pdEngineGetParams.htm">pdEngineGetParams</a> functions. For details, see the <a href="../funcs/pdEngineSetParams.htm">pdEngineSetParams</a> function.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Parameters for Power Engine */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG CacheBytes; <span class="codecomment">/* Size limit for Power Engine's caching subsystem in bytes */</span>&nbsp;
+    DT_SLONG CacheItems; <span class="codecomment">/* The maximum number of items for Power Engine's caching subsystem */</span>&nbsp;
+    DT_UBYTE Reserved1;  <span class="codecomment">/* Reserved for future use */</span>&nbsp;
+    DT_UBYTE Reserved2;  <span class="codecomment">/* Reserved for future use */</span>&nbsp;
+
+} DT_PD_ENGINE_PARAMS;
+</pre>
+</div>
+
+
+<h2><strong id="DT_PD_DOC_PARAMS">DT_PD_DOC_PARAMS</strong></h2>
+
+<p>This structure is used by the <a href="../funcs/pdDocSetParams.htm">pdDocSetParams</a> and <a href="../funcs/pdDocGetParams.htm">pdDocGetParams</a> functions. For details, see the <a href="../funcs/pdDocSetParams.htm">pdDocSetParams</a> function.</p>
+
+<p><strong>Deprecation Notice:</strong> As of D-Type 8.0.1.3 this structure is deprecated and might be removed in the future.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Parameters for Power Engine documents */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L SizeOrigin;        <span class="codecomment">/* Box size for origin points of non-selected PowerDoc images */</span>&nbsp;
+    DT_SRAST_L SizeSelect;        <span class="codecomment">/* Box size for origin points of selected PowerDoc images */</span>&nbsp;
+    DT_SRAST_L SizeClipExtendX;   <span class="codecomment">/* An internal library parameter. Must be set to 10. */</span>&nbsp;
+    DT_SRAST_L SizeClipExtendY;   <span class="codecomment">/* An internal library parameter. Must be set to 10. */</span>&nbsp;
+    DT_UBYTE CacheFlagForMasking; <span class="codecomment">/* Specifies which alpha-masking algorithm to use */</span>&nbsp;
+    DT_UBYTE CacheFlagForGlyphs;  <span class="codecomment">/* Specifies which caching algorithm to use */</span>&nbsp;
+    DT_UBYTE Reserved1;           <span class="codecomment">/* A set of bit values for missing (undefined) glyphs and tabs */</span>&nbsp;
+    DT_UBYTE Reserved2;           <span class="codecomment">/* Miscellaneous bits */</span>&nbsp;
+
+} DT_PD_DOC_PARAMS;
+</pre>
+</div>
+
+
+<h2><strong id="DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</strong></h2>
+
+<p>This structure contains additional and optional parameters for advanced rendering, which can be specified when calling the <a href="../funcs/pdDocDraw.htm">pdDocDraw</a> function.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Optional parameters for rendering */</span>&nbsp;
+typedef struct
+{
+    DT_SWORD Flags;        <span class="codecomment">/*  Bit 0: If unset, perform text layout operations only for text objects
+                                      and characters that are within the visible portion of the page.
+                                      If set, perform text layout operations for any and all text
+                                      objects and characters on the page, even if they are outside
+                                      the visible portion of the page.
+                               Bit 1: If unset, disable processing of critical object-specific errors.
+                                      If set, enable processing of critical object-specific errors. */</span>&nbsp;
+
+    DT_SWORD Origins;      <span class="codecomment">/* -1 = Never draw origins
+                               0 = Draw origins only for selected PowerDoc objects
+                               1 = Draw origins for all PowerDoc objects */</span>&nbsp;
+
+    DT_SWORD Boundaries;   <span class="codecomment">/* -1 = Never draw boundaries
+                               0 = Draw boundaries only for selected PowerDoc objects
+                                   (not all PowerDoc objects have boundaries)
+                               1 = Draw boundaries for all PowerDoc objects
+                                   (not all PowerDoc objects have boundaries) */</span>&nbsp;
+
+    DT_SWORD Background;   <span class="codecomment">/*  0 = Do not clear surface's background
+                               1 = Clear surface's background using the R, G, B, A values below */</span>&nbsp;
+
+    DT_SWORD Flows;        <span class="codecomment">/*  0 = Do not return text flows and frames resulting from text layout
+                                   operations and do not pass them to the text callback function.
+                               1 = Return text flows and frames resulting from text layout
+                                   operations via the FlowsPtr and FlowsLen structure members
+                                   and also pass them to the glyph callback function.
+                                   Use <a href="pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> for all frames.
+                               2 = Return text flows and frames resulting from text layout
+                                   operations via the FlowsPtr and FlowsLen structure members
+                                   and also pass them to the glyph callback function.
+                                   Use <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> for all frames.
+                              10 = Only pass text flows and frames resulting from text layout
+                                   operations to the glyph callback function.
+                                   Use <a href="pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> for all frames.
+                              20 = Only pass text flows and frames resulting from text layout
+                                   operations to the glyph callback function.
+                                   Use <a href="pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> for all frames. */</span>&nbsp;
+
+    DT_SWORD Reserved;     <span class="codecomment">/* Reserved for future use. Must be set to 0. */</span>&nbsp;
+
+    DT_UBYTE R, G, B, A;   <span class="codecomment">/* R, G, B, A values of the surface's background */</span>&nbsp;
+
+    DT_PD_FLOWS FlowsArr;  <span class="codecomment">/* Text flows generated during text layout operations
+                              (this is an input/output variable) */</span>&nbsp;
+    DT_SLONG FlowsLen;     <span class="codecomment">/* The number of text flows (this is an input/output variable) */</span>&nbsp;
+
+    void* UserData;        <span class="codecomment">/* User supplied data (will be passed to <a href="pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a>) */</span>&nbsp;
+
+} DT_PD_DOCDRAW_PARAMS;
+</pre>
+</div>
+
+<p>where DT_PD_FLOWS is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* An array of Text Flows */</span>&nbsp;
+typedef struct
+{
+    DT_PD_FLOW* Ptr;  <span class="codecomment">/* Points to the first Flow in the array */</span>&nbsp;
+    DT_SLONG Len;     <span class="codecomment">/* Number of Flows in the array */</span>&nbsp;
+
+} DT_PD_FLOWS;
+</pre>
+</div>
+
+<p>For more information on advanced rendering, please see the description of the <a href="../funcs/pdDocDraw.htm">pdDocDraw</a> and <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> functions and the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">Workshop</a> section.</p>
+
+
+<h2><strong id="DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</strong></h2>
+
+<p>This structure is used by applications that implement and render their own custom PowerDoc objects.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* The Canvas structure */</span>&nbsp;
+typedef struct
+{
+    DT_PDDOC PowerDocInst;      <span class="codecomment">/* Document Instance */</span>&nbsp;
+    DT_PDENGINE PowerEngInst;   <span class="codecomment">/* Associated Power Engine Instance */</span>&nbsp;
+    DT_DTENGINE DTypeEngInst;   <span class="codecomment">/* Associated Standard Engine Instance */</span>&nbsp;
+    DT_SLONG Page;              <span class="codecomment">/* Current page */</span>&nbsp;
+    DT_SLONG PageParams[2];     <span class="codecomment">/* Reserved page parameters */</span>&nbsp;
+    DT_SRAST_L Width;           <span class="codecomment">/* Surface's width in pixels */</span>&nbsp;
+    DT_SRAST_L Height;          <span class="codecomment">/* Surface's height in pixels */</span>&nbsp;
+    DT_ID_SWORD Format;         <span class="codecomment">/* Surface's format (8, 16, 24 or 32) */</span>&nbsp;
+    DT_ID_SWORD Subformat;      <span class="codecomment">/* Surface's subformat (see the manual) */</span>&nbsp;
+    DT_UBYTE* Memory;           <span class="codecomment">/* Pointer to surface's memory buffer */</span>&nbsp;
+    DT_SLONG Length;            <span class="codecomment">/* Length of the buffer */</span>&nbsp;
+    DT_SLONG Img;               <span class="codecomment">/* Current PowerDoc image */</span>&nbsp;
+    DT_SLONG ImgParams[2];      <span class="codecomment">/* Reserved image parameters */</span>&nbsp;
+    DT_ID_SLONG Obj;            <span class="codecomment">/* Associated PowerDoc object */</span>&nbsp;
+    DT_ID_SLONG ObjParams[2];   <span class="codecomment">/* Reserved object parameters */</span>&nbsp;
+    DT_SLONG Misc1;             <span class="codecomment">/* Reserved */</span>&nbsp;
+    DT_SWORD Misc2;             <span class="codecomment">/* Reserved */</span>&nbsp;
+    DT_UBYTE MiscBits;          <span class="codecomment">/* Reserved */</span>&nbsp;
+    DT_UBYTE MaskType;          <span class="codecomment">/* Reserved */</span>&nbsp;
+    DT_SRAST_L CX, CY, CW, CH;  <span class="codecomment">/* Image's clipped bounding box in pixels */</span>&nbsp;
+    DT_SRAST_L BX, BY, BW, BH;  <span class="codecomment">/* Reserved for internal use (alpha-masking) */</span>&nbsp;
+    DT_SLONG Mask;              <span class="codecomment">/* Page for alpha-masking (reserved for internal use) */</span>&nbsp;
+    DT_UBYTE* Buffer;           <span class="codecomment">/* Buffer for alpha-masking (reserved for internal use) */</span>&nbsp;
+    void* UserData;             <span class="codecomment">/* User supplied data */</span>&nbsp;
+    DT_PDDOCDRAW_R1 Reserved1;  <span class="codecomment">/* Reserved for internal use */</span>&nbsp;
+    DT_PDDOCDRAW_R2 Reserved2;  <span class="codecomment">/* Reserved for internal use */</span>&nbsp;
+    DT_UWORD Flags;             <span class="codecomment">/* Reserved for internal use */</span>&nbsp;
+    DT_UBYTE Status;            <span class="codecomment">/* Image's status */</span>&nbsp;
+    DT_UBYTE Attribs;           <span class="codecomment">/* Image's attributes */</span>&nbsp;
+    DT_ID_SLONG ParentObj;      <span class="codecomment">/* Image's parent PowerDoc object */</span>&nbsp;
+    DT_SRAST_XL EX, EY, EW, EH; <span class="codecomment">/* Image's extent in pixels (if known) */</span>&nbsp;
+    DT_SRAST_XL ImgX, ImgY;     <span class="codecomment">/* Image's origin point in pixels */</span>&nbsp;
+    DT_SRAST_XL XOff, YOff;     <span class="codecomment">/* Surface's offset in pixels */</span>&nbsp;
+
+} DT_PD_DOCDRAW_CANVAS;
+</pre>
+</div>
+
+
+<p>This structure provides all the information necessary to render a PowerDoc image of a given PowerDoc object. For more information, please see the <a href="advanced.htm">Advanced Techniques</a> section of this document.</p>
+
+
+<h2><strong id="DT_PD_ORIGIN">DT_PD_ORIGIN</strong></h2>
+
+<p>This structure type represents an origin point.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Origin point */</span>&nbsp;
+typedef struct
+{
+    DT_SFRAC XA, YA; <span class="codecomment">/* Accurate origin point */</span>&nbsp;
+    DT_SFRAC XS, YS; <span class="codecomment">/* Snapped origin point */</span>&nbsp;
+    const <a href="pdstructs.htm#DT_PD_ORIGIN_EXTRA">DT_PD_ORIGIN_EXTRA</a>* Extra; <span class="codecomment">/* Optional extra info */</span>&nbsp;
+
+} DT_PD_ORIGIN;
+</pre>
+</div>
+
+
+<h2><strong id="DT_PD_ORIGIN_EXTRA">DT_PD_ORIGIN_EXTRA</strong></h2>
+
+<p>This structure type supplements the <a href="pdstructs.htm#DT_PD_ORIGIN">DT_PD_ORIGIN</a> structure, providing additional information.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Extra information */</span>&nbsp;
+typedef struct
+{
+    DT_UBYTE GlyphFlag;          <span class="codecomment">/* Flag to identify the type of glyph */</span>&nbsp;
+    DT_UBYTE GlyphMisc;          <span class="codecomment">/* Reserved for future use and presently set to 0 */</span>&nbsp;
+    DT_UWORD Reserved;           <span class="codecomment">/* Reserved for future use and presently set to 0 */</span>&nbsp;
+    const <a href="../../dt/manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a>* Type; <span class="codecomment">/* Typographical attributes of a glyph or character (will be DV_NULL for PowerFonts) */</span>&nbsp;
+    <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> Transform;          <span class="codecomment">/* A 2D perspective (or projective) transformation matrix */</span>&nbsp;
+    DT_SLONG XOff, YOff;         <span class="codecomment">/* Offset in whole pixels */</span>&nbsp;
+
+} DT_PD_ORIGIN_EXTRA;
+
+</pre>
+</div>
+
+
+<p>See Q-8-28 in <a href="../../common/faq/text.htm">Frequently Asked Questions (FAQs) &mdash; Text Engine API</a> for more information on how to make use of the DT_PD_ORIGIN and DT_PD_ORIGIN_EXTRA structures.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

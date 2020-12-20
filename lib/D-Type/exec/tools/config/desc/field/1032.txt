@@ -1,0 +1,6 @@
+Initial (start) angle in degrees. Must be between 0 and 360.
+
+{strong}Sample values:{/strong}
+
+0 = Angle of 0 degrees
+90 = Angle of 90 degrees

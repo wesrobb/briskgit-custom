@@ -1,0 +1,3 @@
+Misc Text Attributes 2
+
+Bit 0: 1 = Special flag for RTL bullets (used by Text Engine)

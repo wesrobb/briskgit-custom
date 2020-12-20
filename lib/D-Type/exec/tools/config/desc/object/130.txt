@@ -1,0 +1,9 @@
+This objects represents a text path. In Power Engine API, a text path is an array of characters or glyphs drawn along the edge of a user-defined polygon or shape and formatted according to the specified parameters.
+
+{strong}Designated Rendering Function:{/strong} pdDrawTextPath (28)
+
+Note 1: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.
+
+Note 2: pdPolyArrX_08, pdPolyArrX_16, pdPolyArrX_24 and pdPolyArrX_32 cannot be used at the same time. pdPolyArrX_32 takes precedence over pdPolyArrX_24. pdPolyArrX_24 takes precedence over pdPolyArrX_16. Finally, pdPolyArrX_16 takes precedence over pdPolyArrX_08.
+
+Note 3: pdPolyArrY_08, pdPolyArrY_16, pdPolyArrY_24 and pdPolyArrY_32 cannot be used at the same time. pdPolyArrY_32 takes precedence over pdPolyArrY_24. pdPolyArrY_24 takes precedence over pdPolyArrY_16. Finally, pdPolyArrY_16 takes precedence over pdPolyArrY_08.

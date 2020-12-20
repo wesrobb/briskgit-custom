@@ -1,0 +1,7 @@
+Amount of spacing to be added after a character or glyph, in document units. Both positive and negative values are valid.
+
+{strong}Sample values:{/strong}
+
+10 = character spacing of 10 document units
+40 = character spacing of 40 document units
+-10 = character spacing of -10 document units

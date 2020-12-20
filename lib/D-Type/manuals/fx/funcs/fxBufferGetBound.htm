@@ -1,0 +1,51 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxBufferGetBound</h2><div class="box_prototype"><strong>
+DT_SLONG fxBufferGetBound(DT_AUX_INFO* info, DT_SLONG raw_len)</strong></div><br /><strong>Short Description:</strong> <em>Get maximum size of buffer to store compressed data</em><br /><br />
+
+<p>This function calculates the required size of the buffer required to compress <em>raw_len</em> bytes of data using the <a href="fxBufferCompress.htm">fxBufferCompress</a> function. The data compression format is specified by the <em>FileFormat</em> member variable of the <em>info</em> structure.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raw_len</em></p>
+</td><td>
+<p>See <a href="fxBufferCompress.htm">fxBufferCompress</a>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value represents the upper bound, in bytes, of a buffer to allocate to hold the compressed data in a single call to <a href="fxBufferCompress.htm">fxBufferCompress</a>. This function may return a conservative value that is larger than <em>raw_len</em>.
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

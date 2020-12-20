@@ -1,0 +1,6 @@
+A unique identifier that, depending on the context, represent one of the following:
+
+a) code of a character (or PowerChar);
+b) index of a glyph (or PowerGlyph);
+c) index of a library shape or library polyline (see the Library of Shapes and Polylines section in the manual for details)
+d) index of a library bitmap image

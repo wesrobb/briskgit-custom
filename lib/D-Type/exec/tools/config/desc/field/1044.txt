@@ -1,0 +1,31 @@
+Gradient type.
+
+{strong}Supported values:{/strong}
+
+0 = None (Fast Rectangle)
+1 = Horizontal
+2 = Vertical
+3 = Bi-Horizontal
+4 = Bi-Vertical
+
+10 = Quarter-Circular A
+11 = Quarter-Circular B
+12 = Quarter-Circular C
+13 = Quarter-Circular D
+14 = Half-Circular A
+15 = Half-Circular B
+16 = Half-Circular C
+17 = Half-Circular D
+18 = Circular
+
+20 = Quarter-Diamond A
+21 = Quarter-Diamond B
+22 = Quarter-Diamond C
+23 = Quarter-Diamond D
+24 = Half-Diamond A
+25 = Half-Diamond B
+26 = Half-Diamond C
+27 = Half-Diamond D
+28 = Diamond
+
+255 = None (Inverter)

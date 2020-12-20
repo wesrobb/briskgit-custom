@@ -1,0 +1,6 @@
+A flag that specifies whether consecutive text row boundaries should merge.
+
+{strong}Supported values:{/strong}
+
+0 = Don't merge
+1 = Merge

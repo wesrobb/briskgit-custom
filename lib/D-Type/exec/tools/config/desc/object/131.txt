@@ -1,0 +1,7 @@
+This objects represents a rich text path. In Power Engine API, a rich text path is an array of text fragments formatted according to the specified parameters and drawn along the edge of a user-defined polygon or shape. Functionally, the Rich Text Path object is similar to the {a href="../objects/130.htm"}Text Path{/a} object but is more complex. This is because a typical rich text path usually consists of many text fragments, while each fragment is formatted using a different set of typographic and layout attributes.
+
+{strong}Designated Rendering Function:{/strong} pdDrawRichTextPath (29)
+
+Note 1: pdPolyArrX_08, pdPolyArrX_16, pdPolyArrX_24 and pdPolyArrX_32 cannot be used at the same time. pdPolyArrX_32 takes precedence over pdPolyArrX_24. pdPolyArrX_24 takes precedence over pdPolyArrX_16. Finally, pdPolyArrX_16 takes precedence over pdPolyArrX_08.
+
+Note 2: pdPolyArrY_08, pdPolyArrY_16, pdPolyArrY_24 and pdPolyArrY_32 cannot be used at the same time. pdPolyArrY_32 takes precedence over pdPolyArrY_24. pdPolyArrY_24 takes precedence over pdPolyArrY_16. Finally, pdPolyArrY_16 takes precedence over pdPolyArrY_08.

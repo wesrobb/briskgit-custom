@@ -1,0 +1,61 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontRemove</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontRemove(DT_DTENGINE engine, DT_ID_SWORD font_index)</strong></div><br /><strong>Short Description:</strong> <em>Remove font from Font Catalog</em><br /><br />
+
+<p>This function permanently removes a font or font instance from the Font Catalog of the specified Standard Engine instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance to be removed from the Font Catalog.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns 1. Otherwise, the function returns 0</p>
+
+
+<h3>Comments</h3>
+
+<p>An application can use the <a href="dtFontRemove.htm">dtFontRemove</a> function to permanently remove a font or font instance from the Font Catalog when it is no longer needed. Once the specified font or font instance is removed, the value of <em>font_index</em> becomes invalid and any future references to that index are not allowed. Your application must ensure that the removed font index is not referenced or used any more, otherwise unexpected results might occur.</p>
+
+<p>Of course, any other fonts or font instances that are still in the Font Catalog will keep their unique font indexes after <a href="dtFontRemove.htm">dtFontRemove</a> returns.</p>
+
+<p>Applications should use this function only when a font or font instance should be permanently removed from the Font Catalog. If there is a chance that the referenced font or font instance will be used again in the future, it is better to just make it inactive using the <a href="dtFontMakeInactive.htm">dtFontMakeInactive</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

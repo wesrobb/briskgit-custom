@@ -1,0 +1,632 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Examples</h1>
+
+
+<h2 id="E1">Example 1: Hello World</h2>
+
+
+<p>The following code fragment illustrates how to output a simple &quot;Hello World&quot; text line using D-Type Font Engine:</p>
+
+<div class="box_field">
+<pre>
+DT_DTENGINE engine;
+
+<a href="structs.htm#DT_MDC">DT_MDC</a> dc_mem;
+
+<a href="structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{0, 0}, {255, 0, 0, 0}, 0, DV_NULL};
+<span class="codecomment">/*
+    Same as
+    style.ep[0] = 0;
+    style.ep[1] = 0;
+    style.rgbt[0] = 255;
+    style.rgbt[1] = 0;
+    style.rgbt[2] = 0;
+    style.rgbt[3] = 0;
+    style.reserved = 0;
+    style.palette = DV_NULL;
+*/</span>&nbsp;
+
+<a href="structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> type = {0, 0, 0, 0, 0, {{100, 100, 0, 0, 0}}};
+<span class="codecomment">/*
+    Same as
+    type.font_index = 0;
+    type.thickness = 0;
+    type.segment = 0;
+    type.reserved = 0;
+    type.descriptor = 0;
+    type.transform.params.size_h = 100;
+    type.transform.params.size_v = 100;
+    type.transform.params.skew_h = 0;
+    type.transform.params.skew_v = 0;
+    type.transform.params.rotation = 0;
+*/</span>&nbsp;
+
+
+<span class="codecomment">/* Initialize D-Type Font Engine. Exit if an error occurs. */</span>&nbsp;
+DT_STREAM_FILE(sd_ini, "dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd_ini, DV_NULL) == 0) exit(0);
+
+<span class="codecomment">/* Add new Adobe Type 1 font to the Font Catalog */</span>&nbsp;
+DT_STREAM_FILE(sd_font, "fonts/pfb/helvetica.pfb");
+type.font = dtFontAddViaStream(engine, DV_FONT_TYPE1_ADOBE, DV_NULL, 0, -1, 0, 1, &amp;sd_font);
+
+<span class="codecomment">/* Exit if an error occurs */</span>&nbsp;
+if (type.font &lt; 0) exit(0);
+
+
+<span class="codecomment">/* Create a 640x480-pixel 24-bpp memory surface */</span>&nbsp;
+dc_mem.w = 640;
+dc_mem.h = 480,
+dc_mem.l = 3 * dc_mem.w * dc_mem.h;
+if ((dc_mem.m = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)malloc(dc_mem.l)) == DV_NULL) exit(0);
+memset(dc_mem.m, 255, dc_mem.l);
+
+<span class="codecomment">/* Redirect all D-Type output to that surface and define clipping rect */</span>&nbsp;
+dtOutputSetAsMDC(engine, DV_FORMAT_24, 0, &amp;dc_mem, 0, 0, 640, 480);
+
+<span class="codecomment">/* Select color */</span>&nbsp;
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+
+<span class="codecomment">/* Select type */</span>&nbsp;
+dtTypesetterSetTypeAttribs(engine, &amp;type, 0);
+
+
+<span class="codecomment">/* Draw Hello World at coordinates (200, 200) */</span>&nbsp;
+dtxTextDoOutput_ANSI(engine, 200, 200, 0, DV_TEXTMODE_KERN_ROUND_ADD, DV_NULL, "Hello World");
+
+
+<span class="codecomment">/* Copy surface to screen or save as image */</span>&nbsp;
+
+...
+
+
+<span class="codecomment">/* Free memory surface */</span>&nbsp;
+free(dc_mem.m);
+
+<span class="codecomment">/* And destroy D-Type Engine */</span>&nbsp;
+dtEngineExt(engine);
+</pre>
+</div>
+
+
+<h2 id="E2">Example 2: Simple Shape Via Buffer &mdash; Line</h2>
+
+
+<p>The example below demonstrates how to create a simple shape using the <a href="../funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function. The origin of the shape is then placed at screen coordinates (x,&nbsp;y). Information about the 8-bit grayscale memory bitmap can be retrieved from the <em>bmp</em> structure.</p>
+
+<p>Illustration 2A explains how to determine coordinates of the imaginary box that completely encloses the shape. Illustration 2B explains how to generate instructions that describe the shape.</p>
+
+<div class="box_field">
+<pre>
+#define WRITE_UBYTE(a, n) (*((<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)(a)) = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)
+#define WRITE_FLOAT(a, n) (*((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>*)(a)) = (<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(n)); (a) += sizeof(<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)
+
+<a href="structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> extent;
+<a href="types.htm#DT_UBYTE">DT_UBYTE</a> cmd_buf[500];
+<a href="types.htm#DT_UBYTE">DT_UBYTE</a>* buf = cmd_buf;
+<a href="structs.htm#DT_BMP">DT_BMP</a> bmp;
+
+<span class="codecomment">// Imaginary border </span>&nbsp;
+extent.xmn = -4;
+extent.ymn = -4;
+extent.xmx = 34;
+extent.ymx = 34;
+
+<span class="codecomment">// Set point </span>&nbsp;
+WRITE_UBYTE(buf, 16); WRITE_UBYTE(buf, 0);
+WRITE_FLOAT(buf, -2); WRITE_FLOAT(buf, 2);
+
+<span class="codecomment">// Line segment 1 </span>&nbsp;
+WRITE_UBYTE(buf, 20); WRITE_UBYTE(buf, 0);
+WRITE_FLOAT(buf, 4);  WRITE_FLOAT(buf, -4);
+
+<span class="codecomment">// Line segment 2 </span>&nbsp;
+WRITE_UBYTE(buf, 20); WRITE_UBYTE(buf, 0);
+WRITE_FLOAT(buf, 30); WRITE_FLOAT(buf, 30);
+
+<span class="codecomment">// Line segment 3 </span>&nbsp;
+WRITE_UBYTE(buf, 20); WRITE_UBYTE(buf, 0);
+WRITE_FLOAT(buf, -4); WRITE_FLOAT(buf, 4);
+
+<span class="codecomment">// End </span>&nbsp;
+WRITE_UBYTE(buf, 8);
+
+dtShapeDoOutput(engine, DV_BITMAP_ON, x, y, &amp;extent,
+                DV_SHAPE_BUFFER, cmd_buf, DV_NULL, DV_NULL, &amp;bmp);
+
+<span class="codecomment">// Use bmp </span>&nbsp;
+
+...
+
+if (bmp.m != DV_NULL) dtBitmapFree(engine, bmp.m);
+</pre>
+</div>
+
+<p>Figure 2</p>
+
+<p>A)</p>
+
+<p class="center">
+<img src="../images/img6.gif" width="512" height="362" alt="Figure 2A" />
+</p>
+
+<p>B)</p>
+
+<p class="center">
+<img src="../images/img7.gif" width="512" height="362" alt="Figure 2B" />
+</p>
+
+<p>The previous example can be generalized to define a function that draws a line between coordinates (x,&nbsp;y) and (x&nbsp;+&nbsp;dx,&nbsp;y&nbsp;+&nbsp;dy) with a custom thickness t:</p>
+
+<div class="box_field">
+<pre>
+#define WRITE_UBYTE(a, n) (*((<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)(a)) = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)
+#define WRITE_FLOAT(a, n) (*((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>*)(a)) = (<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(n)); (a) += sizeof(<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)
+
+int MyLine(<a href="types.htm#DT_SLONG">DT_SLONG</a> x, <a href="types.htm#DT_SLONG">DT_SLONG</a> y, <a href="types.htm#DT_SLONG">DT_SLONG</a> dx, <a href="types.htm#DT_SLONG">DT_SLONG</a> dy, <a href="types.htm#DT_FLOAT">DT_FLOAT</a> t)
+{
+    t *= 0.5;
+    <a href="structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> extent;
+    <a href="types.htm#DT_SLONG">DT_SLONG</a> x0, y0, x1, y1;
+    <a href="types.htm#DT_FLOAT">DT_FLOAT</a> k = t / sqrt((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(dx * dx + dy * dy));
+    <a href="types.htm#DT_FLOAT">DT_FLOAT</a> kdx = k * dx, kdy = k * dy;
+    <a href="types.htm#DT_UBYTE">DT_UBYTE</a> cmd_buf[500];
+    <a href="types.htm#DT_UBYTE">DT_UBYTE</a>* buf = cmd_buf;
+    <a href="structs.htm#DT_BMP">DT_BMP</a> bmp;
+
+    if (dx &gt; 0) {x0 = 0; x1 = dx;} else {x0 = dx; x1 = 0;}
+    if (dy &gt; 0) {y0 = 0; y1 = dy;} else {y0 = dy; y1 = 0;}
+
+    <span class="codecomment">// Imaginary border </span>&nbsp;
+    extent.xmn = x0 - t - 2;
+    extent.ymn = y0 - t - 2;
+    extent.xmx = x1 + t + 2;
+    extent.ymx = y1 + t + 2;
+
+    <span class="codecomment">// Set point </span>&nbsp;
+    WRITE_UBYTE(buf, 16);       WRITE_UBYTE(buf, 0);
+    WRITE_FLOAT(buf, -kdy);     WRITE_FLOAT(buf, kdx);
+
+    <span class="codecomment">// Line segment 1 </span>&nbsp;
+    WRITE_UBYTE(buf, 20);       WRITE_UBYTE(buf, 0);
+    WRITE_FLOAT(buf, 2 * kdy);  WRITE_FLOAT(buf, -2 * kdx);
+
+    <span class="codecomment">// Line segment 2 </span>&nbsp;
+    WRITE_UBYTE(buf, 20);       WRITE_UBYTE(buf, 0);
+    WRITE_FLOAT(buf, dx);       WRITE_FLOAT(buf, dy);
+
+    <span class="codecomment">// Line segment 3 </span>&nbsp;
+    WRITE_UBYTE(buf, 20);       WRITE_UBYTE(buf, 0);
+    WRITE_FLOAT(buf, -2 * kdy); WRITE_FLOAT(buf, 2 * kdx);
+
+    <span class="codecomment">// End </span>&nbsp;
+    WRITE_UBYTE(buf, 8);
+
+    dtShapeDoOutput(engine, DV_BITMAP_ON, x, y, &amp;extent,
+                    DV_SHAPE_BUFFER, cmd_buf, DV_NULL, DV_NULL, &amp;bmp);
+
+    <span class="codecomment">// Use bmp </span>&nbsp;
+
+    ...
+
+    if (bmp.m != DV_NULL) dtBitmapFree(engine, bmp.m);
+
+    return 1;
+}
+</pre>
+</div>
+
+
+<h2 id="E3">Example 3: Simple Shape Via Buffer &mdash; Ellipse</h2>
+
+<p>The following example demonstrates how to create an approximation of an ellipse using the <a href="../funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function. The origin of the ellipse is then placed at screen coordinates (x,&nbsp;y). Information about the 8-bit grayscale memory bitmap can be retrieved from the <em>bmp</em> structure.</p>
+
+<p>Illustration 3A explains how to determine coordinates of the imaginary box that completely encloses the ellipse. Illustration 3B explains how to generate instructions that describe the ellipse.</p>
+
+<div class="box_field">
+<pre>
+#define WRITE_UBYTE(a, n) (*((<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)(a)) = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)
+#define WRITE_UWORD(a, n) (*((<a href="types.htm#DT_UWORD">DT_UWORD</a>*)(a)) = (<a href="types.htm#DT_UWORD">DT_UWORD</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UWORD">DT_UWORD</a>)
+#define WRITE_FLOAT(a, n) (*((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>*)(a)) = (<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(n)); (a) += sizeof(<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)
+
+<a href="structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> extent;
+<a href="types.htm#DT_UBYTE">DT_UBYTE</a> cmd_buf[500];
+<a href="types.htm#DT_UBYTE">DT_UBYTE</a>* buf = cmd_buf;
+<a href="structs.htm#DT_BMP">DT_BMP</a> bmp;
+<a href="types.htm#DT_SLONG">DT_SLONG</a> n = 10;
+
+<span class="codecomment">// Imaginary border </span>&nbsp;
+extent.xmn = -2;
+extent.ymn = -2;
+extent.xmx = 52;
+extent.ymx = 32;
+
+<span class="codecomment">// Set first point </span>&nbsp;
+WRITE_UBYTE(buf, 16);  WRITE_UBYTE(buf, 0);
+WRITE_FLOAT(buf, 0);   WRITE_FLOAT(buf, 15);
+
+<span class="codecomment">// Bezier curve segment 1 </span>&nbsp;
+WRITE_UBYTE(buf, 24);  WRITE_UBYTE(buf, 0);   WRITE_UWORD(buf, n);
+WRITE_FLOAT(buf, 0);   WRITE_FLOAT(buf, -20);
+WRITE_FLOAT(buf, 50);  WRITE_FLOAT(buf, 0);
+WRITE_FLOAT(buf, 0);   WRITE_FLOAT(buf, 20);
+
+<span class="codecomment">// Bezier curve segment 2 </span>&nbsp;
+WRITE_UBYTE(buf, 24);  WRITE_UBYTE(buf, 0);   WRITE_UWORD(buf, n);
+WRITE_FLOAT(buf, 0);   WRITE_FLOAT(buf, 20);
+WRITE_FLOAT(buf, -50); WRITE_FLOAT(buf, 0);
+WRITE_FLOAT(buf, 0);   WRITE_FLOAT(buf, -20);
+
+<span class="codecomment">// End </span>&nbsp;
+WRITE_UBYTE(buf, 8);
+
+dtShapeDoOutput(engine, DV_BITMAP_ON, x, y, &amp;extent,
+                DV_SHAPE_BUFFER, cmd_buf, DV_NULL, DV_NULL, &amp;bmp);
+
+<span class="codecomment">// Use bmp </span>&nbsp;
+
+...
+
+if (bmp.m != DV_NULL) dtBitmapFree(engine, bmp.m);
+</pre>
+</div>
+
+<p>Figure 3</p>
+
+<p>A)</p>
+
+<p class="center">
+<img src="../images/img8.gif" width="513" height="362" alt="Figure 3A" />
+</p>
+
+<p>B)</p>
+
+<p class="center">
+<img src="../images/img9.gif" width="513" height="362" alt="Figure 3B" />
+</p>
+
+<p>The previous example can be generalized to define a function that draws an ellipse within a bounding box specified by coordinates (x,&nbsp;y) and (x+w, y+h).</p>
+
+<div class="box_field">
+<pre>
+#define WRITE_UBYTE(a, n) (*((<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)(a)) = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UBYTE">DT_UBYTE</a>)
+#define WRITE_UWORD(a, n) (*((<a href="types.htm#DT_UWORD">DT_UWORD</a>*)(a)) = (<a href="types.htm#DT_UWORD">DT_UWORD</a>)(n)); (a) += sizeof(<a href="types.htm#DT_UWORD">DT_UWORD</a>)
+#define WRITE_FLOAT(a, n) (*((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>*)(a)) = (<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(n)); (a) += sizeof(<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)
+
+int MyFilledEllipse(<a href="types.htm#DT_SLONG">DT_SLONG</a> x, <a href="types.htm#DT_SLONG">DT_SLONG</a> y, <a href="types.htm#DT_SLONG">DT_SLONG</a> w, <a href="types.htm#DT_SLONG">DT_SLONG</a> h)
+{
+    <a href="structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> extent;
+    <a href="types.htm#DT_UBYTE">DT_UBYTE</a> cmd_buf[500];
+    <a href="types.htm#DT_UBYTE">DT_UBYTE</a>* buf = cmd_buf;
+    <a href="types.htm#DT_SLONG">DT_SLONG</a> n = (<a href="types.htm#DT_SLONG">DT_SLONG</a>)(1.5 * sqrt((<a href="types.htm#DT_FLOAT">DT_FLOAT</a>)(w + h)));
+    <a href="types.htm#DT_FLOAT">DT_FLOAT</a> h2 = 2 * h / 3;
+    <a href="structs.htm#DT_BMP">DT_BMP</a> bmp;
+
+    <span class="codecomment">// Imaginary border </span>&nbsp;
+    extent.xmn = -2;
+    extent.ymn = -2;
+    extent.xmx = w + 2;
+    extent.ymx = h + 2;
+
+    <span class="codecomment">// Set first point </span>&nbsp;
+    WRITE_UBYTE(buf, 16); WRITE_UBYTE(buf, 0);
+    WRITE_FLOAT(buf, 0);  WRITE_FLOAT(buf, h * 0.5);
+
+    <span class="codecomment">// Bezier curve segment 1 </span>&nbsp;
+    WRITE_UBYTE(buf, 24); WRITE_UBYTE(buf, 0);   WRITE_UWORD(buf, n);
+    WRITE_FLOAT(buf, 0);  WRITE_FLOAT(buf, -h2);
+    WRITE_FLOAT(buf, w);  WRITE_FLOAT(buf, 0);
+    WRITE_FLOAT(buf, 0);  WRITE_FLOAT(buf, h2);
+
+    <span class="codecomment">// Bezier curve segment 2 </span>&nbsp;
+    WRITE_UBYTE(buf, 24); WRITE_UBYTE(buf, 0);   WRITE_UWORD(buf, n);
+    WRITE_FLOAT(buf, 0);  WRITE_FLOAT(buf, h2);
+    WRITE_FLOAT(buf, -w); WRITE_FLOAT(buf, 0);
+    WRITE_FLOAT(buf, 0);  WRITE_FLOAT(buf, -h2);
+
+    <span class="codecomment">// End </span>&nbsp;
+    WRITE_UBYTE(buf, 8);
+
+    dtShapeDoOutput(engine, DV_BITMAP_ON, x, y, &amp;extent,
+                    DV_SHAPE_BUFFER, cmd_buf, DV_NULL, DV_NULL, &amp;bmp);
+
+    <span class="codecomment">// Use bmp </span>&nbsp;
+
+    ...
+
+    if (bmp.m != DV_NULL) dtBitmapFree(engine, bmp.m);
+
+    return 1;
+}
+</pre>
+</div>
+
+<p>Note that in the example above an ad-hoc formula is used to calculate the optimum number of curve segments. For B&eacute;zier curves that approximate one half of the ellipse, the formula</p>
+
+<p align="center">n = 1.5 * sqrt(w + h);</p>
+
+<p>produces very good results.</p>
+
+
+<h2 id="E4">Example 4: Custom Shapes Via Array</h2>
+
+<p>The following code fragment demonstrates how to define and render shapes using the <a href="../funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function when <em>flag = 0 (DV_SHAPE_ARRAY)</em>. In this case, <em>i_arr</em> contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays.</p>
+
+<div class="box_field">
+<pre>
+<a href="structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> extent = {0, 0, 560, 415};
+
+<a href="types.htm#DT_UBYTE">DT_UBYTE</a> i_arr[21] = {<strong>16</strong>, 20, 20, 20, 20, <strong>16</strong>, 20, 20, 20, 20,
+                      <strong>16</strong>, 20, 20, 20, 20, <strong>16</strong>, 20, 20, 20, 20, 8};
+
+<a href="types.htm#DT_FLOAT">DT_FLOAT</a> x_arr[21] = {<strong>27</strong>, 6, -27, 39, -36, <strong>109</strong>, -38, -43, 107, -130,
+                      <strong>154</strong>, 114, -207, 222, -151, <strong>429</strong>, 27, -210, 314, -295, 0};
+
+<a href="types.htm#DT_FLOAT">DT_FLOAT</a> y_arr[21] = {<strong>373</strong>, 38, -27, 6, 17, <strong>275</strong>, 126, -125, 75, 3,
+                      <strong>112</strong>, 195, -93, -47, 168, <strong>4</strong>, 314, -240, 73, 123, 0};
+
+<a href="structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style1 = {{0, 0}, {7, 100, 250, 0}, 0, DV_NULL};
+<a href="structs.htm#DT_BMP">DT_BMP</a> bmp;
+
+dtOutputSetStyleAttribs(engine, &amp;style1, 0);
+
+dtRasterizerSetFillRule(engine, DV_NZW_OFF);
+
+dtShapeDoOutput(engine, DV_BITMAP_ON, 20, 20, &amp;extent,
+                DV_SHAPE_ARRAY, i_arr, x_arr, y_arr, &amp;bmp);
+
+
+<span class="codecomment">// Use bmp </span>&nbsp;
+
+...
+
+if (bmp.m != DV_NULL) dtBitmapFree(engine, bmp.m);
+
+</pre>
+</div>
+
+
+<p>Output:</p>
+
+<p class="center">
+<img src="../images/stars.gif" width="460" height="336" alt="Example 4 Output" border="1" />
+</p>
+
+
+
+<h2 id="E5">Example 5: Memory Based Font</h2>
+
+<p>The following code fragment demonstrates how to load a simple font from memory and use it to display a few characters.</p>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Simple D-Type font that only contains three letters (A, B, C). It's 3682 bytes in size. */</span>&nbsp;
+
+const <a href="types.htm#DT_UBYTE">DT_UBYTE</a> simple_abc_font[3682] =
+{
+   68, 69, 78, 69, 77, 75, 79, 45, 68, 84, 70, 79, 78, 84, 86, 49, 45, 83, 71, 49, 0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 44, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 1, 0, 0, 0, 0,
+   0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 180, 1, 0, 0, 36, 0, 0, 0, 32, 1, 0, 0, 0, 0, 0,
+   0, 2, 0, 0, 0, 0, 0, 0, 0, 212, 2, 0, 0, 71, 0, 0, 0, 32, 1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+   81, 8, 0, 0, 223, 0, 0, 0, 128, 3, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 55, 13, 0, 0, 8, 0, 0, 0,
+   64, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 119, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0,
+   0, 0, 0, 0, 0, 0, 119, 13, 0, 0, 8, 0, 0, 0, 215, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 78, 14, 0,
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 55, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 119, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0,
+   0, 51, 13, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 53, 13, 0, 0, 1, 0, 0, 0,
+   2, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 78, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+   1, 0, 127, 127, 127, 127, 111, 255, 77, 255, 128, 3, 106, 3, 232, 3, 232, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 69, 78, 69, 77, 75, 79, 45, 68,
+   84, 70, 79, 78, 84, 86, 49, 45, 83, 71, 50, 95, 95, 95, 95, 32, 0, 126, 0, 2, 0, 1, 0, 130, 0, 131, 0,
+   205, 0, 246, 255, 132, 0, 133, 0, 208, 0, 4, 0, 134, 0, 135, 0, 209, 0, 1, 0, 136, 0, 137, 0, 196, 0, 17,
+   0, 138, 0, 139, 0, 192, 0, 22, 0, 140, 0, 140, 0, 190, 0, 66, 255, 145, 0, 146, 0, 203, 0, 1, 0, 147, 0,
+   148, 0, 206, 0, 1, 0, 149, 0, 150, 0, 211, 0, 246, 255, 151, 0, 152, 0, 202, 0, 254, 255, 153, 0, 154, 0,
+   216, 0, 233, 255, 155, 0, 156, 0, 215, 0, 232, 255, 159, 0, 159, 0, 194, 0, 62, 255, 161, 0, 172, 0, 97,
+   0, 1, 0, 174, 0, 175, 0, 109, 0, 89, 0, 176, 0, 180, 0, 110, 0, 1, 0, 182, 0, 183, 0, 116, 0, 102, 0,
+   184, 0, 255, 0, 117, 0, 1, 0, 49, 1, 49, 1, 189, 0, 67, 255, 82, 1, 83, 1, 190, 0, 1, 0, 96, 1, 97, 1,
+   192, 0, 1, 0, 120, 1, 120, 1, 194, 0, 62, 255, 146, 1, 146, 1, 195, 0, 61, 255, 198, 2, 199, 2, 196, 0,
+   1, 0, 218, 2, 218, 2, 199, 0, 57, 255, 220, 2, 220, 2, 200, 0, 56, 255, 19, 32, 20, 32, 201, 0, 1, 0, 24,
+   32, 26, 32, 203, 0, 1, 0, 28, 32, 30, 32, 206, 0, 1, 0, 32, 32, 34, 32, 209, 0, 1, 0, 38, 32, 38, 32,
+   212, 0, 44, 255, 48, 32, 48, 32, 213, 0, 43, 255, 57, 32, 58, 32, 214, 0, 1, 0, 34, 33, 34, 33, 216, 0,
+   40, 255, 18, 34, 18, 34, 217, 0, 0, 0, 244, 3, 0, 0, 253, 3, 0, 0, 18, 4, 0, 0, 36, 4, 0, 0, 57, 4, 0, 0,
+   72, 4, 0, 0, 86, 4, 0, 0, 101, 4, 0, 0, 120, 4, 0, 0, 139, 4, 0, 0, 157, 4, 0, 0, 178, 4, 0, 0, 196, 4,
+   0, 0, 205, 4, 0, 0, 215, 4, 0, 0, 228, 4, 0, 0, 241, 4, 0, 0, 251, 4, 0, 0, 18, 5, 0, 0, 43, 5, 0, 0, 61,
+   5, 0, 0, 86, 5, 0, 0, 104, 5, 0, 0, 129, 5, 0, 0, 140, 5, 0, 0, 149, 5, 0, 0, 164, 5, 0, 0, 184, 5, 0, 0,
+   203, 5, 0, 0, 221, 5, 0, 0, 239, 5, 0, 0, 5, 6, 0, 0, 26, 6, 0, 0, 38, 6, 0, 0, 55, 6, 0, 0, 76, 6, 0, 0,
+   92, 6, 0, 0, 114, 6, 0, 0, 129, 6, 0, 0, 146, 6, 0, 0, 166, 6, 0, 0, 177, 6, 0, 0, 187, 6, 0, 0, 208, 6,
+   0, 0, 238, 6, 0, 0, 248, 6, 0, 0, 2, 7, 0, 0, 12, 7, 0, 0, 22, 7, 0, 0, 32, 7, 0, 0, 46, 7, 0, 0, 59, 7,
+   0, 0, 70, 7, 0, 0, 80, 7, 0, 0, 91, 7, 0, 0, 104, 7, 0, 0, 117, 7, 0, 0, 127, 7, 0, 0, 137, 7, 0, 0, 151,
+   7, 0, 0, 166, 7, 0, 0, 176, 7, 0, 0, 196, 7, 0, 0, 212, 7, 0, 0, 223, 7, 0, 0, 232, 7, 0, 0, 242, 7, 0,
+   0, 1, 8, 0, 0, 25, 8, 0, 0, 47, 8, 0, 0, 59, 8, 0, 0, 81, 8, 0, 0, 68, 56, 8, 244, 132, 56, 136, 244, 0,
+   255, 86, 69, 38, 70, 123, 72, 65, 109, 255, 103, 82, 70, 85, 63, 48, 21, 36, 43, 95, 69, 58, 38, 70, 156,
+   88, 104, 137, 255, 103, 116, 70, 21, 146, 82, 111, 149, 131, 56, 255, 86, 69, 22, 137, 144, 77, 118, 149,
+   255, 69, 116, 134, 42, 147, 80, 114, 148, 255, 86, 103, 90, 136, 170, 255, 116, 69, 38, 70, 179, 84, 89,
+   168, 255, 69, 82, 106, 255, 103, 82, 134, 25, 131, 65, 69, 138, 8, 169, 132, 56, 8, 172, 132, 56, 136,
+   173, 255, 116, 69, 38, 138, 135, 66, 68, 131, 138, 255, 69, 116, 134, 25, 160, 95, 108, 180, 255, 86, 69,
+   22, 69, 181, 95, 99, 160, 154, 175, 86, 38, 170, 90, 23, 71, 45, 50, 95, 103, 166, 138, 45, 52, 63, 25,
+   81, 170, 38, 70, 217, 113, 133, 198, 255, 103, 116, 70, 21, 194, 119, 133, 217, 131, 56, 255, 86, 69, 22,
+   137, 217, 117, 124, 196, 255, 69, 116, 134, 42, 194, 117, 125, 216, 255, 86, 103, 134, 42, 18, 9, 10, 21,
+   36, 52, 38, 70, 22, 9, 11, 18, 175, 103, 131, 98, 68, 56, 24, 175, 132, 56, 152, 175, 0, 234, 7, 44, 95,
+   20, 100, 82, 212, 95, 82, 250, 244, 235, 254, 81, 253, 68, 63, 95, 69, 84, 84, 212, 68, 62, 95, 82, 244,
+   245, 254, 175, 2, 132, 47, 95, 20, 175, 82, 7, 199, 20, 61, 175, 69, 135, 144, 11, 18, 166, 42, 1, 4, 1,
+   3, 3, 38, 70, 17, 9, 8, 18, 70, 85, 15, 10, 7, 4, 13, 0, 84, 36, 121, 86, 17, 1, 3, 3, 3, 22, 137, 17,
+   10, 9, 19, 134, 170, 13, 9, 7, 5, 13, 164, 35, 121, 11, 20, 73, 10, 38, 70, 17, 9, 8, 19, 70, 85, 14, 9,
+   7, 5, 13, 0, 84, 35, 121, 86, 17, 1, 3, 3, 3, 22, 137, 17, 9, 9, 20, 134, 170, 12, 10, 7, 4, 13, 164, 37,
+   121, 11, 22, 73, 9, 38, 70, 17, 9, 9, 19, 70, 85, 13, 10, 7, 4, 13, 0, 84, 36, 121, 86, 17, 1, 3, 3, 3,
+   22, 137, 17, 9, 9, 20, 134, 170, 14, 9, 7, 4, 13, 164, 36, 121, 11, 24, 8, 245, 132, 56, 136, 14, 255,
+   86, 69, 11, 25, 26, 36, 54, 68, 56, 95, 82, 255, 69, 82, 134, 25, 84, 41, 43, 85, 8, 66, 132, 56, 136,
+   67, 11, 27, 255, 86, 69, 22, 69, 112, 55, 89, 115, 255, 103, 116, 70, 38, 111, 60, 82, 119, 42, 255, 86,
+   103, 38, 138, 111, 58, 88, 113, 255, 69, 116, 134, 25, 111, 59, 86, 113, 134, 42, 18, 10, 10, 21, 36, 51,
+   38, 70, 22, 10, 11, 18, 175, 103, 131, 98, 38, 70, 22, 9, 11, 18, 175, 103, 131, 98, 70, 21, 19, 9, 11,
+   22, 20, 51, 70, 21, 19, 10, 11, 22, 20, 51, 22, 137, 21, 10, 10, 19, 134, 42, 18, 9, 10, 21, 36, 51, 11,
+   32, 95, 69, 86, 69, 12, 105, 62, 60, 91, 255, 103, 137, 70, 102, 129, 28, 112, 4, 53, 11, 33, 255, 103,
+   137, 99, 161, 226, 175, 86, 135, 70, 11, 34, 212, 132, 1, 1, 20, 42, 255, 86, 69, 22, 137, 150, 87, 94,
+   135, 11, 35, 166, 138, 26, 79, 52, 39, 79, 255, 69, 137, 134, 153, 103, 55, 58, 6, 116, 175, 103, 255,
+   103, 120, 70, 85, 173, 34, 140, 10, 39, 175, 86, 132, 58, 95, 103, 70, 21, 20, 9, 11, 22, 20, 51, 22,
+   137, 21, 9, 10, 20, 134, 42, 18, 9, 10, 21, 36, 51, 70, 85, 72, 55, 27, 40, 55, 95, 103, 36, 72, 68, 56,
+   95, 137, 11, 39, 195, 126, 1, 255, 116, 103, 38, 138, 110, 63, 89, 105, 255, 103, 116, 11, 40, 150, 137,
+   39, 53, 55, 27, 69, 255, 103, 116, 134, 42, 132, 87, 100, 162, 175, 69, 11, 41, 132, 56, 95, 116, 36, 78,
+   255, 116, 69, 11, 42, 36, 72, 68, 56, 95, 69, 8, 254, 255, 116, 103, 38, 70, 161, 85, 99, 130, 255, 69,
+   116, 70, 85, 72, 55, 27, 40, 55, 95, 103, 22, 153, 8, 2, 7, 6, 7, 148, 96, 115, 150, 137, 6, 8, 8, 4, 8,
+   134, 42, 16, 13, 15, 15, 38, 102, 9, 3, 7, 6, 7, 135, 144, 95, 137, 8, 9, 175, 82, 7, 95, 11, 46, 175,
+   69, 135, 195, 95, 69, 152, 175, 11, 47, 20, 237, 175, 82, 7, 140, 20, 62, 11, 48, 20, 61, 175, 69, 135,
+   95, 95, 137, 11, 16, 95, 103, 8, 10, 175, 82, 7, 95, 95, 69, 116, 123, 197, 254, 132, 251, 95, 82, 116,
+   128, 59, 1, 218, 179, 229, 77, 2, 95, 69, 116, 123, 196, 254, 132, 251, 8, 151, 132, 42, 175, 22, 164,
+   182, 135, 68, 97, 175, 69, 68, 239, 95, 20, 36, 128, 68, 55, 20, 227, 148, 55, 3, 95, 69, 36, 230, 175,
+   116, 84, 165, 116, 20, 37, 148, 165, 119, 36, 67, 100, 94, 70, 100, 165, 116, 20, 64, 148, 96, 71, 84,
+   96, 70, 20, 67, 175, 82, 68, 181, 20, 61, 175, 69, 132, 181, 175, 20, 132, 180, 36, 61, 175, 69, 68, 180,
+   132, 56, 136, 13, 255, 86, 69, 38, 138, 113, 51, 67, 96, 0, 255, 69, 82, 134, 25, 84, 41, 43, 85, 8, 65,
+   132, 56, 136, 66, 132, 56, 95, 20, 136, 233, 68, 56, 8, 17, 134, 42, 131, 87, 100, 162, 175, 69, 195,
+   126, 1, 255, 116, 69, 38, 138, 110, 63, 89, 105, 255, 69, 86, 70, 85, 71, 56, 27, 40, 55, 95, 69, 36, 72,
+   68, 56, 25, 11, 175, 20, 132, 56, 89, 15, 255, 86, 103, 68, 56, 24, 166, 132, 56, 152, 166, 0, 175, 82,
+   7, 140, 20, 61, 175, 69, 135, 195, 255, 86, 69, 22, 137, 218, 105, 122, 188, 175, 69, 132, 238, 95, 103,
+   70, 21, 18, 10, 10, 21, 148, 1, 60, 150, 137, 2, 20, 9, 10, 16, 134, 42, 19, 10, 10, 21, 36, 59, 70, 21,
+   19, 9, 8, 15, 20, 41, 22, 137, 15, 9, 8, 19, 134, 42, 18, 10, 8, 15, 36, 41, 95, 22, 164, 16, 69, 68, 58,
+   95, 103, 84, 16, 69, 70, 21, 20, 9, 9, 18, 20, 72, 22, 137, 17, 9, 9, 20, 134, 42, 18, 9, 9, 17, 36, 72,
+   209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0,
+   209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0,
+   209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0,
+   209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0,
+   209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0, 209, 11, 0, 0,
+   209, 11, 0, 0, 31, 12, 0, 0, 196, 12, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0,
+   0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51, 13, 0, 0, 51,
+   13, 0, 0, 51, 13, 0, 0, 0, 1, 230, 255, 0, 0, 54, 2, 166, 2, 91, 2, 2, 25, 0, 3, 17, 209, 61, 18, 20,
+   248, 1, 0, 0, 68, 62, 95, 82, 244, 245, 254, 166, 2, 132, 47, 95, 20, 244, 234, 254, 90, 253, 68, 63, 95,
+   69, 84, 85, 209, 7, 44, 95, 20, 100, 82, 209, 95, 82, 179, 229, 69, 2, 95, 69, 116, 123, 201, 254, 132,
+   251, 95, 82, 116, 128, 55, 1, 0, 0, 1, 23, 0, 0, 0, 22, 2, 166, 2, 96, 2, 2, 25, 8, 12, 35, 22, 2, 55,
+   19, 1, 254, 56, 35, 166, 2, 61, 19, 90, 253, 61, 35, 127, 1, 61, 69, 120, 22, 2, 192, 0, 255, 116, 137,
+   22, 153, 82, 34, 55, 67, 28, 255, 69, 148, 86, 21, 55, 33, 27, 46, 60, 255, 116, 69, 22, 137, 121, 86,
+   61, 113, 175, 103, 135, 37, 95, 103, 152, 166, 175, 116, 7, 26, 255, 69, 120, 70, 21, 130, 99, 62, 130,
+   255, 116, 148, 179, 75, 53, 1, 95, 137, 38, 138, 81, 65, 37, 80, 175, 103, 132, 235, 95, 69, 20, 234,
+   175, 116, 68, 235, 95, 148, 70, 38, 74, 71, 30, 86, 255, 69, 120, 115, 20, 202, 254, 255, 116, 103, 38,
+   138, 91, 74, 39, 90, 175, 103, 132, 236, 95, 137, 8, 5, 175, 116, 68, 233, 255, 69, 120, 70, 38, 144, 23,
+   79, 52, 0, 0, 1, 25, 0, 249, 255, 83, 2, 173, 2, 161, 2, 2, 25, 3, 7, 17, 25, 56, 18, 7, 61, 35, 180, 2,
+   61, 69, 86, 25, 0, 78, 1, 255, 82, 69, 38, 70, 208, 118, 133, 190, 95, 86, 70, 85, 108, 85, 46, 61, 92,
+   148, 46, 35, 95, 69, 166, 138, 50, 75, 69, 37, 90, 255, 69, 86, 134, 25, 156, 95, 109, 175, 255, 82, 103,
+   22, 69, 177, 102, 109, 159, 95, 86, 70, 102, 92, 69, 37, 44, 73, 84, 48, 35, 95, 103, 150, 137, 56, 91,
+   84, 45, 113, 255, 69, 86, 134, 42, 194, 123, 134, 217, 0, 56, 0, 61, 0, 0, 0, 232, 3, 0, 0, 232, 3, 249,
+   255, 173, 2, 0, 0, 163, 2, 243, 255, 245, 1, 0, 0, 232, 1, 241, 255, 159, 2, 0, 0, 134, 2, 0, 0, 232, 3,
+   0, 0, 232, 3, 0, 0, 232, 3, 0, 0, 232, 3, 0, 0, 232, 3, 0, 0, 232, 3, 0, 0, 232, 3, 0, 0, 232, 3, 233, 3,
+   0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 234, 3, 0, 0, 13, 0, 0, 0, 5, 0, 0, 0, 235, 3, 0, 0, 18, 0, 0, 0, 7, 0, 0,
+   0, 236, 3, 0, 0, 25, 0, 0, 0, 60, 0, 0, 0, 237, 3, 0, 0, 85, 0, 0, 0, 3, 0, 0, 0, 238, 3, 0, 0, 88, 0, 0,
+   0, 5, 0, 0, 0, 239, 3, 0, 0, 93, 0, 0, 0, 6, 0, 0, 0, 178, 4, 0, 0, 99, 0, 0, 0, 20, 0, 0, 0, 76, 105,
+   110, 101, 97, 32, 82, 101, 103, 117, 108, 97, 114, 76, 105, 110, 101, 97, 82, 101, 103, 117, 108, 97,
+   114, 68, 45, 84, 121, 112, 101, 32, 115, 97, 109, 112, 108, 101, 32, 102, 111, 110, 116, 32, 102, 111,
+   114, 32, 100, 101, 109, 111, 110, 115, 116, 114, 97, 116, 105, 111, 110, 32, 97, 110, 100, 32, 101, 118,
+   97, 108, 117, 97, 116, 105, 111, 110, 32, 112, 117, 114, 112, 111, 115, 101, 115, 49, 46, 48, 76, 105,
+   110, 101, 97, 107, 110, 111, 119, 110, 123, 48, 46, 48, 48, 49, 32, 48, 32, 48, 32, 48, 46, 48, 48, 49,
+   32, 48, 32, 48, 32, 68, 69, 78, 69, 77, 75, 79, 45, 68, 84, 70, 79, 78, 84, 86, 49, 45, 83, 71, 51
+};
+
+<span class="codecomment">/* Initialize D-Type Font Engine. Exit if an error occurs. */</span>&nbsp;
+DT_STREAM_FILE(sd_ini, "dtype.inf");
+if (dtEngineIniViaStream(&amp;engine, &amp;sd_ini, DV_NULL) == 0) exit(0);
+
+<span class="codecomment">/* Add font from memory. Exit if an error occurs. */</span>&nbsp;
+DT_STREAM_MEMORY(sd, simple_abc_font, 3682); <span class="codecomment">/* create a memory stream for the font */</span>&nbsp;
+<a href="types.htm#DT_ID_UBYTE">DT_ID_UBYTE</a> hinting = 0;
+<a href="types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_index = dtFontAddViaStream(engine, DV_FONT_DTYPE, DV_NULL, 0, -1, 128, hinting, &sd);
+
+if (font_index >= 0)
+{
+   printf("font_index = %d\n", font_index);
+}
+else
+{
+   printf("Error adding font!\n"); exit(0);
+   exit(0);
+}
+
+<span class="codecomment">/* Create a 200x60-pixel 24-bpp memory surface */</span>&nbsp;
+dc_mem.w = 200;
+dc_mem.h = 60,
+dc_mem.l = 3 * dc_mem.w * dc_mem.h;
+if ((dc_mem.m = (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)malloc(dc_mem.l)) == DV_NULL) exit(0);
+memset(dc_mem.m, 255, dc_mem.l);
+
+<span class="codecomment">/* Redirect all D-Type output to that surface and define clipping rect */</span>&nbsp;
+dtOutputSetAsMDC(engine, DV_FORMAT_24, 0, &amp;dc_mem, 0, 0, 200, 60);
+
+<a href="structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{0, 0}, {255, 0, 0, 0}, 0, DV_NULL};
+<a href="structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> type = {font_index, 0, 0, 0, 0, {{48, 48, 0, 0, 0}}};
+
+<span class="codecomment">/* Select color */</span>&nbsp;
+dtOutputSetStyleAttribs(engine, &style, 0);
+
+<span class="codecomment">/* Select type */</span>&nbsp;
+dtTypesetterSetTypeAttribs(engine, &type, 0);
+
+<span class="codecomment">/* Draw a few characters */</span>&nbsp;
+dtCharDoOutput(engine, 'A', 0, 50, 0, DV_NULL); <span class="codecomment">/* draw letter A */</span>&nbsp;
+dtCharDoOutput(engine, 'B', 50, 50, 0, DV_NULL); <span class="codecomment">/* draw letter B */</span>&nbsp;
+dtCharDoOutput(engine, 'D', 100, 50, 0, DV_NULL); <span class="codecomment">/* there is no letter D in this font, so this will be a gap */</span>&nbsp;
+dtCharDoOutput(engine, 'C', 150, 50, 0, DV_NULL); <span class="codecomment">/* draw letter C */</span>&nbsp;
+
+
+<span class="codecomment">/* Copy surface to screen or save as image */</span>&nbsp;
+
+...
+
+
+<span class="codecomment">/* Free memory surface */</span>&nbsp;
+free(dc_mem.m);
+
+<span class="codecomment">/* Remove font */</span>&nbsp;
+dtFontRemove(engine, font_index);
+
+<span class="codecomment">/* And destroy D-Type Engine */</span>&nbsp;
+dtEngineExt(engine);
+</pre>
+</div>
+
+<p>Output:</p>
+
+<p class="center">
+<img src="../images/abc.gif" width="200" height="60" alt="Example 5 Output" border="1" />
+</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

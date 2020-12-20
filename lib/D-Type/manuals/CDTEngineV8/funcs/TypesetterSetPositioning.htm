@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>TypesetterSetPositioning</strong></div><br />
+
+<p>This function sets the positioning mode in the Typesetter. The positioning mode tells the Typesetter whether to place glyphs at fractional pixel positions or snap their output X and/or Y coordinates to the closest whole pixel positions before the glyphs are actually rasterized by the Rasterizer.</p>
+
+<p>When D-Type Engine is initialized, the positioning mode is already set in the Typesetter to the recommended default value (DV_POSITIONING_ENGINE_DEFAULT_A).</p>
+
+<p>This function can be used in conjunction with <a href="TypesetterSetHinting.htm">TypesetterSetHinting</a>. For further details and illustrations, see Appendix &mdash; <a href="../manual/ph.htm">Positioning And Hinting</a>.</p>
+
+<p>When the glyph positioning mode is set to fractional (in either direction), you can use the <a href="TypesetterSetSubpixels.htm">TypesetterSetSubpixels</a> function to set the number of possible subpixel positions, and consequently, control the utilization/efficiency of the bitmap cache.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>positioning</em></p>
+</td><td>
+<p>Sets one of the positioning modes. The positioning mode tells the Typesetter how to position glyphs. At present, the following values are supported:</p>
+
+<p><em>positioning</em> = 0 (DV_POSITIONING_ENGINE_DEFAULT_A) &mdash; Engine Default A (same as 8)<br /></p>
+
+<p><em>positioning</em> = 1 (DV_POSITIONING_ENGINE_DEFAULT_B) &mdash; Engine Default B (same as 9)<br /></p>
+
+<p><em>positioning</em> = 2 (DV_POSITIONING_USER_DEFAULT_A) &mdash; User Default A (same as 4)<br /></p>
+
+<p><em>positioning</em> = 3 (DV_POSITIONING_USER_DEFAULT_B) &mdash; User Default B (same as 5)<br /></p>
+
+<p><em>positioning</em> = 4 (DV_POSITIONING_FRACX_FRACY) &mdash; Frac X, Frac Y<br />
+Both X and Y coordinates of glyph origin points are placed at fractional positions. As a result, spacing between characters looks reasonably consistent in both the horizontal and vertical direction.</p>
+
+<p><em>positioning</em> = 5 (DV_POSITIONING_FRACX_INTY) &mdash; Frac X, Int Y<br />
+X coordinates of glyph origin points are placed at fractional positions, while Y coordinates are snapped to the closest whole pixel positions. As a result, spacing between characters looks reasonably consistent in the horizontal direction and somewhat inconsistent in the vertical direction.</p>
+
+<p><em>positioning</em> = 6 (DV_POSITIONING_INTX_FRACY) &mdash; Int X, Frac Y<br />
+X coordinates of glyph origin points are snapped to the closest whole pixel positions, while Y coordinates are placed at fractional positions. As a result, spacing between characters looks somewhat inconsistent in the horizontal direction and reasonably consistent in the vertical direction.</p>
+
+<p><em>positioning</em> = 7 (DV_POSITIONING_INTX_INTY) &mdash; Int X, Int Y<br />
+Both X and Y coordinates of glyph origin points are snapped to the closest whole pixel positions. As a result, spacing between characters looks somewhat inconsistent in both the horizontal and vertical direction.</p>
+
+<p><em>positioning</em> = 8 (DV_POSITIONING_AUTO_A) &mdash; Auto A<br />
+Same as 4 for standard font sizes, but disables fractional pixel positioning in the X and/or Y direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.</p>
+
+<p><em>positioning</em> = 9 (DV_POSITIONING_AUTO_B) &mdash; Auto B<br />
+Same as 5 for standard font sizes, but disables fractional pixel positioning in the X direction for very small and very big font sizes. This is done in order to improve bitmap cache efficiency when rendering using very small and very big font sizes. This is a useful and recommended mode since fractional pixel positioning is not really necessary at those sizes.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+See Appendix &mdash; <a href="../manual/ph.htm">Positioning And Hinting</a>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

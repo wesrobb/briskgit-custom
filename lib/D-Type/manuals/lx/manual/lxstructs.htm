@@ -1,0 +1,66 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>D-Type Text Layout Extension Structures</h1>
+
+<p>At present, D-Type Text Layout Engine defines and utilizes only one structure type:</p>
+
+<h2><strong id="DT_LX_GLYPH">DT_LX_GLYPH</strong></h2>
+
+<p>This structure type contains information about a single positioned glyph.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Layout Extension's glyph structure describing a single positioned glyph */</span>&nbsp;
+typedef struct
+{
+    DT_ID_ULONG glyph_index; <span class="codecomment">/* font dependent index of the glyph to be displayed */</span>&nbsp;
+    DT_SLONG char_index;     <span class="codecomment">/* index to map the glyph back to the input text array */</span>&nbsp;
+                             <span class="codecomment">/* (not char_code but character's position in the input text array) */</span>&nbsp;
+    DT_SLONG x, y;           <span class="codecomment">/* x and y coordinate of the glyph in font units */</span>&nbsp;
+    DT_UBYTE use_xy;         <span class="codecomment">/* tells whether (x,&nbsp;y) members should be respected, always set to 1 */</span>&nbsp;
+    DT_UBYTE flag;           <span class="codecomment">/* special purpose internal flag, currently set to 0 */</span>&nbsp;
+    DT_UBYTE reserved_1;     <span class="codecomment">/* reserved for future, currently set to 0 */</span>&nbsp;
+    DT_UBYTE reserved_2;     <span class="codecomment">/* reserved for future, currently set to 0 */</span>&nbsp;
+
+} LX_GLYPH;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>glyph_index</em> &mdash; This is the font dependent index of the glyph to be displayed. The glyph defined by this index can be rendered using D-Type Font Engine's dtGlyphDoOutput function</p></li>
+
+<li><p><em>char_index</em> &mdash; This index makes it possible to map the returned glyph back to the input character that produced it. This is important to e.g. properly implement cursor movement and text selection. Note that this value is not the character's Unicode code but its position (index) in the input text array. Also, note that with certain complex scripts it is possible for more than one glyph to point back to the same input character. This happens when the same input character produces more than a single glyph (e.g. split characters in Tamil).</p></li>
+
+<li><p><em>x</em>, <em>y</em> &mdash; This is the x and y coordinate of the glyph to be displayed in font units. Your application is responsible to scale (convert) font units to screen (pixel) coordinates. For more information on how to do this, see the D-Type Units section of D-Type Standard Engine Manual.</p></li>
+
+<li><p><em>use_xy</em> &mdash; This parameter tells whether the returned glyph should be positioned using the (x,&nbsp;y) members of the same structure. D-Type Text Layout Extension always sets this parameter to 1 which indicates that the positioning is required and that (x,&nbsp;y) members should be respected.</p></li>
+
+<li><p><em>flag</em> &mdash; This is a special purpose internal flag, which is currently set to 0. Applications can ignore this flag when rendering glyphs.</p></li>
+
+<li><p><em>reserved_1</em> &mdash; This parameter is reserved for future use and is set to 0 by D-Type Text Layout Extension.</p></li>
+
+<li><p><em>reserved_2</em> &mdash; This parameter is reserved for future use and is set to 0 by D-Type Text Layout Extension.</p></li>
+
+</ul>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

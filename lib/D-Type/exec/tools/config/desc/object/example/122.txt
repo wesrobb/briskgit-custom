@@ -1,0 +1,23 @@
+/* This example illustrates how Generic Object can be used to represent a Library Shape object */
+
+DT_ID_SLONG obj[3];
+
+obj[0] = pdObjAdd(pd, 0, "LibShape Style");
+obj[1] = pdObjAdd(pd, 0, "LibShape");
+{strong}obj[2] = pdObjAdd(pd, 0, "Generic Object");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);
+
+/* Properties for object 1 */
+pdLinkAdd(pd, obj[1], pdBodyPtr, obj[0]);
+pdPropAdd(pd, obj[1], pdDw, "300", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], pdDh, "300", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], pdID, "8", PD_WORD_UNSIGNED);
+
+/* Properties for object 2 */
+{strong}pdLinkAdd(pd, obj[2], pdFnDrawObjectPtr, obj[1]);
+pdPropAdd(pd, obj[2], pdFnDraw, "18", PD_WORD_SIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[2], 0, 50, 50, 0, 0, 0, pdDrawGenericObject, DV_NULL);{/strong}

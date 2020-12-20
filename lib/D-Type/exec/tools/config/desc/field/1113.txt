@@ -1,0 +1,3 @@
+Link to the {a href="../objects/020.htm"}Baseline{/a} object.
+
+This link supplies parameters necessary to render the baselines of text rows.

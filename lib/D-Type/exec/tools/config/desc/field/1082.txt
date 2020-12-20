@@ -1,0 +1,6 @@
+An array of tab stop positions. Depending on the flags in the corresponding pdTabStopFlags array, these positions can be left, center or right tab stop positions. All tab stop positions are quantities in the 0 - 65,535 range. These quantities should be understood as percentages of the width of the current text area (or the length of the current text path); therefore 0 means 0% of the text area width (or text path length) while 65,535 means 100% of the text area width (or text path length). The quantities must be entered in an increasing order.
+
+{strong}Sample values:{/strong}
+
+"9830" = One tab stop position at 15% of the width of the current text area (or the length of the current text path)
+"13107, 32768, 52428" = Three tab stop positions; the first one at 20%, the second one at 50% and the third one at 80% of the width of the current text area (or the length of the current text path)

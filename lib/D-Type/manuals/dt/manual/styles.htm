@@ -1,0 +1,415 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Style Effects</h1>
+
+
+<h2 id="STYLE_ATTRIBS">When Used With the <strong id="DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</strong> Structure</h2>
+
+<p><em>EffectID</em> identifies one of D-Type's special effects. <em>EffectParameter</em> is used in conjunction with <em>EffectID</em> and provides effect specific parameters. Typically this is the value/amount of the effect. The following chart lists all currently supported style effects and explains how to use their parameters:</p>
+
+<table class="table_data">
+<tr><th><em>EffectID</em></th><th>Description</th><th width="50%"><em>EffectParameter</em></th></tr>
+
+<tr><td align="center"> 0 <br /><small>(DV_EFFECT_NONE)</small></td><td>No special effect</td>
+<td>Has no meaning and should be set to 0.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 1 <br /><small>(DV_EFFECT_HBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; only horizontal</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 2 <br /><small>(DV_EFFECT_VBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; only vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 3 <br /><small>(DV_EFFECT_HVBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; horizontal and vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 4 <br /><small>(DV_EFFECT_HBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; only horizontal</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 5 <br /><small>(DV_EFFECT_VBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; only vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 6 <br /><small>(DV_EFFECT_HVBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; horizontal and vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 7 <br /><small>(DV_EFFECT_EMBOSS_50_NW)</small></td><td>50% Transparent Emboss &mdash; North-West</td>
+<td>The amount of emboss in pixels.</td></tr>
+<tr><td align="center"> 8 <br /><small>(DV_EFFECT_EMBOSS_50_NE)</small></td><td>50% Transparent Emboss &mdash; North-East</td>
+<td>The amount of emboss in pixels.</td></tr>
+<tr><td align="center"> 9 <br /><small>(DV_EFFECT_EMBOSS_50_SW)</small></td><td>50% Transparent Emboss &mdash; South-West</td>
+<td>The amount of emboss in pixels.</td></tr>
+<tr><td align="center"> 10 <br /><small>(DV_EFFECT_EMBOSS_50_SE)</small></td><td>50% Transparent Emboss &mdash; South-East</td>
+<td>The amount of emboss in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 11 <br /><small>(DV_EFFECT_PATTERN_PHOTO)</small></td><td>Pattern Group 1 &mdash; Photo Shades</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g1">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 12 <br /><small>(DV_EFFECT_PATTERN_SHADES)</small></td><td>Pattern Group 2 &mdash; Fine Shades</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g2">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 13 <br /><small>(DV_EFFECT_PATTERN_STRIPES)</small></td><td>Pattern Group 3 &mdash; Stripes</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g3">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 14 <br /><small>(DV_EFFECT_PATTERN_ORNAMENTAL)</small></td><td>Pattern Group 4 &mdash; Ornamental</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g4">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+<tr><td align="center"> 15 <br /><small>(DV_EFFECT_EDGE_50_NW)</small></td><td>50% Transparent Shaded Edge &mdash; North-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 16 <br /><small>(DV_EFFECT_EDGE_50_NE)</small></td><td>50% Transparent Shaded Edge &mdash; North-East</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 17 <br /><small>(DV_EFFECT_EDGE_50_SW)</small></td><td>50% Transparent Shaded Edge &mdash; South-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 18 <br /><small>(DV_EFFECT_EDGE_50_SE)</small></td><td>50% Transparent Shaded Edge &mdash; South-East</td>
+<td>The shading factor in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 19 <br /><small>(DV_EFFECT_BODY_50_NW)</small></td><td>50% Transparent Shaded Body &mdash; North-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 20 <br /><small>(DV_EFFECT_BODY_50_NE)</small></td><td>50% Transparent Shaded Body &mdash; North-East</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 21 <br /><small>(DV_EFFECT_BODY_50_SW)</small></td><td>50% Transparent Shaded Body &mdash; South-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 22 <br /><small>(DV_EFFECT_BODY_50_SE)</small></td><td>50% Transparent Shaded Body &mdash; South-East</td>
+<td>The shading factor in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 23 <br /><small>(DV_EFFECT_EDGE_100_NW)</small></td><td>Opaque Shaded Edge &mdash; North-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 24 <br /><small>(DV_EFFECT_EDGE_100_NE)</small></td><td>Opaque Shaded Edge &mdash; North-East</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 25 <br /><small>(DV_EFFECT_EDGE_100_SW)</small></td><td>Opaque Shaded Edge &mdash; South-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 26 <br /><small>(DV_EFFECT_EDGE_100_SE)</small></td><td>Opaque Shaded Edge &mdash; South-East</td>
+<td>The shading factor in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 27 <br /><small>(DV_EFFECT_BODY_100_NW)</small></td><td>Opaque Shaded Body &mdash; North-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 28 <br /><small>(DV_EFFECT_BODY_100_NE)</small></td><td>Opaque Shaded Body &mdash; North-East</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 29 <br /><small>(DV_EFFECT_BODY_100_SW)</small></td><td>Opaque Shaded Body &mdash; South-West</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 30 <br /><small>(DV_EFFECT_BODY_100_SE)</small></td><td>Opaque Shaded Body &mdash; South-East</td>
+<td>The shading factor in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 31 <br /><small>(DV_EFFECT_SHADE_INNER_A)</small></td><td>Inner Shade A</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 32 <br /><small>(DV_EFFECT_SHADE_INNER_B)</small></td><td>Inner Shade B</td>
+<td>The shading factor in pixels.</td></tr>
+<tr><td align="center"> 33 <br /><small>(DV_EFFECT_SHADE_INNER_C)</small></td><td>Inner Shade C</td>
+<td>The shading factor in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 34 <br /><small>(DV_EFFECT_HBOLD)</small></td><td>Bold &mdash; only horizontal</td>
+<td>The amount of emboldening in pixels.</td></tr>
+<tr><td align="center"> 35 <br /><small>(DV_EFFECT_VBOLD)</small></td><td>Bold &mdash; only vertical</td>
+<td>The amount of emboldening in pixels.</td></tr>
+<tr><td align="center"> 36 <br /><small>(DV_EFFECT_HVBOLD)</small></td><td>Bold &mdash; horizontal and vertical</td>
+<td>The amount of emboldening in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 37 <br /><small>(DV_EFFECT_HBOLD_VBLUR_FUZZY)</small></td><td>Horizontal Bold with vertical Fuzzy Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+<tr><td align="center"> 38 <br /><small>(DV_EFFECT_VBOLD_HBLUR_FUZZY)</small></td><td>Vertical Bold with horizontal Fuzzy Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 39 <br /><small>(DV_EFFECT_PATTERN_INVPHOTO)</small></td><td>Inverted Pattern Group 1 &mdash; Photo Shades</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g1">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 40 <br /><small>(DV_EFFECT_PATTERN_INVSHADES)</small></td><td>Inverted Pattern Group 2 &mdash; Fine Shades</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g2">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 41 <br /><small>(DV_EFFECT_PATTERN_INVSTRIPES)</small></td><td>Inverted Pattern Group 3 &mdash; Stripes</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g3">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+<tr><td align="center"> 42 <br /><small>(DV_EFFECT_PATTERN_INVORNAMENTAL)</small></td><td>Inverted Pattern Group 4 &mdash; Ornamental</td>
+<td>Pattern fill index. Refer to <a href="patterns.htm#g4">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 43 <br /><small>(DV_EFFECT_PATTERN_CUSTOM)</small></td><td>Custom Pattern Fill</td>
+<td>Custom pattern fill index.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 44 <br /><small>(DV_EFFECT_RESERVED_A)</small></td><td>Reserved for future use</td>
+<td>Has no meaning and should be set to 0.</td></tr>
+<tr><td align="center"> 45 <br /><small>(DV_EFFECT_RESERVED_B)</small></td><td>Reserved for future use</td>
+<td>Has no meaning and should be set to 0.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 46 <br /><small>(DV_EFFECT_HBLUR_STACK)</small></td><td>Stack Blur &mdash; only horizontal</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 47 <br /><small>(DV_EFFECT_VBLUR_STACK)</small></td><td>Stack Blur &mdash; only vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+<tr><td align="center"> 48 <br /><small>(DV_EFFECT_HVBLUR_STACK)</small></td><td>Stack Blur &mdash; horizontal and vertical</td>
+<td>The amount of blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 49 <br /><small>(DV_EFFECT_HBOLD_VBLUR_GAUSS)</small></td><td>Horizontal Bold with vertical Gaussian Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+<tr><td align="center"> 50 <br /><small>(DV_EFFECT_VBOLD_HBLUR_GAUSS)</small></td><td>Vertical Bold with horizontal Gaussian Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 51 <br /><small>(DV_EFFECT_HBOLD_VBLUR_STACK)</small></td><td>Horizontal Bold with vertical Stack Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+<tr><td align="center"> 52 <br /><small>(DV_EFFECT_VBOLD_HBLUR_STACK)</small></td><td>Vertical Bold with horizontal Stack Blur</td>
+<td>The amount of emboldening and blur in pixels.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 53 <br /><small>(DV_EFFECT_RESERVED_C)</small></td><td>Reserved for future use</td>
+<td>Has no meaning and should be set to 0.</td></tr>
+<tr><td align="center"> 54 <br /><small>(DV_EFFECT_RESERVED_D)</small></td><td>Reserved for future use</td>
+<td>Has no meaning and should be set to 0.</td></tr>
+
+<tr><td colspan="3"></td></tr>
+
+<tr><td align="center"> 55 <br /><small>(DV_EFFECT_HOUTLINE)</small></td><td>Outline &mdash; only horizontal</td>
+<td>Outline value in pixels.</td></tr>
+<tr><td align="center"> 56 <br /><small>(DV_EFFECT_VOUTLINE)</small></td><td>Outline &mdash; only vertical</td>
+<td>Outline value in pixels.</td></tr>
+<tr><td align="center"> 57 <br /><small>(DV_EFFECT_HVOUTLINE)</small></td><td>Outline &mdash; horizontal and vertical</td>
+<td>Outline value in pixels.</td></tr>
+
+</table>
+
+<p>For a sample of each of the above effects, please see the illustration at the bottom of this page.</p>
+
+
+
+
+<h2 id="STYLE_EFFECTS">When Used With the <strong id="DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</strong> Structure</h2>
+
+<p><em>EffectID</em> identifies one of D-Type's special effects, while <em>EffectParameter</em> values provide effect specific parameters. Some effects have no parameters, while others have 1 or 2 <em>EffectParameter</em> values. The following chart lists all currently supported style effects and explains how to use their parameters:</p>
+
+<table class="table_data">
+<tr><th><em>EffectID</em></th><th>Description</th><th>Number<br />of Required<br />&nbsp;<em>EffectParameter</em>&nbsp;<br />Values (<em>n</em>)</th><th width="25%">First <em>EffectParameter</em></th><th width="25%">Second <em>EffectParameter</em></th></tr>
+
+<tr><td align="center"> 0 <br /><small>(DV_EFFECT_NONE)</small></td><td>No special effect</td>
+<td align="center">0</td><td></td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 1 <br /><small>(DV_EFFECT_HBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; only horizontal</td>
+<td align="center">1</td><td>The amount of horizontal blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 2 <br /><small>(DV_EFFECT_VBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; only vertical</td>
+<td align="center">1</td><td>The amount of vertical blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 3 <br /><small>(DV_EFFECT_HVBLUR_FUZZY)</small></td><td>Fuzzy Blur &mdash; horizontal and vertical</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 4 <br /><small>(DV_EFFECT_HBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; only horizontal</td>
+<td align="center">1</td><td>The amount of horizontal blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 5 <br /><small>(DV_EFFECT_VBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; only vertical</td>
+<td align="center">1</td><td>The amount of vertical blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 6 <br /><small>(DV_EFFECT_HVBLUR_GAUSS)</small></td><td>Gaussian Blur &mdash; horizontal and vertical</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 7 <br /><small>(DV_EFFECT_EMBOSS_50_NW)</small></td><td>50% Transparent Emboss &mdash; North-West</td>
+<td align="center">2</td><td>The amount of horizontal emboss in pixels.</td><td>The amount of vertical emboss in pixels.</td></tr>
+<tr><td align="center"> 8 <br /><small>(DV_EFFECT_EMBOSS_50_NE)</small></td><td>50% Transparent Emboss &mdash; North-East</td>
+<td align="center">2</td><td>The amount of horizontal emboss in pixels.</td><td>The amount of vertical emboss in pixels.</td></tr>
+<tr><td align="center"> 9 <br /><small>(DV_EFFECT_EMBOSS_50_SW)</small></td><td>50% Transparent Emboss &mdash; South-West</td>
+<td align="center">2</td><td>The amount of horizontal emboss in pixels.</td><td>The amount of vertical emboss in pixels.</td></tr>
+<tr><td align="center"> 10 <br /><small>(DV_EFFECT_EMBOSS_50_SE)</small></td><td>50% Transparent Emboss &mdash; South-East</td>
+<td align="center">2</td><td>The amount of horizontal emboss in pixels.</td><td>The amount of vertical emboss in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 11 <br /><small>(DV_EFFECT_PATTERN_PHOTO)</small></td><td>Pattern Group 1 &mdash; Photo Shades</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g1">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 12 <br /><small>(DV_EFFECT_PATTERN_SHADES)</small></td><td>Pattern Group 2 &mdash; Fine Shades</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g2">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 13 <br /><small>(DV_EFFECT_PATTERN_STRIPES)</small></td><td>Pattern Group 3 &mdash; Stripes</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g3">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 14 <br /><small>(DV_EFFECT_PATTERN_ORNAMENTAL)</small></td><td>Pattern Group 4 &mdash; Ornamental</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g4">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+<tr><td align="center"> 15 <br /><small>(DV_EFFECT_EDGE_50_NW)</small></td><td>50% Transparent Shaded Edge &mdash; North-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 16 <br /><small>(DV_EFFECT_EDGE_50_NE)</small></td><td>50% Transparent Shaded Edge &mdash; North-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 17 <br /><small>(DV_EFFECT_EDGE_50_SW)</small></td><td>50% Transparent Shaded Edge &mdash; South-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 18 <br /><small>(DV_EFFECT_EDGE_50_SE)</small></td><td>50% Transparent Shaded Edge &mdash; South-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 19 <br /><small>(DV_EFFECT_BODY_50_NW)</small></td><td>50% Transparent Shaded Body &mdash; North-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 20 <br /><small>(DV_EFFECT_BODY_50_NE)</small></td><td>50% Transparent Shaded Body &mdash; North-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 21 <br /><small>(DV_EFFECT_BODY_50_SW)</small></td><td>50% Transparent Shaded Body &mdash; South-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 22 <br /><small>(DV_EFFECT_BODY_50_SE)</small></td><td>50% Transparent Shaded Body &mdash; South-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 23 <br /><small>(DV_EFFECT_EDGE_100_NW)</small></td><td>Opaque Shaded Edge &mdash; North-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 24 <br /><small>(DV_EFFECT_EDGE_100_NE)</small></td><td>Opaque Shaded Edge &mdash; North-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 25 <br /><small>(DV_EFFECT_EDGE_100_SW)</small></td><td>Opaque Shaded Edge &mdash; South-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 26 <br /><small>(DV_EFFECT_EDGE_100_SE)</small></td><td>Opaque Shaded Edge &mdash; South-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 27 <br /><small>(DV_EFFECT_BODY_100_NW)</small></td><td>Opaque Shaded Body &mdash; North-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 28 <br /><small>(DV_EFFECT_BODY_100_NE)</small></td><td>Opaque Shaded Body &mdash; North-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 29 <br /><small>(DV_EFFECT_BODY_100_SW)</small></td><td>Opaque Shaded Body &mdash; South-West</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 30 <br /><small>(DV_EFFECT_BODY_100_SE)</small></td><td>Opaque Shaded Body &mdash; South-East</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 31 <br /><small>(DV_EFFECT_SHADE_INNER_A)</small></td><td>Inner Shade A</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 32 <br /><small>(DV_EFFECT_SHADE_INNER_B)</small></td><td>Inner Shade B</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+<tr><td align="center"> 33 <br /><small>(DV_EFFECT_SHADE_INNER_C)</small></td><td>Inner Shade C</td>
+<td align="center">2</td><td>The horizontal shading factor in pixels.</td><td>The vertical shading factor in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 34 <br /><small>(DV_EFFECT_HBOLD)</small></td><td>Bold &mdash; only horizontal</td>
+<td align="center">1</td><td>The amount of horizontal emboldening in pixels.</td><td></td></tr>
+<tr><td align="center"> 35 <br /><small>(DV_EFFECT_VBOLD)</small></td><td>Bold &mdash; only vertical</td>
+<td align="center">1</td><td>The amount of vertical emboldening in pixels.</td><td></td></tr>
+<tr><td align="center"> 36 <br /><small>(DV_EFFECT_HVBOLD)</small></td><td>Bold &mdash; horizontal and vertical</td>
+<td align="center">2</td><td>The amount of horizontal emboldening in pixels.</td><td>The amount of vertical emboldening in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 37 <br /><small>(DV_EFFECT_HBOLD_VBLUR_FUZZY)</small></td><td>Horizontal Bold with vertical Fuzzy Blur</td>
+<td align="center">2</td><td>The amount of horizontal emboldening in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+<tr><td align="center"> 38 <br /><small>(DV_EFFECT_VBOLD_HBLUR_FUZZY)</small></td><td>Vertical Bold with horizontal Fuzzy Blur</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical emboldening in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 39 <br /><small>(DV_EFFECT_PATTERN_INVPHOTO)</small></td><td>Inverted Pattern Group 1 &mdash; Photo Shades</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g1">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 40 <br /><small>(DV_EFFECT_PATTERN_INVSHADES)</small></td><td>Inverted Pattern Group 2 &mdash; Fine Shades</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g2">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 41 <br /><small>(DV_EFFECT_PATTERN_INVSTRIPES)</small></td><td>Inverted Pattern Group 3 &mdash; Stripes</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g3">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+<tr><td align="center"> 42 <br /><small>(DV_EFFECT_PATTERN_INVORNAMENTAL)</small></td><td>Inverted Pattern Group 4 &mdash; Ornamental</td>
+<td align="center">1</td><td>Pattern fill index. Refer to <a href="patterns.htm#g4">Appendix &mdash; Pattern Fills</a> for a list of available pattern fills.</td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 43 <br /><small>(DV_EFFECT_PATTERN_CUSTOM)</small></td><td>Custom Pattern Fill</td>
+<td align="center">1</td><td>Custom pattern fill index.</td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 44 <br /><small>(DV_EFFECT_RESERVED_A)</small></td><td>Reserved for future use</td>
+<td align="center">0</td><td></td><td></td></tr>
+<tr><td align="center"> 45 <br /><small>(DV_EFFECT_RESERVED_B)</small></td><td>Reserved for future use</td>
+<td align="center">0</td><td></td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 46 <br /><small>(DV_EFFECT_HBLUR_STACK)</small></td><td>Stack Blur &mdash; only horizontal</td>
+<td align="center">1</td><td>The amount of horizontal blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 47 <br /><small>(DV_EFFECT_VBLUR_STACK)</small></td><td>Stack Blur &mdash; only vertical</td>
+<td align="center">1</td><td>The amount of vertical blur in pixels.</td><td></td></tr>
+<tr><td align="center"> 48 <br /><small>(DV_EFFECT_HVBLUR_STACK)</small></td><td>Stack Blur &mdash; horizontal and vertical</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 49 <br /><small>(DV_EFFECT_HBOLD_VBLUR_GAUSS)</small></td><td>Horizontal Bold with vertical Gaussian Blur</td>
+<td align="center">2</td><td>The amount of horizontal emboldening in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+<tr><td align="center"> 50 <br /><small>(DV_EFFECT_VBOLD_HBLUR_GAUSS)</small></td><td>Vertical Bold with horizontal Gaussian Blur</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical emboldening in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 51 <br /><small>(DV_EFFECT_HBOLD_VBLUR_STACK)</small></td><td>Horizontal Bold with vertical Stack Blur</td>
+<td align="center">2</td><td>The amount of horizontal emboldening in pixels.</td><td>The amount of vertical blur in pixels.</td></tr>
+<tr><td align="center"> 52 <br /><small>(DV_EFFECT_VBOLD_HBLUR_STACK)</small></td><td>Vertical Bold with horizontal Stack Blur</td>
+<td align="center">2</td><td>The amount of horizontal blur in pixels.</td><td>The amount of vertical emboldening in pixels.</td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 53 <br /><small>(DV_EFFECT_RESERVED_C)</small></td><td>Reserved for future use</td>
+<td align="center">0</td><td></td><td></td></tr>
+<tr><td align="center"> 54 <br /><small>(DV_EFFECT_RESERVED_D)</small></td><td>Reserved for future use</td>
+<td align="center">0</td><td></td><td></td></tr>
+
+<tr><td colspan="5"></td></tr>
+
+<tr><td align="center"> 55 <br /><small>(DV_EFFECT_HOUTLINE)</small></td><td>Outline &mdash; only horizontal</td>
+<td align="center">1</td><td>Horizontal outline value in pixels.</td><td></td></tr>
+<tr><td align="center"> 56 <br /><small>(DV_EFFECT_VOUTLINE)</small></td><td>Outline &mdash; only vertical</td>
+<td align="center">1</td><td>Vertical outline value in pixels.</td><td></td></tr>
+<tr><td align="center"> 57 <br /><small>(DV_EFFECT_HVOUTLINE)</small></td><td>Outline &mdash; horizontal and vertical</td>
+<td align="center">2</td><td>Horizontal outline value in pixels.</td><td>Vertical outline value in pixels.</td></tr>
+
+</table>
+
+
+<h2>Notes and Illustrations</h2>
+
+<p><em>Note 1:</em> Effects 4, 5 and 6 (Gaussian Blur) are computationally intensive. The larger the amount of blur, the more time it takes to render the effect. Use Gaussian Blur with caution, especially on slower machines.</p>
+
+<p><em>Note 2:</em> Fuzzy Blur and Stack Blur are extremely fast and suitable for real-time blurring.</p>
+
+<p><em>Note 3:</em> Gaussian Blur and Stack Blur produce softer, more aesthetically pleasing look compared to Fuzzy Blur.</p>
+
+<p><em>Note 4:</em> In order to use effects 11, 12, 13, 14, 39, 40, 41 or 42, the engine must be initialized using the <strong>dtype.pat</strong> file. This file contains pattern fill definitions listed in <a href="patterns.htm">Appendix &mdash; Pattern Fills</a>.</p>
+
+<p><em>Note 5:</em> Effects 34, 35, 36 (Bold) can be used to simulate bold typefaces.</p>
+
+<p>In the following illustration, each sample represents one <em>EffectID</em> instance.
+Of course, by changing <em>EffectParameter</em> for each <em>EffectID</em> it is possible to create additional instances
+of that effect.</p>
+
+<p class="center">
+<img src="../images/img18.gif" alt="Style Effects" /><br />
+</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

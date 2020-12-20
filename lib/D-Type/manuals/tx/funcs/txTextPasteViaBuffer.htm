@@ -1,0 +1,98 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextPasteViaBuffer</h2><div class="box_prototype"><strong>
+DT_SLONG txTextPasteViaBuffer(DT_TXDOC text_doc, DT_ID_UBYTE paste_command, DT_SLONG nr_of_chars, const DT_UBYTE* buffer, DT_ID_SWORD buffer_format, DT_SWORD unicode_flags, const DT_STREAM_DESC* fontmap_sd)</strong></div><br /><strong>Short Description:</strong> <em>Paste text into current text selection - via buffer</em><br /><br />
+
+<p>This function pastes text (i.e. a sequence of Unicode characters) into the active selection of the text document specified by <em>text_doc</em>, replacing any currently selected text.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>paste_command</em></p>
+</td><td>
+<p>See <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a></p>
+</td></tr>
+
+<tr><td>
+<p><em>nr_of_chars</em></p>
+</td><td>
+<p>The length of the text, i.e. the number of characters (not bytes) in the memory buffer. If 0, no new characters will be inserted into the active selection of the text document, however any currently selected text will be erased.</p>
+</td></tr>
+
+<tr><td>
+<p><em>buffer</em></p>
+</td><td>
+<p>A pointer to a memory buffer that holds the text to be pasted. If DV_NULL, no new characters will be inserted into the active selection of the text document, however any currently selected text will be erased.</p>
+</td></tr>
+
+<tr><td>
+<p><em>buffer_format</em></p>
+</td><td>
+<p>Format of the text in the memory buffer. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_BUFFER_FORMAT_1  1   <span class="codecomment">/* 1 byte per character &mdash; for ANSI */</span>&nbsp;
+TX_BUFFER_FORMAT_2  2   <span class="codecomment">/* 2 bytes per character &mdash; for UCS2 */</span>&nbsp;
+TX_BUFFER_FORMAT_3  3   <span class="codecomment">/* 3 bytes per character */</span>&nbsp;
+TX_BUFFER_FORMAT_4  4   <span class="codecomment">/* 4 bytes per character &mdash; for UCS4 */</span>&nbsp;
+</pre></div>
+<p>These values have the following meaning:</p>
+<ul>
+<li><p>TX_BUFFER_FORMAT_1 indicates that the size of each character in the buffer is 1 byte. All characters have codepoints in the 0 - 255 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_2 indicates that the size of each character in the buffer is 2 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_3 indicates that the size of each character in the buffer is 3 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;16,777,215 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_4 indicates that the size of each character in the buffer is 4 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,295 range.</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>unicode_flags</em></p>
+</td><td>
+<p>See <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a></p>
+</td></tr>
+
+<tr><td>
+<p><em>fontmap_sd</em></p>
+</td><td>
+<p>See <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a></p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value will be the number of pasted characters. Otherwise, the function returns -1. The function will also return -1 if there are multiple (non-contiguous) or block (rectangular) active selections in the text document.</p>
+
+
+<h3>Comments</h3>
+<p>See <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

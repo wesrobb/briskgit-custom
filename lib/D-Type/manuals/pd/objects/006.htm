@@ -1,0 +1,126 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Text Ruler (Horizontal)</h2>
+<h3 id="overview">Overview</h3>
+The Text Ruler (Horizontal) object supplies indents and tab stops to be respected during the text layout process. The text layout engine uses tab stops to advance to the next tab stop position when processing tab characters. As such, the Text Ruler (Horizontal) object can be used to build the following higher-level text objects: <a href="130.htm">Text Path</a>, <a href="103.htm">Text Area</a>, <a href="131.htm">Rich Text Path</a>, <a href="106.htm">Rich Text Area</a>.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTabStopPositions"><em><span class="field">pdTabStopPositions</span> (1082)</em> &nbsp; <small class="label">PD_ARR_WORD_UNSIGNED</small></h4>
+<p>
+An array of tab stop positions. Depending on the flags in the corresponding pdTabStopFlags array, these positions can be left, center or right tab stop positions. All tab stop positions are quantities in the 0 - 65,535 range. These quantities should be understood as percentages of the width of the current text area (or the length of the current text path); therefore 0 means 0% of the text area width (or text path length) while 65,535 means 100% of the text area width (or text path length). The quantities must be entered in an increasing order.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"9830" = One tab stop position at 15% of the width of the current text area (or the length of the current text path)<br />
+"13107, 32768, 52428" = Three tab stop positions; the first one at 20%, the second one at 50% and the third one at 80% of the width of the current text area (or the length of the current text path)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTabStopFlags"><em><span class="field">pdTabStopFlags</span> (1083)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p>
+An optional array of tab stop flags. Each tab stop flag corresponds to and describes one tab stop position in the pdTabStopPositions array.<br />
+<br />
+<strong>Supported flag values:</strong><br />
+<br />
+0 = Left Tab Stop<br />
+1 = Center Tab Stop<br />
+2 = Right Tab Stop<br />
+<br />
+Tab stop positions without explicitly associated tab stop flags are interpreted as left tab stops.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"1"<br />
+"0, 2, 1"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdIndentLeft"><em><span class="field">pdIndentLeft</span> (1106)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p>
+The amount of left indent, in the 0 - 65,535 range. This amount should be understood as a percentage of the width of the current text area (or the length of the current text path); therefore 0 means 0% of the text area width (or text path length) while 65,535 means 100% of the text area width (or text path length).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"13107" = 20% of the width of the current text area (or the length of the current text path)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdIndentRight"><em><span class="field">pdIndentRight</span> (1107)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p>
+The amount of right indent, in the 0 - 65,535 range. This amount should be understood as a percentage of the width of the current text area (or the length of the current text path); therefore 0 means 0% of the text area width (or text path length) while 65,535 means 100% of the text area width (or text path length).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"52428" = 80% of the width of the current text area (or the length of the current text path)<br />
+<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdMarginLeft"><em><span class="field">pdMarginLeft</span> (1159)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="020.htm#pdMarginLeft">Baseline</a>, <a href="021.htm#pdMarginLeft">Row Boundary</a></small></p>
+<p>
+Left margin, in document units. Positive values mean "inside", negative values mean "outside".<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"100" = Left margin of 100 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdMarginRight"><em><span class="field">pdMarginRight</span> (1160)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="020.htm#pdMarginRight">Baseline</a>, <a href="021.htm#pdMarginRight">Row Boundary</a></small></p>
+<p>
+Right margin, in document units. Positive values mean "inside", negative values mean "outside".<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"100" = Right margin of 100 document units<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Text Ruler");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdPropAdd(pd, obj[0], pdTabStopPositions, "12240, 20400, 38250, 56100", PD_ARR_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Text Ruler");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + p(pdTabStopPositions, "12240, 20400, 38250, 56100");<br />
+obj_0 + p(pdTabStopFlags, "1, 0, 0, 2");<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

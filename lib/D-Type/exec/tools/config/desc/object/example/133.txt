@@ -1,0 +1,9 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Background Surface");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[0], 0, 50, 50, 0, 0, 0, pdDrawBackground, DV_NULL);{/strong}

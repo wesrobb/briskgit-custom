@@ -1,0 +1,3 @@
+Link to the {a href="../objects/009.htm"}PowerFontRecord{/a} object.
+
+This link in used to establish a link to the next PowerFont record.

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>PowerFont Record</h2>
+<h3 id="overview">Overview</h3>
+PowerFont Record is a special object that contains a complete description of a PowerGlyph design. PowerGlyphs designs are like regular glyph shapes found in outline fonts, but are constructed using PowerDoc objects. Each PowerFont Record corresponds to exactly one PowerGlyph design.<br />
+<br />
+PowerRecords are the building blocks used to construct the <a href="010.htm">PowerFont</a> object.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdFnDrawObjectPtr"><em><span class="field">pdFnDrawObjectPtr</span> (1085)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="013.htm#pdFnDrawObjectPtr">Group Member</a>, <a href="122.htm#pdFnDrawObjectPtr">Generic Object</a></small></p>
+<p>
+Link to any visual PowerDoc object (i.e. any object with a designated FnDraw rendering function).<br />
+<br />
+The pdFnDraw property describes the visual object pointed by the pdFnDrawObjectPtr link. If pdFnDraw is missing, it is assumed pdFnDrawObjectPtr points to the <a href="123.htm">Group</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPowerFontRecordPtr"><em><span class="field">pdPowerFontRecordPtr</span> (1092)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="010.htm#pdPowerFontRecordPtr">PowerFont</a></small></p>
+<p>
+Link to the <a href="009.htm">PowerFontRecord</a> object.<br />
+<br />
+This link in used to establish a link to the next PowerFont record.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdFnDraw"><em><span class="field">pdFnDraw</span> (1086)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="013.htm#pdFnDraw">Group Member</a>, <a href="122.htm#pdFnDraw">Generic Object</a></small></p>
+<p>
+Rendering function that describes the visual object pointed to by the pdFnDrawObjectPtr link.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Nothing<br />
+1 = <a href="101.htm">Text Line</a><br />
+2 = <a href="102.htm">Text Arc</a><br />
+3 = <a href="103.htm">Text Area</a><br />
+4 = <a href="111.htm">Line</a><br />
+5 = <a href="113.htm">Circle/Ellipse</a><br />
+6 = <a href="112.htm">Rectangle</a><br />
+7 = <a href="114.htm">True Circle/Ellipse</a><br />
+8 = <a href="115.htm">Slice</a><br />
+9 = <a href="116.htm">Arc</a><br />
+10 = <a href="106.htm">Rich Text Area</a><br />
+11 = <a href="117.htm">Pattern</a><br />
+12 = <a href="118.htm">Grid</a><br />
+13 = <a href="119.htm">Custom Shape or Polygon</a><br />
+14 = <a href="120.htm">Gradient</a>, <a href="125.htm">Gradient (As Fast Rectangle)</a>, <a href="126.htm">Gradient (As Inverter)</a><br />
+15 = <a href="121.htm">Bitmap Image</a><br />
+16 = <a href="108.htm">Char</a><br />
+17 = <a href="104.htm">Rich Text Line</a><br />
+18 = <a href="110.htm">Library Shape</a><br />
+19 = <a href="105.htm">Rich Text Arc</a><br />
+20 = <a href="107.htm">Glyph</a><br />
+21 = <a href="122.htm">Generic Object</a><br />
+22 = <a href="123.htm">Group</a><br />
+23 = <a href="109.htm">PowerGlyph</a><br />
+24 = <a href="124.htm">Polyline (also Bezier and B-Spline curves)</a><br />
+25 = <a href="129.htm">Library Polyline</a><br />
+26 = <a href="127.htm">Text Design</a><br />
+27 = <a href="128.htm">Rich Text Design</a><br />
+28 = <a href="130.htm">Text Path</a><br />
+29 = <a href="131.htm">Rich Text Path</a><br />
+30 = <a href="132.htm">Library Bitmap Image</a><br />
+31 = <a href="133.htm">Background Surface</a><br />
+10000 = <a href="301.htm">Button</a><br />
+10001 = <a href="302.htm">Radio Button</a><br />
+10002 = <a href="303.htm">Check Box</a><br />
+10003 = <a href="304.htm">Text Box</a><br />
+10004 = <a href="305.htm">List Box</a><br />
+10005 = <a href="306.htm">Horizontal Slider</a><br />
+10006 = <a href="307.htm">Vertical Slider</a><br />
+10007 = <a href="308.htm">Rich Text Box</a><br />
+10008 = <a href="309.htm">Rich Button</a><br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDw"><em><span class="field">pdDw</span> (1029)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="010.htm#pdDw">PowerFont</a>, <a href="129.htm#pdDw">Library Polyline</a>, <a href="110.htm#pdDw">Library Shape</a>, <a href="111.htm#pdDw">Line</a>, <a href="112.htm#pdDw">Rectangle</a>, <a href="113.htm#pdDw">Circle/Ellipse</a>, <a href="117.htm#pdDw">Pattern</a>, <a href="118.htm#pdDw">Grid</a>, <a href="120.htm#pdDw">Gradient</a>, <a href="125.htm#pdDw">Gradient (As Fast Rectangle)</a>, <a href="126.htm#pdDw">Gradient (As Inverter)</a>, <a href="121.htm#pdDw">Bitmap Image</a>, <a href="132.htm#pdDw">Library Bitmap Image</a></small></p>
+<p>
+In general, this property represents the width of a line, shape or some other object in document units. Most objects assume a positive width. However, some objects (e.g. lines) can have either a positive or a negative width. In these cases, this property also indicates the direction.<br />
+<br />
+This property may also be used for some other more specific purposes. For example, in PowerFonts it refers to the font's base width (or horizontal units per em-square). Similarly, in PowerFont records this property serves as the advance width of a glyph.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+500 = Width of 500 document units<br />
+-200 = Width of -200 document units<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[14];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Surface Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Outline Style");<br />
+obj[2] = pdObjAdd(pd, 0, "TextLine Body Style");<br />
+obj[3] = pdObjAdd(pd, 0, "Line Definition");<br />
+obj[4] = pdObjAdd(pd, 0, "LibShape");<br />
+obj[5] = pdObjAdd(pd, 0, "LibShape");<br />
+obj[6] = pdObjAdd(pd, 0, "TextLine Typography");<br />
+obj[7] = pdObjAdd(pd, 0, "Text Layout");<br />
+obj[8] = pdObjAdd(pd, 0, "TextLine");<br />
+obj[9] = pdObjAdd(pd, 0, "Group Member #0");<br />
+obj[10] = pdObjAdd(pd, 0, "Group Member #1");<br />
+obj[11] = pdObjAdd(pd, 0, "Group Member #2");<br />
+obj[12] = pdObjAdd(pd, 0, "Group");<br />
+<strong>obj[13] = pdObjAdd(pd, 0, "PowerFont Record");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "FF004000", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "00000000", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "FFFFFF00", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[1]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "400", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdOutlinePtr, obj[3]);<br />
+pdPropAdd(pd, obj[4], pdID, "56", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[4], pdDw, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdDh, "300", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[0]);<br />
+pdPropAdd(pd, obj[5], pdID, "56", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[5], pdDw, "270", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdDh, "270", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+pdLinkAdd(pd, obj[6], pdBodyPtr, obj[2]);<br />
+pdPropAdd(pd, obj[6], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdFontDw, "95", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdFontDh, "130", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdSkewHor, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdSkewVer, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdRotation, "0", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 7 */</span><br />
+pdPropAdd(pd, obj[7], pdKerning, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdAlign, "0", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdAlignEnd, "0", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdRelativeDirection, "0", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 8 */</span><br />
+pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[6]);<br />
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[7]);<br />
+pdPropAdd(pd, obj[8], pdTextString_08, "STOP", PD_ASC);<br />
+<br />
+<span class="codecomment">/* Properties for object 9 */</span><br />
+pdLinkAdd(pd, obj[9], pdGroupMemberPtr, obj[10]);<br />
+pdLinkAdd(pd, obj[9], pdFnDrawObjectPtr, obj[4]);<br />
+pdPropAdd(pd, obj[9], pdFnDraw, "18", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[9], pdDx, "0", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[9], pdDy, "-300", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 10 */</span><br />
+pdLinkAdd(pd, obj[10], pdGroupMemberPtr, obj[11]);<br />
+pdLinkAdd(pd, obj[10], pdFnDrawObjectPtr, obj[5]);<br />
+pdPropAdd(pd, obj[10], pdFnDraw, "18", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[10], pdDx, "15", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[10], pdDy, "-285", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 11 */</span><br />
+pdLinkAdd(pd, obj[11], pdFnDrawObjectPtr, obj[8]);<br />
+pdPropAdd(pd, obj[11], pdFnDraw, "1", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[11], pdDx, "19", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[11], pdDy, "-102", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 12 */</span><br />
+pdLinkAdd(pd, obj[12], pdGroupMemberPtr, obj[9]);<br />
+<br />
+<span class="codecomment">/* Properties for object 13 */</span><br />
+<strong>pdLinkAdd(pd, obj[13], pdFnDrawObjectPtr, obj[12]);<br />
+pdPropAdd(pd, obj[13], pdDw, "350", PD_LONG_SIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Surface Style");<br />
+local obj_1 = o("Outline Style");<br />
+local obj_2 = o("TextLine Body Style");<br />
+local obj_3 = o("Line Definition");<br />
+local obj_4 = o("LibShape");<br />
+local obj_5 = o("LibShape");<br />
+local obj_6 = o("TextLine Typography");<br />
+local obj_7 = o("Text Layout");<br />
+local obj_8 = o("TextLine");<br />
+local obj_9 = o("Group Member #0");<br />
+local obj_10 = o("Group Member #1");<br />
+local obj_11 = o("Group Member #2");<br />
+local obj_12 = o("Group");<br />
+local obj_13 = o("PowerFont Record");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "FF004000");<br />
+<br />
+obj_1 + s(pdRGBT, "00000000");<br />
+<br />
+obj_2 + s(pdRGBT, "FFFFFF00");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_1);<br />
+obj_3 + i(pdLineThickness, 400);<br />
+<br />
+obj_4 + l(pdOutlinePtr, obj_3);<br />
+obj_4 + i(pdID, 56);<br />
+obj_4 + i(pdDw, 300);<br />
+obj_4 + i(pdDh, 300);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_0);<br />
+obj_5 + i(pdID, 56);<br />
+obj_5 + i(pdDw, 270);<br />
+obj_5 + i(pdDh, 270);<br />
+<br />
+obj_6 + l(pdBodyPtr, obj_2);<br />
+obj_6 + i(pdFontIndex, 0);<br />
+obj_6 + i(pdFontDw, 95);<br />
+obj_6 + i(pdFontDh, 130);<br />
+obj_6 + i(pdSkewHor, 0);<br />
+obj_6 + i(pdSkewVer, 0);<br />
+obj_6 + i(pdRotation, 0);<br />
+<br />
+obj_7 + i(pdKerning, 1);<br />
+obj_7 + i(pdAlign, 0);<br />
+obj_7 + i(pdAlignEnd, 0);<br />
+obj_7 + i(pdRelativeDirection, 0);<br />
+<br />
+obj_8 + l(pdTypographyPtr, obj_6);<br />
+obj_8 + l(pdTextLayoutPtr, obj_7);<br />
+obj_8 + s(pdTextString_08, "STOP");<br />
+<br />
+obj_9 + l(pdGroupMemberPtr, obj_10);<br />
+obj_9 + l(pdFnDrawObjectPtr, obj_4);<br />
+obj_9 + i(pdFnDraw, 18);<br />
+obj_9 + i(pdDx, 0);<br />
+obj_9 + i(pdDy, -300);<br />
+<br />
+obj_10 + l(pdGroupMemberPtr, obj_11);<br />
+obj_10 + l(pdFnDrawObjectPtr, obj_5);<br />
+obj_10 + i(pdFnDraw, 18);<br />
+obj_10 + i(pdDx, 15);<br />
+obj_10 + i(pdDy, -285);<br />
+<br />
+obj_11 + l(pdFnDrawObjectPtr, obj_8);<br />
+obj_11 + i(pdFnDraw, 1);<br />
+obj_11 + i(pdDx, 19);<br />
+obj_11 + i(pdDy, -102);<br />
+<br />
+obj_12 + l(pdGroupMemberPtr, obj_9);<br />
+<br />
+obj_13 + l(pdFnDrawObjectPtr, obj_12);<br />
+obj_13 + i(pdDw, 350);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

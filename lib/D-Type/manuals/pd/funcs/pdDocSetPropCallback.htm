@@ -1,0 +1,87 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetPropCallback</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetPropCallback(DT_PDDOC power_doc, DT_UBYTE* (*user_prop_func)(DT_ID_SLONG obj, DT_SLONG name, DT_SLONG* len, DT_SLONG user_id, void* user_param))</strong></div><br /><strong>Short Description:</strong> <em>Set document's property callback function</em><br /><br />
+
+<p>The pdDocSetPropCallback function registers a callback function to be called whenever the value of a PowerDoc property added by <a href="pdPropAddAsExtCallback.htm">pdPropAddAsExtCallback</a> or set by <a href="pdPropSetAsExtCallback.htm">pdPropSetAsExtCallback</a> needs to be obtained.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_prop_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called whenever the value of a PowerDoc property added by <a href="pdPropAddAsExtCallback.htm">pdPropAddAsExtCallback</a> or set by <a href="pdPropSetAsExtCallback.htm">pdPropSetAsExtCallback</a> needs to be obtained. Your function must be declared as follows:</p>
+
+<p class="center"><em>
+<a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a>* user_prop_func(<a href="../../dt/manual/types.htm#DT_ID_SLONG">DT_ID_SLONG</a> obj, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> name, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a>* len, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> user_id, void* user_param)
+</em></p>
+
+<p>where <em>user_prop_func</em> is the name of your own C function, <em>obj</em> object's index in the Power Engine document and <em>name</em> a numerical value that identifies the property for which the value is requested. The <em>user_id</em> parameter is your own numerical value and <em>user_param</em> a pointer to your own data type that you will receive during the callback. See <a href="pdPropAddAsExtCallback.htm">pdPropAddAsExtCallback</a> for more information on these parameters.</p>
+
+<p>The <em>len</em> parameter is an output parameter that must be set by your application and specifies the length of the property value, in bytes. It must not be negative.</p>
+
+<p>Your function is called any time D-Type Power Engine needs to obtain the value of the property added by the <a href="pdPropAddAsExtCallback.htm">pdPropAddAsExtCallback</a> function or set by the <a href="pdPropSetAsExtCallback.htm">pdPropSetAsExtCallback</a> function. Your function must return a pointer to a buffer that holds the value of the property and set <em>len</em> accordingly. Within the buffer, the value must be stored as native binary data (i.e. in the same format as if it was created by calling <a href="pdMakeBinary.htm">pdMakeBinary</a>). Whether you fetch the binary data to the buffer before or during the callback is entirely up to your application. As far as D-Type Power Engine is concerned, the binary data must remain in the buffer at least until the next callback for the same value is made or until this property is removed from the associated PowerDoc object. Note that your application is responsible for managing and destroying the buffer. If this is not done properly, you could experience crashes, memory leaks and other similar problems.</p>
+
+<p>Your function may also return DV_NULL to indicate that the property value is not available. This however will not prevent D-Type Power Engine from requesting the the same property value again at a later time.</p>
+
+<p>Setting the <em>user_prop_func</em> parameter to DV_NULL when calling pdDocSetPropCallback will permanently unregister a previously registered property callback function. Once this is done, D-Type Power Engine will no longer initiate property value callbacks. In this case, any PowerDoc properties added by pdPropAddAsExtCallback or set by pdPropSetAsExtCallback will be valueless.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+
+<h3>Note</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

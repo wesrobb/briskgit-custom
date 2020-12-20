@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtxGlyphsDoOutput_Arc</h2><div class="box_prototype"><strong>
+void dtxGlyphsDoOutput_Arc(DT_DTENGINE engine, DT_SLONG xc, DT_SLONG yc, DT_SLONG rc, DT_SWORD alpha0, DT_SWORD delta, const DT_TYPE_EFFECTS_L* effects, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG glyph_arr[])</strong></div><br /><strong>Short Description:</strong> <em>Render a sequence of glyphs to Output as a circular arc</em><br /><br />
+
+<h2>dtxCharsDoOutput_Arc</h2><div class="box_prototype"><strong>
+void dtxCharsDoOutput_Arc(DT_DTENGINE engine, DT_SLONG xc, DT_SLONG yc, DT_SLONG rc, DT_SWORD alpha0, DT_SWORD delta, const DT_TYPE_EFFECTS_L* effects, DT_SLONG spacing, DT_ID_SWORD mode, DT_TM2X2 tm, const DT_ID_ULONG chars_arr[])</strong></div><br /><strong>Short Description:</strong> <em>Render a sequence of characters to Output as a circular arc</em><br /><br />
+
+<p>These functions draw a text string in a circular arc. The radius of the arc is rc while its center point is placed at the coordinates (xc, yc) of the current Output.</p>
+
+<p>The key typographic attributes for the text arc (font, transformation, outline expansion/thickness) are supplied via the <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure; the Typesetter provides all other typographic attributes (e.g. hinting, positioning, quality level). The dtxCharsDoOutput_Arc and dtxGlyphsDoOutput_Arc functions set type attributes themselves by explicitly calling <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a> before each individual glyph in the text arc is drawn. Therefore, it is not necessary to set type attributes in the Typesetter (via <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a>) before calling these functions.</p>
+
+<p>As with other rendering functions, the current Output provides the destination surface (which can be either D-Type's Memory Device Context surface or Windows compatible Device Context surface) and style attributes that are applied to the text string  when its image is actually rendered.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>xc</em></p>
+</td><td>
+<p>X coordinate of the text arc's center point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>yc</em></p>
+</td><td>
+<p>Y coordinate of the text arc's center point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>rc</em></p>
+</td><td>
+<p>Radius of the text arc, in pixels. Must be positive.</p>
+</td></tr>
+
+<tr><td>
+<p><em>alpha0</em></p>
+</td><td>
+<p>Angle of the text arc's start point, in degrees. Must be between 0 and 360.</p>
+</td></tr>
+
+<tr><td>
+<p><em>delta</em></p>
+</td><td>
+<p>Length of the text arc, in degrees. Must be positive for clockwise direction.</p>
+<p>The end point of the text arc is then defined by the (alpha0+delta) angle.</p>
+
+<p>This makes it possible to specify the desired length (in degrees) of the text arc.
+If this value is non-zero, the function will first adjust the supplied text size
+so that the total length of the arc matches the specified desired length.</p>
+
+</td></tr>
+
+
+<tr><td>
+<p><em>effects</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure that provides key typographic attributes for the text string to be drawn.</p>
+</td></tr>
+
+<tr><td>
+<p><em>spacing</em></p>
+</td><td>
+<p>Additional spacing between glyphs in the text string, in font units.</p>
+</td></tr>
+
+<tr><td>
+<p><em>mode</em></p>
+</td><td>
+
+<p>This parameter specifies how the function should position the glyphs/characters. Currently, only the following values are supported:</p>
+
+<ul>
+
+<li><p><em>kern_mode</em> = 4 (DV_SPACING_FRAC) &mdash; <em>Do not kern, Use Fractional Pixel Positioning.</em> The accurate distance from the previous character is added to the previous pixel position.</p>
+<p align="center">PosNewPix=Delta+PosPrevPix</p>
+<p><em>Note:</em> <strong>This method is very suitable and recommended for a device independent text layout. It produces good looking text and accurate (device independent) character spacing.</strong></p>
+</li>
+
+<li><p><em>kern_mode</em> = 5 (DV_SPACING_KERN_FRAC) &mdash; <em>Kern, Use Fractional Pixel Positioning.</em> Same as DV_SPACING_FRAC but with kerning. That is, the accurate distance from the previous character is kerned and added to the previous pixel position.</p>
+<p align="center">PosNewPix=Delta+Kerning+PosPrevPix</p>
+<p><em>Note:</em> Same as for DV_SPACING_FRAC.</p>
+</li>
+
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>tm</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr</em></p>
+</td><td>
+<p>A string of glyph indices, terminated with DV_ENDOFGLYPHARR.</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars_arr</em></p>
+</td><td>
+<p>A null-terminated string in UCS4 format.</p>
+</td></tr>
+
+</table>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,6 @@
+Height of a text area in document units. Must not be negative. The value 0 is special and means an infinite height; in this configuration the text never flows to any subsequent text areas and just keeps wrapping in one infinitely high text area.
+
+{strong}Sample values:{/strong}
+
+500 = Height of 500 document units
+1000 = Height of 1000 document units

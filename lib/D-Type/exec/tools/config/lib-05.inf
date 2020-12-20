@@ -1,0 +1,21 @@
+!LIB_CATEGORY=User-Specific Format Library 0
+!LIB_CATEGORY=User-Specific Format Library 1
+!LIB_CATEGORY=User-Specific Format Library 2
+!LIB_CATEGORY=User-Specific Format Library 3
+!LIB_CATEGORY=User-Specific Format Library 4
+!LIB_CATEGORY=User-Specific Format Library 5
+!LIB_CATEGORY=User-Specific Format Library 6
+!LIB_CATEGORY=User-Specific Format Library 7
+!LIB_CATEGORY=User-Specific Format Library 8
+!LIB_CATEGORY=User-Specific Format Library 9
+
+{
+0|user_100000|User-Specific 1 (Main Heading)
+0|user_100001|User-Specific 2 (Subheading)
+0|user_100002|User-Specific 3 (Normal Body Text)
+0|user_100003|User-Specific 4 (Fancy Style)
+0|user_100004|User-Specific 9 (Underlined)
+1|user_110000|User-Specific 1 (Format used in new examples)
+1|user_110001|User-Specific 2 (Format used in old examples)
+0|user_100005|User-Specific 6 (Tall Red Title)
+}

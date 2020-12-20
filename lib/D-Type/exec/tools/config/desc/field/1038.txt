@@ -1,0 +1,3 @@
+Link to the {a href="../objects/007.htm"}Text Fragment{/a} object.
+
+This link in used to establish a link to the next text fragment. This can be the first text fragment or the fragment that follows the current one.

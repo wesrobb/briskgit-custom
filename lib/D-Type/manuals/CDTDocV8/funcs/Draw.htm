@@ -1,0 +1,424 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>Draw</strong></div><br />
+
+<p>The Draw function draws a single page in a Power Engine document to a memory surface specified by <em>format</em>, <em>subformat</em> and <em>memory_surface</em>. While drawing the page, the function respects the transform matrix set by <a href="SetTransformPlus.htm">SetTransformPlus</a>, <a href="SetTransform.htm">SetTransform</a> or <a href="SetTransform.htm">SetScale</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>page</em></p>
+</td><td>
+<p>The number of the page to draw.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_off</em></p>
+</td><td>
+<p>Horizontal offset to apply when drawing the page area, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y_off</em></p>
+</td><td>
+<p>Vertical offset to apply when drawing the page area, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>format</em></p>
+</td><td>
+<p>Specifies the format, or number of bits-per-pixel, of the memory surface to which the page area is drawn. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subformat</em></p>
+</td><td>
+<p>Color configuration of the pixel. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_surface</em></p>
+</td><td>
+<p>A pointer to the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure that describes the surface. See D-Type Standard Engine Manual for details.</p>
+
+<p>When calling pdDocDraw, it is allowed to set the <em>m</em> member of the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure to DV_NULL. This means that D-Type Power Engine should allocate memory for the surface. In this case, the surface's memory must later be released by calling <a href="Free.htm">Free</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>params</em></p>
+</td><td>
+<p>Additional parameters. See the description of the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure for details. Set to DV_NULL if no additional parameters are needed (i.e. to use default parameters).</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If successful, the function will return 1. If the function is not successful, the return value is 0. This can happen if the input values are invalid or out-of-memory conditions occur (e.g. if D-Type Power Engine is requested to allocate memory for the surface by setting the <em>m</em> member of the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure to DV_NULL and the allocation fails). Additionally, when the processing of critical object-specific errors is enabled via the Flags member of the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure, the function can also return one of the following error codes:</p>
+
+<div class="box_field"><pre>
+PD_RET_OBJ_ERR_MDC        -8 <span class="codecomment">/* memory surface not supported by object */</span>&nbsp;
+PD_RET_OBJ_ERR_PATTERN    -7 <span class="codecomment">/* pattern file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_BITMAP     -6 <span class="codecomment">/* bitmap file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_VECTOR     -5 <span class="codecomment">/* vector file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_FONT       -4 <span class="codecomment">/* font file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_MEMORY     -3 <span class="codecomment">/* not enough memory to process the object */</span>&nbsp;
+PD_RET_OBJ_ERR_DEFINITION -2 <span class="codecomment">/* object not properly defined */</span>&nbsp;
+</pre></div>
+
+<p>If something goes wrong while rendering one of the PowerDoc objects in the document, these error codes provide more information about the cause of the error. Note that in this situation only the error code of the first encountered object-specific error is returned and only if it is classified as critical (meaning that it has a severe impact on the rendering outcome). It is your application's responsibility to decide how to handle a critical object-specific error (e.g. ignore it, retry rendering, report to the user etc). If the function returns one of these error codes, you should assume that the document has not been rendered completely and/or correctly.</p>
+
+<p>However, if a critical object-specific error is encountered but the processing of critical object-specific errors is disabled, the function will assume that the object in question was rendered successfully and will not return its object-specific error code. In this case, the function might return 1 indicating that overall the rendering was successful, even though some objects in the document did not render completely and/or correctly.</p>
+
+
+<h3>Comments</h3>
+<p>The <em>format</em> parameter specifies the number of bits-per-pixel and is used to calculate the amount of memory required to store the surface; <em>subformat</em> defines the configuration of a single pixel and is used to calculate the maximum number of colors in the surface. See the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function in D-Type Standard Engine Manual for a list of all the surface formats supported by D-Type Standard Engine.</p>
+
+<p>Although the pdDocDraw function will accept any memory surface format that is supported by D-Type Standard Engine, certain limitations apply. Application developers should note the following:</p>
+
+<ul>
+<li><p>In D-Type Power Engine API, the following memory surface formats are called <strong>key memory surface formats</strong>:</p>
+
+<ul>
+<li><em>format</em> = 8
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	<li><em>subformat</em> = 2</li>
+	<li><em>subformat</em> = 3</li>
+	<li><em>subformat</em> = 4</li>
+	<li><em>subformat</em> = 5</li>
+	<li><em>subformat</em> = 10</li>
+	<li><em>subformat</em> = 12</li>
+	<li><em>subformat</em> = 13</li>
+	<li><em>subformat</em> = 14</li>
+	<li><em>subformat</em> = 15</li>
+	</ul>
+</li>
+<li><em>format</em> = 16
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	<li><em>subformat</em> = 2</li>
+	<li><em>subformat</em> = 3</li>
+	<li><em>subformat</em> = 4</li>
+	<li><em>subformat</em> = 5</li>
+	<li><em>subformat</em> = 6</li>
+	</ul>
+</li>
+<li><em>format</em> = 24
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	</ul>
+</li>
+<li><em>format</em> = 32
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	</ul>
+</li>
+</ul>
+
+<p>These surface formats represent a subset of the full spectrum of D-Type Standard Engine surface formats. The combination <em>format</em> = 8, <em>subformat</em> = 1 represents an alpha-surface and is useful for alpha-making. The combination <em>format</em> = 24, <em>subformat</em> = 0 is a popular and frequently used 24-bpp RGB color surface format. Finally, the combinations <em>format</em> = 32, <em>subformat</em> = 0 and <em>format</em> = 32, <em>subformat</em> = 1 are both commonly used 32-bpp RGB color surface formats.</p>
+
+<p>The following table illustrates the pixel configuration of the key memory surface formats. Please note that this table is merely a striped down version of the table included in D-Type Standard Engine Manual (see the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function).</p>
+
+
+
+
+
+<table class="table_data">
+
+<tr>
+<th>Format<br />(bits-per-pixel)</th><th>Subformat</th>
+
+
+<th>Description</th>
+</tr>
+
+
+
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>TTTTTTTT</tt></strong><br />
+8-bit alpha surface. Eight bits (1 byte) are used to represent transparency. 256 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;B.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">10</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">12</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">13</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">14</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">15</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;B.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>xBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (1-5-5-5). Five bits are used for each color component. The first bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>BBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (6-5-5). Six bits are used for red; five bits are used for green and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-6-5). Six bits are used for green; five bits are used for red and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-6). Six bits are used for blue; five bits are used for red and green. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRx</tt></strong><br />
+16-bit RGB surface (5-5-5-1). Five bits are used for each color component. The last bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>BBBBBxGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-1-5-5). Five bits are used for each color component. The bit between red and green component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">6</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGxRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-1-5). Five bits are used for each color component. The bit between green and blue component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Standard 24-bit RGB surface. Eight bits (1 byte) are used for each color component. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR xxxxxxxx</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>xxxxxxxx BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+
+
+
+<tr><td colspan="3">
+
+<p><strong>Legend</strong>:<br />
+
+g = bits used to describe gray<br />
+R = bits used to describe red, G = bits used to describe green, B = bits used to describe blue<br />
+T = bits used to describe transparency (0=fully opaque, 255=fully transparent)<br />
+
+x = unused bits</p>
+
+<p><strong>Note 1:</strong> RGB and alpha values are stored only for pixels that are actually rendered by D-Type. Your application must ensure that the surface is cleared with appropriate values before rendering.
+
+</p>
+
+
+
+</td></tr>
+
+</table>
+
+
+</li>
+
+<li><p>Most PowerDoc objects support the full spectrum of D-Type Standard Engine surface formats (see the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function). However, there are currently three PowerDoc objects that only support the key memory surface formats described above. These objects are: the <a href="../objects/117.htm">Pattern</a> object, the <a href="../objects/120.htm">Gradient</a> object and the <a href="../objects/121.htm">Bitmap Image</a> object. This is because these three objects are not internally rendered by D-Type Standard Engine (which includes D-Type Rasterizer, D-Type Shape Engine and D-Type Font Engine) but specialized bitmap rendering routines inside D-Type Power Engine. Attempting to render these objects using one of the non key memory surface formats may result in blank output (in either all or some color channels).</p></li>
+
+<li><p>A similar limitation might apply to user-defined objects. If a page contains any user-defined objects, they will render only to those memory surface formats that their developer decided to support.</p></li>
+
+<li><p>Alpha-masking is only supported when the objects are rendered to the key memory surface formats. Attempting to alpha-mask objects that are rendered to one of the non key memory surface formats may not generate the correct result (in either all or some color channels).</p></li>
+
+</ul>
+
+<p><strong>Note to application developers who wish to implement user-defined PowerDoc objects:</strong></p>
+
+<p>If you wish to extend Power Engine API by developing your own user-defined objects then you should also ensure that these objects can be rendered to as many surface formats as possible. Although not mandatory, we strongly recommend that your objects support all the key memory surface formats. In addition, you should ensure that your objects can be rendered to both the top-to-bottom and bottom-to-top surfaces.</p>
+
+<p>Because of the above considerations, we recommend that you render user-defined objects using D-Type Standard Engine (D-Type Rasterizer and/or D-Type Shape Engine and/or D-Type Font Engine). In this way you will not have to spend time developing your own routines to support various surface formats and pixel configurations. At the same time, users of those objects will get automatic support for all the memory surface formats that are supported by D-Type Standard Engine.</p>
+
+
+<h3>Note 1</h3>
+<p>This is only a brief description of the Draw function. Additional functionality is possible. Please refer to the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure and the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">D-Type Workshop</a> section.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

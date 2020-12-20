@@ -1,0 +1,1 @@
+Image data in RGB format (variable length, 3 bytes per pixel).

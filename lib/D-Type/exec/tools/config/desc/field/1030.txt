@@ -1,0 +1,8 @@
+In general, this property represents the height of a line, shape or other object in document units. Most objects assume a positive height. But some objects (e.g. lines) can have either a positive or a negative height. In these cases, the height property also indicates the direction.
+
+This property may also be used for some other more specific purposes. For example, in PowerFonts this property refers to the font's base height (or vertical units per em-square).
+
+{strong}Sample values:{/strong}
+
+400 = Height of 400 document units
+-100 = Height of -100 document units

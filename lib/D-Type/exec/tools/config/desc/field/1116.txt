@@ -1,0 +1,20 @@
+A value consisting of 5 independent bits. Each bit indicates whether a line break is allowed after a certain user-selectble class of characters. This makes it possible to fine tune the behaviour of the text wrapping algorithm (on arbitrary text selections) in order to improve the appearance of text.
+
+{strong}Supported values:{/strong}
+
+Bit 0 - If set, line break is allowed after common punctuation marks (e.g. period, comma, exclamation mark, question mark, colon, semi-colon)
+Bit 1 - If set, line break is allowed after other punctuation marks (e.g. middle dot, inverted exclamation mark, inverted question mark)
+Bit 2 - If set, line break is allowed after minus/hyphen signs and dashes (e.g. en dash, em dash, horizontal bar)
+Bit 3 - If set, line break is allowed after forward or backward slashes
+Bit 4 - If set, line break is allowed after other separators (e.g. pipe)
+Bit 5 - If set, line break is allowed after closing brackets/parentheses
+Bit 6 - If set, line break is allowed after other terminating symbols (e.g. percent, degree, cent sign)
+
+{strong}Sample values:{/strong}
+
+0 = Line break is not allowed after any user-selectable class of characters
+1 = Line break is allowed after common punctuation marks
+8 = Line break is allowed after  forward or backward slashes
+9 = Line break is allowed after common punctuation marks and forward or backward slashes
+11 = Line break is allowed after common punctuation marks, other punctuation marks and forward or backward slashes
+31 = Line break is allowed after all user-selectable classes of characters

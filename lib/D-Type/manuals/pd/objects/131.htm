@@ -1,0 +1,431 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Rich Text Path</h2>
+<h3 id="overview">Overview</h3>
+This objects represents a rich text path. In Power Engine API, a rich text path is an array of text fragments formatted according to the specified parameters and drawn along the edge of a user-defined polygon or shape. Functionally, the Rich Text Path object is similar to the <a href="130.htm">Text Path</a> object but is more complex. This is because a typical rich text path usually consists of many text fragments, while each fragment is formatted using a different set of typographic and layout attributes.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawRichTextPath (29)<br />
+<br />
+Note 1: pdPolyArrX_08, pdPolyArrX_16, pdPolyArrX_24 and pdPolyArrX_32 cannot be used at the same time. pdPolyArrX_32 takes precedence over pdPolyArrX_24. pdPolyArrX_24 takes precedence over pdPolyArrX_16. Finally, pdPolyArrX_16 takes precedence over pdPolyArrX_08.<br />
+<br />
+Note 2: pdPolyArrY_08, pdPolyArrY_16, pdPolyArrY_24 and pdPolyArrY_32 cannot be used at the same time. pdPolyArrY_32 takes precedence over pdPolyArrY_24. pdPolyArrY_24 takes precedence over pdPolyArrY_16. Finally, pdPolyArrY_16 takes precedence over pdPolyArrY_08.<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTextFragmentPtr"><em><span class="field">pdTextFragmentPtr</span> (1038)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextFragmentPtr">Text Fragment</a>, <a href="104.htm#pdTextFragmentPtr">Rich Text Line</a>, <a href="105.htm#pdTextFragmentPtr">Rich Text Arc</a>, <a href="106.htm#pdTextFragmentPtr">Rich Text Area</a>, <a href="128.htm#pdTextFragmentPtr">Rich Text Design</a>, <a href="308.htm#pdTextFragmentPtr">Rich Text Box</a>, <a href="309.htm#pdTextFragmentPtr">Rich Button</a>, <a href="310.htm#pdTextFragmentPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="007.htm">Text Fragment</a> object.<br />
+<br />
+This link in used to establish a link to the next text fragment. This can be the first text fragment or the fragment that follows the current one.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdBaselinePtr"><em><span class="field">pdBaselinePtr</span> (1113)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="022.htm#pdBaselinePtr">Text Extras</a>, <a href="101.htm#pdBaselinePtr">Text Line</a>, <a href="102.htm#pdBaselinePtr">Text Arc</a>, <a href="103.htm#pdBaselinePtr">Text Area</a>, <a href="104.htm#pdBaselinePtr">Rich Text Line</a>, <a href="105.htm#pdBaselinePtr">Rich Text Arc</a>, <a href="106.htm#pdBaselinePtr">Rich Text Area</a>, <a href="130.htm#pdBaselinePtr">Text Path</a></small></p>
+<p>
+Link to the <a href="020.htm">Baseline</a> object.<br />
+<br />
+This link supplies parameters necessary to render the baselines of text rows.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdGlobalDirection"><em><span class="field">pdGlobalDirection</span> (1075)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#pdGlobalDirection">Text Line</a>, <a href="102.htm#pdGlobalDirection">Text Arc</a>, <a href="103.htm#pdGlobalDirection">Text Area</a>, <a href="104.htm#pdGlobalDirection">Rich Text Line</a>, <a href="105.htm#pdGlobalDirection">Rich Text Arc</a>, <a href="106.htm#pdGlobalDirection">Rich Text Area</a>, <a href="130.htm#pdGlobalDirection">Text Path</a></small></p>
+<p>
+Global text direction and bidirectional text display method.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+A) Horizontal Layout (Text in Rows) and Bidirectional Reordering:<br />
+<br />
+0 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)<br />
+1 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)<br />
+2 = Left-to-Right, Bottom-to-Top<br />
+3 = Right-to-Left, Bottom-to-Top<br />
+4 = Same as 0 but swap Portrait &amp; Landscape<br />
+5 = Same as 1 but swap Portrait &amp; Landscape<br />
+6 = Same as 2 but swap Portrait &amp; Landscape<br />
+7 = Same as 3 but swap Portrait &amp; Landscape<br />
+<br />
+B) Vertical Layout (Text in Columns) and Bidirectional Reordering:<br />
+<br />
+8 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)<br />
+9 = Bottom-to-Top, Right-to-Left<br />
+10 = Top-to-Bottom, Left-to-Right<br />
+11 = Bottom-to-Top, Left-to-Right<br />
+12 = Same as 8 but swap Portrait &amp; Landscape<br />
+13 = Same as 9 but swap Portrait &amp; Landscape<br />
+14 = Same as 10 but swap Portrait &amp; Landscape<br />
+15 = Same as 11 but swap Portrait &amp; Landscape<br />
+<br />
+C) Horizontal Layout (Text in Rows) and Bidirectional Rotation:<br />
+<br />
+16 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)<br />
+17 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)<br />
+18 = Left-to-Right, Bottom-to-Top<br />
+19 = Right-to-Left, Bottom-to-Top<br />
+20 = Same as 16 but swap Portrait &amp; Landscape<br />
+21 = Same as 17 but swap Portrait &amp; Landscape<br />
+22 = Same as 18 but swap Portrait &amp; Landscape<br />
+23 = Same as 19 but swap Portrait &amp; Landscape<br />
+<br />
+D) Vertical Layout (Text in Columns) and Bidirectional Rotation:<br />
+<br />
+24 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)<br />
+25 = Bottom-to-Top, Right-to-Left<br />
+26 = Top-to-Bottom, Left-to-Right<br />
+27 = Bottom-to-Top, Left-to-Right<br />
+28 = Same as 24 but swap Portrait &amp; Landscape<br />
+29 = Same as 25 but swap Portrait &amp; Landscape<br />
+30 = Same as 26 but swap Portrait &amp; Landscape<br />
+31 = Same as 27 but swap Portrait &amp; Landscape<br />
+<br />
+<strong>Notes:</strong><br />
+<br />
+D-Type Engine can display text in horizontal writing mode (text in rows) and vertical writing mode (text in columns). In horizontal writing mode, the global text progression can be Letf-to-Right/Top-to-Bottom, Right-to-Left/Top-to-Bottom, Letf-to-Right/Bottom-to-Top or Right-to-Left/Bottom-to-Top. In vertical writing mode, the global text progression can be Top-to-Bottom/Right-to-Left, Bottom-to-Top/Right-to-Left, Top-to-Bottom/Left-to-Right or Bottom-to-Top/Left-to-Right.<br />
+<br />
+Additionally, D-Type Engine can display bidirectional text (e.g. a mixture of left-to-right text such as English or Chinese and right-to-left text such as Arabic or Hebrew) using two different methods: the first method is Bidirectional Reordering, the second method is Bidirectional Rotation. Visually, these two methods produce quite different output. However, both are suitable for displaying text that was processed by the Unicode Bidirectional Algorithm (BiDi).<br />
+<br />
+With Bidirectional Reordering the characters are reordered for display depending on the relative direction of the containing text fragment. Thus, a left-to-right text fragment has its characters ordered (visually) in the opposite order from a right-to-left text fragment. While reading bidirectional text, from start to end, the reader must alternate the reading direction (left-to-right/right-to-left in horizontal writing mode or top-to-bottom/bottom-to-top in vertical writing mode) each time a change of direction occurs. This is also the progression of the cursor as it advances from one character to another. This means that with Bidirectional Reordering, the order in which the characters are displayed is not the same as the order in which they are stored in memory (logical or storage order).<br />
+<br />
+With Bidirectional Rotation all characters are ordered uniformly (e.g. from left-to-right in horizontal writing mode or top-to-bottom in vertical writing mode) regardless of whether the containing text fragment has a left-to-right or right-to-left direction. However, their rotation depends on the relative direction of the containing text fragment. More specifically, characters that are part of a left-to-right text fragment are rotated 180 degrees relative to the characters that are part of a right-to-left text fragment. Thus, while reading bidirectional text, from start to end, the reader must rotate the display surface or tilt his/her head (clockwise or counterclockwise) each time a change of direction occurs. However, the reading direction and the progression of the cursor remain uniform. This also means that with Bidirectional Rotation, the order in which the characters are displayed is the same as the order in which they are stored in memory.<br />
+<br />
+Bidirectional Reordering is frequently used in horizontal writing mode and also works well in vertical writing mode. Bidirectional Rotation is typically not used in horizontal writing mode due to the fact that almost all Unicode scripts, when displayed in horizontal writing mode, have their orientation set to portrait (meaning that the glyph's x-axis in font design space is parallel with the baseline). Using Bidirectional Rotation in this case would require the user to rotate the display surface by 180 degrees (clockwise or counterclockwise) each time a change of direction is encountered -- which is, needles to say, far from practical. However, Bidirectional Rotation works well in vertical writing mode. This is due to the fact that vertical writing is used mostly with CJK scripts (Chinese/Japanese/Korean) which typically have their orientation set to landscape (meaning that the glyph's x-axis in font design space is perpendicular to the baseline). Non-CJK scripts, such as Latin or Arabic then have their orientation set to portrait. Under this scheme, the reading direction and the progression of the cursor is always top-to-bottom. When reading the majority of content (i.e. CJK text), there is no need to rotate the display surface. However, when a left-to-right text fragment (e.g. English) is encountered, the reader rotates the display surface by 90 degrees clockwise. Similarly, when a right-to-left text fragment (e.g. Arabic) is encountered, the reader rotates the display surface by 90 degrees counterclockwise. In all three cases (Chinese, English and Arabic) the characters are ordered from top to bottom and the reader is never expected to alter the reading direction (which would otherwise be required if Bidirectional Reordering was used). This is not to say that Bidirectional Reordering cannot be used in vertical writing mode. However, Bidirectional Rotation might work better in certain applications as rotating the display surface by 90 degrees clockwise or counterclockwise relative to the vertical baseline is sometimes considered a more practical way of reading vertical bidirectional text.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="txLockStatus"><em><span class="field">txLockStatus</span> (2005)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#txLockStatus">Text Line</a>, <a href="102.htm#txLockStatus">Text Arc</a>, <a href="103.htm#txLockStatus">Text Area</a>, <a href="104.htm#txLockStatus">Rich Text Line</a>, <a href="105.htm#txLockStatus">Rich Text Arc</a>, <a href="106.htm#txLockStatus">Rich Text Area</a>, <a href="130.htm#txLockStatus">Text Path</a></small></p>
+<p>
+A flag that indicates whether and how the text is locked for user interactions.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Text is not locked (all user interactions are enabled)<br />
+<br />
+1 = Text is completely locked (all user interactions are disabled)<br />
+<br />
+2 = Text is locked for both editing and formatting/styling (but a user can still move the cursor and make text selections)<br />
+<br />
+3 = Text is locked for editing but not for formatting/styling (and a user can still move the cursor and make text selections)<br />
+<br />
+4 = Text is locked for formatting/styling but not for editing (and a user can still move the cursor and make text selections)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdGlyphStart"><em><span class="field">pdGlyphStart</span> (1076)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#pdGlyphStart">Text Line</a>, <a href="102.htm#pdGlyphStart">Text Arc</a>, <a href="103.htm#pdGlyphStart">Text Area</a>, <a href="104.htm#pdGlyphStart">Rich Text Line</a>, <a href="105.htm#pdGlyphStart">Rich Text Arc</a>, <a href="106.htm#pdGlyphStart">Rich Text Area</a>, <a href="130.htm#pdGlyphStart">Text Path</a></small></p>
+<p>
+Start glyph position within the first text fragment, i.e. the index of the glyph in the first text fragment from which the text layout and display starts. This value cannot be negative and must be less than the length of the first text fragment.<br />
+<br />
+This property is useful when building text flows (i.e. when text fragments span more than one text area). In most other cases, this property should be omitted or its value should be set to 0.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrI"><em><span class="field">pdPolyArrI</span> (1041)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_012">012</a>, <a href="intro.htm#method_015">015</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrI">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrI">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrI">Text Path</a></small></p>
+<p>
+Instructions for PolyArrX and PolyArrY (variable length, 1 byte per instruction).<br />
+<br />
+pdPolyArrI is an array containing instructions that describe the corresponding pair of coordinates in the pdPolyArrX_... and pdPolyArrY_... arrays. Possible values for pdPolyArrI are:<br />
+<br />
+<strong>A. Standard segment construction instructions:</strong><br />
+<br />
+ <strong>16</strong> = New closed contour<br />
+ <strong>17</strong> = New open contour<br />
+ <strong>20</strong> = Line<br />
+ <strong>24</strong> = Bezier curve. Must be followed by n and 0 (see below).<br />
+ <strong>25</strong> = Quadratic B-Spline curve. Must be followed by n (see below).<br />
+<br />
+<strong>B. Instructions that can only follow 24 or 25:</strong><br />
+<br />
+ <strong>n</strong> = A positive number or zero. Used only when the preceding instruction is 24 (Bezier curve) or 25 (Quadratic B-Spline curve). A positive number represents the suggested number of line segments that the curve will be approximated with. Zero means that the rendering engine should automatically calculate the optimum number of line segments when rendering the curve.<br />
+<br />
+ <strong>0</strong> = Reserved. Used only when the first instruction in a segment is 24.<br />
+<br />
+<strong>C. Special "one byte does it all" instructions:</strong><br />
+<br />
+ <strong>254</strong> = Open Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are not automatically closed.<br />
+<br />
+ <strong>255</strong> = Closed Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are automatically closed.<br />
+<br />
+The instruction 254 and 255 are special. Only one of them can be used per single Polyline/Polygon. When specified, this instruction must be the only instruction in the pdPolyArrI array. In other words, pdPolyArrI must be a single element array, containing only the instruction 254 or 255.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"16, 20, 20, 20"<br />
+"16, 20, 25, 0, 20"<br />
+"16, 20, 20, 24, 0, 0, 20, 25, 10, 20, 20"<br />
+"254"<br />
+"255"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_32"><em><span class="field">pdPolyArrX_32</span> (1042)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_32">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrX_32">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrX_32">Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 4 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_24"><em><span class="field">pdPolyArrX_24</span> (1140)</em> &nbsp; <small class="label">PD_ARR_TRIO_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_24">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrX_24">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrX_24">Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 3 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_16"><em><span class="field">pdPolyArrX_16</span> (1141)</em> &nbsp; <small class="label">PD_ARR_WORD_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_16">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrX_16">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrX_16">Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 2 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_08"><em><span class="field">pdPolyArrX_08</span> (1142)</em> &nbsp; <small class="label">PD_ARR_BYTE_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_08">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrX_08">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrX_08">Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 1 byte per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 40, 30, 20"<br />
+"10, 20, -10, -20, -25"<br />
+"5, 10, 12, 8, 12, 9, 13, 4, 8, 10, 19"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_32"><em><span class="field">pdPolyArrY_32</span> (1043)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_32">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrY_32">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrY_32">Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 4 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_24"><em><span class="field">pdPolyArrY_24</span> (1143)</em> &nbsp; <small class="label">PD_ARR_TRIO_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_24">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrY_24">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrY_24">Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 3 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_16"><em><span class="field">pdPolyArrY_16</span> (1144)</em> &nbsp; <small class="label">PD_ARR_WORD_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_16">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrY_16">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrY_16">Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 2 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_08"><em><span class="field">pdPolyArrY_08</span> (1145)</em> &nbsp; <small class="label">PD_ARR_BYTE_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_08">Custom Shape or Polygon</a>, <a href="124.htm#pdPolyArrY_08">Polyline (also Bezier and B-Spline curve)</a>, <a href="130.htm#pdPolyArrY_08">Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 1 byte per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 10, 35, 20"<br />
+"20, 20, -20, -20, 10"<br />
+"-5, -9, -2, -8, -12, 1, 3, 2, -2, 1, 5"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdWrapType"><em><span class="field">pdWrapType</span> (1066)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="103.htm#pdWrapType">Text Area</a>, <a href="106.htm#pdWrapType">Rich Text Area</a>, <a href="130.htm#pdWrapType">Text Path</a></small></p>
+<p>
+Text wrap method.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Soft Wrap Enabled<br />
+1 = Soft Wrap Disabled - trim text after any character<br />
+2 = Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) but not after a hyphen<br />
+3 = Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) or after a hyphen<br />
+4 = Soft Wrap Disabled - trim text after any character and add a horizontal ellipsis<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[10];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Text Fragment Outline Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Text Fragment Body Style");<br />
+obj[2] = pdObjAdd(pd, 0, "Text Fragment Shadow Style");<br />
+obj[3] = pdObjAdd(pd, 0, "Text Fragment Outline");<br />
+obj[4] = pdObjAdd(pd, 0, "Text Fragment Shadow");<br />
+obj[5] = pdObjAdd(pd, 0, "Text Fragment Typography");<br />
+obj[6] = pdObjAdd(pd, 0, "Text Fragment Layout");<br />
+obj[7] = pdObjAdd(pd, 0, "Text Fragment Ruler");<br />
+obj[8] = pdObjAdd(pd, 0, "Text Fragment");<br />
+<strong>obj[9] = pdObjAdd(pd, 0, "RichTextPath");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);<br />
+pdPropAdd(pd, obj[2], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);<br />
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);<br />
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);<br />
+pdPropAdd(pd, obj[5], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDw, "70", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDh, "70", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+pdPropAdd(pd, obj[6], pdSpacingRow, "10", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdSpacingLetter, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdKerning, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[6], pdAlign, "3", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 7 */</span><br />
+pdPropAdd(pd, obj[7], pdTabStopPositions, "40, 80, 150, 220", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 8 */</span><br />
+pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[5]);<br />
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[6]);<br />
+pdLinkAdd(pd, obj[8], pdTextRulerHorPtr, obj[7]);<br />
+pdPropAdd(pd, obj[8], pdTextString_08, "This is a text fragment", PD_ASC);<br />
+<br />
+<span class="codecomment">/* Properties for object 9 */</span><br />
+<strong>pdLinkAdd(pd, obj[9], pdTextFragmentPtr, obj[8]);<br />
+pdPropAdd(pd, obj[9], pdPolyArrI, "17, 20, 25, 20, 20", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], pdPolyArrX_32, "0, 400, 300, 200, -60", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[9], pdPolyArrY_32, "0, 100, 350, 200, 100", PD_ARR_LONG_SIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[9], 0, 100, 100, 0, 0, 0, pdDrawRichTextPath, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Text Fragment Outline Style");<br />
+local obj_1 = o("Text Fragment Body Style");<br />
+local obj_2 = o("Text Fragment Shadow Style");<br />
+local obj_3 = o("Text Fragment Outline");<br />
+local obj_4 = o("Text Fragment Shadow");<br />
+local obj_5 = o("Text Fragment Typography");<br />
+local obj_6 = o("Text Fragment Layout");<br />
+local obj_7 = o("Text Fragment Ruler");<br />
+local obj_8 = o("Text Fragment");<br />
+local obj_9 = o("RichTextPath");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_2 + s(pdRGBT, "80808078");<br />
+obj_2 + s(pdEP, "030A");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_0);<br />
+obj_3 + i(pdLineThickness, 240);<br />
+<br />
+obj_4 + l(pdStylePtr, obj_2);<br />
+obj_4 + i(pdShadowDx, 5);<br />
+obj_4 + i(pdShadowDy, 5);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_1);<br />
+obj_5 + l(pdShadowPtr, obj_4);<br />
+obj_5 + l(pdOutlinePtr, obj_3);<br />
+obj_5 + i(pdFontIndex, 0);<br />
+obj_5 + i(pdFontDw, 70);<br />
+obj_5 + i(pdFontDh, 70);<br />
+<br />
+obj_6 + i(pdSpacingRow, 10);<br />
+obj_6 + i(pdSpacingLetter, 5);<br />
+obj_6 + i(pdKerning, 1);<br />
+obj_6 + i(pdAlign, 3);<br />
+<br />
+obj_7 + p(pdTabStopPositions, "40, 80, 150, 220");<br />
+obj_7 + p(pdTabStopFlags, "1, 0, 0, 2");<br />
+<br />
+obj_8 + l(pdTypographyPtr, obj_5);<br />
+obj_8 + l(pdTextLayoutPtr, obj_6);<br />
+obj_8 + l(pdTextRulerHorPtr, obj_7);<br />
+obj_8 + s(pdTextString_08, "This is a text fragment");<br />
+<br />
+obj_9 + l(pdTextFragmentPtr, obj_8);<br />
+obj_9 + p(pdPolyArrI, "17, 20, 25, 20, 20");<br />
+obj_9 + p(pdPolyArrX_32, "0, 400, 300, 200, -60");<br />
+obj_9 + p(pdPolyArrY_32, "0, 100, 350, 200, 100");<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_9.Pin(0, 100, 100, pdDrawRichTextPath);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

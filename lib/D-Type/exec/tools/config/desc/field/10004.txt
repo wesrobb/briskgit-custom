@@ -1,0 +1,1 @@
+Name of the control. Controls representing different variables or features should have different names. Controls representing the same variable or feature (e.g. a group of radio buttons) should have the same name.

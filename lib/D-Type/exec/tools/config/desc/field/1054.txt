@@ -1,0 +1,8 @@
+Pattern Group.
+
+{strong}Supported values:{/strong}
+
+1 = Photo Shades
+2 = Fine Shades
+3 = Stripes
+4 = Ornamental

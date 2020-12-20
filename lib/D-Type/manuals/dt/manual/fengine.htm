@@ -1,0 +1,128 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Font Engine Overview</h1>
+
+<p>D-Type Font Engine is by far the most complex component of D-Type Engine. Its function is to manage fonts and font instances, provide applications with font information in a manner that is independent of the underlying font format, and render glyphs within the fonts to the output surface of the application's choice. In this process, colors and, optionally, advanced style effects are applied.</p>
+
+
+<p>D-Type Font Engine consists of the following main components:</p>
+
+<ul>
+<li>Font Catalog</li>
+<li>Typesetter</li>
+<li>Rasterizer</li>
+<li>Output</li>
+<li>Pattern Catalog</li>
+</ul>
+
+
+<!--
+<p class="center">
+<img src="../images/img2.gif" width="575" height="669" />
+</p>
+-->
+
+
+<h2>How It Works</h2>
+
+
+<p>The visual appearance of any glyph rendered by D-Type Font Engine depends on several parameters. The most important ones are described below:</p>
+
+<ul>
+
+<li><p><strong>Character code (Unicode)</strong> or, alternatively, font dependent <strong>glyph index</strong> uniquely identifies the glyph to be rendered. Applications can use <a href="../funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a> to draw glyphs by their Unicode character code or <a href="../funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a> to draw glyphs by their font dependent glyph index.</p></li>
+
+<li><p><strong>Style</strong> is a set of style properties that are applied to the glyph during rendering. These include: color, transparency and various special effects such as shadow, glow, pattern fill, emboss, blur, emboldening etc. D-Type Engine uses the Output object to hold information about the current style. See the <a href="../funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> and <a href="../funcs/dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a> functions for details.</p></li>
+
+<li><p><strong>Type</strong> is a set of typographical properties that are applied to the glyph during rendering. These include: font, transformation (size, skew, rotation, etc.) and outline appearance (normal, outlined, dilated). D-Type Engine uses the Typesetter object to hold information about the current type. See the <a href="../funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a>, <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a>, dtTypesetterSetTypeAttribsTransformed and <a href="../funcs/dtTypesetterSetTypeEffectsTransformed.htm">dtTypesetterSetTypeEffectsTransformed</a> functions for details.</p></li>
+
+<li><p><strong>Position</strong> defines the placement of the glyph on the screen or other output surface. This is simply the (X, Y) coordinate of the glyph's origin point. Two identical glyphs that have a different location on the screen might have slightly different bitmap images due to different sub-pixel offsets. Positioning can be controlled by calling the <a href="../funcs/dtTypesetterSetPositioning.htm">dtTypesetterSetPositioning</a> and <a href="../funcs/dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> function.</p></li>
+
+<li><p><strong>Hinting</strong> has impact on how the glyph's outline interacts with the pixel grid during the rasterization process. Different hinting modes will produce different bitmap images. The desired hinting mode can be specified by calling the <a href="../funcs/dtTypesetterSetHinting.htm">dtTypesetterSetHinting</a> function.</p></li>
+
+</ul>
+
+
+<h2>Life Cycle</h2>
+
+
+<p>A typical life cycle of an application that relies on D-Type Font Engine is briefly summarized in the following table:</p>
+
+
+<table class="table_data">
+
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td>1. Initialize D-Type Engine</td>
+<td><a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a>
+</td>
+</tr>
+
+<tr>
+<td>2. Add (additional) font(s) to the Font Catalog</td>
+<td><a href="../funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a>, <a href="../funcs/dtFontAddViaStreams.htm">dtFontAddViaStreams</a></td>
+</tr>
+
+<tr>
+<td>3. Obtain font information (optional)</td>
+<td><a href="../funcs/dtFontGetSysStatus.htm">dtFontGetSysStatus</a>, <a href="../funcs/dtFontGetMetrics.htm">dtFontGetMetrics</a>, <a href="../funcs/dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a>, <a href="../funcs/dtFontGetStringValue.htm">dtFontGetStringValue</a>, <a href="../funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a></td>
+</tr>
+
+<tr>
+<td>4. Add additional font instances to the Font Catalog (optional for Multiple-Master fonts)</td>
+<td><a href="../funcs/dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a></td>
+</tr>
+
+<tr>
+<td>5. Set destination surface (D-Type's Memory Surface or Windows Device Context) and its clipping region to the Output</td>
+<td><a href="../funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>, <a href="../funcs/dtOutputSetAsHDC.htm">dtOutputSetAsHDC</a></td>
+</tr>
+
+<tr>
+<td>6. Select a style to the Output.</td>
+<td><a href="../funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> or <a href="../funcs/dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a></td>
+</tr>
+
+<tr>
+<td>7. Select a type to the Typesetter.</td>
+<td><a href="../funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> or <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a></td>
+</tr>
+
+<tr>
+<td>8. Draw glyphs or text</td>
+<td><a href="../funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="../funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a><br /><a href="../funcsx/dtxGlyphsDoOutput.htm">dtxGlyphsDoOutput</a>, <a href="../funcsx/dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>, <a href="../funcsx/dtxGlyphsDoOutput_Arc.htm">dtxGlyphsDoOutput_Arc</a>, <a href="../funcsx/dtxGlyphsDoOutput_Arc.htm">dtxCharsDoOutput_Arc</a></td>
+</tr>
+
+<tr>
+<td>9. Deinitialize D-Type Engine</td>
+<td><a href="../funcs/dtEngineExt.htm">dtEngineExt</a></td>
+</tr>
+
+</table>
+
+
+<p>Please note that the above table only identifies the most important steps and functions. Your application might need additional steps and/or functions.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

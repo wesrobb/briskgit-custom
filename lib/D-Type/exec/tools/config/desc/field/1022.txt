@@ -1,0 +1,7 @@
+Amount of spacing to be added after a text line, in document units.
+
+{strong}Sample values:{/strong}
+
+10 = spacing of 10 document units
+15 = spacing of 15 document units
+-5 = spacing of -5 document units

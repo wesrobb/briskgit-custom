@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Font Driver Classes</h1>
+
+
+<table class="table_data">
+
+<tr align="center">
+<th>&nbsp;</th>
+<th width="18%">&nbsp;CDTFontDType&nbsp;</th>
+<th width="18%">&nbsp;CDTFontOpenTypeTtf&nbsp;</th>
+<th width="18%">&nbsp;CDTFontOpenTypeCff&nbsp;</th>
+<th width="18%">&nbsp;CDTFontType1&nbsp;</th>
+<th width="18%">&nbsp;CDTFontType3&nbsp;</th>
+</tr>
+
+<tr align="center"><td colspan="6"><strong>General</strong></td></tr>
+
+
+<tr align="center">
+<th>Description</th>
+<td align="left" valign="top">A font driver class to handle single-master and multiple-master fonts and font collections in D-Type format.</td>
+<td align="left" valign="top">A font driver class to handle single-master TrueType fonts and font collections and/or single-master OpenType fonts and font collections with TrueType outlines.</td>
+<td align="left" valign="top">A font driver class to handle single-master OpenType fonts (and font collections if they become available) with Type 2/CFF outlines as well as Bare CFF fonts.</td>
+<td align="left" valign="top">A font driver class to handle single-master and multiple-master fonts in Adobe Type 1 format.</td>
+<td align="left" valign="top">A font driver class to provide limited support for single-master Type 3 PostScript fonts. <strong>Only Type 3 fonts that obey <a href="psfonts.htm">D-Type's strict parsing rules</a> are supported.</strong></td>
+</tr>
+
+
+<tr align="center">
+<th>Class Identifier</th>
+<td>DTF</td>
+<td>TTF</td>
+<td>CFF</td>
+<td>PFB</td>
+<td>PSF</td>
+</tr>
+
+
+<tr align="center"><td colspan="6"><strong>Main Input File</strong></td></tr>
+
+
+<tr align="center">
+<th>File</th>
+<td>D-Type Font File</td>
+<td>TrueType File, TrueType Collection, or OpenType File with TrueType Outlines</td>
+<td>OpenType File with Type 2/CFF Outlines or Bare CFF</td>
+<td>Adobe Type 1 File (Printer Font Binary or Printer Font ASCII)</td>
+<td>Adobe Type 3 PostScript File (ASCII File)</td>
+</tr>
+
+<tr align="center">
+<th>Usual Extension</th>
+<td>.dtf</td>
+<td>.ttf or .ttc</td>
+<td>.otf or .otc<br />and .cff</td>
+<td>.pfb or .pfa</td>
+<td>.ps</td>
+</tr>
+
+<tr align="center">
+<th>Data Recognized</th>
+<td>All</td>
+<td align="left" valign="top">Global Values<br />Global Metrics<br />Glyph Outlines<br />Glyph Metrics<br />Char Maps<br />Kerning<br />Name Strings<br />Glyph Substitutions</td>
+<td align="left" valign="top">Global Values<br />Global Metrics<br />Glyph Outlines<br />Glyph Metrics<br />Char Maps<br />Kerning (only in OpenType)<br />Name Strings<br />Glyph Substitutions (only in OpenType)</td>
+<td align="left" valign="top">Global Values<br />Global Metrics<br />Glyph Outlines<br />Glyph Metrics<br />Char Maps<br />Name Strings</td>
+<td align="left" valign="top">Global Values<br />Global Metrics<br />Glyph Outlines<br />Glyph Metrics<br />Char Maps<br />Name Strings</td>
+</tr>
+
+
+<tr align="center"><td colspan="6"><strong>First Optional File</strong></td></tr>
+
+<tr align="center">
+<th>File</th>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>Adobe Font Metrics File</td>
+<td>Adobe Font Metrics File</td>
+</tr>
+
+
+<tr align="center">
+<th>Usual Extension</th>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>.afm</td>
+<td>.afm</td>
+</tr>
+
+<tr align="center">
+<th>Data Recognized</th>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>Kerning</td>
+<td>Kerning</td>
+</tr>
+
+
+<tr align="center"><td colspan="6"><strong>Derived Legacy Font Factory Instances</strong></td></tr>
+
+<tr align="center">
+<th><a href="factories.htm">font_format_id</a></th>
+<td>0</td>
+<td>1<br />3</td>
+<td>6<br />5<br />14<br />15<br />16</td>
+<td>2<br />7<br />8</td>
+<td>11<br />12</td>
+</tr>
+
+
+</table>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

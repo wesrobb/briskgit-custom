@@ -1,0 +1,685 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Standard Engine Structures</h1>
+
+<p>In addition to the <a href="types.htm">basic data types</a>, D-Type Standard Engine also defines and utilizes the following structure types:</p>
+
+<h2><strong id="DT_POINT_FLOAT">DT_POINT_FLOAT</strong></h2>
+
+<p>This structure type describes a single point using float-point coordinates.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Point */</span>&nbsp;
+typedef struct
+{
+    DT_FLOAT x, y;
+
+} DT_POINT_FLOAT;
+</pre>
+</div>
+
+
+<h2><strong id="DT_RECT_SWORD">DT_RECT_SWORD</strong></h2>
+
+<p>This structure type describers a rectangle whose coordinates are expressed as 16-bit signed integers.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Rectangle (coordinates expressed as 16-bit signed integers) */</span>&nbsp;
+typedef struct
+{
+    DT_SWORD xmn, ymn, xmx, ymx;
+
+} DT_RECT_SWORD;
+</pre>
+</div>
+
+<p>Here, <em>xmn</em> and <em>ymn</em> represent the minimum (x,&nbsp;y) coordinate of the rectangle (or its top left corner) while
+<em>xmx</em> and <em>ymx</em> represent the maximum (x,&nbsp;y) coordinate of the rectangle (or its bottom right corner).</p>
+
+
+<h2><strong id="DT_RECT_SLONG">DT_RECT_SLONG</strong></h2>
+
+<p>This structure type describers a rectangle whose coordinates are expressed as 32-bit signed integers.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Rectangle (coordinates expressed as 32-bit signed integers) */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG xmn, ymn, xmx, ymx;
+
+} DT_RECT_SLONG;
+</pre>
+</div>
+
+<p>Here, <em>xmn</em> and <em>ymn</em> represent the minimum (x,&nbsp;y) coordinate of the rectangle (or its top left corner) while
+<em>xmx</em> and <em>ymx</em> represent the maximum (x,&nbsp;y) coordinate of the rectangle (or its bottom right corner).</p>
+
+
+<h2><strong id="DT_ADVANCE">DT_ADVANCE</strong></h2>
+
+<p>This structure type contains the horizontal and vertical origin, advance width and advance height of a glyph/character in font units.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's glyph/char origins and advances */</span>&nbsp;
+typedef struct
+{
+    DT_SWORD x, y; <span class="codecomment">/* horizontal and vertical origin in font units */</span>&nbsp;
+    DT_UWORD w, h; <span class="codecomment">/* advance width and height in font units */</span>&nbsp;
+
+} DT_ADVANCE;
+</pre>
+</div>
+
+<p>Here, <em>x</em> and <em>y</em> represent the horizontal and vertical origin of the glyph/character while <em>w</em> and <em>h</em> represent its advance width and height.</p>
+
+
+<h2><strong id="DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</strong></h2>
+
+<p>This structure type provides style properties that are applied when D-Type renders an output primitive (glyph, character, shape, bitmap) to the output surface. The structure is utilized by the <a href="../funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> and <a href="../funcs/dtOutputGetStyleAttribs.htm">dtOutputGetStyleAttribs</a> functions.</p>
+
+<p>The <a href="structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Style */</span>&nbsp;
+typedef struct
+{
+    DT_UBYTE ep[2];          <span class="codecomment">/* Effect and effect parameter */</span>&nbsp;
+    DT_UBYTE rgbt[4];        <span class="codecomment">/* Color (Red, Green, Blue) and Transparency */</span>&nbsp;
+    DT_SWORD reserved;       <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    const DT_UBYTE* palette; <span class="codecomment">/* Either DV_NULL or a valid pointer to a 256-element array */</span>&nbsp;
+
+} DT_STYLE_ATTRIBS;
+</pre>
+</div>
+
+<p>Here, <em>ep</em> represents <em>EffectID</em> and <em>EffectParameter</em>. See <a href="styles.htm#STYLE_ATTRIBS">Appendix &mdash; Style Effects</a> for a list of supported values. The <em>rgbt</em> parameter is simply the intensity of Red (<em>R</em>), Green (<em>G</em>) and Blue (<em>B</em>) and <em>Transparency</em>.</p>
+
+<ul>
+<li><p><em>R</em> &mdash; red component (R). Must be between 0 and 255.</p></li>
+<li><p><em>G</em> &mdash; green component (R). Must be between 0 and 255.</p></li>
+<li><p><em>B</em> &mdash; blue component (R). Must be between 0 and 255.</p></li>
+<li><p><em>Transparency</em> &mdash; An integer in the 0-255 range, where 0 indicates 0% transparency and 255 indicates 100% transparency. For&nbsp;example:</p>
+<p>0 = not transparent &mdash; completely visible<br />
+127 = 50% transparent<br />
+250 = 98% transparent &mdash; hardly visible<br />
+255 = 100% transparent &mdash; invisible</p></li>
+</ul>
+
+<p>The <em>reserved</em> parameter is reserved for future use and must be set to 0.</p>
+
+<p>The <em>palette</em> parameter must be either DV_NULL or a pointer to an array containing exactly 256 elements. When rendering in true RGB mode, which is highly recommended, set this parameter to DV_NULL. When rendering in indexed color mode, which is an option when the output device is not capable of displaying RGB colors, the <em>R</em>, <em>G</em>, <em>B</em> and <em>T</em> parameters will be ignored and the array pointed by <em>palette</em> will be used instead. In that case, <em>palette</em> must be a valid pointer to an array containing exactly 256 elements. The array must exist at the address pointed by <em>palette</em> as long as the style structure is in use by D-Type Engine (in other words the array can be discarded or freed only after the style has been unloaded from D-Type Engine or replaced by another style). Each element in this array represents a color index of the corresponding gray-level. This provides rudimentary support for rendering in indexed color mode (with limited anti-aliasing and no alpha-blending capabilities). The interpretation of the supplied color indices is up to your application.</p>
+
+
+<h2><strong id="DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</strong></h2>
+
+<p>This structure type has the same purpose as <a href="structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> but is more sophisticated. It allows several style effects to be combined and applied to an output primitive (glyph, character, shape, bitmap) at the same time. It also allows certain style effects to use multiple effect parameters (e.g. Gaussian blur with a different amount of blur in the horizontal and vertical direction). The structure is utilized by the <a href="../funcs/dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a> and <a href="../funcs/dtOutputGetStyleEffects.htm">dtOutputGetStyleEffects</a> functions.</p>
+
+<p>The <a href="structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Style */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG effects_len;     <span class="codecomment">/* Number of effect values */</span>&nbsp;
+    DT_SLONG effects_arr[64]; <span class="codecomment">/* Array of effect values */</span>&nbsp;
+    DT_UBYTE rgbt[4];         <span class="codecomment">/* Color (Red, Green, Blue) and Transparency */</span>&nbsp;
+    const DT_UBYTE* palette;  <span class="codecomment">/* Either DV_NULL or a valid pointer to a 256-element array */</span>&nbsp;
+
+} DT_STYLE_EFFECTS;
+</pre>
+</div>
+
+<p>Here, <em>effects_len</em> is the actual number of elements in the <em>effects_arr</em> array and must not exceed 64. The <em>effects_arr</em> array is an array that contains one or more effect values. The maximum number of values this array can hold is 64. The array begins with the first <em>EffectID</em>, which is followed by the first set of <em>n</em> <em>EffectParameter</em> values. The array continues with the second <em>EffectID</em>, which is followed by the second set of <em>n</em> <em>EffectParameter</em> values. The array continues with the third <em>EffectID</em>, which is followed by the third set of <em>n</em> <em>EffectParameter</em> values. And so on. Once again, the total number of <em>EffectID</em> and <em>EffectParameter</em> values in the array cannot exceed 64.</p>
+
+<p>The number of <em>EffectParameter</em> values in each set (<em>n</em>) depends on the actual <em>EffectID</em> in that set. Some <em>EffectID</em> values have no parameters, while others have 1 or 2 parameters. See <a href="styles.htm#STYLE_EFFECTS">Appendix &mdash; Style Effects</a> for details.</p>
+
+<p>The <em>rgbt</em> parameter is simply the intensity of Red (<em>R</em>), Green (<em>G</em>) and Blue (<em>B</em>) and <em>Transparency</em>.</p>
+
+<ul>
+<li><p><em>R</em> &mdash; red component (R). Must be between 0 and 255.</p></li>
+<li><p><em>G</em> &mdash; green component (R). Must be between 0 and 255.</p></li>
+<li><p><em>B</em> &mdash; blue component (R). Must be between 0 and 255.</p></li>
+<li><p><em>Transparency</em> &mdash; An integer in the 0-255 range, where 0 indicates 0% transparency and 255 indicates 100% transparency. For&nbsp;example:</p>
+<p>0 = not transparent &mdash; completely visible<br />
+127 = 50% transparent<br />
+250 = 98% transparent &mdash; hardly visible<br />
+255 = 100% transparent &mdash; invisible</p></li>
+</ul>
+
+<p>The <em>palette</em> parameter must be either DV_NULL or a pointer to an array containing exactly 256 elements. When rendering in true RGB mode, which is highly recommended, set this parameter to DV_NULL. When rendering in indexed color mode, which is an option when the output device is not capable of displaying RGB colors, the <em>R</em>, <em>G</em>, <em>B</em> and <em>T</em> parameters will be ignored and the array pointed by <em>palette</em> will be used instead. In that case, <em>palette</em> must be a valid pointer to an array containing exactly 256 elements. The array must exist at the address pointed by <em>palette</em> as long as the style structure is in use by D-Type Engine (in other words the array can be discarded or freed only after the style has been unloaded from D-Type Engine or replaced by another style). Each element in this array represents a color index of the corresponding gray-level. This provides rudimentary support for rendering in indexed color mode (with limited anti-aliasing and no alpha-blending capabilities). The interpretation of the supplied color indices is up to your application.</p>
+
+
+<h2><strong id="DT_LINEDECOR">DT_LINEDECOR</strong></h2>
+
+<p>This structure type contains various line decoration parameters supported by D-Type that can be applied to output primitives (glyphs, characters, and shapes).</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Line Decoration */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L thickness; <span class="codecomment">/* 0=normal, &gt;0=outline, &lt;0=expansion */</span>&nbsp;
+    DT_SRAST_L segment;   <span class="codecomment">/* Segment len - used for dashing when thickness&lt;&gt;0 */</span>&nbsp;
+    DT_SRAST_L shift;     <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    DT_UWORD dash_size;   <span class="codecomment">/* Dash size as a percentage of the segment len (0=default, 65535=100%) */</span>&nbsp;
+    DT_UBYTE flags;       <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    DT_ID_UBYTE scale_id; <span class="codecomment">/* Multiplier ID for thickness, segment and shift (0=multiply by 256, 1=multiply by 100) */</span>&nbsp;
+
+} DT_LINEDECOR;
+</pre>
+</div>
+
+<p>This structure consists of the following components:</p>
+
+<ul>
+<li><p><em>thickness</em> &mdash; When positive, this parameter represents the amount of outline thickness in pixels or fractions of pixels (as defined by the <em>scale_id</em> parameter). In this case the output primitive will be rendered outlined. When negative, this parameter represents the amount of outline expansion in pixels or fractions of pixels (as defined by the <em>scale_id</em> parameter). In this case the output primitive will be rendered dilated. If zero, the output primitive will be rendered in standard mode (without any outline effects).</p></li>
+
+<li><p><em>segment</em> &mdash; This parameter is used in conjunction with the <em>thickness</em> parameter. More precisely, when <em>thickness</em> is non-zero, then <em>segment</em> can be used to indicate that the outline should be subdivided into a number of smaller segments (each consisting of a dash and a gap) so that the overall appearance of the output primitive is dashed.</p>
+
+<p>The value of the <em>segment</em> parameter indicates the desired length of a single segment, in pixels. Each segment consists of a dash and a gap. By default, the dash takes approximately two thirds of the segment's length, while the gap uses the remaining one third. Therefore, if <em>segment</em> is set to 30 pixels, then each dash will be approximately 20 pixels in length while each gap will be approximately 10 pixels in length. However, this default can be changed by setting the <em>dash_size</em> parameter accordingly.</p>
+
+<p>At present the <em>segment</em> parameter must be non-negative. It should be set to zero if the segments are not desired or if <em>thickness</em> is set to zero. In this case the outline will appear solid and continuous.</p></li>
+
+<li><p><em>shift</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>dash_size</em> &mdash; Dash size as a percentage of the segment len, where the value 65535 means 100%. The value 0 is special and means the default dash size. In this case, as noted above, the dash takes approximately two thirds of the segment's length, while the gap uses the remaining one third.</p></li>
+
+<li><p><em>flags</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>scale_id</em> &mdash; Multiplier ID for thickness, segment and shift. The value 0 (DV_SCALE_256) means that these values are expressed in 1/256 pixel units, the value 1 (DV_SCALE_100) means that these values are expressed in 1/100 pixel units, while the value 2 (DV_SCALE_1) means that these values are expressed in pixels. Other values are reserved for future use.</p></li>
+</ul>
+
+
+<h2><strong id="DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</strong></h2>
+
+<p>This is a complex structure type that contains information about typographical properties of a glyph or character. The structure is utilized by the dtTypesetterSetTypeAttribs and dtTypesetterGetTypeAttribs functions.</p>
+
+<p>The <a href="structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Type (typographical properties of a glyph or character) */</span>&nbsp;
+typedef struct
+{
+    DT_ID_SWORD font_index;  <span class="codecomment">/* Font index from Font Catalog */</span>&nbsp;
+    DT_SRAST_L thickness;    <span class="codecomment">/* 0=normal, &gt;0=outline, &lt;0=expansion */</span>&nbsp;
+    DT_SRAST_L segment;      <span class="codecomment">/* Used for dashing when thickness&lt;&gt;0 */</span>&nbsp;
+    DT_UBYTE reserved;       <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    DT_ID_UBYTE descriptor;  <span class="codecomment">/* 0=transformation via raw params, 1=transformation via 2x2 matrix */</span>&nbsp;
+    DT_TRANSFORM transform;
+
+} DT_TYPE_ATTRIBS;
+</pre>
+</div>
+
+<p>This structure consists of the following components:</p>
+
+<ul>
+<li><p><em>font_index</em> &mdash; Uniquely identifies a font in the Font Catalog.</p></li>
+
+<li><p><em>thickness</em> &mdash; When positive, this parameter represents the amount of outline thickness in 1/100 pixels. In this case the glyph will be rendered outlined. When negative, this parameter represents the amount of outline expansion in 1/100 pixels. In this case the glyph will be rendered dilated. If zero, the glyph will be rendered in standard mode (without any outline effects).</p></li>
+
+<li><p><em>segment</em> &mdash; This parameter is used in conjunction with the <em>thickness</em> parameter. More precisely, when <em>thickness</em> is non-zero, then <em>segment</em> can be used to indicate that the outline should be subdivided into a number of smaller segments (each consisting of a dash and a gap) so that the overall glyph appearance is dashed.</p>
+
+<p>The value of the <em>segment</em> parameter indicates the desired length of a single segment, in pixels. Each segment consists of a dash and a gap. The dash takes approximately two thirds of the segment's length, while the gap uses the remaining one third. Therefore, if <em>segment</em> is set to 30 pixels, then each dash will be approximately 20 pixels in length while each gap will be approximately 10 pixels in length.</p>
+<p>At present this parameter must be non-negative. It should be set to zero if the segments are not desired or if <em>thickness</em> is set to zero. In this case the outline will appear solid and continuous.</p></li>
+
+<li><p><em>reserved</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>descriptor</em> &mdash; Describes <em>transform</em>, which is a union that holds a transformation that is specified using raw transformation parameters or a 2x2 transformation matrix. If <em>descriptor</em> is set to 0, <em>transform</em> holds raw transformation parameters. If <em>descriptor</em> is set to 1, <em>transform</em> holds a 2x2 transformation matrix. At present, any other values are illegal.</p></li>
+
+<li><p><em>transform</em> &mdash; A union that holds a transformation to apply to a glyph or character. At present, this transformation can be specified using either raw transformation parameters or a 2x2 transformation matrix. This union is fully defined by the <a href="structs.htm#DT_TRANSFORM">DT_TRANSFORM</a> type.</p></li>
+
+</ul>
+
+
+<h2><strong id="DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</strong></h2>
+
+<p>This is a complex structure type that contains information about typographical properties of a glyph or character. The structure is utilized by the <a href="../funcs/dtTypesetterSetTypeEffects.htm">dtTypesetterSetTypeEffects</a>, <a href="../funcs/dtTypesetterSetTypeEffectsTransformed.htm">dtTypesetterSetTypeEffectsTransformed</a> and <a href="../funcs/dtTypesetterGetTypeEffects.htm">dtTypesetterGetTypeEffects</a> functions.</p>
+
+<p>This structure type has the same purpose as <a href="structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> but is more powerful.</p>
+
+<p>The <a href="structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Type (typographical properties of a glyph or character) */</span>&nbsp;
+typedef struct
+{
+    DT_ID_SWORD font_index;  <span class="codecomment">/* Font index from Font Catalog */</span>&nbsp;
+    DT_UBYTE reserved;       <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    DT_ID_UBYTE descriptor;  <span class="codecomment">/* 0=transformation via raw params, 1=transformation via 2x2 matrix */</span>&nbsp;
+    DT_TRANSFORM transform;
+    DT_LINEDECOR linedecor;
+
+} DT_TYPE_EFFECTS;
+</pre>
+</div>
+
+<p>This structure consists of the following components:</p>
+
+<ul>
+<li><p><em>font_index</em> &mdash; Uniquely identifies a font in the Font Catalog.</p></li>
+
+<li><p><em>reserved</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>descriptor</em> &mdash; Describes <em>transform</em>, which is a union that holds a transformation that is specified using raw transformation parameters or a 2x2 transformation matrix. If <em>descriptor</em> is set to 0, <em>transform</em> holds raw transformation parameters. If <em>descriptor</em> is set to 1, <em>transform</em> holds a 2x2 transformation matrix. At present, any other values are illegal.</p></li>
+
+<li><p><em>transform</em> &mdash; A union that holds a transformation to apply to a glyph or character. At present, this transformation can be specified using either raw transformation parameters or a 2x2 transformation matrix. This union is fully defined by the <a href="structs.htm#DT_TRANSFORM">DT_TRANSFORM</a> type.</p></li>
+
+<li><p><em>linedecor</em> &mdash; Line decoration parameters defined by the <a href="structs.htm#DT_LINEDECOR">DT_LINEDECOR</a> structure.</p></li>
+
+</ul>
+
+
+<h2><strong id="DT_TRANSFORM">DT_TRANSFORM</strong></h2>
+
+<p>This is a union type that describes the transformation to be applied to a glyph or character. Currently, a transformation can be specified in two different ways:</p>
+
+<ol>
+<li>using raw transformation parameters (such as size, skew, rotation)</li>
+<li>using a 2x2 transformation matrix</li>
+</ol>
+
+<p>Therefore, this union is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Transformation to be applied to a glyph or character */</span>&nbsp;
+typedef union
+{
+    DT_TRANSFORM_PARAMS params; <span class="codecomment">/* Transformation via raw params */</span>&nbsp;
+    DT_TRANSFORM_MATRIX matrix; <span class="codecomment">/* Transformation via 2x2 matrix */</span>&nbsp;
+
+} DT_TRANSFORM;
+</pre>
+</div>
+
+
+<h2><strong id="DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</strong></h2>
+
+<p>If the transformations is specified using raw transformation parameters, the following structure type is used:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Transformation specified using raw transformation parameters */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L size_h, size_v; <span class="codecomment">/* Horizontal and vertical size in pixels (or subpixels) */</span>&nbsp;
+    DT_SWORD skew_h, skew_v;   <span class="codecomment">/* Horizontal and vertical skew in degrees */</span>&nbsp;
+    DT_SWORD rotation;         <span class="codecomment">/* Rotation in degrees, must be between 0 and 360 */</span>&nbsp;
+
+} DT_TRANSFORM_PARAMS;
+</pre>
+</div>
+
+<p>This structure consists of the following components:</p>
+
+<ul>
+<li><p><em>size_h</em> &mdash; Font width in pixels (or subpixels). If negative, glyphs will be mirrored vertically. This value may be in subpixels (i.e. multiplied by an integer) to support fractional scaling in the horizontal direction. See <a href="../funcs/dtTypesetterSetSizeSubscale.htm">dtTypesetterSetSizeSubscale</a> for details.</p></li>
+<li><p><em>size_v</em> &mdash; Font height in pixels (or subpixels). If negative, glyphs will be mirrored horizontally. This value may be in subpixels (i.e. multiplied by an integer) to support fractional scaling in the vertical direction. See <a href="../funcs/dtTypesetterSetSizeSubscale.htm">dtTypesetterSetSizeSubscale</a> for details.</p></li>
+<li><p><em>skew_h</em> &mdash; Horizontal skew for the font in degrees. If the angle is positive, glyphs will be slanted to the left. If the angle is negative, glyphs will be slanted to the right. This value must be between -89 and 89 degrees. Values smaller than -45 degrees or larger than 45 degrees are not recommended and should be avoided.</p></li>
+<li><p><em>skew_v</em> &mdash; Vertical skew for the font in degrees. If the angle is positive, glyphs will be slanted downwards. If the angle is negative, glyphs will be slanted upwards. This value must be between -89 and 89 degrees. Values smaller than -45 degrees or larger than 45 degrees are not recommended and should be avoided.</p></li>
+<li><p><em>rotation</em> &mdash; Font rotation in degrees. Must be between 0 and 360.</p></li>
+</ul>
+
+
+<h2><strong id="DT_TRANSFORM_MATRIX">DT_TRANSFORM_MATRIX</strong></h2>
+
+<p>If the transformations is specified using a 2x2 transformation matrix, the following structure type is used:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Transformation specified using a 2x2 transformation matrix */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L tm_00, tm_01; <span class="codecomment">/* m[0][0] and m[0][1] multiplied by 262144 */</span>&nbsp;
+    DT_SRAST_L tm_10, tm_11; <span class="codecomment">/* m[1][0] and m[1][1] multiplied by 262144 */</span>&nbsp;
+
+} DT_TRANSFORM_MATRIX;
+</pre>
+</div>
+
+<p>Here, the <em>tm_00</em>, <em>tm_01</em>, <em>tm_10</em> and <em>tm_11</em> are transformation parameters premultiplied by 262144 and expressed as 32-bit signed integers. In other words, the transformation parameters are 14.18 signed fractional values. Mathematically:</p>
+
+<p class="center">
+<em>tm_00</em> = m[0][0] * 262144<br />
+<em>tm_01</em> = m[0][1] * 262144<br />
+<em>tm_10</em> = m[1][0] * 262144<br />
+<em>tm_11</em> = m[1][1] * 262144<br />
+</p>
+
+
+<p>As with the <a href="types.htm#DT_TM2X2">DT_TM2X2</a> data type, the transformation is described by the following formula:</p>
+
+<p class="center">
+<em>tx</em> = m[0][0] * <em>x</em> + m[0][1] * <em>y</em><br />
+<em>ty</em> = m[1][0] * <em>x</em> + m[1][1] * <em>y</em>
+</p>
+<p>Again, in these equations <em>x</em> and <em>y</em> represent the original point coordinates, <span class="nobreak">m[i][j]</span> represent floating-point transformation parameters, and <em>tx</em> and <em>ty</em> represent the final (transformed) coordinates.</p>
+
+
+<h2><strong id="DT_MDC">DT_MDC</strong></h2>
+
+<p>This structure type contains information about D-Type's memory (off-screen) surfaces.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's memory (off-screen) surface */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L w, h; <span class="codecomment">/* Surface's dimensions in pixels */</span>&nbsp;
+    DT_UBYTE* m;     <span class="codecomment">/* Pointer to surface's memory buffer */</span>&nbsp;
+    DT_SLONG l;      <span class="codecomment">/* Length of the buffer in bytes (defines pitch) */</span>&nbsp;
+
+} DT_MDC;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>w</em> &mdash; width of the memory surface in pixels. This value must be positive. <!--For best performance on all platforms, it should also be a multiple of 4.--></p></li>
+
+<li><p><em>h</em> &mdash; height of the memory surface in pixels. D-Type supports bottom-to-top and top-to-bottom surfaces. A positive <em>h</em> value indicates a bottom-to-top surface; a negative <em>h</em> value indicates a top-to-bottom surface. The value 0 is illegal.</p></li>
+
+<li><p><em>m</em> &mdash; pointer to a memory buffer that stores the surface's pixels. Depending on the format of the surface, each pixel in the buffer is represented with 8, 16, 24 or 32 bits (i.e. 1, 2, 3 or 4 <em>bytes per pixel</em>). <!--As a result, each scan-line consists of exactly <span class="nobreak"><em>bytes-per-pixel</em> * <em>w</em> bytes</span>.--></p></li>
+
+<li><p><em>l</em> &mdash; length of the memory buffer in bytes; must equal <span class="nobreak"><em>pitch</em> * abs(<em>h</em>)</span></p>
+<p>In the above equation, <em>pitch</em> is the distance, in bytes, between two memory addresses in the buffer that represent the beginning of two neighbouring pixel rows. Each pixel row consists of precisely <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes that represent the surface's pixels. Consequently, a valid <em>pitch</em> value must not be less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. A pitch value that is exactly <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is <span class="nobreak"><em>pitch</em> - <em>w</em> * <em>bytes per pixel</em></span>). Note that when rendering to the memory surface D-Type never reads or writes these extra bytes.</p>
+
+<p>Although not explicitly specified, <em>pitch</em> is an important value that has a direct impact on how D-Type renders pixels to your memory surface. To obtain the surface's pitch, D-Type divides the length of the memory buffer <em>l</em> by the absolute height of the memory surface <em>h</em>. For this reason, you must ensure that <em>l</em> is divisible by abs(<em>h</em>) and that the result of this division is not less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. If these conditions are not met, your pitch value is not properly defined and D-Type will assume the value <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> instead.</p>
+</li>
+</ul>
+
+
+<h2><strong id="DT_BMP">DT_BMP</strong></h2>
+
+<p>This structure type contains information about D-Type's 8-bit grayscale memory bitmaps.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's 8-bit grayscale memory bitmap */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L x, y; <span class="codecomment">/* Bitmap's origin point in pixels */</span>&nbsp;
+    DT_SRAST_L w, h; <span class="codecomment">/* Bitmap's dimensions in pixels */</span>&nbsp;
+    DT_UBYTE* m;     <span class="codecomment">/* Pointer to bitmap's memory buffer */</span>&nbsp;
+    DT_SLONG l;      <span class="codecomment">/* Length of the buffer in bytes */</span>&nbsp;
+
+} DT_BMP;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>m</em> &mdash; pointer to a memory buffer that stores the 8-bit grayscale bytes. In regular bitmaps (i.e. bitmaps that are neither LCD-optimized nor LCD2-optimized), each pixel is represented with 8 bits (1 byte), where 0 means black (fully opaque) and 255 means white (fully transparent). As a result, each scan-line in those bitmaps consists of exactly <em>w</em> bytes. In LCD-optimized bitmaps, each pixel is represented with 3 bytes: the first byte is for the R (or B) subpixel intensity, the second one is for the G subpixel intensity and the third one is for the B (or R) subpixel intensity. As a result, each scan-line in those bitmaps consists of exactly 3 * <em>w</em> bytes. Finally, In LCD2-optimized bitmaps, each pixel is represented with 2 bytes: the first byte is for the G subpixel intensity, the second one is for the combined BR (or RB) subpixel intensity. As a result, each scan-line in those bitmaps consists of exactly 2 * <em>w</em> bytes.</p></li>
+<li><p><em>l</em> &mdash; length of the memory buffer in bytes, calculated as follows:</p>
+
+<ul>
+<li>In regular bitmaps (i.e. bitmaps that are neither LCD-optimized nor LCD2-optimized), <em>l</em>&nbsp;=&nbsp;abs(<em>w</em>) * abs(<em>h</em>).</li>
+<li>In LCD-optimized bitmaps, <em>l</em>&nbsp;=&nbsp;3&nbsp;*&nbsp;abs(<em>w</em>) * abs(<em>h</em>).</li>
+<li>In LCD2-optimized bitmaps, <em>l</em>&nbsp;=&nbsp;2&nbsp;*&nbsp;abs(<em>w</em>) * abs(<em>h</em>)</li>
+</ul>
+</li>
+<li><p><em>w</em> &mdash; width of the bitmap in pixels. Must be a positive value unless noted otherwise (e.g. in <a href="../funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a>). For best performance on all platforms, this value should be a multiple of 4.</p></li>
+<li><p><em>h</em> &mdash; height of the bitmap in pixels. Must be a positive value unless noted otherwise (e.g. in <a href="../funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a>).</p></li>
+<li><p><em>x</em> &mdash; difference between the bitmap's left edge and its origin in pixels</p></li>
+<li><p><em>y</em> &mdash; difference between the bitmap's origin and its top edge in pixels</p></li>
+</ul>
+
+
+<h2><strong id="DT_INIT_INFO">DT_INIT_INFO</strong></h2>
+
+<p>This structure type provides additional initialization information to D-Type Engine and receives additional initialization information from D-Type Engine. For details, see the <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> function.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Additional initialization information */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG init_key;    <span class="codecomment">/* Initialization key (0=demo) */</span>&nbsp;
+    DT_SWORD init_flag;   <span class="codecomment">/* Initialization flag (0=demo) */</span>&nbsp;
+    DT_SWORD init_status; <span class="codecomment">/* Set by D-Type Engine, provides extended initialization information */</span>&nbsp;
+    DT_SWORD reserved1;   <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    DT_SWORD reserved2;   <span class="codecomment">/* Must be set to 0 */</span>&nbsp;
+    void* reserved3;      <span class="codecomment">/* Must be set to DV_NULL */</span>&nbsp;
+    void* reserved4;      <span class="codecomment">/* Must be set to DV_NULL */</span>&nbsp;
+
+} DT_INIT_INFO;
+</pre>
+</div>
+
+
+<h2><strong id="DT_STREAM_DESC">DT_STREAM_DESC</strong></h2>
+
+<p>This structure type describes a <em>stream</em>. In D-Type API, a stream is an abstract object that represent a file in some location. Presently, this location can be disk (local or network), memory (RAM) or a local or remote web server (e.g. a Web server on the Internet or local network).</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Stream structure */</span>&nbsp;
+typedef struct
+{
+    DT_ID_UBYTE stream_id;
+    DT_UBYTE flags;
+    DT_UBYTE reserved1;
+    DT_UBYTE reserved2;
+
+    union
+    {
+        <span class="codecomment">/* File Stream */</span>&nbsp;
+        const DT_CHAR* file_name; <span class="codecomment">/* used when stream_id=0 or stream_id=1, for reading and writing */</span>&nbsp;
+
+        <span class="codecomment">/* Memory Stream */</span>&nbsp;
+        struct
+        {
+            const DT_UBYTE* addr;
+            DT_SLONG len;
+
+        } mem_r;                  <span class="codecomment">/* used when stream_id=2, for reading */</span>&nbsp;
+
+        struct
+        {
+            DT_UBYTE* addr;
+            DT_SLONG len;
+
+        } mem_w;                  <span class="codecomment">/* used when stream_id=2, for writing */</span>&nbsp;
+
+        <span class="codecomment">/* URL, FURL and MURL Streams */</span>&nbsp;
+        const DT_CHAR* url;       <span class="codecomment">/* used when stream_id=3, stream_id=5 or stream_id=6, for reading only */</span>&nbsp;
+
+        <span class="codecomment">/* File-Pointer Stream */</span>&nbsp;
+        FILE* file_ptr;           <span class="codecomment">/* used when stream_id=4, for reading and writing */</span>&nbsp;
+
+    } stream_locator;
+
+} DT_STREAM_DESC;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+
+<ul>
+<li><p><em>stream_id</em> &mdash; This member identifies the stream type. At present, this member can have one of the following values:</p>
+
+<ul>
+
+<li><p><em>stream_id</em> = 0 &mdash; <strong>Default Stream Type</strong>. Same as <em>stream_id</em> = 1.</p></li>
+
+<li><p><em>stream_id</em> = 1 &mdash; <strong>File Stream</strong>. This stream type can be used for either reading or writing. In either case the <em>file_name</em> member of the <em>stream_locator</em> union is used. The <em>file_name</em> member is a valid pointer to the standard ANSI C/C++ string which contains the path of the file on disk (UTF-8 encoding is supported).</p></li>
+
+<li><p><em>stream_id</em> = 2 &mdash; <strong>Memory Stream</strong>. This stream type can be used for either reading or writing. The <em>mem_r</em> member of the <em>stream_locator</em> union is used when the stream is for reading; the <em>mem_w</em> member of the <em>stream_locator</em> union is used when the stream is for writing. Both members are defined as a structure that consists of two members: <em>addr</em> and <em>len</em>. The <em>addr</em> member is a pointer to the memory address at which the file begins while <em>len</em> is the size of the memory file, in bytes. When the stream is for reading, <em>addr</em> is defined as a pointer to <tt>const</tt>, which protects applications from accidentally writing to the memory address pointed by <em>addr</em>.</p></li>
+
+<li><p><em>stream_id</em> = 3 &mdash; <strong>URL Stream</strong>. This stream type can be used only for reading. In this case the <em>url</em> member of the <em>stream_locator</em> union is used. The <em>url</em> member is a valid pointer to the standard ANSI C/C++ string which contains the location (URL) of the file on a local or remote server (e.g. a Web server on the Internet or local network).</p>
+
+<p>At present, URL can be used to identify a single transport protocol: the HTTP protocol version 1.1. As a result, the first seven characters of the string pointed by <em>url</em> must be "<em>http://</em>". Additionally, the Web server on which the referenced file resides must support partial content delivery via the HTTP 1.1 protocol (e.g. Microsoft Internet Information Server or Apache Server). This protocol provides truly random access to files over the Internet or local network (LAN). The older HTTP 1.0 protocol is not suitable for random file access and, therefore, not supported. Also, authenticated HTTP access and HTTP redirects are presently not supported.</p>
+
+<p><u>Care must be taken when using this stream type. Accessing files that reside on a non-trusted server can have a negative or even damaging effect on your application. Also, this is inherently a slow access method. Accessing files from disk or memory is usually much faster. Ideally, use this stream type on a local network (LAN) and in a trusted environment.</u></p>
+
+<p>The URL Stream is only available on platforms that support Berkeley sockets (e.g. Linux, Mac OS X, Windows).</p>
+</li>
+
+<li><p><em>stream_id</em> = 4 &mdash; <strong>File-Pointer Stream</strong>. This stream type can be used for either reading or writing. In either case the <em>file_ptr</em> member of the <em>stream_locator</em> union is used. However, this stream type is not presently documented.</p></li>
+
+<li><p><em>stream_id</em> = 5 &mdash; <strong>FURL Stream</strong> (also called <strong>File-Backed URL Stream</strong>). Same as the URL Stream (<em>stream_id</em> = 3), except that the entire remote file is first downloaded to local disk, and then read from there. This is a noticeably faster way to read a remote file compared to the URL Stream.</p>
+
+<p>The <em>url</em> member is a valid pointer to the standard ANSI C/C++ string which contains the path prefix for the local file to be created (relative to the current working directory), followed by the '~' character, followed by the location (URL) of the file on a local or remote server (e.g. a Web server on the Internet or local network). The first seven characters after '~' must be "<em>http://</em>". For example:</p>
+
+<p class="center">
+system/tmp/www_~http://www.remotefontserver.com/config/dtype.inf
+</p>
+</li>
+
+<li><p><em>stream_id</em> = 6 &mdash; <strong>MURL Stream</strong> (also called <strong>Memory-Backed URL Stream</strong>). Same as the URL Stream (<em>stream_id</em> = 3), except that the entire remote file is first downloaded to memory, and then read from there. This is the fastest way to read a remote file, however it requires the most memory.</p>
+
+<p>The <em>url</em> member is a valid pointer to the standard ANSI C/C++ string which contains the location (URL) of the file on a local or remote server (e.g. a Web server on the Internet or local network). The first seven characters of the string pointed by <em>url</em> must be "<em>http://</em>".</p>
+</li>
+
+</ul>
+</li>
+
+<li><p><em>flags</em> &mdash; Must be set to 0.</p></li>
+
+<li><p><em>reserved1</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>reserved2</em> &mdash; Reserved for future use. Must be set to 0.</p></li>
+
+<li><p><em>stream_locator</em> &mdash; This is a union that supplies the actual location of the stream. Depending on the value of the <em>stream_id</em> member variable, different union members are used. See above for details.</p></li>
+
+</ul>
+
+
+<h3>Stream Macros</h3>
+
+<p>Rather than setting the members of the <a href="structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure one by one, applications can use the following stream macros to easily create streams that represent files on disk, files in memory (RAM) or files on a local or remote web server:</p>
+
+<h4 id="DT_STREAM_FILE">DT_STREAM_FILE(sd, _file_name)</h4>
+
+<p>This macros declares the <em>sd</em> variable as a stream that represent a file on disk. The path of the file is <em>_file_name</em>. This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=1;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.file_name=_file_name;
+</pre>
+</div>
+
+
+<h4 id="DT_STREAM_MEMORY">DT_STREAM_MEMORY(sd, _mem_addr, _mem_len)</h4>
+
+<p>This macros declares the <em>sd</em> variable as a stream that represent a file in memory. The file begins at memory address <em>_mem_addr</em> and its size is <em>_mem_len</em> bytes. This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=2;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.mem_r.addr=_mem_addr;
+sd.stream_locator.mem_r.len=_mem_len;
+</pre>
+</div>
+
+
+<h4 id="DT_STREAM_URL">DT_STREAM_URL(sd, _url)</h4>
+
+<p>This macros declares the <em>sd</em> variable as a stream that represent a file on a web server. The URL of the file is <em>_url</em>. This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=3;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.url=_url;
+</pre>
+</div>
+
+
+<h4 id="DT_STREAM_FURL">DT_STREAM_FURL(sd, _url)</h4>
+
+<p>This macros declares the <em>sd</em> variable as a stream that represent a file on a web server. The URL of the file is contained within <em>_url</em> (i.e. <em>_url</em> contains the path prefix for the local file to be created relative to the current working directory, followed by the '~' character, followed by the URL of the file). This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=5;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.url=_url;
+</pre>
+</div>
+
+
+<h4 id="DT_STREAM_MURL">DT_STREAM_MURL(sd, _url)</h4>
+
+<p>This macros declares the <em>sd</em> variable as a stream that represent a file on a web server. The URL of the file is <em>_url</em>. This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=6;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.url=_url;
+</pre>
+</div>
+
+
+
+<!--
+<h4 id="DT_STREAM_FPTR">DT_STREAM_FPTR(sd, _file_ptr)</h4>
+
+<p>This macro has the same effect as the following code:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_DESC sd;
+sd.stream_id=4;
+sd.flags=0;
+sd.reserved1=0;
+sd.reserved2=0;
+sd.stream_locator.file_ptr=_file_ptr;
+</pre>
+</div>
+-->
+
+<p>For details on how to use these stream macros, see the <a href="streams.htm">How To Use D-Type Streams And Stream Macros</a> section of this manual.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

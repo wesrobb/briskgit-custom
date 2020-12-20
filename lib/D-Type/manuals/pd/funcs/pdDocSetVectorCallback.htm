@@ -1,0 +1,465 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetVectorCallback</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetVectorCallback(DT_PDDOC power_doc, DT_ULONG misc_bits, DT_SWORD (*user_vector_func)(DT_ULONG flags, DT_SRAST_L x, DT_SRAST_L y, const DT_UBYTE* instr_buffer, const DT_RECT_L* extent, DT_ID_SWORD bitmap_flag, DT_ID_UWORD layer, const DT_PD_DOCDRAW_CANVAS* canvas, void* user_param), void* user_param)</strong></div><br /><strong>Short Description:</strong> <em>Set document's vector callback function - L</em><br /><br />
+
+<p>The pdDocSetVectorCallback function registers a callback function to be called during the rasterization of vector based objects performed by <a href="pdDocDraw.htm">pdDocDraw</a>. Vector based objects are any visual PowerDoc objects that consist of one or more vectorial shapes and which D-Type Power Engine renders using D-Type Rasterizer.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>misc_bits</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_vector_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called as <a href="pdDocDraw.htm">pdDocDraw</a> performs the rasterization of vector based objects. Your function must be declared as follows:</p>
+
+<p class="center"><em>
+<a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> your_user_vector_func(<a href="../../dt/manual/types.htm#DT_ID_ULONG">DT_ID_ULONG</a> flags, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> x, <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> y, const <a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a>* instr_buffer, const <a href="../../dt/manual/structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a>* extent, <a href="../../dt/manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> bitmap_flag, <a href="../../dt/manual/types.htm#DT_ID_UWORD">DT_ID_UWORD</a> layer, <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a>* canvas, void* user_param)
+</em></p>
+
+<p>where <em>your_user_vector_func</em> is the name of your own C function, <em>flags</em> represents a set of rasterization specific flags, <em>x</em> and <em>y</em> are the coordinates of the shape's origin point, <em>instr_buffer</em> is a pointer to a read-only buffer that contains a complete description of the shape to be rasterized, <em>extent</em> is a pointer to the <a href="../../dt/manual/structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure which represents an imaginary box that encloses that shape, <em>bitmap_flag</em> is a flag passed to D-Type Rasterizer, and <em>canvas</em> is a pointer to the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a> structure that provides additional information about the vector object that contains the shape to be rasterized. The <em>user_param</em> parameter is a pointer to your own data type that you will receive during the callback.</p>
+
+<p>The <em>x</em> and <em>y</em> coordinates as well as the coordinates of the imaginary box that encloses the shape are in pixels. The description of the shape to be rasterized in the <em>instr_buffer</em> is in the DV_SHAPE_BUFFER_ABSOLUTE format. This is one of the formats supported by the <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function. For details, see the description of the <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function in D-Type Standard Engine Manual.</p>
+
+<p>The <em>flags</em> parameter specifies how the shape is to be rasterized. At present, this parameter can have one of the following values:</p>
+
+<ul>
+<li>0 = rasterize shape using the default rasterization rule</li>
+<li>1 = rasterize shape using the Nonzero Winding Number (NZW) rule</li>
+<li>2 = rasterize shape using the default rasterization rule but may also reuse a previously cached bitmap to improve performance (this can happen, for example, when the body layer is rasterized directly over the shadow layer)</li>
+</ul>
+
+<p>For details on the Nonzero Winding Number rule, see the <a href="../../dt/funcs/dtRasterizerSetFillRule.htm">dtRasterizerSetFillRule</a> function in D-Type Standard Engine Manual.</p>
+
+<p>The <em>layer</em> parameter specifies which part of the vector based object the shape is associated with. At present, this parameter can have one of the following values:</p>
+
+<ul>
+<li>1 = the shadow layer</li>
+<li>2 = the body layer</li>
+<li>3 = the outline layer</li>
+<li>4 = the underline / strike-through layer</li>
+<li>5 = same as 2 but is utilized by objects that have 2 or 4 layers (e.g. Line, Polyline, Arc, Grid) and not 3 like most other vector based objects (e.g. Rectangle, Circle/Ellipse, Slice, Custom Shape or Polygon etc.)</li>
+<li>6 = same as 2 but is utilized by objects that are rendered by D-Type Direct Color Rasterizer</li>
+<li>0 = other or unknown</li>
+</ul>
+
+<p>The <em>bitmap_flag</em> parameter has the same meaning as the <em>bitmap_flag</em> parameter passed to the <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function.</p>
+
+<p>The <em>canvas</em> parameter can be used to obtain additional information about the vector based object and its context, for example its <em>Img</em> and <em>Obj</em> index, <em>Status</em>, <em>Attribs</em>, <em>Page</em> and other information stored inside the <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a> structure. This structure does not explicitly provide any information about the style characteristics of the shape to be rasterized (e.g. color, transparency), however your application can obtain this information by utilizing the <em>Img</em> and <em>Obj</em> index.</p>
+
+<p>Your function is called one or more times for each vector based object that is rendered. Exactly how many callbacks per object your function receives depends on how many layers and independent vectorial shapes there are in your object. For example, if your vector based object contains the shadow and body layer and both layers contain a single independent shape, you will receive two callbacks for this object (2 layers x 1 independent shape). The first callback will be for the shadow, the second for the body. Similarly, if your vector based object contains a single layer (e.g. only the body) with three independent shapes, you will receive three callbacks for this object (1 layer x 3 independent shapes). The callbacks are always initiated in the same order in which the vectorial shapes are rendered (i.e. increasing z-order / bottom-to-top).</p>
+
+<p>
+Vector based objects are any <a href="../objects/index.htm">visual PowerDoc objects</a> that consist of one or more vectorial shapes (i.e. shapes that are constructed using straight or curved line segments), excluding glyphs, and which D-Type Power Engine renders using D-Type Rasterizer. Theoretically, any visual PowerDoc object can trigger the pdDocSetVectorCallback callback. However, certain objects do not contain any vectorial shapes (e.g. <a href="../objects/117.htm">Pattern</a>, <a href="../objects/120.htm">Gradient</a>, <a href="../objects/121.htm">Bitmap Image</a>) and never trigger this callback. In contrast, certain objects always contain vectorial shapes and, thus, almost always trigger the pdDocSetVectorCallback callback. Examples are the <a href="../objects/111.htm">Line</a>, <a href="../objects/116.htm">Arc</a>, <a href="../objects/124.htm">Polyline (also Bezier and B-Spline curve)</a>, <a href="../objects/129.htm">Library Polyline</a>, <a href="../objects/112.htm">Rectangle</a>, <a href="../objects/113.htm">Circle/Ellipse</a>, <a href="../objects/114.htm">True Circle/Ellipse</a>, <a href="../objects/115.htm">Slice</a>, <a href="../objects/119.htm">Custom Shape or Polygon</a>, <a href="../objects/110.htm">Library Shape</a>, <a href="../objects/118.htm">Grid</a> objects. Glyphs (found in e.g. <a href="../objects/107.htm">Glyph</a>, <a href="../objects/108.htm">Char</a>, <a href="../objects/101.htm">Text Line</a>, <a href="../objects/102.htm">Text Arc</a>, <a href="../objects/130.htm">Text Path</a>, <a href="../objects/103.htm">Text Area</a>, <a href="../objects/127.htm">Text Design</a>, <a href="../objects/104.htm">Rich Text Line</a>, <a href="../objects/105.htm">Rich Text Arc</a>, <a href="../objects/131.htm">Rich Text Path</a>, <a href="../objects/106.htm">Rich Text Area</a> or <a href="../objects/128.htm">Rich Text Design</a>) do not trigger the pdDocSetVectorCallback callback (instead they trigger the <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> callback). However, certain text effects that are applied to (or added to) glyphs can trigger the pdDocSetVectorCallback callback. For example, the text underline and strike-through effects will trigger the pdDocSetVectorCallback callback because these effects are essentially vectorial shapes that are added to the glyphs. In this case, there will be one pdDocSetVectorCallback callback per glyph per independent shape. For example, 10 glyphs with the double underline effect will trigger 20 callbacks (or 10 glyphs x 2 underlines). All these callbacks will be associated with the underline / strike-through layer.
+</p>
+
+<p>
+If, during the rasterization process, the <a href="pdDocDraw.htm">pdDocDraw</a> function determines that a vector based object is completely outside the visible page area, the object will not be rasterized and, consequently, will not trigger any pdDocSetVectorCallback callbacks.
+</p>
+
+<p>
+The fact that your application received the pdDocSetVectorCallback callback is an indication that D-Type Power Engine is about to render a shape using D-Type Rasterizer. The information that is passed to your callback function via the <em>flags</em>, <em>x</em>, <em>y</em>, <em>instr_buffer</em>, <em>extent</em> and <em>bitmap_flag</em> parameters is the same information that is passed to D-Type Rasterizer. Therefore, your application can cache this data and render the shape later using D-Type Rasterizer. For details, see the description of the <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function.
+</p>
+
+<p>Your function should return one of the following values:</p>
+
+<ul>
+<li>-2 = to instruct <a href="pdDocDraw.htm">pdDocDraw</a> not to rasterize this shape;</li>
+<li>1 = to instruct <a href="pdDocDraw.htm">pdDocDraw</a> to rasterize this shape.</li>
+</ul>
+
+<p>The consequence of returning -2 is that the shape will not be rendered (leaving a gap in the output) without any effect on other shapes in the same vector based object or other vector based objects.</p>
+
+<p>Regardless of the return value, the rasterization process continues; there is no way for your callback function to immediately terminate or alter the flow of the rasterization process.</p>
+
+<p>Setting the <em>user_vector_func</em> parameter to DV_NULL when calling pdDocSetVectorCallback will permanently unregister a previously registered callback function. Once this is done, any subsequent calls to <a href="pdDocDraw.htm">pdDocDraw</a> will no longer initiate any callbacks during the rasterization of vector based objects.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_param</em></p>
+</td><td>
+<p>A void pointer to your own data type that you will receive during the callback. This pointer is passed back to your function during the callback to help you track the state of execution or provide other information useful to your application. This pointer is not accessed or modified by D-Type Engine in any way; it is simply sent back to your function as supplied. You can set this parameter to DV_NULL if you have no need for it.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+
+<h3>Note</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+<h3>Related Functions</h3>
+<p><a href="pdDocDraw.htm">pdDocDraw</a></p>
+
+
+<h3>Example</h3>
+
+<p>The following example is a modification of the <a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a> sample program that ships with D-Type Power Engine. In this example, <em>MyVectorCallbackFunc</em> is set up as the document's vector callback function. This function prints to the standard output some debug information about each shape that is about to be rasterized. At the same time this function instructs <a href="pdDocDraw.htm">pdDocDraw</a> not to rasterize shapes that are associated with PowerDoc image whose <em>Img</em> index is 3. Further down it can be seen that this image points to the object whose <em>Obj</em> index is 18. This object has one layer, body, defined via the <em>pdBodyPtr</em> link. This layer corresponds to a single vectorial shape and, therefore, <a href="pdDocDraw.htm">pdDocDraw</a> triggers a single vector callback for this vector based object. The output of the <em>MyVectorCallbackFunc</em> function confirms this.</p>
+
+<div class="box_field">
+<pre>
+#include &lt;memory.h&gt;
+#include &lt;math.h&gt;
+
+<span class="codecomment">// Main D-Type header file </span>&nbsp;
+#include "dtype.h"
+
+<span class="codecomment">// Header for this file </span>&nbsp;
+#include "engine.h"
+
+
+DT_SWORD MyVectorCallbackFunc(DT_ULONG flags, DT_SLONG x, DT_SLONG y, const DT_UBYTE* instr_buffer, const DT_RECT_SLONG* extent, DT_ID_SWORD bitmap_flag,
+DT_ID_UWORD layer, const DT_PD_DOCDRAW_CANVAS* canvas, void* user_param)
+{
+    printf("Got vector callback for Img %ld, Obj %ld (flags=%ld, bitmap_flag=%d, layer=%d, user_param=%p), x=%ld, y=%ld, extent=(%ld, %ld, %ld, %ld)\n",
+    canvas->Img, canvas->Obj, flags, bitmap_flag, layer, user_param, x, y, extent->xmn, extent->ymn, extent->xmx, extent->ymx);
+
+    if (canvas->Img == 3) return -2; <span class="codecomment">/* exclude image #3 from output -- this is Smiley's eye */</span>&nbsp;
+
+    return 1; <span class="codecomment">/* render all other images */</span>&nbsp;
+}
+
+
+<span class="codecomment">// CDTPowerEngine constructor </span>&nbsp;
+
+CDTPowerEngine::CDTPowerEngine()
+{
+    Engine = DV_NULL;
+    PowerDoc = DV_NULL;
+
+    DT_STREAM_FILE(sd, "dtype.inf");
+    if (pdEngineIniViaStream(&amp;Engine, &amp;sd, DV_NULL) == 0) return;
+    if (pdDocIni(&amp;PowerDoc, Engine) == 0) return;
+
+    InitDoc();
+
+    <span class="codecomment">/* Set document's vector callback function */</span>&nbsp;
+    pdDocSetVectorCallback(PowerDoc, 0, MyVectorCallbackFunc, DV_NULL);
+}
+
+
+<span class="codecomment">// CDTPowerEngine destructor </span>&nbsp;
+
+CDTPowerEngine::~CDTPowerEngine()
+{
+    pdDocExt(PowerDoc);
+    pdEngineExt(Engine);
+}
+
+
+<span class="codecomment">// Public methods </span>&nbsp;
+
+DT_UBYTE* CDTPowerEngine::GetMemoryImage(DT_SWORD page, DT_FLOAT zoom, DT_SLONG x, DT_SLONG y, DT_SWORD clip_w, DT_SWORD clip_h)
+{
+    DT_SLONG bytes_per_pixel = SURFACE_BPP;
+    DT_UBYTE clear_byte = 255;
+    DT_MDC dc_mem;
+
+    <span class="codecomment">// Create memory surface </span>&nbsp;
+    dc_mem.w = clip_w;
+#ifdef WIN32 <span class="codecomment">/* flip the surface vertically */</span>&nbsp;
+    dc_mem.h = clip_h;
+#else
+    dc_mem.h = -clip_h;
+#endif
+    dc_mem.l = bytes_per_pixel * clip_w * clip_h;
+    if ((dc_mem.m = (DT_UBYTE*)malloc(dc_mem.l)) == DV_NULL) return DV_NULL;
+    memset(dc_mem.m, clear_byte, dc_mem.l);
+
+    if (Engine == DV_NULL) return dc_mem.m;
+
+    pdDocSetScale(PowerDoc, zoom);
+
+    <span class="codecomment">// Draw PowerDoc page to D-Type memory surface </span>&nbsp;
+    pdDocDraw(PowerDoc, page, x, y, SURFACE_FORMAT, 0, &amp;dc_mem, DV_NULL);
+
+    return dc_mem.m;
+}
+
+
+<span class="codecomment">// Private methods </span>&nbsp;
+
+void CDTPowerEngine::InitDoc()
+{
+    <span class="codecomment">/* PART 1a: Defining objects and their properties */</span>&nbsp;
+
+    DT_ID_SLONG obj[21];
+
+    obj[0] = pdObjAdd(PowerDoc, 0, "Ellipse Outline Color");
+    obj[1] = pdObjAdd(PowerDoc, 0, "Ellipse Body Color");
+    obj[2] = pdObjAdd(PowerDoc, 0, "Ellipse Shadow Color");
+    obj[3] = pdObjAdd(PowerDoc, 0, "Ellipse Outline");
+    obj[4] = pdObjAdd(PowerDoc, 0, "Ellipse Shadow");
+    obj[5] = pdObjAdd(PowerDoc, 0, "Ellipse");
+    obj[6] = pdObjAdd(PowerDoc, 0, "Ellipse Outline Color");
+    obj[7] = pdObjAdd(PowerDoc, 0, "Ellipse Body Color");
+    obj[8] = pdObjAdd(PowerDoc, 0, "Ellipse Outline");
+    obj[9] = pdObjAdd(PowerDoc, 0, "Ellipse");
+    obj[10] = pdObjAdd(PowerDoc, 0, "Arc Color");
+    obj[11] = pdObjAdd(PowerDoc, 0, "Arc Line Width");
+    obj[12] = pdObjAdd(PowerDoc, 0, "Arc");
+    obj[13] = pdObjAdd(PowerDoc, 0, "Ellipse Outline Color");
+    obj[14] = pdObjAdd(PowerDoc, 0, "Ellipse Body Color");
+    obj[15] = pdObjAdd(PowerDoc, 0, "Ellipse Outline");
+    obj[16] = pdObjAdd(PowerDoc, 0, "Ellipse");
+    obj[17] = pdObjAdd(PowerDoc, 0, "Ellipse Body Color");
+    obj[18] = pdObjAdd(PowerDoc, 0, "Ellipse");
+    obj[19] = pdObjAdd(PowerDoc, 0, "TextLine Typography");
+    obj[20] = pdObjAdd(PowerDoc, 0, "TextLine");
+
+    <span class="codecomment">/* Properties for object 0 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[0], pdRGBT, (DT_UBYTE*)"50641400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 1 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[1], pdRGBT, (DT_UBYTE*)"FFFF0000", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 2 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[2], pdRGBT, (DT_UBYTE*)"80808078", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 3 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[3], pdStylePtr, obj[0]);
+    pdPropAdd(PowerDoc, obj[3], pdLineThickness, (DT_UBYTE*)"340", PD_WORD_UNSIGNED);
+
+    <span class="codecomment">/* Properties for object 4 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[4], pdStylePtr, obj[2]);
+    pdPropAdd(PowerDoc, obj[4], pdShadowDx, (DT_UBYTE*)"5", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[4], pdShadowDy, (DT_UBYTE*)"5", PD_WORD_SIGNED);
+
+    <span class="codecomment">/* Properties for object 5 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[5], pdDw, (DT_UBYTE*)"480", PD_LONG_SIGNED);
+    pdPropAdd(PowerDoc, obj[5], pdDh, (DT_UBYTE*)"480", PD_LONG_SIGNED);
+    pdLinkAdd(PowerDoc, obj[5], pdBodyPtr, obj[1]);
+    pdLinkAdd(PowerDoc, obj[5], pdOutlinePtr, obj[3]);
+    pdLinkAdd(PowerDoc, obj[5], pdShadowPtr, obj[4]);
+
+    <span class="codecomment">/* Properties for object 6 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[6], pdRGBT, (DT_UBYTE*)"50641400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 7 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[7], pdRGBT, (DT_UBYTE*)"FFFFFF00", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 8 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[8], pdLineThickness, (DT_UBYTE*)"340", PD_WORD_UNSIGNED);
+    pdLinkAdd(PowerDoc, obj[8], pdStylePtr, obj[6]);
+
+    <span class="codecomment">/* Properties for object 9 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[9], pdOutlinePtr, obj[8]);
+    pdLinkAdd(PowerDoc, obj[9], pdBodyPtr, obj[7]);
+    pdPropAdd(PowerDoc, obj[9], pdDw, (DT_UBYTE*)"140", PD_LONG_SIGNED);
+    pdPropAdd(PowerDoc, obj[9], pdDh, (DT_UBYTE*)"140", PD_LONG_SIGNED);
+
+    <span class="codecomment">/* Properties for object 10 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[10], pdRGBT, (DT_UBYTE*)"50641400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 11 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[11], pdStylePtr, obj[10]);
+    pdPropAdd(PowerDoc, obj[11], pdLineThickness, (DT_UBYTE*)"1700", PD_WORD_UNSIGNED);
+
+    <span class="codecomment">/* Properties for object 12 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[12], pdLinePtr, obj[11]);
+    pdPropAdd(PowerDoc, obj[12], pdAngleTheta, (DT_UBYTE*)"120", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[12], pdAngleAlpha, (DT_UBYTE*)"30", PD_WORD_UNSIGNED);
+    pdPropAdd(PowerDoc, obj[12], pdRadiusHor, (DT_UBYTE*)"160", PD_LONG_SIGNED);
+    pdPropAdd(PowerDoc, obj[12], pdRadiusVer, (DT_UBYTE*)"160", PD_LONG_SIGNED);
+
+    <span class="codecomment">/* Properties for object 13 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[13], pdRGBT, (DT_UBYTE*)"50641400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 14 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[14], pdRGBT, (DT_UBYTE*)"FFC01400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 15 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[15], pdLineThickness, (DT_UBYTE*)"240", PD_WORD_UNSIGNED);
+    pdLinkAdd(PowerDoc, obj[15], pdStylePtr, obj[13]);
+
+    <span class="codecomment">/* Properties for object 16 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[16], pdOutlinePtr, obj[15]);
+    pdLinkAdd(PowerDoc, obj[16], pdBodyPtr, obj[14]);
+    pdPropAdd(PowerDoc, obj[16], pdDh, (DT_UBYTE*)"130", PD_LONG_SIGNED);
+    pdPropAdd(PowerDoc, obj[16], pdDw, (DT_UBYTE*)"160", PD_LONG_SIGNED);
+
+    <span class="codecomment">/* Properties for object 17 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[17], pdRGBT, (DT_UBYTE*)"50641400", PD_HEX);
+
+    <span class="codecomment">/* Properties for object 18 */</span>&nbsp;
+    pdLinkAdd(PowerDoc, obj[18], pdBodyPtr, obj[17]);
+    pdPropAdd(PowerDoc, obj[18], pdDw, (DT_UBYTE*)"70", PD_LONG_SIGNED);
+    pdPropAdd(PowerDoc, obj[18], pdDh, (DT_UBYTE*)"70", PD_LONG_SIGNED);
+
+    <span class="codecomment">/* Properties for object 19 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[19], pdFontIndex, (DT_UBYTE*)"3", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[19], pdFontDw, (DT_UBYTE*)"70", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[19], pdFontDh, (DT_UBYTE*)"100", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[19], pdSkewHor, (DT_UBYTE*)"0", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[19], pdSkewVer, (DT_UBYTE*)"0", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[19], pdRotation, (DT_UBYTE*)"0", PD_WORD_SIGNED);
+    pdLinkAdd(PowerDoc, obj[19], pdBodyPtr, obj[17]);
+
+    <span class="codecomment">/* Properties for object 20 */</span>&nbsp;
+    pdPropAdd(PowerDoc, obj[20], pdAngleRotation, (DT_UBYTE*)"0", PD_WORD_SIGNED);
+    pdPropAdd(PowerDoc, obj[20], pdTextString_08, (DT_UBYTE*)"Sample PowerDoc Output", PD_ASC);
+    pdLinkAdd(PowerDoc, obj[20], pdTypographyPtr, obj[19]);
+
+
+    <span class="codecomment">/* PART 1b: Image placement */</span>&nbsp;
+
+    pdImgAdd(PowerDoc, obj[5], 0, 100, 170, 0, 0, 0, pdDrawEllipse, DV_NULL);   <span class="codecomment">/* Img 0 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[9], 0, 180, 250, 0, 0, 0, pdDrawEllipse, DV_NULL);   <span class="codecomment">/* Img 1 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[12], 0, 340, 410, 0, 0, 0, pdDrawArc, DV_NULL);      <span class="codecomment">/* Img 2 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[18], 0, 205, 260, 0, 0, 0, pdDrawEllipse, DV_NULL);  <span class="codecomment">/* Img 3 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[9], 0, 360, 250, 0, 0, 0, pdDrawEllipse, DV_NULL);   <span class="codecomment">/* Img 4 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[18], 0, 385, 260, 0, 0, 0, pdDrawEllipse, DV_NULL);  <span class="codecomment">/* Img 5 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[16], 0, 260, 340, 0, 0, 0, pdDrawEllipse, DV_NULL);  <span class="codecomment">/* Img 6 */</span>&nbsp;
+    pdImgAdd(PowerDoc, obj[20], 0, 300, 100, 0, 0, 0, pdDrawTextLine, DV_NULL); <span class="codecomment">/* Img 7 */</span>&nbsp;
+
+
+    <span class="codecomment">/* PART 2: Load additional documents from disk */</span>&nbsp;
+
+    DT_STREAM_FILE(sd1, "../../files/powerdoc/starburst-with_text.pdc");
+    pdDocAppendFromStream(PowerDoc, 0, 700, 100, &amp;sd1);
+
+    DT_STREAM_FILE(sd2, "../../files/powerdoc/tiger.pdc");
+    pdDocAppendFromStream(PowerDoc, 0, 0, 700, &amp;sd2);
+
+    DT_STREAM_FILE(sd3, "../../files/powerdoc/pie_chart.pdc");
+    pdDocAppendFromStream(PowerDoc, 0, 700, 700, &amp;sd3);
+}
+</pre>
+</div>
+
+<p><em>Output</em>:</p>
+
+<p>Note that the <em>MyVectorCallbackFunc</em> function removed PowerDoc image with <em>Img</em> index 3 from the output. So our Smiley lost one eye.</p>
+
+<p class="center">
+<img src="../images/output_01.gif" width="759" height="750" alt="" />
+</p>
+
+<p>Debug information that <em>MyVectorCallbackFunc</em> function prints to the standard output is shown below. Note that some objects do not trigger any vector callbacks. For example, object with <em>Img</em> index 7 does not trigger any vector callbacks because this is the Text Line object (as explained above this object triggers the glyph callback instead). Also, remember that vector based objects that are completely outside the visible page area may not trigger any pdDocSetVectorCallback callbacks.</p>
+
+<div class="box_field">
+<pre>
+Got vector callback for Img 0, Obj 5 (flags=0, bitmap_flag=-1, layer=1, user_param=0x0), x=2, y=2, extent=(57, 97, 337, 377)
+Got vector callback for Img 0, Obj 5 (flags=2, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(57, 97, 337, 377)
+Got vector callback for Img 0, Obj 5 (flags=0, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(57, 97, 337, 377)
+Got vector callback for Img 1, Obj 9 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(103, 144, 186, 227)
+Got vector callback for Img 1, Obj 9 (flags=0, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(103, 144, 186, 227)
+Got vector callback for Img 2, Obj 12 (flags=1, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(103, 143, 291, 331)
+Got vector callback for Img 3, Obj 18 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(118, 149, 161, 192)
+Got vector callback for Img 4, Obj 9 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(207, 144, 290, 227)
+Got vector callback for Img 4, Obj 9 (flags=0, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(207, 144, 290, 227)
+Got vector callback for Img 5, Obj 18 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(222, 149, 265, 192)
+Got vector callback for Img 6, Obj 16 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(149, 196, 244, 273)
+Got vector callback for Img 6, Obj 16 (flags=0, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(149, 196, 244, 273)
+Got vector callback for Img 8, Obj 22 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=-424, y=-77, extent=(434, 86, 723, 374)
+Got vector callback for Img 11, Obj 35 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(28, 545, 53, 578)
+Got vector callback for Img 11, Obj 35 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(50, 574, 53, 578)
+Got vector callback for Img 11, Obj 35 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(28, 548, 52, 578)
+Got vector callback for Img 11, Obj 35 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(28, 545, 53, 577)
+Got vector callback for Img 12, Obj 36 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(40, 541, 54, 576)
+Got vector callback for Img 12, Obj 36 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(51, 573, 54, 576)
+Got vector callback for Img 12, Obj 36 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(40, 541, 54, 576)
+Got vector callback for Img 12, Obj 36 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(40, 541, 54, 575)
+Got vector callback for Img 13, Obj 37 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(35, 591, 71, 604)
+Got vector callback for Img 13, Obj 37 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(68, 598, 71, 600)
+Got vector callback for Img 13, Obj 37 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(35, 591, 71, 604)
+Got vector callback for Img 13, Obj 37 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(35, 591, 70, 604)
+Got vector callback for Img 14, Obj 38 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(35, 603, 70, 621)
+Got vector callback for Img 14, Obj 38 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(66, 603, 70, 606)
+Got vector callback for Img 14, Obj 38 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(36, 604, 70, 621)
+Got vector callback for Img 14, Obj 38 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(35, 603, 69, 621)
+Got vector callback for Img 15, Obj 39 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(32, 599, 67, 613)
+Got vector callback for Img 15, Obj 39 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(64, 600, 67, 603)
+Got vector callback for Img 15, Obj 39 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(32, 599, 67, 613)
+Got vector callback for Img 15, Obj 39 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(32, 599, 66, 613)
+Got vector callback for Img 16, Obj 40 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(24, 575, 61, 593)
+Got vector callback for Img 16, Obj 40 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(58, 589, 61, 593)
+Got vector callback for Img 16, Obj 40 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(24, 576, 61, 593)
+Got vector callback for Img 16, Obj 40 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(24, 575, 60, 592)
+Got vector callback for Img 17, Obj 41 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(20, 580, 57, 596)
+Got vector callback for Img 17, Obj 41 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(53, 592, 57, 595)
+Got vector callback for Img 17, Obj 41 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(20, 581, 56, 596)
+Got vector callback for Img 17, Obj 41 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(20, 580, 55, 594)
+Got vector callback for Img 18, Obj 42 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(18, 587, 55, 600)
+Got vector callback for Img 18, Obj 42 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(52, 594, 55, 598)
+Got vector callback for Img 18, Obj 42 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(18, 587, 55, 600)
+Got vector callback for Img 18, Obj 42 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(18, 587, 54, 600)
+Got vector callback for Img 19, Obj 43 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(25, 576, 61, 598)
+Got vector callback for Img 19, Obj 43 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(58, 595, 61, 598)
+Got vector callback for Img 19, Obj 43 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(25, 578, 61, 598)
+Got vector callback for Img 19, Obj 43 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(25, 576, 61, 597)
+Got vector callback for Img 20, Obj 44 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(18, 552, 49, 581)
+Got vector callback for Img 20, Obj 44 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(47, 578, 49, 581)
+Got vector callback for Img 20, Obj 44 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(18, 555, 49, 581)
+Got vector callback for Img 20, Obj 44 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(18, 552, 49, 580)
+Got vector callback for Img 21, Obj 45 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(16, 561, 50, 585)
+Got vector callback for Img 21, Obj 45 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(47, 582, 50, 585)
+Got vector callback for Img 21, Obj 45 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(16, 563, 50, 585)
+Got vector callback for Img 21, Obj 45 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(16, 561, 49, 584)
+Got vector callback for Img 22, Obj 46 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(14, 566, 50, 588)
+Got vector callback for Img 22, Obj 46 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(47, 584, 50, 588)
+Got vector callback for Img 22, Obj 46 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(14, 568, 50, 588)
+Got vector callback for Img 22, Obj 46 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(14, 566, 49, 587)
+Got vector callback for Img 23, Obj 48 (flags=0, bitmap_flag=0, layer=2, user_param=0x0), x=0, y=0, extent=(46, 572, 305, 746)
+Got vector callback for Img 23, Obj 48 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(45, 585, 50, 598)
+Got vector callback for Img 23, Obj 48 (flags=1, bitmap_flag=0, layer=3, user_param=0x0), x=0, y=0, extent=(45, 594, 54, 612)
+... etc ...
+</pre>
+</div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>D-Type Helper Library For Platform Independent Window Display</h1>
+
+<h2>Overview</h2>
+
+<p>D-Type's helper library for platform independent window display (also known as <em>dtwindow</em>) makes is it easy to write portable windowed applications capable of displaying D-Type's memory (off-screen) 32-bpp RGB surfaces. These applications are written using a single source code base and, when compiled, run virtually identically on Windows, Linux and Macintosh. In the future support for additional platforms and memory surface formats might be added.</p>
+
+
+<p>The dtwindow library is written in C++ and features a C++ based public API (Application Programming Interface). There are currently three implementations: the Windows implementation (intended for use on Windows 95/98/NT/2000), the Unix implementation (intended for use on Linux and Mac OS X under X11) and the native Mac OS X implementation (Cocoa). All three implementations have the same public interface. This is what makes it possible to write portable windowed applications using a single source code base.</p>
+
+<p>The library consists of two classes: <strong>CDTDisplay</strong> and <strong>CDTWindow</strong>. Both are declared in <em>dtwindow.h</em>. Their public interface looks as follows:</p>
+
+<p><strong>CDTDisplay</strong></p>
+
+<div class="box_field">
+<pre>
+class CDTDisplay
+{
+public: <span class="codecomment">// Constructors and destructors </span>&nbsp;
+
+    CDTDisplay(DT_ULONG flags);
+    virtual ~CDTDisplay();
+
+public: <span class="codecomment">// Public methods </span>&nbsp;
+
+    void EventLoop();
+};
+</pre>
+</div>
+
+<p><strong>CDTWindow</strong></p>
+
+<div class="box_field">
+<pre>
+class CDTWindow
+{
+public: <span class="codecomment">// Constructors and destructors </span>&nbsp;
+
+    CDTWindow(CDTDisplay* display);
+    CDTWindow(CDTDisplay* display, const DT_CHAR* title, DT_SLONG w, DT_SLONG h, DT_ULONG flags);
+    virtual ~CDTWindow();
+
+public: <span class="codecomment">// Public methods </span>&nbsp;
+
+    DT_SWORD Open(const DT_CHAR* title, DT_SLONG w, DT_SLONG h, DT_ULONG flags);
+    void Close();
+
+    DT_SLONG GetW();
+    DT_SLONG GetH();
+    DT_SLONG GetStatus();
+
+    DT_SWORD SetPixels(void* pixels, DT_ULONG flags);
+    DT_SWORD Refresh(DT_SLONG x, DT_SLONG y, DT_SLONG w, DT_SLONG h, DT_ULONG flags);
+    DT_SWORD Modify(DT_ULONG flags);
+
+protected: <span class="codecomment">// Event-driven callbacks </span>&nbsp;
+
+    virtual void Event_Resize(DT_SLONG w, DT_SLONG h) {}
+    virtual void Event_KeyDown(DT_SLONG key) {}
+    virtual void Event_KeyUp(DT_SLONG key) {}
+    virtual void Event_MouseButtonDown(DT_SLONG button, DT_SLONG x, DT_SLONG y) {}
+    virtual void Event_MouseMove(DT_SLONG x, DT_SLONG y) {}
+    virtual void Event_MouseButtonUp(DT_SLONG button, DT_SLONG x, DT_SLONG y) {}
+};
+</pre>
+</div>
+
+<p>The CDTDisplay class represents a display (i.e. a monitor or similar output device) on which your window(s) will be displayed. Your application only needs to instantiate this class and call its <em>EventLoop</em> method when it is ready to process window messages.</p>
+
+<p>The CDTWindow class represents a window and is more complex. After instantiating this class, you typically do the following:</p>
+
+<ol>
+
+<li>
+<p>Call its <em>Open</em> method to open the window. Note that CDTWindow's default constructor does not automatically open your window. You must do this explicitly by calling its <em>Open</em> method (or, alternatively, you can instantiate CDTWindow using its alternative constructor which opens the window). Regardless of the method you choose to open your window, you must specify its title, initial width and height (in pixels) and, optionally, some extra flags (e.g. to indicate if your window should be resizable). Your window's width and height will match your 32-bpp RGB surface's dimensions.</p>
+</li>
+
+<li>
+<p>Call its <em>SetPixels</em> method to attach to your window a memory buffer that stores your surface's pixels. As soon as this is done, your window will refresh and display your surface's pixels.</p>
+<p>The pixels must be stored in D-Type's 32 RGB format. This format uses four bytes per pixel: the first three bytes represent the B, G and R color components, while the last byte is unused. Pixels in this surface format can be generated, for example, by calling the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function and setting its <em>format</em> parameter to 32 and <em>subformat</em> parameter to 0.</p></li>
+
+</ol>
+
+<p>Once the above two steps are completed, you have a window on the screen that shows your 32-bpp RGB surface. Now your application is ready to process window messages that may be generated by or sent to your window. As mentioned earlier, this is done by calling the <em>EventLoop</em> method of your CDTDisplay class. Any captured window messages are then processed by your application using the available event-driven callbacks. There are currently 6 such callbacks: <em>Event_Resize</em>, <em>Event_KeyDown</em>, <em>Event_KeyUp</em>, <em>Event_MouseButtonDown</em>, <em>Event_MouseMove</em> and <em>Event_MouseButtonUp</em>. These are simply standard C++ virtual functions that your application can override in your own class in order to process an event. Their intended use is as follows:</p>
+
+<ul>
+<li><p><em>Event_Resize</em> &mdash; This function will be called only if your window was opened as a resizable window. In this case your application will almost certainly want to process this event. The function's <em>w</em> and <em>h</em> parameters will indicate the new size of your window, in pixels. You can then use this information to change the dimensions of your memory surface, redraw the pixels and refresh the window.</p></li>
+
+<li><p><em>Event_KeyDown</em> &mdash; This function will be called when a user presses a key on the keyboard while interacting with your window. The function's <em>key</em> parameter will provide a platform independent code of the key that was pressed. If necessary, your application can then act accordingly.</p></li>
+
+<li><p><em>Event_KeyUp</em> &mdash; This function will be called when a user releases a key on the keyboard while interacting with your window. The function's <em>key</em> parameter will provide a platform independent code of the key that was released. If necessary, your application can then act accordingly.</p></li>
+
+<li><p><em>Event_MouseButtonDown</em> &mdash; This function will be called when a user presses a mouse button while the mouse pointer is inside your window. The function's <em>button</em> parameter will provide a platform independent code of the mouse button that was pressed, while the <em>x</em> and <em>y</em> parameters will provide the (x,&nbsp;y) coordinates of the mouse pointer at that moment. The (x,&nbsp;y) coordinates will be in pixels and relative to the origin of your window. If necessary, your application can then act accordingly.</p></li>
+
+<li><p><em>Event_MouseMove</em> &mdash; This function will be called when a user moves the mouse pointer inside your window. The function's <em>x</em> and <em>y</em> parameters will provide the (x,&nbsp;y) coordinates of the position to which the mouse pointer was moved. The (x,&nbsp;y) coordinates will be in pixels and relative to the origin of your window. If necessary, your application can then act accordingly.</p></li>
+
+<li><p><em>Event_MouseButtonUp</em> &mdash; This function will be called when a user releases a mouse button while the mouse pointer is inside your window. The function's <em>button</em> parameter will provide a platform independent code of the mouse button that was released, while the <em>x</em> and <em>y</em> parameters will provide the (x,&nbsp;y) coordinates of the mouse pointer at that moment. The (x,&nbsp;y) coordinates will be in pixels and relative to the origin of your window. If necessary, your application can then act accordingly.</p></li>
+
+</ul>
+
+<p>In a typical application, you will have only one CDTDisplay object and one or more CDTWindow objects. All the CDTWindow objects will be associated with the same CDTDisplay object.</p>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

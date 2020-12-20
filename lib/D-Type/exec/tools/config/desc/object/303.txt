@@ -1,0 +1,7 @@
+The Checkbox object is an on/off switch that may be toggled by the user. Checkboxes are similar to radio buttons with one important difference: Even when several share the same control name, they are not mutually exclusive. In other words, switching one of them to the "on" or "off" state does not have any impact on any other control.
+
+In most cases, however, multiple checkboxes do not share the same control name. In this case one checkbox represent exactly one feature (or state).
+
+{strong}Designated Rendering Function:{/strong} fcDrawCheckBox (10002)
+
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.

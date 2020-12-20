@@ -1,0 +1,130 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Pattern Fill Definition</h2>
+<h3 id="overview">Overview</h3>
+This object represents an ordered list of pattern fill definitions.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdPatternFillPtr"><em><span class="field">pdPatternFillPtr</span> (1130)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="001.htm#pdPatternFillPtr">Surface Definition</a></small></p>
+<p>
+Link to the <a href="018.htm">Pattern Fill Definition</a> object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdNw"><em><span class="field">pdNw</span> (1039)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="008.htm#pdNw">Bitmap Image Data</a>, <a href="118.htm#pdNw">Grid</a></small></p>
+<p>
+Number of items in horizontal direction. Depending on the context, the items can be pixels, rows, grid lines etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdNh"><em><span class="field">pdNh</span> (1040)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="008.htm#pdNh">Bitmap Image Data</a>, <a href="118.htm#pdNh">Grid</a></small></p>
+<p>
+Number of items in vertical direction. Depending on the context, the items can be pixels, rows, grid lines etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataGray"><em><span class="field">pdImageDataGray</span> (1046)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_011">011</a>, <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="008.htm#pdImageDataGray">Bitmap Image Data</a></small></p>
+<p>
+Image data in grayscale format (variable length, 1 byte per pixel).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataMono"><em><span class="field">pdImageDataMono</span> (1129)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="008.htm#pdImageDataMono">Bitmap Image Data</a></small></p>
+<p>
+Monochrome image data (variable length, 1 byte stores 8 pixels).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPatternROP"><em><span class="field">pdPatternROP</span> (1131)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="117.htm#pdPatternROP">Pattern</a></small></p>
+<p>
+Pattern Raster Operation.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = None<br />
+1 = Invert<br />
+2 = X-Mirror<br />
+3 = Invert and X-Mirror<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[3];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Pattern Fill Definition - First");<br />
+obj[1] = pdObjAdd(pd, 0, "Pattern Fill Definition - Second");<br />
+obj[2] = pdObjAdd(pd, 0, "Pattern Fill Definition - Third");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdLinkAdd(pd, obj[0], pdPatternFillPtr, obj[1]);<br />
+pdPropAdd(pd, obj[0], pdNw, "3", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdNh, "3", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdImageDataGray, "880088 888888 008800", PD_HEX);</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+<strong>pdLinkAdd(pd, obj[1], pdPatternFillPtr, obj[2]);<br />
+pdPropAdd(pd, obj[1], pdNw, "4", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdNh, "4", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdImageDataGray, "88880000 88880000 00008888 00008888", PD_HEX);</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+<strong>pdPropAdd(pd, obj[2], pdNw, "5", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[2], pdNh, "5", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[2], pdImageDataGray, "8888008888 8888008888 8888888888 0000880000 0000880000", PD_HEX);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Pattern Fill Definition - First");<br />
+local obj_1 = o("Pattern Fill Definition - Second");<br />
+local obj_2 = o("Pattern Fill Definition - Third");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + l(pdPatternFillPtr, obj_1);<br />
+obj_0 + i(pdNw, 3);<br />
+obj_0 + i(pdNh, 3);<br />
+obj_0 + p(pdImageDataGray, "880088 888888 008800");<br />
+<br />
+obj_1 + l(pdPatternFillPtr, obj_2);<br />
+obj_1 + i(pdNw, 4);<br />
+obj_1 + i(pdNh, 4);<br />
+obj_1 + p(pdImageDataGray, "88880000 88880000 00008888 00008888");<br />
+<br />
+obj_2 + i(pdNw, 5);<br />
+obj_2 + i(pdNh, 5);<br />
+obj_2 + p(pdImageDataGray, "8888008888 8888008888 8888888888 0000880000 0000880000");<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

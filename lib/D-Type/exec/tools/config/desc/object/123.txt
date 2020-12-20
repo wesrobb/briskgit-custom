@@ -1,0 +1,3 @@
+The Group object is a collection of any number of individual PowerDoc objects presented and rendered as a single object. These individual objects are called group members and are defined by the {a href="../objects/013.htm"}Group Member{/a} object. When a group member is a group itself, it is called a sub-group.
+
+{strong}Designated Rendering Function:{/strong} pdDrawGroup (22)

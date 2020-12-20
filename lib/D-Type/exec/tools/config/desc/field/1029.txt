@@ -1,0 +1,8 @@
+In general, this property represents the width of a line, shape or some other object in document units. Most objects assume a positive width. However, some objects (e.g. lines) can have either a positive or a negative width. In these cases, this property also indicates the direction.
+
+This property may also be used for some other more specific purposes. For example, in PowerFonts it refers to the font's base width (or horizontal units per em-square). Similarly, in PowerFont records this property serves as the advance width of a glyph.
+
+{strong}Sample values:{/strong}
+
+500 = Width of 500 document units
+-200 = Width of -200 document units

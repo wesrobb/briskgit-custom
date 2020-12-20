@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<h2>Init</h2>
+
+<div class="box_prototype"><strong><sup><small>1</small></sup> bool Init(const DT_STREAM_DESC* sd_init, const DT_STREAM_DESC* sd_fontmap = DV_NULL, DT_INIT_INFO* init_info = DV_NULL)</strong></div><br />
+<div class="box_prototype"><strong><sup><small>2</small></sup> bool Init(const DT_STREAM_DESC&amp; sd_init, const DT_STREAM_DESC&amp; sd_fontmap, DT_INIT_INFO* init_info = DV_NULL)</strong></div><br />
+<div class="box_prototype"><strong><sup><small>3</small></sup> bool Init(const DT_STREAM_DESC&amp; sd_init, DT_INIT_INFO* init_info = DV_NULL)</strong></div><br />
+
+<p>This method fully initializes the CDTEngineV8 object using a set of external initialization streams. Depending on the value of the DEF_ENGINE_LEVEL macro variable, the initialization is performed as follows:</p>
+
+<ul>
+<li>DEF_ENGINE_LEVEL = 1 initializes D-Type Standard Engine.</li>
+<li>DEF_ENGINE_LEVEL = 2 initializes D-Type Standard Engine and D-Type Layout Cache.</li>
+<li>DEF_ENGINE_LEVEL = 3 initializes D-Type Standard Engine, D-Type Layout Cache and D-Type Power Engine.</li>
+<li>DEF_ENGINE_LEVEL = 4 initializes D-Type Standard Engine, D-Type Layout Cache, D-Type Power Engine and D-Type Text Engine.</li>
+</ul>
+
+<p>If the initialization was successful, applications can subsequently call other CDTEngineV8 methods. Applications that wish to use the CDTEngineV8 class to create PowerDoc documents should see the <a href="../../CDTDocV8/funcs/index.htm">CDTDocV8</a> class.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>sd_init</em></p>
+</td><td>
+<p>References the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the main D-Type initialization file. Typically, this is <em><a href="../../dt/manual/inifiles.htm#inf">dtype.inf</a></em>. When appropriate, applications can provide their own (altered) version of the dtype.inf file. Also, it is possible for each CDTEngineV8 object to be initialized via its own unique initialization file, meaning that different CDTEngineV8 objects can be initialized using a different set of initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd_fontmap</em></p>
+</td><td>
+<p>References the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the default font map file. Typically, this is <em><a href="../../tx/manual/fontmap.htm">fontmap.inf</a></em>. When appropriate, applications can provide their own (altered) version of the fontmap.inf file.</p>
+<p>The default font map file tells CDTEngineV8 what default fonts to use for different Unicode scripts in the absence of any other more specific instructions.</p>
+<p>This paramater is respected ony when DEF_ENGINE_LEVEL is 4.</p>
+</td></tr>
+
+<tr><td>
+<p><em>init_info</em></p>
+</td><td>
+<p>References the <a href="../../dt/manual/structs.htm#DT_INIT_INFO">DT_INIT_INFO</a> structure that provides additional initialization information to CDTEngineV8 and receives additional initialization information from CDTEngineV8. If you do not wish to make use of this parameter, simply set it to DV_NULL.</p>
+<p>The members of this structure have the following meaning:</p>
+
+<p><em>init_key</em> &mdash; this parameter is reserved for future and must be set to 0:</p>
+
+<p><em>init_flag</em> &mdash; this parameter is reserved for future and must be set to 0:</p>
+
+<p><em>init_status</em> &mdash; this parameter provides extended initialization information and is set by CDTEngineV8. One of the following values will be returned:</p>
+
+<ul>
+<li><em>init_status</em> = 0 &mdash; OK &mdash; The engine did not detect any critical errors during the initialization, or they were automatically corrected or ignored. The engine initialized successfully.</li>
+
+<li><em>init_status</em> = -1 &mdash; Warning &mdash; At least one initialization path is invalid. The engine initialized in a degraded mode.</li>
+
+<li><em>init_status</em> = 1 &mdash; Error &mdash; At least one initialization path is invalid. The engine could not be initialized.</li>
+
+<li><em>init_status</em> = -2 &mdash; Warning &mdash; There was not enough memory for full initialization. The engine initialized in a degraded mode.</li>
+
+<li><em>init_status</em> = 2 &mdash; Error &mdash; There was not enough memory for full initialization. The engine could not be initialized.</li>
+
+<li><em>init_status</em> = -3 or any other negative value indicates that an unspecified or unknown warning was encountered during the initialization and the engine initialized in a degraded mode.</li>
+
+<li><em>init_status</em> = 3 or any other positive value indicates that an unspecified or unknown error was encountered during the initialization and the engine could not be initialized.</li>
+
+</ul>
+
+<p><em>reserved1</em> &mdash; reserved for future and must be set to 0.</p>
+
+<p><em>reserved2</em> &mdash; reserved for future and must be set to 0.</p>
+
+<p><em>reserved3</em> &mdash; reserved for future and must be set to DV_NULL.</p>
+
+<p><em>reserved4</em> &mdash; reserved for future and must be set to DV_NULL.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the initialization was successful, the return value is true. Otherwise, the method returns false.</p>
+
+
+<h3>Note 1</h3>
+<p>To ensure that the initialization is successful, the location that <em>sd_init</em> holds must point to the main D-Type initialization file. For more information on the structure of the main D-Type initialization file, see the <a href="../../dt/manual/inifiles.htm">Initialization Files</a> section of this document. In addition, any other stream descriptors that the main D-Type initialization file may contain (e.g. locations of the initial font list, pattern catalog, etc.) must be valid and should stay valid until the corresponding CDTEngineV8 object is destroyed. Remember that various CDTEngineV8 methods might attempt to open some of these streams later during the execution of your application so it is important to ensure that they remain accessible to CDTEngineV8 even after the Init method returns.</p>
+
+
+<h3>Note 2</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+<h3>Note 3</h3>
+<p>See our <a href="../../dt/manual/fpaths.htm">notes regarding file based streams</a>.</p>
+
+
+<h3>Note 4</h3>
+<p>Please note that any stream descriptors that are part of the <em>Optional Secondary Initialization Files</em> section of <em><a href="../../dt/manual/inifiles.htm#inf">dtype.inf</a></em> are optional. If not needed, they can be specified as NONE streams (<em>Stream&nbsp;ID</em>&nbsp;=&nbsp;-1, <em>Stream&nbsp;Locator</em>&nbsp;=&nbsp;NONE). Otherwise they must be valid or your initialization could fail.</p>
+
+
+<h3>Note 5</h3>
+<p><em>Char Translation and Alignment</em> stream descriptors (the <em>.ccv</em> file paths) that are specified within the <em>Font Factories</em> section of <em><a href="../../dt/manual/inifiles.htm#inf">dtype.inf</a></em> are highly recommended
+because those files allow your application to create custom character encodings and, additionally, contain instruction designed to improve font rendering. Therefore, we do not recommend you specify them as NONE streams.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

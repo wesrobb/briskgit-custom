@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: General</h1>
+
+
+<p><strong>Q-1-2. I understand that fonts can be setup in the dtype.fls initialization file or directly through calls to D-Type. When using <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>), is it possible to run with an empty font list and set up fonts completely through code?</strong></p>
+
+<p>Of course. This can be done in two different ways:</p>
+
+<p>a) Specify an empty font list in the dtype.fls as illustrated below:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment"># *** D-TYPE INITIAL FONT LIST V4.0 ***
+#
+# This file contains a list of fonts that will automatically be added to the Font Catalog
+# as soon as the corresponding D-Type Engine instance is initialized. Each row in this list
+# consists of the following parameters:
+#
+#
+# * font_format_id - Font Format ID
+#   An ID that specifies the font format (e.g. D-Type, TrueType, OpenType, Type 1).
+#   See the manual for details.
+#
+# * fuid - Unique Font Identifier (16-byte string)
+#   An optional 16-byte string selected by your application that will uniquely identify
+#   the font. Set to DV_NULL if fuid is not needed.
+#
+# * fcnr - Font Collection Number (0 = first font in the collection)
+#   When the font file is a font collection, this is the index of a font in that
+#   collection. Set to 0 to add the first font in the collection or if the font file
+#   is not a collection.
+#
+# * cmap_id - Reserved for future. Must be set to -1.
+#
+# * caching - Caching Mode
+#   Set to 0 or 128 for standard caching scheme. See the manual for details.
+#
+# * hinting - Font Hinting. This parameter can have one of the following values:
+#   0 : disable hinting
+#   1 : use native hinting when available; auto-hinting otherwise
+#   2 : use auto-hinting exclusively
+#   3 : use native hinting when available; compact auto-hinting otherwise
+#   4 : use compact auto-hinting exclusively
+#
+# * nr_of_streams - Number of streams that will supply the font data.
+#   Most font formats contain all vital font data in a single stream (file). Therefore,
+#   this parameter is typically 1. Some font formats (e.g. Type 1) may supply additional
+#   font data via additional streams. In this case nr_of_streams will be greater than 1.
+#   See the manual for details on how those font formats utilize the additional streams.
+#
+# * A sequence of stream descriptors, one descriptor for each stream that will supply the
+#   font data. Each stream descriptor consists of the following parameters:
+#
+#     * stream_id      - identifies the stream type. See the manual for details.
+#     * stream_locator - stream type specific locator (e.g. file path). See the manual for details.
+#
+#   Regardless of the font format, the first stream descriptor in the sequence always
+#   supplies vital font data.
+#
+# * reserved  - Reserved for future. Must be set to DV_NULL.
+#
+#
+# The parameters in each row must be separated by a single comma and specified in precisely
+# the same order as listed above.
+#
+# The last row must always be -1. This is an end-of-list indicator.</span>
+
+{
+-1
+}
+</pre>
+</div>
+
+<p>or</p>
+
+<p>b) Remove the dtype.fls file altogether and specify the 'NONE' stream for the initial font list in the main dtype.inf initialization file. This is illustrated below:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment"># *** D-TYPE MAIN INITIALIZATION FILE VERSION 4.4.1.0 OR HIGHER ***
+
+# A) OPTIONAL SECONDARY INITIALIZATION FILES
+
+# 1. Stream descriptor for the initial font list
+#    (Use the 'NONE' stream if the initial font list is not needed)
+#
+# 2. Stream descriptor for the pattern catalog
+#    (Use the 'NONE' stream if the pattern catalog is not needed)
+#
+# 3. Stream descriptor for the custom gray-scale table
+#    (Use the 'NONE' stream for the default 256 levels of gray)
+#
+# Notes:
+#
+#  * All stream descriptors must be specified as [Stream ID],[Stream Locator]
+#    (See the manual for a list of stream descriptors)
+#
+#  * Any non-existent or inaccessible streams (e.g. due to lack of adequate
+#    read permissions) will be interpreted as 'NONE' streams.</span>
+
+{
+-1,NONE
+0,system\ini\dtype.pat
+0,system\ini\gs256.gsl
+}
+</pre>
+</div>
+
+
+<p><strong>Q-1-3. How can I identify D-Type functions?</strong></p>
+
+<p>D-Type functions have the <em>dt</em>, <em>dtx</em>, <em>dts</em>, <em>pd</em>, <em>pdx</em>, <em>tx</em>, <em>lx</em> or <em>dc</em> prefix. For example, <em>dtEngineIniViaStream</em>, <em>dtGlyphDoOutput</em>, <em>dtxTextDoOutput</em>, <em>pdEngineIniViaStream</em>, <em>txEngineIniViaStream</em> are all D-Type functions. The <em>dt</em>, <em>pd</em>, <em>tx</em>, <em>lx</em> and <em>dc</em> functions are located in D-Type's dynamic or static library files. The <em>dtx</em> functions are located in the dtextras.cpp file. The <em>dts</em> functions are located in the dtshapes.cpp file. The <em>pdx</em> functions are located in the pdextras.cpp file.</p>
+
+
+<p><strong>Q-1-4. The <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function returns 0. What is the problem?</strong></p>
+
+<p>When initializing using the <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function, D-Type Engine will look for the main <em>dtype.inf</em> initialization file. In addition, <em>dtype.inf</em> also references several other secondary initialization files. If your initialization fails, here are some of the possible reasons for this:</p>
+
+<p>a) your main dtype.inf file is corrupt or is not in the right location</p>
+
+<p>b) some of the secondary initialization files are missing, not specified correctly or are corrupt</p>
+
+<p>c) font paths in the initial font list are not specified correctly</p>
+
+<p>d) the amount of memory reserved for the bitmap and/or transformation cache in the dtype.inf file is excessively large and exceeds the amount of memory your operating system can allocate</p>
+
+
+<p><strong>Q-1-5. Can I create the <em>dtype.inf</em> file dynamically, prior to the initialization of D-Type Engine?</strong></p>
+
+<p>Yes, if necessary the <em>dtype.inf</em> file can be created dynamically, prior to the initialization of D-Type Engine. This file can be created either on disk or in memory.</p>
+
+<p><strong>Q-1-6. Why is the <em>tmp</em> folder required? Will my program work if I remove this folder?</strong></p>
+
+<p>The <em>tmp</em> folder is a storage for any temporary resources that might be created during execution (e.g. font cache). Consequently, this folder must be configured to allow D-Type Font Engine to READ/WRITE/MODIFY/DELETE files in it.</p>
+
+<p>While this directory does not have to exist, it is highly recommended. If the <em>tmp</em> directory does not exist, D-Type Font Engine will attempt to use RAM instead. You should remove the <em>tmp</em> directory only if you are certain that your application will run on a system with enough RAM to support all your fonts.</p>
+
+
+<p><strong>Q-1-7. The initialization of D-Type Font Engine fails if I try to run my application from the Windows Command Prompt. I am using the <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function to initialize the engine.</strong></p>
+
+
+<p>The <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function reads the configuration settings from the <em>dtype.inf</em> file, in which the initialization paths by default are relative to the application's current working directory. When you are running the program from the command line, the current working directory is not your application's directory but Windows/System32 (or something similar). As a result the engine cannot find the necessary initialization files and the initialization fails.</p>
+
+<p>There a few different ways to solve this problem:</p>
+
+<ol>
+<li><p>Modify all initialization paths inside the <em>dtype.inf</em> file to be absolute (and not relative to your application's working directory). In addition, if you are using the <em>Initial Font List</em>, you will also need to modify any relative paths in the <em>dtype.fls</em> file in the same way.</p></li>
+<li><p>In some cases, it is not possible to know in advance where the application's working directory is going to be. So this must be obtained at runtime. Once the application's working directory is retrieved, the <em>dtype.inf</em> file (and <em>dtype.fls</em> if necessary) can be dynamically created by your application before calling the <a href="../../dt/funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> function. All the paths in those dynamically created initialization files would be defined as absolute.</p></li>
+<li><p>Probably the best option is to obtain your application's working directory at runtime and then use the Windows <em>SetCurrentDirectory</em> function to set your application's directory to be the current working directory. In this way, you can keep all paths in the <em>dtype.inf</em> and <em>dtype.fls</em> files relative and your program should work fine.</p></li>
+</ol>
+
+<p>To understand this problem better, imagine your application must read some file from its working directory. You could attempt to open the file using a relative path (e.g. <tt>FILE* f=fopen("myfile.txt", "rb")</tt>) but this will likely fail when your application is called from the command line because the current working directory is Windows/System32. Therefore, your application must ensure the requested file can be found &mdash; either by using an absolute file path or by changing the current working directory using the <em>SetCurrentDirectory</em> function.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

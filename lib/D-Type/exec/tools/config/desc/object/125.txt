@@ -1,0 +1,6 @@
+Fast rectangle is a special case of the standard gradient - its color and transparency are constant. Functionally, fast rectangles are similar to the standard rectangle objects, however, they have some advantages and some disadvantages.
+
+Advantages: Fast to render
+Disadvantages: Cannot be outlined, cannot have a shadow or rounded corners
+
+{strong}Designated Rendering Function:{/strong} pdDrawGradient (14), pdDrawFastRect (14)

@@ -1,0 +1,92 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>ImgGetTransformPlus</strong></div><br />
+<div class="box_prototype"><strong>ImgGetTransform</strong></div><br />
+
+<p>The ImgGetTransformPlus (or ImgGetTransform) function returns the transformation matrix associated with an existing PowerDoc image.</p>
+
+<p>The only difference between ImgGetTransformPlus and ImgGetTransform is that ImgGetTransformPlus returns the full 3x3 transformation matrix while ImgGetTransform only returns its top two rows and columns. Therefore, ImgGetTransform is more limited (i.e. this function cannot be used to retrieve the full perspective transform associated with a PowerDoc image).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>img</em></p>
+</td><td>
+<p>Image's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For ImgGetTransformPlus, this is a 3x3 transformation matrix. This matrix represents the 2D perspective (or projective) transform currently associated with the specified PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+
+<p>For ImgGetTransform, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of the 2D perspective transform currently associated with the specified PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

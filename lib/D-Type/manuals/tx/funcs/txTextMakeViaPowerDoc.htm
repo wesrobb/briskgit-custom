@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextMakeViaPowerDoc</h2><div class="box_prototype"><strong>
+DT_SLONG txTextMakeViaPowerDoc(DT_TXDOC text_doc, DT_PDDOC power_doc)</strong></div><br /><strong>Short Description:</strong> <em>Make text document - via PowerDoc</em><br /><br />
+
+<p>The txTextMakeViaPowerDoc function builds a Unicode text document from a Power Engine document (i.e. a document created using D-Type Power Engine and its API functions). However, this function does not perform any Unicode text algorithms on the text in the source Power Engine document (e.g. Unicode's implicit bidirectional reordering algorithm) and does not auto-detect Unicode scripts. The function simply accepts the text as supplied and assumes that any required Unicode text processing is already done in the supplied Power Engine document.</p>
+
+<p>This function can only be called once in the specified text document instance, and only after a successful call to <a href="txTextIni.htm">txTextIni</a>. Applications that wish to rebuild their Unicode text using this function must first destroy the existing text document instance by calling <a href="txTextExt.htm">txTextExt</a> and then create a new one by calling <a href="txTextIni.htm">txTextIni</a>.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the previously created Power Engine document.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the Unicode text document was built successfully, the return value will be a non-negative integer. Otherwise, the function returns -1.</p>
+
+
+<h3>Comments</h3>
+
+<p>Power Engine documents that have malformed text objects may not be usable as Unicode text documents. Thus, D-Type Text Engine may not be able to properly operate on such documents and its API functions may fail to generate any useful and/or expected results. The presence of other PowerDoc objects (e.g. bitmap images, patterns, gradients, vector based objects etc.) in the supplied Power Engine document is permitted. These objects will be retained in the Unicode text document.</p>
+
+<p>For information on how to create valid Power Engine documents and valid text objects, see <a href="../../pd/objects/index.htm">Guidelines For Creating PowerDoc Objects</a>.</p>
+
+<p>For other comments, see the comments section of the <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a> function.</p>
+
+
+<h3>Related Functions</h3>
+<p>
+<a href="txTextIniViaPowerDoc.htm">txTextIniViaPowerDoc</a><br />
+<a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>
+</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

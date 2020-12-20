@@ -1,0 +1,104 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxAnimStart</h2><div class="box_prototype"><strong>
+DT_SWORD fxAnimStart(DT_AUX_INFO* info, DT_ID_SWORD bitmap_format, DT_ID_SWORD bitmap_subformat, DT_SLONG width, DT_SLONG height, DT_UWORD flags, DT_SLONG frames_count, const DT_AUX_GRAPHICS_ATTRIBS* gattribs, DT_AUX_USER_STREAM* user_stream)</strong></div><br /><strong>Short Description:</strong> <em>Open new animated image</em><br /><br />
+
+<p>This function open a new animated image in a user-defined stream to which subsequent <a href="fxAnimWrite.htm">fxAnimWrite</a> calls will write animation frames. The image compression format is specified by the <em>FileFormat</em> member variable of the <em>info</em> structure.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_format</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_subformat</em></p>
+</td><td>
+<p>See <a href="fxImageWrite.htm">fxImageWrite</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>width</em></p>
+</td><td>
+<p>All bitmaps that will be added to the animation via subsequent subsequent <a href="fxAnimWrite.htm">fxAnimWrite</a> calls must have the same width. The <em>width</em> parameter specifies this width, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>height</em></p>
+</td><td>
+<p>All bitmaps that will be added to the animation via subsequent subsequent <a href="fxAnimWrite.htm">fxAnimWrite</a> calls must have the same height. The <em>height</em> parameter specifies this height, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask value.</p>
+<ul>
+<li>bit 0 (1) &mdash; Use alpha-channel for this animated image. If set, subsequent <a href="fxAnimWrite.htm">fxAnimWrite</a> calls can specify <em>msk_ptr
+</em> and <em>msk_padding</em> parameters; otherwise these two parameters will be ignored.</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>frames_count</em></p>
+</td><td>
+<p>The number of frames that will be added to the animated image. This value must equal the number of subsequent <a href="fxAnimWrite.htm">fxAnimWrite</a> calls.</p>
+</td></tr>
+
+<tr><td>
+<p><em>gattribs</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_GRAPHICS_ATTRIBS">DT_AUX_GRAPHICS_ATTRIBS</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_stream</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_USER_STREAM">DT_AUX_USER_STREAM</a>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The only image formats that currently support animation are DV_AUX_FILEFORMAT_APNG and DV_AUX_FILEFORMAT_GIF. The animated image opened by this function must be closed by <a href="fxAnimEnd.htm">fxAnimEnd</a>.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

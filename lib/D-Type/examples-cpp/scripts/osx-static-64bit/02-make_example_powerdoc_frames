@@ -1,0 +1,14 @@
+##!/bin/csh
+
+cd "$(dirname "$0")"
+
+echo -------------------------------------------------------------------------------
+echo Build example_powerdoc_frames
+echo -------------------------------------------------------------------------------
+
+export MACOSX_DEPLOYMENT_TARGET=10.8
+c++ -force_cpusubtype_ALL -arch x86_64 -stdlib=libc++ -c -std=c++0x -nostdlib -fno-exceptions -fno-rtti -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -Wcomma -Wdouble-promotion -Wformat=2 -ffunction-sections -fdata-sections -fno-common -pedantic -I ../../../includes/core-cpp/ -I ../../../includes/extras/ -I ../../../includes/utils/ -O3 ../../../examples-cpp/example_powerdoc_frames/main.cpp
+c++ -force_cpusubtype_ALL -dead_strip -arch x86_64 -stdlib=libc++ -o example_powerdoc_frames main.o ../../../engine/libs/x86_64-osx_64-static/clang/dtypestd.o ../../../engine/libs/x86_64-osx_64-static/clang/dtypepwr.o ../../../engine/libs/x86_64-osx_64-static/clang/dtypelay.a ../../../engine/libs/x86_64-osx_64-static/clang/dtypeaux.a ../../../other/libs/x86_64-osx_64-static/clang/dtwindow.a -fno-exceptions -fno-rtti -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -pedantic -framework CoreServices -framework Cocoa -framework OpenGL
+
+echo Done.
+echo -------------------------------------------------------------------------------

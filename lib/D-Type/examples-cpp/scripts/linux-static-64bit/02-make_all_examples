@@ -1,0 +1,21 @@
+##!/bin/csh
+
+echo -------------------------------------------------------------------------------
+echo Build all examples
+echo -------------------------------------------------------------------------------
+
+./02-make_example_color_rasterizer
+./02-make_example_basic_animation
+./02-make_example_basic_output
+./02-make_example_font_converter
+./02-make_example_layout_extension
+./02-make_example_powerdoc_output
+./02-make_example_powerdoc_frames
+./02-make_example_powerdoc_viewer
+./02-make_example_text_animation
+./02-make_example_text_output
+./02-make_example_text_application
+./02-make_example_textpro_builder1
+./02-make_example_textpro_builder2
+
+echo -------------------------------------------------------------------------------

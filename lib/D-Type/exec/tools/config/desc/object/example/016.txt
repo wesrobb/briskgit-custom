@@ -1,0 +1,10 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Text Layout - Manual");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdPosArrI, "0, 0, 0, 1, 0, 0, 0, 0, 7", PD_ARR_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], pdPosArrX_32, "2000, 21800, 15600, -16000, 15360, 15360, 5360, 9360, 1360, 15600, 22600, 18600, 15600, 10000, 11000, 8000, 10000, 4100, 3000", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[0], pdPosArrY_32, "0, 6400, -6400, 30600, 0, 0, 0, 0, 55600, 0, -1000, -1000, -1000, -1000, -3000, -5000, -11000, -14000, -15000", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[0], pdHinting, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], pdPositioning, "1", PD_BYTE_UNSIGNED);{/strong}

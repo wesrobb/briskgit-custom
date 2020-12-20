@@ -1,0 +1,70 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdEngineSetParams</h2><div class="box_prototype"><strong>
+DT_SWORD pdEngineSetParams(DT_PDENGINE engine, const DT_PD_ENGINE_PARAMS* params, DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set Engine parameters</em><br /><br />
+
+<p>The pdEngineSetParams function sets important Power Engine parameters. These parameters can be used to fine-tune the performance of D-Type Power Engine and/or change its memory footprint.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Power Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>params</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/pdstructs.htm#DT_PD_ENGINE_PARAMS">DT_PD_ENGINE_PARAMS</a> structure. This structure contains important run-time parameters for the specified Power Engine. The members of this structure have the following meaning:</p>
+
+<p><em>CacheBytes</em> &mdash; Size limit for Power Engine's caching subsystem in bytes. Must be non-negative. This optional caching subsystem is designed to boost Power Engine's performance and is primarily used as a temporary buffer during rendering. For example, Power Engine documents may use this cache as a buffer for alpha-masking. Or, various text objects may choose to store in this buffer positional glyph data obtained from character codes during text layout operations and later reuse it when rendering the same text. The default size limit of this cache depends on the platform and version of the engine but is typically set to 6&nbsp;MB (6,291,456 bytes). If you wish to set the size limit of Power Engine's caching subsystem to a larger or smaller value, change <em>CacheBytes</em> accordingly.</p>
+
+<p><em>CacheItems</em> &mdash; This parameter specifies the maximum number of items that Power Engine's caching subsystem can simultaneously hold. Must be non-negative. The default value is 1000. If you wish to increase or decrease this value, change <em>CacheItems</em> accordingly.</p>
+
+<p><em>Reserved1</em> &mdash; Reserved for future use. Must be set to 0.</p>
+
+<p><em>Reserved2</em> &mdash; Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Note 1</h3>
+
+<p>While the <em>CacheBytes</em> member of the <a href="../manual/pdstructs.htm#DT_PD_ENGINE_PARAMS">DT_PD_ENGINE_PARAMS</a> structure puts a restriction on the size of D-Type Power Engine's cache, this is not always its true maximum size. In some situations the size of the caching subsystem may temporarily exceed the limit specified by <em>CacheBytes</em> in order to hold a large single object. For example, if <em>CacheBytes</em> is set to 1&nbsp;MB and the size of the object to be temporarily stored in the cache is 1.2&nbsp;MB, the caching subsystem will grow to 1.2&nbsp;MB in order to hold this object. However, any subsequent requests to store any additional objects in the cache will remove the ones that are using too much space and bring the size of the cache below the value specified by <em>CacheBytes</em>.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

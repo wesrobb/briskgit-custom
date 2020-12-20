@@ -1,0 +1,67 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextSetTransformPlus</h2><div class="box_prototype"><strong>
+void txTextSetTransformPlus(DT_TXDOC text_doc, const DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Set text document's transform - 3x3 transformation matrix</em><br /><br />
+<h2>txTextSetTransform</h2><div class="box_prototype"><strong>
+void txTextSetTransform(DT_TXDOC text_doc, const DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Set text document's transform - 2x2 transformation matrix</em><br /><br />
+<h2>txTextSetScale</h2><div class="box_prototype"><strong>
+void txTextSetScale(DT_TXDOC text_doc, DT_FLOAT scale)</strong></div><br /><strong>Short Description:</strong> <em>Set text document's transform - simple scale</em><br /><br />
+
+<p>The txTextSetTransformPlus (or txTextSetTransform or  txTextSetScale) function sets the text document's transformation matrix.</p>
+
+<p>This matrix is respected when the text document is drawn by calling the <a href="txTextDraw.htm">txTextDraw</a> function. This allows applications to easily scale, stretch, rotate, skew or transform using an arbitrary transform matrix the entire output of this function.</p>
+
+<p>The only difference between txTextSetTransformPlus and txTextSetTransform is that txTextSetTransformPlus uses a 3x3 transformation matrix while txTextSetTransform uses a 2x2 transformation matrix. Therefore, txTextSetTransform is more limited (i.e. this function cannot be used to apply a perspective transform to a text document). Finally, the txTextSetScale function is even more limited &mdash; it is a special case of txTextSetTransform.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For txTextSetTransformPlus, this is a 3x3 transformation matrix. This matrix represents a 2D perspective (or projective) transform to apply to the specified text document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+<p>For txTextSetTransform, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of a 2D perspective transform to apply to the specified text document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+<tr><td>
+<p><em>scale</em></p>
+</td><td>
+<p>For txTextSetScale only, a simple scale to apply to the specified text document. Same as calling txTextSetTransform with the following:<br />
+<em>transform[0][0] = scale, transform[0][1] = 0.0, transform[1][0] = 0.0</em> and <em>transform[1][1] = scale</em>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="txTextDraw.htm">txTextDraw</a><br /><a href="txTextGetTransformPlus.htm">txTextGetTransformPlus</a>, <a href="txTextGetTransformPlus.htm">txTextGetTransform</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

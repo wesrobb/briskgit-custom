@@ -1,0 +1,64 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTWindow</h1>
+
+<h2>Modify</h2>
+
+<div class="box_prototype"><strong>DT_SWORD Modify(DT_ULONG flags)</strong></div><br />
+
+<p>This function modifies window attributes, such as the stacking order, status etc.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>Specifies window attributes. Currently the following are supported:</p>
+<ul>
+<li>1 (DV_WINDOW_ATTRIB_TOP) &mdash; stack the window to the top</li>
+<li>2 (DV_WINDOW_ATTRIB_BOTTOM) &mdash; stack the window to the bottom</li>
+<li>4 (DV_WINDOW_ATTRIB_DISABLE) &mdash; disable the window so it cannot generate any events</li>
+<li>5 (DV_WINDOW_ATTRIB_ENABLE) &mdash; enable the window so it can generate events</li>
+</ul>
+
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

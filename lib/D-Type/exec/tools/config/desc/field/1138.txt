@@ -1,0 +1,11 @@
+Background color bytes when edge smoothing is enabled (4 bytes). This property is respected only when edge smoothing is enabled, as follows:
+
+- In RGBA images all 4 bytes are used; these 4 bytes represent the background color of an image. The color value is interpreted the same way as the color value of each individual pixel in the corresponding pdImageDataRGBAlpha property of the Bitmap Image Data object.
+
+- In RGB images the first three bytes are used; these 3 bytes represent the background color of an image. The color value is interpreted the same way as the color value of each individual pixel in the corresponding pdImageDataRGB property of the Bitmap Image Data object. The fourth byte is unused and should be set to 255.
+
+- In GA images the first two bytes are used; these 2 bytes represent the background color of an image. The color value is interpreted the same way as the color value of each individual pixel in the corresponding pdImageDataGrayAlpha property of the Bitmap Image Data object. The last two bytes are unused and should be set to 255.
+
+- In G images only the first byte is used; this byte represent the background color of an image. The color value is interpreted the same way as the color value of each individual pixel in the corresponding pdImageDataGray property of the Bitmap Image Data object. The last three bytes are unused and should be set to 255.
+
+In all cases, the pdOrderingArr property affects the used bytes the same way as it affects the corresponding bytes in the pdImageDataRGBAlpha, pdImageDataRGB, pdImageDataGrayAlpha and pdImageDataGray properties.

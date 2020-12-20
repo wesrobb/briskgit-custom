@@ -1,0 +1,22 @@
+Attributes of an object.
+
+1) When used to build the {a href="../objects/013.htm"}Group Member{/a} object, this value should be interpreted as follows:
+
+Bit 0 unset = indicates a visible PowerDoc object.
+Bit 0 set = indicates a hidden PowerDoc object. Hidden object are not rendered.
+
+Bit 2 unset = do not use fractional positioning for object origins.
+Bit 2 set = use fractional positioning for object origins.
+
+All other bits are reserved for future use and must be set to 0.
+
+2) When used to build the {a href="../objects/134.htm"}System Guide{/a} object, the interpretation is different:
+
+Bit 0 = If set, show right part of the guide
+Bit 1 = If set, show bottom part of the guide
+Bit 2 = If set, show left part of the guide
+Bit 3 = If set, show top part of the guide
+Bit 4 = If set, the right part is just a short segment, otherwise it is infinitely long
+Bit 5 = If set, the bottom part is just a short segment, otherwise it is infinitely long
+Bit 6 = If set, the left part is just a short segment, otherwise it is infinitely long
+Bit 7 = If set, the top part is just a short segment, otherwise it is infinitely long

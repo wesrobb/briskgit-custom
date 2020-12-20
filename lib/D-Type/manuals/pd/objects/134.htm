@@ -1,0 +1,113 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>System Guide</h2>
+<h3 id="overview">Overview</h3>
+This object describes a system guide. A system guide is a special object whose purpose is to help align and position other objects on the page, or to set various extents and bounding boxes that might be important to visually indicate. Guides are visible only when object origins are visible.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawSysGuide (-2) or pdDrawSysGuideDashed (-3)<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdRGBT"><em><span class="field">pdRGBT</span> (1001)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="001.htm#pdRGBT">Surface Definition</a>, <a href="133.htm#pdRGBT">Background Surface</a></small></p>
+<p>
+Color and transparency (4 bytes)<br />
+<br />
+The first three bytes specify the intensity of red (R), green (G) and blue (B) while the last byte specifies the transparency level (T). All values are in the 0-255 range. The value 0 means minimum intensity, 255 means maximum intensity.<br />
+<br />
+The length of this field, when converted to the binary format, is precisely 4 bytes.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"00 00 00 00" (0, 0, 0, 0) = Fully Black, Fully Opaque<br />
+"00 00 00 7F" (0, 0, 0, 127) = Fully Black, 50% Transparent<br />
+"FF 00 00 00" (255, 0, 0, 0) = Fully Red, Fully Opaque<br />
+"00 FF 00 7F" (0, 255, 0, 127) = Fully Green, 50% Transparent<br />
+"FF FF FF FF" (255, 255, 255, 255) = Fully White, Fully Transparent<br />
+"00 7F 00 00" (0, 127, 0, 0) = 50% Green, Fully Transparent<br />
+"7F 7F 7F 7F" (127, 127, 127, 127) = Gray, 50% Transparent<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAttribs"><em><span class="field">pdAttribs</span> (1094)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="013.htm#pdAttribs">Group Member</a></small></p>
+<p>
+Attributes of an object.<br />
+<br />
+1) When used to build the <a href="013.htm">Group Member</a> object, this value should be interpreted as follows:<br />
+<br />
+Bit 0 unset = indicates a visible PowerDoc object.<br />
+Bit 0 set = indicates a hidden PowerDoc object. Hidden object are not rendered.<br />
+<br />
+Bit 2 unset = do not use fractional positioning for object origins.<br />
+Bit 2 set = use fractional positioning for object origins.<br />
+<br />
+All other bits are reserved for future use and must be set to 0.<br />
+<br />
+2) When used to build the <a href="134.htm">System Guide</a> object, the interpretation is different:<br />
+<br />
+Bit 0 = If set, show right part of the guide<br />
+Bit 1 = If set, show bottom part of the guide<br />
+Bit 2 = If set, show left part of the guide<br />
+Bit 3 = If set, show top part of the guide<br />
+Bit 4 = If set, the right part is just a short segment, otherwise it is infinitely long<br />
+Bit 5 = If set, the bottom part is just a short segment, otherwise it is infinitely long<br />
+Bit 6 = If set, the left part is just a short segment, otherwise it is infinitely long<br />
+Bit 7 = If set, the top part is just a short segment, otherwise it is infinitely long<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "System Guide");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);<br />
+pdPropAdd(pd, obj[0], pdAttribs, "15", PD_BYTE_UNSIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[0], 0, 50, 50, 0, 0, 0, pdDrawSysGuide, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("System Guide");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "B4961400");<br />
+obj_0 + i(pdAttribs, 15);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_0.Pin(0, 50, 50, pdDrawSysGuide);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

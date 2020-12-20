@@ -1,0 +1,185 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterSetTypeEffects</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterSetTypeEffects(DT_DTENGINE engine, const DT_TYPE_EFFECTS_L* type, DT_UBYTE reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set Typesetter's type (advanced version)</em><br /><br />
+
+<p>This function supplies <em>type</em> to the Typesetter of the specified Standard Engine instance. Type is a set of typographical properties that are applied to the glyphs/characters during rendering. These properties are:</p>
+
+<ul>
+<li>font index</li>
+<li>transformation &mdash; size, skew, rotation etc.</li>
+<li>outline appearance (normal, outlined, dilated) and related parameters.</li>
+</ul>
+
+<p>When D-Type Engine is initialized, the default type is not set. Therefore, applications must explicitly set the type before any glyphs/characters can be rendered.</p>
+
+<p>This function utilizes the <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure to set the type.</p>
+
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>type</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> structure.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+Type is applied to glyphs whenever they are processed by the Typesetter. This happens, for example, when you call <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="dtGlyphDoTransform.htm">dtGlyphDoTransform</a>, <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> or <a href="dtGlyphDoTransform.htm">dtCharDoTransform</a>.
+
+
+
+<h3>Example 1</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> type = {MYFONT_SIMPLE, 0, 0, {{200, 200, 0, 0, 20}}, {0, 0, 0, 0, 0, DV_SCALE_100}};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   type.font_index = MYFONT_SIMPLE;
+   type.reserved = 0;
+   type.descriptor = 0;
+   type.transform.params.size_h = 200;
+   type.transform.params.size_v = 200;
+   type.transform.params.skew_h = 0;
+   type.transform.params.skew_v = 0;
+   type.transform.params.rotation = 20;
+   type.linedecor.thickness = 0;
+   type.linedecor.segment = 0;
+   type.linedecor.shift = 0;
+   type.linedecor.dash_size = 0;
+   type.linedecor.flags = 0;
+   type.linedecor.scale_id = DV_SCALE_100;
+*/</span>&nbsp;
+
+dtTypesetterSetTypeEffects(engine, &amp;type, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above type</em>:</p>
+
+<p class="center">
+<img src="../images/type_1.gif" width="160" height="190" alt="R" />
+</p>
+
+
+<h3>Example 2</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> type = {MYFONT_COURIER, 0, 0, {{500, 250, -14, 0, 0}}, {350, 20, 0, 0, 0, DV_SCALE_100}};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   type.font_index = MYFONT_COURIER;
+   type.reserved = 0;
+   type.descriptor = 0;
+   type.transform.params.size_h = 500;
+   type.transform.params.size_v = 250;
+   type.transform.params.skew_h = -14;
+   type.transform.params.skew_v = 0;
+   type.transform.params.rotation = 0;
+   type.linedecor.thickness = 350;
+   type.linedecor.segment = 20;
+   type.linedecor.shift = 0;
+   type.linedecor.dash_size = 0;
+   type.linedecor.flags = 0;
+   type.linedecor.scale_id = DV_SCALE_100;
+*/</span>&nbsp;
+
+dtTypesetterSetTypeEffects(engine, &amp;type, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above type</em>:</p>
+
+<p class="center">
+<img src="../images/type_2.gif" width="300" height="160" alt="R" />
+</p>
+
+
+<h3>Example 3</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> type = {MYFONT_SIMPLE, 0, 0, {{-200, 200, 0, 0, 0}}, {-1500, 0, 0, 0, 0, DV_SCALE_100}};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   type.font_index = MYFONT_SIMPLE;
+   type.reserved = 0;
+   type.descriptor = 0;
+   type.transform.params.size_h = -200;
+   type.transform.params.size_v = 200;
+   type.transform.params.skew_h = 0;
+   type.transform.params.skew_v = 0;
+   type.transform.params.rotation = 0;
+   type.linedecor.thickness = -1500;
+   type.linedecor.segment = 20;
+   type.linedecor.shift = 0;
+   type.linedecor.dash_size = 0;
+   type.linedecor.flags = 0;
+   type.linedecor.scale_id = DV_SCALE_100;
+*/</span>&nbsp;
+
+dtTypesetterSetTypeEffects(engine, &amp;type, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above type</em>:</p>
+
+<p class="center">
+<img src="../images/type_3.gif" width="150" height="170" alt="R" />
+</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

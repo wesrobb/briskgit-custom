@@ -1,0 +1,9 @@
+Text wrap method.
+
+{strong}Supported values:{/strong}
+
+0 = Soft Wrap Enabled
+1 = Soft Wrap Disabled - trim text after any character
+2 = Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) but not after a hyphen
+3 = Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) or after a hyphen
+4 = Soft Wrap Disabled - trim text after any character and add a horizontal ellipsis

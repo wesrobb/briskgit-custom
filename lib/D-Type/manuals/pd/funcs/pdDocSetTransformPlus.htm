@@ -1,0 +1,67 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetTransformPlus</h2><div class="box_prototype"><strong>
+void pdDocSetTransformPlus(DT_PDDOC power_doc, const DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Set document's transform - 3X3 transformation matrix</em><br /><br />
+<h2>pdDocSetTransform</h2><div class="box_prototype"><strong>
+void pdDocSetTransform(DT_PDDOC power_doc, const DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Set document's transform - 2X2 transformation matrix</em><br /><br />
+<h2>pdDocSetScale</h2><div class="box_prototype"><strong>
+void pdDocSetScale(DT_PDDOC power_doc, DT_FLOAT scale)</strong></div><br /><strong>Short Description:</strong> <em>Set document's transform - simple scale</em><br /><br />
+
+<p>The pdDocSetTransformPlus (or pdDocSetTransform or pdDocSetScale) function sets the transformation matrix of the Power Engine document specified by the document instance <em>power_doc</em>.</p>
+
+<p>This matrix is respected when the document is drawn by calling the <a href="pdDocDraw.htm">pdDocDraw</a> function. This allows applications to easily scale, stretch, rotate, skew or transform using an arbitrary transform matrix the entire output of this function.</p>
+
+<p>The only difference between pdDocSetTransformPlus and pdDocSetTransform is that pdDocSetTransformPlus uses a 3x3 transformation matrix while pdDocSetTransform uses a 2x2 transformation matrix. Therefore, pdDocSetTransform is more limited (i.e. this function cannot be used to apply a perspective transform to a Power Engine document). Finally, the pdDocSetScale function is even more limited &mdash; it is a special case of pdDocSetTransform.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For pdDocSetTransformPlus, this is a 3x3 transformation matrix. This matrix represents a 2D perspective (or projective) transform to apply to the specified Power Engine document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+<p>For pdDocSetTransform, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of a 2D perspective transform to apply to the specified Power Engine document. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+<tr><td>
+<p><em>scale</em></p>
+</td><td>
+<p>For pdDocSetScale only, a simple scale to apply to the specified Power Engine document. Same as calling pdDocSetTransform with the following:<br />
+<em>transform[0][0] = scale, transform[0][1] = 0.0, transform[1][0] = 0.0</em> and <em>transform[1][1] = scale</em>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdDocDraw.htm">pdDocDraw</a><br /><a href="pdDocGetTransformPlus.htm">pdDocGetTransformPlus</a>, <a href="pdDocGetTransformPlus.htm">pdDocGetTransform</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

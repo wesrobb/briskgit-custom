@@ -1,0 +1,1 @@
+A value indicating what percentage of the total coverage is represented by the slider. Multiplied by 100.

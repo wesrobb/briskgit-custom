@@ -1,0 +1,12 @@
+Text direction relative to the global text direction.
+
+{strong}Sample values:{/strong}
+
+0 = Same as global text direction
+1 = Opposite to global text direction
+2 = Same as global text direction (nested, level 1)
+3 = Opposite to global text direction (nested, level 1)
+4 = Same as global text direction (nested, level 2)
+5 = Opposite to global text direction (nested, level 2)
+6 = Same as global text direction (nested, level 3)
+7 = Opposite to global text direction (nested, level 3)

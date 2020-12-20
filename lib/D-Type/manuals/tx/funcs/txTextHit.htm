@@ -1,0 +1,102 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextHit</h2><div class="box_prototype"><strong>
+DT_SWORD txTextHit(DT_TXDOC text_doc, DT_ID_SWORD hit_type, DT_SRAST_L x, DT_SRAST_L y, DT_RECT_SLONG* extent, DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Process text hit actions</em><br /><br />
+
+<p>This function processes a text hit action (i.e. any operation on text performed using a pointing device such as a mouse). Depending on the hit parameters and current text selection state, this action may result in a new cursor position or updated boundaries of the text selection.</p>
+
+<p>This function should be used after a texflow area is rendered by calling the <a href="txTextDraw.htm">txTextDraw</a> function with its <em>flags</em> parameter set to instruct D-Type Text Engine to generate text flows and frames.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>hit_type</em></p>
+</td><td>
+<p>Type of hit action. Can be one of the following:</p>
+<div class="box_field">
+<pre>
+TX_HIT_RELEASE   -3  <span class="codecomment">/* Mouse button released */</span>&nbsp;
+TX_HIT_MOVE      -2  <span class="codecomment">/* Mouse move */</span>&nbsp;
+TX_HIT_NORMAL     0  <span class="codecomment">/* Normal mouse button click */</span>&nbsp;
+TX_HIT_DOUBLE     1  <span class="codecomment">/* Double mouse button click - selects a word (but only looks for the space character to find the word boundaries) */</span>&nbsp;
+TX_HIT_TRIPLE     4  <span class="codecomment">/* Triple mouse button click - selects a paragraph (by looking for the newline character to find the paragraph boundaries) */</span>&nbsp;
+TX_HIT_SHIFT      2  <span class="codecomment">/* Mouse button click with the Shift key */</span>&nbsp;
+TX_HIT_CTRL       3  <span class="codecomment">/* Mouse button click with the Ctrl key */</span>&nbsp;
+TX_HIT_ALT        5  <span class="codecomment">/* Mouse button click with the Alt key */</span>&nbsp;
+TX_HIT_CTRLALT    6  <span class="codecomment">/* Mouse button click with the Ctrl+Alt key */</span>&nbsp;
+</pre>
+
+</div>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>The x coordinate of the mouse on the screen (in pixels).</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>The y coordinate of the mouse on the screen (in pixels).</p>
+</td></tr>
+
+<tr><td>
+<p><em>extent</em></p>
+</td><td>
+<p>A pointer to the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure that will receive a rectangle describing the smallest enclosing box of the screen area that needs to be repainted following a text selection action.<br />
+<br />
+If you do not wish to receive this rectangle, you may set <em>extent</em> to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If a portion of the screen area needs to be repainted, the return value is 1. If no portion of the screen area needs to be repainted, the return value is 2. In this case all members of the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure will be set to 0.</p>
+<p>If the function was not successful (e.g. invalid input parameters), the return value is 0.</p>
+
+
+<h3>Comments</h3>
+<p>This function can be called when the user clicks or moves a mouse pointer inside (or outside) a textflow area. When called, the function will interpret the mouse action as required. This may result in a cursor movement, selection highlighting or any other text selection action that a mouse action can invoke. However, the developer does not need to know what operation, if any, was invoked.</p>
+<p>The <em>extent</em> returned by this function is a rectangle that describes the smallest enclosing box of the screen area that needs to be repainted following a text selection action. After that, the <a href="txTextDraw.htm">txTextDraw</a> function can be called again in order to repaint the area defined by <em>extent</em>.</p>
+
+<h3>Note</h3>
+<p>D-Type Text Engine is capable of supporting multiple (non-contiguous) text selections. For backward compatibility reasons, this feature is disabled by default. See the description of the <a href="txTextSetParams.htm">txTextSetParams</a> function for
+details on how to enable multiple (non-contiguous) text selections. A new non-contiguous text selection is initiated when the <em>hit_type</em> parameter is set to TX_HIT_CTRL (mouse button click with the Ctrl key) and updated as the mouse moves, which requires one or more subsequent TX_HIT_MOVE (mouse move) actions.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,58 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtOutputGetStyleEffects</h2><div class="box_prototype"><strong>
+DT_SWORD dtOutputGetStyleEffects(DT_DTENGINE engine, DT_STYLE_EFFECTS* style, DT_UBYTE reserved)</strong></div><br /><strong>Short Description:</strong> <em>Get Output style (advanced version)</em><br /><br />
+
+<p>This function returns the current style associated with the Output of the specified Standard Engine instance. Style can be set by <a href="dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>style</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_STYLE_EFFECTS">DT_STYLE_EFFECTS</a> structure that will receive the current style. See <a href="dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a> for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

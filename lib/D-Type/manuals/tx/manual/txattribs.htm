@@ -1,0 +1,74 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Predefined Styles/Formats</h1>
+
+
+<div class="box_field"><pre>
+<span class="codecomment">/* Some of the commonly used text formatting/styling attributes */</span>&nbsp;
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrRed[]           = {{TX_ATTR_BODY_RGBT, {"FF000000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrRedDark[]       = {{TX_ATTR_BODY_RGBT, {"A0000000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGreen[]         = {{TX_ATTR_BODY_RGBT, {"00FF0000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGreenDark[]     = {{TX_ATTR_BODY_RGBT, {"00A00000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGreenForest[]   = {{TX_ATTR_BODY_RGBT, {"80800000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGreenGrass[]    = {{TX_ATTR_BODY_RGBT, {"40808000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBlue[]          = {{TX_ATTR_BODY_RGBT, {"0000FF00"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBlueDark[]      = {{TX_ATTR_BODY_RGBT, {"0000A000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrWhite[]         = {{TX_ATTR_BODY_RGBT, {"FFFFFF00"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBlack[]         = {{TX_ATTR_BODY_RGBT, {"00000000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGray[]          = {{TX_ATTR_BODY_RGBT, {"A0A0A000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrGrayDark[]      = {{TX_ATTR_BODY_RGBT, {"80808000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrYellow[]        = {{TX_ATTR_BODY_RGBT, {"FFFF0000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBurgundy[]      = {{TX_ATTR_BODY_RGBT, {"80000000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBrown[]         = {{TX_ATTR_BODY_RGBT, {"80400000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrOrange[]        = {{TX_ATTR_BODY_RGBT, {"FF804000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrPink[]          = {{TX_ATTR_BODY_RGBT, {"FF00FF00"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrPurpleDark[]    = {{TX_ATTR_BODY_RGBT, {"80008000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrPurpleLight[]   = {{TX_ATTR_BODY_RGBT, {"FF008000"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrTurquoise[]     = {{TX_ATTR_BODY_RGBT, {"00FFFF00"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrArial[]         = {{TX_ATTR_FONT_UNIQUEID, {"F0010_ARIAL__NS0"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrTimes[]         = {{TX_ATTR_FONT_UNIQUEID, {"F0011_TIMES__NS0"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrPalatino[]      = {{TX_ATTR_FONT_UNIQUEID, {"F0011_PALATN_NS0"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBold[]          = {{TX_ATTR_BODY_EP, {"2202"}}, {TX_ATTR_SPACING_LETTER, {"2"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrItalic[]        = {{TX_ATTR_SKEW_HOR, {"-12"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrBig[]           = {{TX_ATTR_FONT_WIDTH, {"54"}}, {TX_ATTR_FONT_HEIGHT, {"54"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrSmall[]         = {{TX_ATTR_FONT_WIDTH, {"24"}}, {TX_ATTR_FONT_HEIGHT, {"24"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrCondensed[]     = {{TX_ATTR_FONT_WIDTH, {"24"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrExpanded[]      = {{TX_ATTR_FONT_WIDTH, {"54"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrSubscript[]     = {{TX_ATTR_FONT_WIDTH, {"20"}}, {TX_ATTR_FONT_HEIGHT, {"20"}}, {TX_ATTR_DY, {"10"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrSuperscript[]   = {{TX_ATTR_FONT_WIDTH, {"20"}}, {TX_ATTR_FONT_HEIGHT, {"20"}}, {TX_ATTR_DY, {"-10"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrUnderline[]     = {{TX_ATTR_EFFECT, {"1"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrStrikethru[]    = {{TX_ATTR_EFFECT, {"8"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrLeft[]          = {{TX_ATTR_ALIGN, {"0"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrCenter[]        = {{TX_ATTR_ALIGN, {"1"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrRight[]         = {{TX_ATTR_ALIGN, {"2"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrJustified[]     = {{TX_ATTR_ALIGN, {"3"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrLeftFull[]      = {{TX_ATTR_ALIGN, {"0"}}, {TX_ATTR_ALIGNEND, {"0"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrCenterFull[]    = {{TX_ATTR_ALIGN, {"1"}}, {TX_ATTR_ALIGNEND, {"1"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrRightFull[]     = {{TX_ATTR_ALIGN, {"2"}}, {TX_ATTR_ALIGNEND, {"2"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrJustifiedFull[] = {{TX_ATTR_ALIGN, {"3"}}, {TX_ATTR_ALIGNEND, {"3"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrHyphenationEN[] = {{TX_ATTR_HYPHENATION, {"1"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrHyphenationFR[] = {{TX_ATTR_HYPHENATION, {"2"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrHyphenationDE[] = {{TX_ATTR_HYPHENATION, {"3"}}, {TX_ATTR_END, {""}}};
+const <a href="txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> attrHyphenationES[] = {{TX_ATTR_HYPHENATION, {"4"}}, {TX_ATTR_END, {""}}};
+</pre></div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

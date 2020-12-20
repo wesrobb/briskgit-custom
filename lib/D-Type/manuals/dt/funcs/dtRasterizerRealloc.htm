@@ -1,0 +1,91 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtRasterizerRealloc</h2><div class="box_prototype"><strong>
+DT_SWORD dtRasterizerRealloc(DT_DTENGINE engine, DT_SWORD raster_width, DT_SWORD raster_height, DT_SWORD raster_intersect, DT_ID_SWORD raster_id)</strong></div><br /><strong>Short Description:</strong> <em>Reallocate and/or switch Rasterizer</em><br /><br />
+
+<p>This function reallocates operating memory required for D-Type Rasterizer to render vectorial shapes. Additionally, this function can be used to change the currently active D-Type Rasterizer.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_width</em></p>
+</td><td>
+<p>Maximum width that D-Type Rasterizer will render in a single pass.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_height</em></p>
+</td><td>
+<p>Maximum height that D-Type Rasterizer will render in a single pass.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_intersect</em></p>
+</td><td>
+<p>Initial value for maximum number of intersections in a single scan line.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_id</em></p>
+</td><td>
+<p>One of D-Type Rasterizers. The following values are supported:</p>
+<ul>
+<li>0 = Ultra-Fast Grayscale Rasterizer</li>
+<li>1 = Perfect Grayscale Rasterizer</li>
+<li>2 = Universal Rasterizer &mdash; Grayscale</li>
+<li>3 = Universal Rasterizer &mdash; Black &amp; White</li>
+</ul>
+<p>If you do not wish to change the currently active D-Type Rasterizer, set <em>raster_id</em> to -1.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>In order to render vectorial shapes (e.g. glyphs, characters, user defined shapes), D-Type Rasterizer requires a certain amount of operating memory. This memory is allocated during the initialization of the rasterizer and is approximately calculated using the following formula:</p>
+
+<p align="center"><em>memory</em> = (8 + 4 * <em>raster_intersect</em>) * (<em>raster_width + raster_height</em>) bytes</p>
+
+<p>Vectorial shapes that are larger than <em>raster_width</em> pixels in width or <em>raster_height</em> pixels in height are not rendered in a single pass. Instead, those shapes are rendered using two or multiple pass techniques. In such cases, <a href="dtShapeDoOutput.htm">dtShapeDoOutput</a>, <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a> and <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> are not able to provide a pointer to the bitmap's 8-bit grayscale data via the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure.</p>
+
+<p>Therefore, applications that expect 8-bit grayscale data via the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure may use the <a href="dtRasterizerRealloc.htm">dtRasterizerRealloc</a> function to ensure D-Type Rasterizer can render and return grayscale bitmaps of up to <em>width</em> pixels in width and <em>height</em> pixels in height.</p>
+
+<p>In addition, when rendering complex shapes or characters (e.g. shapes with many horizontal or vertical edges), larger <em>raster_intersect</em> means better performance, since memory reallocations will not be frequent. However, if this value is too big, a large portion of memory will be unused. A good value for <em>raster_intersect</em> is between 8 and 36 for small and medium sizes, and between 2 and 6 for very large sizes.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

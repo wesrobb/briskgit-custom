@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Baseline</h2>
+<h3 id="overview">Overview</h3>
+This object represents a text baseline.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdLinePtr"><em><span class="field">pdLinePtr</span> (1015)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="129.htm#pdLinePtr">Library Polyline</a>, <a href="111.htm#pdLinePtr">Line</a>, <a href="116.htm#pdLinePtr">Arc</a>, <a href="118.htm#pdLinePtr">Grid</a>, <a href="124.htm#pdLinePtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="003.htm">Line Definition (Full)</a> or <a href="015.htm">Line Definition (Standard)</a> object.<br />
+<br />
+This link supplies parameters necessary to render the body of a line. In the context of the Grid object, this link supplies the parameters necessary to render the grid lines.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowPtr"><em><span class="field">pdShadowPtr</span> (1016)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdShadowPtr">Typography (For Outline Fonts)</a>, <a href="021.htm#pdShadowPtr">Row Boundary</a>, <a href="023.htm#pdShadowPtr">Typographic Frame</a>, <a href="129.htm#pdShadowPtr">Library Polyline</a>, <a href="110.htm#pdShadowPtr">Library Shape</a>, <a href="111.htm#pdShadowPtr">Line</a>, <a href="112.htm#pdShadowPtr">Rectangle</a>, <a href="113.htm#pdShadowPtr">Circle/Ellipse</a>, <a href="114.htm#pdShadowPtr">True Circle/Ellipse</a>, <a href="115.htm#pdShadowPtr">Slice</a>, <a href="116.htm#pdShadowPtr">Arc</a>, <a href="118.htm#pdShadowPtr">Grid</a>, <a href="119.htm#pdShadowPtr">Custom Shape or Polygon</a>, <a href="124.htm#pdShadowPtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="002.htm">Shadow Definition</a> object.<br />
+<br />
+Used to render the shadow of a line, shape or some other object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdMarginLeft"><em><span class="field">pdMarginLeft</span> (1159)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="006.htm#pdMarginLeft">Text Ruler (Horizontal)</a>, <a href="021.htm#pdMarginLeft">Row Boundary</a></small></p>
+<p>
+Left margin, in document units. Positive values mean "inside", negative values mean "outside".<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"100" = Left margin of 100 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdMarginRight"><em><span class="field">pdMarginRight</span> (1160)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="006.htm#pdMarginRight">Text Ruler (Horizontal)</a>, <a href="021.htm#pdMarginRight">Row Boundary</a></small></p>
+<p>
+Right margin, in document units. Positive values mean "inside", negative values mean "outside".<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"100" = Right margin of 100 document units<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[3];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Line Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Line Definition");<br />
+<strong>obj[2] = pdObjAdd(pd, 0, "Baseline");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdLineThickness, "1500", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineSegment, "10", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineStart, "100", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineEnd, "100", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+<strong>pdLinkAdd(pd, obj[2], pdLinePtr, obj[1]);<br />
+pdPropAdd(pd, obj[2], pdMarginLeft, "200", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdMarginRight, "50", PD_LONG_SIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Line Style");<br />
+local obj_1 = o("Line Definition");<br />
+local obj_2 = o("Baseline");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + l(pdStylePtr, obj_0);<br />
+obj_1 + i(pdLineThickness, 1500);<br />
+obj_1 + i(pdLineSegment, 10);<br />
+obj_1 + i(pdLineStart, 100);<br />
+obj_1 + i(pdLineEnd, 100);<br />
+<br />
+obj_2 + l(pdLinePtr, obj_1);<br />
+obj_2 + i(pdMarginLeft, 200);<br />
+obj_2 + i(pdMarginRight, 50);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

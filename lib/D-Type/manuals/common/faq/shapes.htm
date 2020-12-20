@@ -1,0 +1,33 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: Shapes</h1>
+
+
+<p><strong>Q-7-1. Do I have to free the bitmap after using <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a>?</strong></p>
+
+<p>Yes, if the <em>bitmap_flag</em> parameter is set to 1 (DV_BITMAP_ON), you should release it when it is no longer needed by calling <a href="../../dt/funcs/dtBitmapFree.htm">dtBitmapFree</a>.</p>
+
+<p><strong>Q-7-2. If, when calling <a href="../../dt/funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a>, the <em>bitmap_flag</em> parameter is set to 0 (DV_BITMAP_OFF), do I still have to free the bitmap?</strong></p>
+
+<p>If the <em>bitmap_flag</em> parameter is set to 0, D-Type Shape Engine will never attempt to create a memory bitmap and will always provide a DV_NULL pointer for the bitmap data. Therefore, your application does not have to release memory by calling <a href="../../dt/funcs/dtBitmapFree.htm">dtBitmapFree</a>. To summarize, you should only release memory if the pointer to the bitmap data is not DV_NULL, which can only happen when <em>bitmap_flag</em> is set to 1 (DV_BITMAP_ON).</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

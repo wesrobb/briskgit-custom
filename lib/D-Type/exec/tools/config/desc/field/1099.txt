@@ -1,0 +1,3 @@
+Font Caching.
+
+Tells the engine how to cache the font. This parameter will be described more thoroughly in the future. For now, set this parameter to 0 which identifies a standard caching scheme. This caching scheme ensures a good performance with all supported font formats.

@@ -1,0 +1,66 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextPasteViaDoc</h2><div class="box_prototype"><strong>
+DT_SLONG txTextPasteViaDoc(DT_TXDOC text_doc, const DT_TXDOC text_doc2, DT_SLONG paste_flags)</strong></div><br /><strong>Short Description:</strong> <em>Paste another text document into current text selection</em><br /><br />
+
+<p>This function pastes an entire source text document specified by <em>text_doc2</em> into the active selection of the destination text document specified by <em>text_doc</em>, replacing any currently selected text.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance. This is the destination text document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>text_doc2</em></p>
+</td><td>
+<p>Handle of the text document to be pasted. This is the source text document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>paste_flags</em></p>
+</td><td>
+<p>A set of bit values to fine tune the behavior of the function.</p>
+<ul>
+<li>Bit 0: If unset (0), the funtion does not subsequently run Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s). If set (1), the funtion does subsequently run Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s). In this case the function uses the same font map and the same Unicode flags that were used when the text document was created by calling <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a> or <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>.</li>
+<li>Bits 1-31 are reserved for future use. Must be all set to 0.</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value will be the number of pasted characters. Otherwise, the function returns -1. The function will also return -1 if there are multiple (non-contiguous) or block (rectangular) active selections in the text document.</p>
+
+
+<h3>Comments</h3>
+<p>This function makes it possible to insert another text document into the active selection of the current text document. The source text can be styled/formatted if required. It is expected that the source text document will represent at least a single paragraph of Unicode text when <em>paste_flags</em> is set to 0.</p>
+<p>In order to view the modified text document it is necessary to subsequently call the <a href="txTextDraw.htm">txTextDraw</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

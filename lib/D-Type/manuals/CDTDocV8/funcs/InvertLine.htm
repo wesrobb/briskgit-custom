@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>InvertLine</strong></div><br />
+
+<p>The InvertLine function applies an inversion effect to a line segment within an existing memory surface. The blend parameters of the effect can be set by calling <a href="SetInvert.htm">SetInvert</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>X coordinate of the line segment's enclosing rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Y coordinate of the line segment's enclosing rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>w</em></p>
+</td><td>
+<p>Width of the line segment's enclosing rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>h</em></p>
+</td><td>
+<p>Height of the line segment's enclosing rectangle, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>format</em></p>
+</td><td>
+<p>Same as in Draw. See the <a href="Draw.htm">Draw</a> function for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subformat</em></p>
+</td><td>
+<p>Same as in Draw. See the <a href="Draw.htm">Draw</a> function for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_surface</em></p>
+</td><td>
+<p>A pointer to the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure that describes the surface. See D-Type Standard Engine Manual for details.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+<p>This function can be used to invert the color of an area within an existing memory surface without the need to redraw the entire area by calling the <a href="Draw.htm">Draw</a> function. Depending on the blend parameters (set by calling the <a href="SetInvert.htm">SetInvert</a> function), certain inversion effects are reversible. This means that when applied two times successively to the same pixels, the result will be the same as if the effect was not applied at all. For this reason, these inversion effect can be used to visually indicate various types of temporary user selections (e.g. the cursor movements, text or block selections).</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

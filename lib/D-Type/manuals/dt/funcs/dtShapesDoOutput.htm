@@ -1,0 +1,694 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtShapesDoOutput</h2><div class="box_prototype"><strong>
+DT_SWORD dtShapesDoOutput(DT_DTENGINE engine, const DT_LINEDECOR_L* linedecor, DT_ID_SWORD bitmap_flag, DT_SRAST_L x, DT_SRAST_L y, const DT_RECT_L* extent, DT_ID_SWORD flag, const DT_UBYTE i_arr[], const DT_FLOAT x_arr[], const DT_FLOAT y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render custom shapes to Output</em><br /><br />
+
+<h2>dtShapesDoOutputFrac</h2><div class="box_prototype"><strong>
+DT_SWORD dtShapesDoOutputFrac(DT_DTENGINE engine, const DT_LINEDECOR_L* linedecor, DT_ID_SWORD bitmap_flag, DT_SRAST_L x, DT_SRAST_L y, const DT_RECT_L* extent, DT_ID_SWORD flag, const DT_UBYTE i_arr[], const DT_SFRAC_L x_arr[], const DT_SFRAC_L y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render custom shapes to Output - fractional version</em><br /><br />
+
+
+<p>These functions draw a custom shape at coordinates (X, Y) of the current Output. The Output provides the destination surface (which can be either D-Type's Memory Device Context surface or Windows compatible Device Context surface) and style attributes that are applied to the shape when its image is actually rendered.</p>
+
+<p>In addition, depending on the value of <em>bitmap_flag</em>, this function makes an attempt to provide your application with a pointer to the shape's <em>plain 8-bit grayscale memory bitmap</em>, provided that the shape image is not completely outside the device context's clipping region.</p>
+
+<p>When the device context redirection is disabled in the Output, the function does not render the shape to the output surface and its behavior heavily depends on the value of the <em>bitmap_flag</em> parameter:</p>
+
+<ul>
+<li>If <em>bitmap_flag</em> is set to 1 (DV_BITMAP_ON) or 3 (DV_BITMAPPART_ON), the function will only attempt to provide a pointer to its plain 8-bit grayscale memory bitmap;</li>
+<li>If <em>bitmap_flag</em> is set to -1 (DV_BITMAP_ON_ONLYIFOPAQUEANDINSIDE) or -3 (DV_BITMAPPART_ON_ONLYIFOPAQUEANDINSIDE), the function will conditionally attempt to provide a pointer to its plain 8-bit grayscale memory bitmap data;</li>
+<li>Finally, if <em>bitmap_flag</em> is set to 0 (DV_BITMAP_OFF) or 2 (DV_BITMAPPART_OFF), the function does nothing.</li>
+</ul>
+
+<p>Before rendering the shape, applications can call <a href="dtRasterizerSetFillRule.htm">dtRasterizerSetFillRule</a> to tell the Rasterizer whether to apply the <em>Odd-Even</em> or <em>Nonzero Winding Number</em> filling rule when identifying interior regions of the shape.</p>
+
+<p><a href="dtShapesDoOutput.htm">dtShapesDoOutputFrac</a> is identical to <a href="dtShapesDoOutput.htm">dtShapesDoOutput</a> except that some of its parameters are 24.8 signed fractional values. For more details on fractional units, see the <a href="../manual/units.htm">D-Type Units</a> section of this document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>linedecor</em></p>
+</td><td>
+<p>See <a href="../manual/structs.htm#DT_LINEDECOR">DT_LINEDECOR</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_flag</em></p>
+</td><td>
+<p>A hint to the Shape Engine defined as follows:</p>
+<ul>
+<li><p>If <em>bitmap_flag</em> = 0 (DV_BITMAP_OFF), the function will not attempt to retrieve an 8-bit grayscale bitmap for the shape. In this case, <em>memory_bitmap.m</em> will always be set to DV_NULL.</p></li>
+<li><p>If <em>bitmap_flag</em> = 1 (DV_BITMAP_ON), the function will make an attempt to retrieve the bitmap.</p></li>
+</ul>
+
+<p>While the above two basic hints are sufficient for most applications, the following special-purpose hints are also available:</p>
+<ul>
+<li><p>If <em>bitmap_flag</em> = -1 (DV_BITMAP_ON_ONLYIFOPAQUEANDINSIDE), the function will make an attempt to retrieve the bitmap only if its <em>extent</em> box (which is described below) is fully inside the output surface and the shape is not completely transparent.</p></li>
+<li><p><em>bitmap_flag</em> = 2 (DV_BITMAPPART_OFF) indicates that the shape is not fully enclosed by the <em>extent</em> box described below and the function will not attempt to retrieve its 8-bit grayscale bitmap. In this case, <em>memory_bitmap.m</em> will always be set to DV_NULL.</p></li>
+<li><p><em>bitmap_flag</em> = 3 (DV_BITMAPPART_ON) indicates that the shape is not fully enclosed by the <em>extent</em> box described below but the function will attempt to retrieve its partial 8-bit grayscale bitmap.</p></li>
+<li><p><em>bitmap_flag</em> = -3 (DV_BITMAPPART_ON_ONLYIFOPAQUEANDINSIDE) indicates that the shape is not fully enclosed by the <em>extent</em> box described below; the function will attempt to retrieve its partial 8-bit grayscale bitmap only if this <em>extent</em> box is fully inside the output surface and the shape is not completely transparent.</p></li>
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>X coordinate of the shape's origin point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Y coordinate of the shape's origin point, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>extent</em></p>
+</td><td>
+<p>The coordinates of the imaginary box that fully or partially encloses the shape. This must be a valid pointer to the <a href="../manual/structs.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure. Its members contain the following values:</p>
+
+<p><strong>xmn</strong> &mdash; Minimum X coordinate of the imaginary box in pixels<br />
+<strong>ymn</strong> &mdash; Minimum Y coordinate of the imaginary box in pixels<br />
+<strong>xmx</strong> &mdash; Maximum X coordinate of the imaginary box in pixels<br />
+<strong>ymx</strong> &mdash; Maximum Y coordinate of the imaginary box in pixels</p>
+
+<p>When <em>bitmap_flag</em> is set to 0 (DV_BITMAP_OFF), 1 (DV_BITMAP_ON) or -1 (DV_BITMAP_ON_ONLYIFOPAQUEANDINSIDE) the shape must be completely inside this imaginary enclosing box. When <em>bitmap_flag</em> is set to 2 (DV_BITMAPPART_OFF), 3 (DV_BITMAPPART_ON) or -3 (DV_BITMAPPART_ON_ONLYIFOPAQUEANDINSIDE), the imaginary enclosing box may enclose the shape only partially.</p>
+
+<p>Please note that a failure to set the imaginary enclosing box as described here might cause unexpected rendering and/or clipping results.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Tells the Shape Engine how the shape is defined. The Shape Engine can render shapes that are defined in six different ways:</p>
+<ul>
+<li><p>If <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED), the shape is defined via a buffer using a mixed positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the shape to be rendered while <em>x_arr</em> and <em>y_arr</em> are ignored and should be both set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE), the shape is defined via a buffer using an abolute positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the shape to be rendered while <em>x_arr</em> and <em>y_arr</em> are ignored and should be both set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), the shape is defined via a buffer using a relative positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the shape to be rendered while <em>x_arr</em> and <em>y_arr</em> are ignored and should be both set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 1 (DV_SHAPE_ARRAY_MIXED), the shape is defined via the <em>i_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using a mixed positioning mode. In this case all three values must be valid array pointers.</p></li>
+
+<li><p>If <em>flag</em> = 3 (DV_SHAPE_ARRAY_ABSOLUTE), the shape is defined via the <em>i_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using an abolute positioning mode. In this case all three values must be valid array pointers.</p></li>
+
+<li><p>If <em>flag</em> = 5 (DV_SHAPE_ARRAY_RELATIVE), the shape is defined via the <em>i_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using a relative positioning mode. In this case all three values must be valid array pointers.</p></li>
+</ul>
+<p>See the tables below for details on the mixed, absolute and relative positioning modes.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>i_arr</em></p>
+</td><td>
+<p>Depending on <em>flag</em>, this is either a valid pointer to a user-defined buffer that fully describes the shape or an array that contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_arr, y_arr</em></p>
+</td><td>
+<p>An array of control points that define the shape.</p>
+
+<p>When <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED) or <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE) or <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), both arrays are ignored and should be set to DV_NULL. Otherwise, they must be valid array pointers. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_bitmap</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure that will receive information about the shape's plain 8-bit grayscale memory bitmap:</p>
+
+<ul>
+<li>
+<p><em>memory_bitmap.m</em> &mdash; pointer to a memory buffer at which the grayscale memory bitmap data begins. This buffer is dynamically allocated and must be released later by calling the <a href="dtBitmapFree.htm">dtBitmapFree</a> function. The buffer always contains plain 8-bpp grayscale bitmap (non-compressed) data. If DV_NULL, the bitmap image could not be retrieved or was not requested. In this case all other member variables will be set to 0.</p>
+</li>
+
+<li><p><em>memory_bitmap.l</em> &mdash; length of the memory buffer in bytes as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.w</em> &mdash; width of the bitmap in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.h</em> &mdash; height of the bitmap in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.x</em> &mdash; horizontal distance between the bitmap's left edge and shape's origin in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.y</em> &mdash; vertical distance between the shape's origin and bitmap's top edge in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+</ul>
+
+<p>You may set <em>memory_bitmap</em> to DV_NULL only if you do not wish to retrieve information about the shape's plain 8-bit grayscale memory bitmap and <em>bitmap_flag</em> is set to 0 (DV_BITMAP_OFF) or 2 (DV_BITMAPPART_OFF). <strong>In all other cases, <em>memory_bitmap</em> must be a valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure.
+</strong></p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value is 1 if the function was successful. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>As mentioned above, the Shape Engine can render shapes that are defined in six different ways:</p>
+
+<ol>
+<li>
+<p>If <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED) or <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE) or <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), then <em>i_arr</em> is a pointer to a buffer that stores a complete description of the custom shape to be rendered. This buffer contains a sequence of instruction-parameters.</p>
+
+
+<h4>A) Mixed Positioning Mode</h4>
+
+<p>In this mode, the New Contour (16) instruction specifies its (X1, Y1) coordinates as absolute positions while all other instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX3 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY3 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Shape: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<h4>B) Absolute Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as absolute positions. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X2 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y2 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X2 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y2 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X3 in pixels (absolute position)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y3 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Shape: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<h4>C) Relative Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 coordinate in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 coordinate in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX3 in pixels (relative delta)</li>
+<li><strong><a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY3 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Shape: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<p><sup>*</sup>Note: Whether it's <a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a> or <a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a> depends on which version of the function is used. If <a href="dtShapesDoOutput.htm">dtShapesDoOutputFrac</a> is used, all coordinates in the buffer must be in the <a href="../manual/types.htm#DT_SFRAC">DT_SFRAC</a> format. If <a href="dtShapesDoOutput.htm">dtShapesDoOutput</a> is used, all coordinates in the buffer must be in the <a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a> format.</p>
+
+<p>See <a href="../manual/examples.htm#E2">Example 2</a> and <a href="../manual/examples.htm#E3">Example 3</a> at the end of this manual to see how the <a href="dtShapesDoOutput.htm">dtShapesDoOutput</a> function can be used to render some basic geometric shapes using this method.</p>
+</li>
+
+<li>
+<p>If <em>flag</em> = 1 (DV_SHAPE_ARRAY_MIXED) or <em>flag</em> = 3 (DV_SHAPE_ARRAY_ABSOLUTE) or <em>flag</em> = 5 (DV_SHAPE_ARRAY_RELATIVE), then <em>i_arr</em> contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays. Possible values for <em>i_arr</em> are:</p>
+
+<ul>
+<li>New contour: <strong>16</strong></li>
+<li>Line: <strong>20</strong></li>
+<li>Quadratic B-Spline curve: <strong>25</strong></li>
+<li>B&eacute;zier curve: <strong>24</strong></li>
+<li>End of shape: <strong>8</strong></li>
+</ul>
+
+<p>The following table describes how the arrays should be created. Please note that Quadratic B-Spline curves require two consecutive rows in each array while B&eacute;zier curves require three consecutive rows.</p>
+
+<h4>A) Mixed Positioning Mode</h4>
+
+<p>In this mode, the New Contour (16) instruction specifies its (X1, Y1) coordinates as absolute positions while all other instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="33%">i_arr</th>
+<th width="33%">x_arr</th>
+<th width="33%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="3" align="left">New Contour &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">dX3 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY3 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">End Of Shape &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+
+<h4>B) Absolute Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as absolute positions. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="33%">i_arr</th>
+<th width="33%">x_arr</th>
+<th width="33%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="3" align="left">New Contour &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y2 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y2 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">X3 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y3 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">End Of Shape &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h4>C) Relative Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="33%">i_arr</th>
+<th width="33%">x_arr</th>
+<th width="33%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="3" align="left">New Contour &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">dX1 coordinate in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 coordinate in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">dX3 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY3 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">End Of Shape &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<p>n = number of curve segments. Set to 0 and this value will be automatically calculated.</p>
+
+<p>See <a href="../manual/examples.htm#E4">Example 4</a> at the end of this manual to see how the <a href="dtShapesDoOutput.htm">dtShapesDoOutput</a> function can be used to render a simple shape using this method.</p>
+</li>
+</ol>
+
+<p>The term <em>plain 8-bit grayscale memory bitmap</em> means a grayscale bitmap without any style effects (e.g. transparency, blur, emboss etc). Special effects are applied only when the bitmap is actually rendered to the Output surface (MDC or HDC) in which the style effect is selected using the <a href="dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> function. Plain 8-bit grayscale memory bitmaps are sometimes useful to applications that independently post-process plain 8-bit grayscale data.</p>
+
+<p>Finally, when <em>memory_bitmap.m</em> is not DV_NULL, don't forget to release the memory bitmap when it is no longer needed by calling the <a href="dtBitmapFree.htm">dtBitmapFree</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

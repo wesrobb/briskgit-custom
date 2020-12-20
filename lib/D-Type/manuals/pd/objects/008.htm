@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Bitmap Image Data</h2>
+<h3 id="overview">Overview</h3>
+This object represents a raw bitmap. The bitmap's pixels can be stored in RGBA, RGB, GA, G or monochrome format. The Bitmap Image Data object does not have a visual representation, however, it is the key building block used in the construction of the <a href="121.htm">Bitmap Image</a> object.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<br />
+Note: pdImageDataRGB, pdImageDataRGBAlpha, pdImageDataGray and pdImageDataGrayAlpha cannot be used at the same time. pdImageDataRGBAlpha takes precedence over pdImageDataRGB. pdImageDataRGB takes precedence over pdImageDataGrayAlpha. pdImageDataGrayAlpha takes precedence over pdImageDataGray. Finally, pdImageDataGray takes precedence over pdImageDataMono.<br />
+<br />
+<h3 id="links">Links</h3>
+<p>None</p>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdNw"><em><span class="field">pdNw</span> (1039)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="018.htm#pdNw">Pattern Fill Definition</a>, <a href="118.htm#pdNw">Grid</a></small></p>
+<p>
+Number of items in horizontal direction. Depending on the context, the items can be pixels, rows, grid lines etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdNh"><em><span class="field">pdNh</span> (1040)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="018.htm#pdNh">Pattern Fill Definition</a>, <a href="118.htm#pdNh">Grid</a></small></p>
+<p>
+Number of items in vertical direction. Depending on the context, the items can be pixels, rows, grid lines etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataRGB"><em><span class="field">pdImageDataRGB</span> (1045)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_009">009</a>, <a href="intro.htm#method_002">002</a></strong></small></p>
+<p>
+Image data in RGB format (variable length, 3 bytes per pixel).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataGray"><em><span class="field">pdImageDataGray</span> (1046)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_011">011</a>, <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="018.htm#pdImageDataGray">Pattern Fill Definition</a></small></p>
+<p>
+Image data in grayscale format (variable length, 1 byte per pixel).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataRGBAlpha"><em><span class="field">pdImageDataRGBAlpha</span> (1095)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_008">008</a>, <a href="intro.htm#method_000">000</a></strong></small></p>
+<p>
+Image data in RGBA (RGB with Alpha) format (variable length, 4 bytes per pixel).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataGrayAlpha"><em><span class="field">pdImageDataGrayAlpha</span> (1096)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_010">010</a>, <a href="intro.htm#method_004">004</a></strong></small></p>
+<p>
+Image data in the GA (grayscale with Alpha) format (variable length, 2 bytes per pixel).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataMono"><em><span class="field">pdImageDataMono</span> (1129)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="018.htm#pdImageDataMono">Pattern Fill Definition</a></small></p>
+<p>
+Monochrome image data (variable length, 1 byte stores 8 pixels).<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPitch"><em><span class="field">pdPitch</span> (1133)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p>
+The distance, in bytes, between the beginning of two neighbouring pixel rows. This property makes it possible to pass to D-Type Power Engine bitmap images that have some padding (extra bytes) at the end of each bitmap row.<br />
+<br />
+This property works with all supported Bitmap Image Data formats (pdImageDataGray, pdImageDataGrayAlpha, pdImageDataRGB, pdImageDataRGBAlpha) except pdImageDataMono.<br />
+<br />
+A valid pitch value must not be less than pdNw * bytes_per_pixel, where bytes_per_pixel is 1 for pdImageDataGray, 2 for pdImageDataGrayAlpha, 3 for pdImageDataRGB and 4 for pdImageDataRGBAlpha. A pitch value that is exactly pdNw * bytes_per_pixel bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than pdNw * bytes_per_pixel bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is pdPitch - pdNw * bytes_per_pixel). Note that D-Type Power Engine does not read or use these extra bytes.<br />
+<br />
+If pdPitch is not specified, D-Type Power Engine will use the value pdNw * bytes_per_pixel, i.e. assume that pixel rows are contiguous. If pdPitch is not properly defined, D-Type Power Engine will not be able to display the bitmap image.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[1];<br />
+<br />
+<strong>obj[0] = pdObjAdd(pd, 0, "Grayscale Image Data");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+<strong>pdPropAdd(pd, obj[0], pdNw, "4", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdNh, "4", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[0], pdImageDataGray, "88880000 88880000 00008888 00008888", PD_HEX);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Grayscale Image Data");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + i(pdNw, 4);<br />
+obj_0 + i(pdNh, 4);<br />
+obj_0 + p(pdImageDataGray, "88880000 88880000 00008888 00008888");<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

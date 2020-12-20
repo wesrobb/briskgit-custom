@@ -1,0 +1,7 @@
+Height of a font or PowerFont in document units. If negative, font glyphs will be mirrored horizontally.
+
+{strong}Sample values:{/strong}
+
+12 = Font height of 12 document units
+48 = Font height of 48 document units
+-48 = Font height of 48 document units, mirrored horizontally

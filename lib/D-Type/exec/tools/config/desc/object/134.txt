@@ -1,0 +1,3 @@
+This object describes a system guide. A system guide is a special object whose purpose is to help align and position other objects on the page, or to set various extents and bounding boxes that might be important to visually indicate. Guides are visible only when object origins are visible.
+
+{strong}Designated Rendering Function:{/strong} pdDrawSysGuide (-2) or pdDrawSysGuideDashed (-3)

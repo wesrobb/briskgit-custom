@@ -1,0 +1,3 @@
+This object represents extra text elements. This includes the baseline and row boundary.
+
+{strong}Designated Rendering Function:{/strong} NONE

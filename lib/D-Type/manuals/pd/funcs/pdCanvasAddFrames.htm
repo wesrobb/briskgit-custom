@@ -1,0 +1,93 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdCanvasAddFrames</h2><div class="box_prototype"><strong>
+DT_SWORD pdCanvasAddFrames(DT_PD_DOCDRAW_CANVAS* canvas, DT_SRAST_L x_off, DT_SRAST_L y_off, DT_SLONG idx_off, DT_ID_SLONG parent_obj, DT_SLONG local_number, DT_ID_SWORD frames_format, DT_PD_FRAMES frames, DT_SLONG frames_len)</strong></div><br /><strong>Short Description:</strong> <em>Add frames to canvas</em><br /><br />
+
+<p>The pdCanvasAddFrames function associates the supplied array of frames with the PowerDoc object that is currenlty selected in the canvas. This is a specialized function intended for developers who wish to implement their own user-defined PowerDoc objects.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>canvas</em></p>
+</td><td>
+<p>A valid pointer to <a href="../manual/pdstructs.htm#DT_PD_DOCDRAW_CANVAS">DT_PD_DOCDRAW_CANVAS</a> structure.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_off</em></p>
+</td><td>
+<p>Horizontal offset to apply when associating the frames, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y_off</em></p>
+</td><td>
+<p>Vertical offset to apply when associating the frames, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>idx_off</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>parent_obj</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>local_number</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>frames_format</em></p>
+</td><td>
+<p>Specifies whether the frames to be associated are in <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> or <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format. Set to 1 for <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> and 2 for <a href="../manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>frames</em></p>
+</td><td>
+<p>The <a href="../manual/pdstructs.htm#DT_PD_FRAMES">DT_PD_FRAMES</a> union defining the array of frames to be associated.</p>
+</td></tr>
+
+<tr><td>
+<p><em>frames_len</em></p>
+</td><td>
+<p>The size of the frames array.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

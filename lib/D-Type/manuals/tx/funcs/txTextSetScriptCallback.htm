@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextSetScriptCallback</h2><div class="box_prototype"><strong>
+DT_SWORD txTextSetScriptCallback(DT_TXDOC text_doc, DT_ID_SLONG (*user_script_func)(DT_SLONG index, DT_ID_ULONG char_code, DT_ID_SLONG script_code, DT_ULONG* flag, void* user_param), void* user_param)</strong></div><br /><strong>Short Description:</strong> <em>Set text document's char-to-script callback function</em><br /><br />
+
+<p>The txTextSetScriptCallback function registers a callback function to be called during Unicode text processing performed by <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a> and, depending on the UnicodeFlags, <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a> and <a href="txTextPasteViaBuffer.htm">txTextPasteViaBuffer</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_script_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will be called as D-Type Text Engine processes plain text and determines the script of each character. This function is responsible for telling D-Type Text Engine what script a certain Unicode character is associated with. It must be declared as follows:</p>
+
+<p class="center"><em>
+<a href="../../dt/manual/types.htm#DT_ID_SLONG">DT_ID_SLONG</a> your_user_script_func(<a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> index, <a href="../../dt/manual/types.htm#DT_ID_ULONG">DT_ID_ULONG</a> char_code, <a href="../../dt/manual/types.htm#DT_ID_SLONG">DT_ID_SLONG</a> script_code, <a href="../../dt/manual/types.htm#DT_ULONG">DT_ULONG</a>* flag, void* user_param)
+</em></p>
+
+<p>where <em>your_user_script_func</em> is the name of your own C function, <em>index</em> represents the index of the character in the plain text for which a callback is triggered, <em>char_code</em> is its Unicode character code and <em>script_code</em> is the script code assigned to this character based on the Unicode standard. See the list of <a href="../../lx/manual/scripts.htm">defined scripts</a> for a list of currently supported codes. The <em>flag</em> parameter is an output parameter that your function can set, as explained below. The <em>user_param</em> parameter is a pointer to your own data type that you will receive during the callback.</p>
+
+<p>Your function is passed the script code assigned to a particular character based on Unicode. Your function can accept Unicode's assignment by returning the same script code, or change it by returning a different script code. Either way, the <em><a href="../manual/fontmap.htm">fontmap.inf</a></em> file will respect the returned script code. This means that the script code you return will determine the font, text shaping and relative orientation that D-Type Text Engine will apply to the character in question. When the returned script code is different (see Note 1 below) from the script code of the previous character, your function can also set the <em>flag</em> output parameter to specify the line breaking preference for this point in text (i.e. between the previous and current character). You can set <em>flag</em> to one of the following:</p>
+
+<ul>
+<li>0 = line breaking is allowed between the previous and current character; as a result a line break might occur at this point in text</li>
+<li>1 = use D-Type's default line breaking algorithm to determine if line breaking is allowed between the previous and current character (this is the recommended option)</li>
+<li>2 = line breaking is not allowed between the previous and current character; consequently a line break will not occur at this point in text &mdash; assuming there are other (better) line breaking opportunities on the same text line</li>
+</ul>
+
+<p>If you do not set the <em>flag</em> parameter, value 0 is assumed. Note that the value of the <em>flag</em> parameter is irrelevant and ignored when the returned script code is the same as the script code of the previous character. In that case line breaking is always performed as normal (i.e. using D-Type's default line breaking algorithm). This means that unless there is a change of script, your function will not be able to impact the way D-Type Text Engine performs line breaking.</p>
+
+<p>Setting the <em>user_script_func</em> parameter to DV_NULL when calling txTextSetScriptCallback will permanently unregister a previously registered callback function. Once this is done, D-Type Text Engine will no longer initiate any callbacks during Unicode text processing. In that case, the script code assigned to a particular character is based solely on Unicode.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_param</em></p>
+</td><td>
+<p>A void pointer to your own data type that you will receive during the callback. This pointer is passed back to your function during the callback to help you track the state of execution or provide other information useful to your application. This pointer is not accessed or modified by D-Type Engine in any way; it is simply sent back to your function as supplied. You can set this parameter to DV_NULL if you have no need for it.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input).</p>
+
+<h3>Comments</h3>
+<p>The callback mechanism makes it possible to override the Unicode script associated with a particular character. The callbacks are triggered when D-Type Text Engine processes plain text and determines the script of each character. This happens when a user calls <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a> and, depending on the UnicodeFlags, <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a> and <a href="txTextPasteViaBuffer.htm">txTextPasteViaBuffer</a>.</p>
+<p>The char-to-script callback mechanism is very useful when used in conjunction with the capabilities of the <em><a href="../manual/fontmap.htm">fontmap.inf</a></em> file. By associating different script codes with different fonts and/or relative orientation in the <em><a href="../manual/fontmap.htm">fontmap.inf</a></em> file, applications can have a fine level of control over automatic text layout of different scripts and/or character groups. Examples include: a) controlling the height of the carriage return in vertical writing mode, b) precise control over vertical alternatives of certain non-CJK characters, c) controlling the rotation of 2 byte Roman characters in vertical writing mode.</p>
+
+
+<h3>Note 1</h3>
+<p>"Common" (0 or zyyyScriptCode) and "Inherited" (1 or qaaiScriptCode or zinhScriptCode) are not considered to be different scrips, when compared with the script of the previous character.</p>
+
+<h3>Note 2</h3>
+<p>Regardless of the value of the <em>flag</em> parameter, line breaks are always allowed after white space characters.</p>
+
+
+<h3>Note 3</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="../../pd/funcs/pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="../../pd/funcs/pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+<h3>Related Functions</h3>
+<p><a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>, <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a>, <a href="txTextPasteViaBuffer.htm">txTextPasteViaBuffer</a></p>
+
+
+<h3>Example</h3>
+
+<p>The following example shows a simple implementation of a callback function.</p>
+
+<p>This function returns a private script code (p001ScriptCode) which allows the application to implement custom text layout operations (e.g. font assignment and character rotation) using the <em><a href="../manual/fontmap.htm">fontmap.inf</a></em> file.</p>
+
+<div class="box_field">
+<pre>
+DT_ID_SLONG MyUserScriptFunc(DT_SLONG index, DT_ID_ULONG char_code, DT_ID_SLONG script_code, DT_ULONG* flag, void* user_param)
+{
+   *flag = 1; <span class="codecomment">/* use D-Type's default line breaking algorithm to determine if line breaking is allowed between the previous and current character */</span>&nbsp;
+
+   if (char_code &gt;= 0xFF10 &amp;&amp; char_code &lt;= 0xFF19) || (char_code &gt;= 0xFF21 &amp;&amp; char_code &lt;= 0xFF3A) || (char_code &gt;= 0xFF41 &amp;&amp; char_code &lt;= 0xFF5A)
+   {
+      return p001ScriptCode; <span class="codecomment">/* full width alpha-numerical characters in CJK range*/</span>&nbsp;
+   }
+
+   <span class="codecomment">/* otherwise return the script as per Unicode Standard */</span>&nbsp;
+   return script_code;
+}
+</pre>
+</div>
+
+<p>Then, in the fontmap.inf file, an entry such as this one could be added:</p>
+
+<div class="box_field">
+<pre>
+SCRIPTCODE:p001|ATTRIBS:ro=8|FONTNAME:Arial Unicode MS
+</pre>
+</div>
+
+<p>This now means "when plain text is processed, do not rotate full width alpha-numerical characters in CJK range and use the Arial Unicode MS font to display them".</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

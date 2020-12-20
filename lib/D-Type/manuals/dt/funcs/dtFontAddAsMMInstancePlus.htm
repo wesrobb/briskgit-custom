@@ -1,0 +1,470 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontAddAsMMInstance</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontAddAsMMInstance(DT_DTENGINE engine, DT_ID_SWORD font_index, const DT_SWORD contribs[])</strong></div><br /><strong>Short Description:</strong> <em>Add new font as a Multiple-Master font instance and return its font index</em><br /><br />
+<h2>dtFontAddAsMMInstancePlus</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontAddAsMMInstancePlus(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SWORD contribs_flag, DT_SWORD contribs_len, const DT_SLONG contribs[])</strong></div><br /><strong>Short Description:</strong> <em>Add new font as a Multiple-Master font instance and return its font index</em><br /><br />
+
+<p>These two functions add an interpolated Multiple-Master font instance to the Font Catalog of the specified Standard Engine instance.</p>
+
+<p>Similar to <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>, these functions return a font index for the newly added font instance. This index uniquely identifies the font (or font instance) in the Font Catalog.</p>
+
+<p>dtFontAddAsMMInstance is deprecated; this function has the same effect as calling dtFontAddAsMMInstancePlus with <em>contribs_flag</em> set to DV_MMCONTRIB_TYPE_DIM_NORM1024 and <em>contribs_len</em> set to <em>dim</em>, where <em>dim</em> can be obtained by calling the <a href="dtFontGetDim.htm">dtFontGetDim</a> or <a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of an existing Multiple-Master font or Multiple-Master font instance in the Font Catalog. The new interpolated Multiple-Master font instance will be created from the font or font instance specified by that font index.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>contribs_flag</em></p>
+</td><td>
+<p>Identifies how the dtFontAddAsMMInstancePlus function should interpret the values stored in the <em>contribs</em> array. Can be one of the following:</p>
+
+<ul>
+
+<li><p>0 (DV_MMCONTRIB_TYPE_NONE) &mdash; This option will be described in the future.</p></li>
+
+<li><p>1 (DV_MMCONTRIB_TYPE_DIM_NORM1024) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding base design in the final interpolated font instance. The value of each element must be in the 0 - 1024 range, where zero means &quot;no contribution&quot; (or 0% contribution) and 1024 means &quot;full contribution&quot; (or 100% contribution). The sum of all the elements in the array must equal 1024 (or 100%), otherwise unexpected results might occur.</p></li>
+
+<li><p>2 (DV_MMCONTRIB_TYPE_DIM_NORM16384) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding base design in the final interpolated font instance. The value of each element must be in the 0 - 16384 range, where zero means &quot;no contribution&quot; (or 0% contribution) and 16384 means &quot;full contribution&quot; (or 100% contribution). The sum of all the elements in the array must equal 16384 (or 100%), otherwise unexpected results might occur.</p></li>
+
+<li><p>3 (DV_MMCONTRIB_TYPE_AXIS_NORM1024) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding design axis in the final interpolated font instance. The value of each element must be in the 0 - 1024 range, where zero means &quot;no contribution&quot; (or 0% contribution) and 1024 means &quot;full contribution&quot; (or 100% contribution).</p></li>
+
+<li><p>4 (DV_MMCONTRIB_TYPE_AXIS_NORM16384) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding design axis in the final interpolated font instance. The value of each element must be in the 0 - 16384 range, where zero means &quot;no contribution&quot; (or 0% contribution) and 16384 means &quot;full contribution&quot; (or 100% contribution).</p></li>
+
+<li><p>5 (DV_MMCONTRIB_TYPE_AXIS_USER1024) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding design axis in the final interpolated font instance, expressed as a percentage of the axis' end-user scale that starts at the minimum axis value and ends at the maximum axis value. The minimum and maximum axis values can be obtained by calling the <a href="dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function. The value of each element must be in the 0 - 1024 range, where zero means &quot;minimum axis value&quot; (or 0%) and 1024 means &quot;maximum axis value&quot; (or 100%). See <a href="dtFontAddAsMMInstancePlus.htm#example4">Example 4</a> below for details.</p></li>
+
+<li><p>6 (DV_MMCONTRIB_TYPE_AXIS_USER16384) &mdash; Each element in the <em>contribs</em> array represents a contribution of the corresponding design axis in the final interpolated font instance, expressed as a percentage of the axis' end-user scale that starts at the minimum axis value and ends at the maximum axis value. The minimum and maximum axis values can be obtained by calling the <a href="dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function. The value of each element must be in the 0 - 16384 range, where zero means &quot;minimum axis value&quot; (or 0%) and 16384 means &quot;maximum axis value&quot; (or 100%). See <a href="dtFontAddAsMMInstancePlus.htm#example4">Example 4</a> below for details.</p></li>
+
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>contribs_len</em></p>
+</td><td>
+<p>Number of elements in the <em>contribs</em> array when dtFontAddAsMMInstancePlus is used.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>contribs</em></p>
+</td><td>
+<p>A <em>Contribution Array</em>.</p>
+
+<p>If dtFontAddAsMMInstancePlus is used, the number of elements in this array is explicitly specified by the <em>contribs_len</em> parameter and their values should be interpreted according to the <em>contribs_flag</em> value described above.</p>
+
+<p>If dtFontAddAsMMInstance is used, the number of elements in this array must be the same as the number of base designs in the Multiple-Master font referenced by <em>font_index</em>. This number can be obtained by calling the <a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> or <a href="dtFontGetDim.htm">dtFontGetDim</a> function. In this case, each element in the <em>contribs</em> array represents a contribution of the corresponding base design in the final interpolated font instance. The value of each element must be in the 0 - 1024 range, where zero means &quot;no contribution&quot; (or 0% contribution) and 1024 means &quot;full contribution&quot; (or 100% contribution). Finally, the sum of all the elements in the array must equal 1024 (or 100%), otherwise unexpected results might occur.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is the index of the created font instance in the Font Catalog. This value uniquely identifies the font or font instance in the catalog and is referred to as <em>font index</em>. If not successful, the function returns -1.</p>
+
+
+<h3>Comments</h3>
+
+<p>The created font instance should be treated as any regular font. This means that an application can even use the <a href="dtGlyphGetOutline.htm">dtGlyphGetOutline</a> or <a href="dtGlyphGetOutline.htm">dtCharGetOutline</a> function to get the interpolated outline curve for an interpolated outline glyph or character.</p>
+
+
+<h3>Note 1</h3>
+
+<p>DV_MMCONTRIB_TYPE_DIM_NORM1024 and DV_MMCONTRIB_TYPE_DIM_NORM16384 are now obsolete and should not be used in modern programs. These flags were used long time ago in the age of Adobe's Multiple Master fonts which predate variable OpenType fonts.</p>
+
+
+<h3>Example 1</h3>
+
+<p>The following example illustrates a Multiple-Master font with 2 design axes (width and weight), 4 base designs and 12 interpolated (intermediate) designs (16 font instances in total). The value of the <em>ContributionArray</em> elements is shown below for each design (indicated as <em>C[0], C[1], C[2]</em> and <em>C[3]</em>). Please note that the sum of all contributions in each array is exactly 1024 (or 100%).</p>
+
+<p class="center">
+<img src="../images/img3.gif" width="486" height="693" alt="MM contributions" />
+</p>
+
+
+<h3>Example 2</h3>
+
+<p>The following program illustrates how to create intermediate font instances from a single Multiple-Master font file.</p>
+
+<div class="box_field">
+<pre>
+#include &lt;stdio.h&gt;
+#include "dtype.h"
+
+#define INTERPOLATIONS_X 3
+#define INTERPOLATIONS_Y 5
+#define INTERPOLATIONS_X_AND_Y (1 + (INTERPOLATIONS_X + 1) * (INTERPOLATIONS_Y + 1))
+
+<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> MMFont[INTERPOLATIONS_X_AND_Y];
+
+<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> InitMMInstances(DT_DTENGINE engine)
+{
+    <span class="codecomment">/* Add a Multiple-Master font to catalog */</span>&nbsp;
+    DT_STREAM_FILE(sd, "system/fonts/pfb/HSansMM.pfb");
+    MMFont[0] = dtFontAddViaStream(engine, DV_FONT_TYPE1_ADOBE, DV_NULL, 0, 0, 0, 1, &amp;sd);
+
+    if (MMFont[0] &lt; 0)
+    {
+        <span class="codecomment">/* Error opening font */</span>&nbsp;
+        printf("Multiple-Master font file \"HSansMM.pfb\" not found
+        in D-Type's system/fonts/pfb sub-directory");
+        return 0;
+    }
+
+    DT_SWORD font_axis_count = dtFontGetMMAxisInfo(engine, MMFont[0], DV_NULL, DV_NULL);
+
+    if (font_axis_count &lt; 0)
+    {
+        printf("Something is wrong with this font!\n");
+        return 0;
+    }
+    else if (font_axis_count > 16)
+    {
+        printf("This is a complex Multiple-Master font with more than 16 axes! This font cannot be used with this program.\n");
+        return 0;
+    }
+    else if (font_axis_count == 0)
+    {
+        printf("This is not a Multiple-Master, but a regular font! This font cannot be used with this program.\n");
+        return 0;
+    }
+    else if (font_axis_count < 2)
+    {
+        printf("Although this is a Multiple-Master font, it cannot be used for this demo because it has less than 2 axes!\n");
+        return 0;
+    }
+
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> mm_contribs[2];
+    <a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> mm_contribs[2];
+    <a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> i = 1, i_x, i_y;
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> result = 1;
+
+    // Create interpolated font instances
+
+    for (i_y = 0; i_y <= DV_MM_INTERPOLATIONS_Y; i_y++)
+    for (i_x = 0; i_x <= DV_MM_INTERPOLATIONS_X; i_x++)
+    {
+        mm_contribs[0] = 1024 * i_x / DV_MM_INTERPOLATIONS_X;
+        mm_contribs[1] = 1024 * i_y / DV_MM_INTERPOLATIONS_Y;
+
+        // Now we can make an MM instance
+        MMFont[i] = dtFontAddAsMMInstancePlus(engine, MMFont[0], DV_MMCONTRIB_TYPE_AXIS_NORM1024, 2, mm_contribs);
+        if (MMFont[i] < 0) result = 0; /* Error creating font instance */
+
+        i++;
+    }
+
+    return result;
+}
+
+void DrawMMInstances(DT_DTENGINE engine)
+{
+    <a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> i = 1, i_x, i_y;
+    <a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{0, 0}, {20, 115, 0, 0}, 0, DV_NULL};
+    <a href="../manual/structs.htm#DT_TYPE_EFFECTS">DT_TYPE_EFFECTS</a> type = {0, 0, 0, {{50, 50, 0, 0, 0}}, {0, 0, 0, 0, 0, DV_SCALE_100}};
+
+    dtOutputSetStyleAttribs(engine, &amp;style, 0);
+
+    <span class="codecomment">/* Draw a sample of all the previously created font instances */</span>&nbsp;
+
+    for (i_y = 0; i_y <= INTERPOLATIONS_Y; i_y++)
+    for (i_x = 0; i_x <= INTERPOLATIONS_X; i_x++)
+    {
+        type.font = MMFont[i];
+        dtTypesetterSetTypeEffects(engine, &amp;type, 0);
+
+        dtxTextDoOutput_ANSI(engine, 20 + 340 * wgh, 20 + 80 * wdt,
+        80, DV_TEXTMODE_KERN_FRAC, DV_NULL, "D-Type");
+        i++;
+    }
+}
+
+void main(void)
+{
+    DT_DTENGINE engine
+    <a href="../manual/structs.htm#DT_MDC">DT_MDC</a> dc_mem;
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> wcl = 640, hcl = 400;
+
+    <span class="codecomment">/* Initialize Standard Engine */</span>&nbsp;
+    DT_STREAM_FILE(sd, "dtype.inf");
+    if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) &lt;= 0) return;
+
+    <span class="codecomment">/* Generate MM instances */</span>&nbsp;
+    InitMMInstances(engine);
+
+    <span class="codecomment">/* Create a 640x480-pixel memory surface */</span>&nbsp;
+    dc_mem.w = wcl;
+    dc_mem.h = hcl,
+    dc_mem.l = (<a href="../manual/types.htm#DT_SLONG">DT_SLONG</a>)3 * wcl * hcl;
+    if ((dc_mem.m = (<a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a>*)malloc(dc_mem.l)) == DV_NULL) return;
+    memset(dc_mem.m, 255, dc_mem.l);
+
+    <span class="codecomment">/* Redirect all D-Type output to that surface */</span>&nbsp;
+    dtOutputSetAsMDC(engine, DV_FORMAT_24, 0, &amp;dc_mem, 0, 0, wcl, hcl);
+
+    <span class="codecomment">/* Draw a sample of MM instances */</span>&nbsp;
+    DrawMMInstances(engine);
+
+    <span class="codecomment">/* Copy surface to screen or save as image */</span>&nbsp;
+
+    ...
+
+    <span class="codecomment">/* Release the surface */</span>&nbsp;
+    free(dc_mem.m);
+
+    <span class="codecomment">/* And destroy Standard Engine instance */</span>&nbsp;
+    dtEngineExt(engine);
+}
+</pre>
+</div>
+
+<p><em>Output</em>:</p>
+
+<p class="center">
+<img src="../images/img4.gif" width="575" height="199" alt="MM instances" />
+</p>
+
+
+<h3>Example 3</h3>
+
+<p>The following program illustrates another way to create intermediate font instances from a single Multiple-Master font file.</p>
+
+<div class="box_field">
+<pre>
+#include &lt;stdio.h&gt;
+#include "dtype.h"
+
+#define INTERPOLATIONS_X 3
+#define INTERPOLATIONS_Y 5
+#define MAXBASEDESIGNS 16
+
+<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> MMFont[1 + (INTERPOLATIONS_X + 1) * (INTERPOLATIONS_Y + 1)];
+
+<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> InitMMInstances(DT_DTENGINE engine)
+{
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> result = 1;
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> font_dim;
+    <a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> i, wdt, wgh;
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> mm_contribs[MAXBASEDESIGNS];
+    <a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a> k_wgh, k_wdt;
+
+    <span class="codecomment">/* Add a Multiple-Master font to catalog */</span>&nbsp;
+    DT_STREAM_FILE(sd, "system/fonts/pfb/HSansMM.pfb");
+    MMFont[0] = dtFontAddViaStream(engine, DV_FONT_TYPE1_ADOBE, DV_NULL, 0, 0, 0, 1, &amp;sd);
+
+    if (MMFont[0] &lt; 0)
+    {
+        <span class="codecomment">/* Error opening font */</span>&nbsp;
+        printf("Multiple-Master font file \"HSansMM.pfb\" not found
+        in D-Type's system/fonts/pfb sub-directory");
+        return 0;
+    }
+
+    font_dim = dtFontGetDim(engine, MMFont[0]);
+
+    if (font_dim == 1)
+    {
+        printf("This is not a Multiple-Master, but a regular font! This
+        font cannot be used in demonstration of Multiple-Master features.");
+        return 0;
+    }
+    else if (font_dim &lt; 4)
+    {
+        printf("Although this is a Multiple-Master font, it cannot be
+        used with this program because it has less than 4 base designs!");
+        return 0;
+    }
+    else if (font_dim &gt; MAXBASEDESIGNS)
+    {
+        printf("This is an incredibly complex Multiple-Master font!");
+        return 0;
+    }
+
+    <span class="codecomment">/* Set all base contributions to 0 */</span>&nbsp;
+    for (i = 0; i &lt; font_dim; i++) mm_contribs[i] = 0;
+
+    <span class="codecomment">/* Create Interpolated Font Instances */</span>&nbsp;
+    for (wdt = 0, i = 1; wdt &lt;= INTERPOLATIONS_Y; wdt++)
+    {
+        <span class="codecomment">/* k_wdt is a "Width" factor, and is always between 0 and 1 */</span>&nbsp;
+        k_wdt = (wdt / (<a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a>)INTERPOLATIONS_Y);
+
+        for (wgh = 0; wgh &lt;= INTERPOLATIONS_X; wgh++)
+        {
+            <span class="codecomment">/* k_wgh is a "Weight" factor, and is always between 0 and 1 */</span>&nbsp;
+            k_wgh = (wgh / (<a href="../manual/types.htm#DT_FLOAT">DT_FLOAT</a>)INTERPOLATIONS_X);
+
+            <span class="codecomment">/* Calculate contribution of each base design */</span>&nbsp;
+
+            <span class="codecomment">/* If the font has more than 4 base designs, we calculate only the */</span>&nbsp;
+            <span class="codecomment">/* first four contributions, and ignore all remaining contributions */</span>&nbsp;
+
+            <span class="codecomment">/* Contribution of base design 0 (Weight-0, Width-0) */</span>&nbsp;
+            mm_contribs[0] = (<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a>)((1 - k_wdt) * (1 - k_wgh) * 1024);
+            <span class="codecomment">/* Contribution of base design 1 (Weight-1, Width-0) */</span>&nbsp;
+            mm_contribs[1] = (<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a>)((1 - k_wdt) * k_wgh * 1024);
+            <span class="codecomment">/* Contribution of base design 2 (Weight-0, Width-1) */</span>&nbsp;
+            mm_contribs[2] = (<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a>)(k_wdt * (1 - k_wgh) * 1024);
+            <span class="codecomment">/* Contribution of base design 3 (Weight-1, Width-1) */</span>&nbsp;
+            mm_contribs[3] = (<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a>)(k_wgh * k_wdt * 1024);
+
+            <span class="codecomment">/* NOTE: The sum of all the contributions MUST ALWAYS EQUAL 1024 */</span>&nbsp;
+
+            <span class="codecomment">/* Now we can make a MM instance */</span>&nbsp;
+            MMFont[i] = dtFontAddAsMMInstance(engine, MMFont[0], mm_contribs);
+
+            if (MMFont[i] &lt; 0) result = 0; <span class="codecomment">/* Error creating font instance */</span>&nbsp;
+
+            i++;
+        }
+    }
+
+    return result;
+}
+
+void DrawMMInstances(DT_DTENGINE engine)
+{
+    <a href="../manual/types.htm#DT_SLONG">DT_SLONG</a> i, wdt, wgh;
+    <a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{0, 0}, {20, 115, 0, 0}, 0, DV_NULL};
+    <a href="../manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> type = {0, 0, 0, 0, 0, {{50, 50, 0, 0, 0}}};
+
+    dtOutputSetStyleAttribs(engine, &amp;style, 0);
+
+    <span class="codecomment">/* Draw a sample of all the previously created font instances */</span>&nbsp;
+
+    for (wdt = 0, i = 1; wdt &lt;= INTERPOLATIONS_Y; wdt++)
+    {
+        for (wgh = 0; wgh &lt;= INTERPOLATIONS_X; wgh++)
+        {
+            type.font = MMFont[i];
+            dtTypesetterSetTypeAttribs(engine, &amp;type, 0);
+
+            dtxTextDoOutput_ANSI(engine, 20 + 340 * wgh, 20 + 80 * wdt,
+            80, DV_TEXTMODE_KERN_FRAC, DV_NULL, "D-Type");
+            i++;
+        }
+    }
+}
+
+void main(void)
+{
+    DT_DTENGINE engine
+    <a href="../manual/structs.htm#DT_MDC">DT_MDC</a> dc_mem;
+    <a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> wcl = 640, hcl = 400;
+
+    <span class="codecomment">/* Initialize Standard Engine */</span>&nbsp;
+    DT_STREAM_FILE(sd, "dtype.inf");
+    if (dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL) &lt;= 0) return;
+
+    <span class="codecomment">/* Generate MM instances */</span>&nbsp;
+    InitMMInstances(engine);
+
+    <span class="codecomment">/* Create a 640x480-pixel memory surface */</span>&nbsp;
+    dc_mem.w = wcl;
+    dc_mem.h = hcl,
+    dc_mem.l = (<a href="../manual/types.htm#DT_SLONG">DT_SLONG</a>)3 * wcl * hcl;
+    if ((dc_mem.m = (<a href="../manual/types.htm#DT_UBYTE">DT_UBYTE</a>*)malloc(dc_mem.l)) == DV_NULL) return;
+    memset(dc_mem.m, 255, dc_mem.l);
+
+    <span class="codecomment">/* Redirect all D-Type output to that surface */</span>&nbsp;
+    dtOutputSetAsMDC(engine, DV_FORMAT_24, 0, &amp;dc_mem, 0, 0, wcl, hcl);
+
+    <span class="codecomment">/* Draw a sample of MM instances */</span>&nbsp;
+    DrawMMInstances(engine);
+
+    <span class="codecomment">/* Copy surface to screen or save as image */</span>&nbsp;
+
+    ...
+
+    <span class="codecomment">/* Release the surface */</span>&nbsp;
+    free(dc_mem.m);
+
+    <span class="codecomment">/* And destroy Standard Engine instance */</span>&nbsp;
+    dtEngineExt(engine);
+}
+</pre>
+</div>
+
+<p><em>Output</em>:</p>
+
+<p class="center">
+<img src="../images/img4.gif" width="575" height="199" alt="MM instances" />
+</p>
+
+<h3 id="example4">Example 4</h3>
+
+<p>Assume we have a variable OpenType font called Bahnschrift.ttf. This font has two design axes, Weight and Width. The Weight scale is in the 300 &ndash; 700 range, while the Width scale is in the 75 &ndash; 100 range. We want to calculate the elements of the <em>contribs</em> array corresponding to the final interpolated font instance &quot;SemiBold SemiCondensed&quot; in which Weight = 600 and Width = 87.5. We want to use either <em>contribs_flag</em> = DV_MMCONTRIB_TYPE_AXIS_USER1024 or <em>contribs_flag</em> = DV_MMCONTRIB_TYPE_AXIS_USER16384 when calling dtFontAddAsMMInstance.</p>
+
+<p>
+<strong>Weight</strong><br />
+&nbsp;&nbsp;End-user scale (based on the font data): min_value = 300 and max_value = 700<br />
+&nbsp;&nbsp;scale_range = max_value - min_value = 700 - 300 = 400<br />
+&nbsp;&nbsp;desired_weight = 600<br />
+&nbsp;&nbsp;Percentage of the axis' end-user scale = (desired_weight - min_value) / scale_range = (600 - 300) / 400 = <strong>0.75 or 75%</strong><br />
+</p>
+
+<p>
+<strong>Width</strong><br />
+&nbsp;&nbsp;End-user scale (based on the font data): min_value = 75 and max_value = 100<br />
+&nbsp;&nbsp;scale_range = max_value - min_value = 100 - 75 = 25<br />
+&nbsp;&nbsp;desired_width = 87.5<br />
+&nbsp;&nbsp;Percentage of the axis' end-user scale = (desired_width - min_value) / scale_range = (87.5 - 75) / 25 = <strong>0.5 or 50%</strong><br />
+</p>
+
+<p>
+<strong>Thus, when <em>contribs_flag</em> = DV_MMCONTRIB_TYPE_AXIS_USER1024, the elements of the <em>contribs</em> array should be set up as follows:</strong>
+</p>
+
+<p>
+<strong>contribs[0] = 768</strong> (which is 75% since 0.75 * 1024 = 768)<br />
+<strong>contribs[1] = 512</strong> (which is 50% since 0.50 * 1024 = 512)
+</p>
+
+
+<p>
+<strong>Similarly, when <em>contribs_flag</em> = DV_MMCONTRIB_TYPE_AXIS_USER16384, the elements of the <em>contribs</em> array should be set up as follows:</strong>
+</p>
+
+<p>
+<strong>contribs[0] = 12288</strong> (which is 75% since 0.75 * 16384 = 12288)<br />
+<strong>contribs[1] = 8192</strong> (which is 50% since 0.50 * 16384 = 8192)
+</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

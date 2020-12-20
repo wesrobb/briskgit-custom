@@ -1,0 +1,6 @@
+Initial and final intensity of red (2 bytes). Used for grayscale images.
+
+{strong}Sample values:{/strong}
+
+"00 FF" = initial intensity is 0, final intensity is 255
+"CC 0A " = initial intensity is 204, final intensity is 10

@@ -1,0 +1,76 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTRasterizerV8</h1>
+
+<h2>SetFillRule</h2>
+
+<div class="box_prototype"><strong>void SetFillRule(DT_ID_UBYTE fill_rule)</strong></div><br />
+
+<p>This method tells CDTRasterizerV8 which filling rule to respects when rasterizing vectorial shapes: the <em>Nonzero Winding Number</em> rule or the <em>Odd-Even</em> rule.
+
+When the <em>Odd-Even</em> rule is selected, the direction of contours used to build vectorial shapes is ignored. When the <em>Nonzero Winding Number</em> rule is selected, the direction of contours is respected. Depending on the construction of the vectorial shape (i.e. whether it has any overlapping contours), these two rules may yield different rasterization results.</p>
+
+<p>The default filling rule is the <em>Nonzero Winding Number</em> rule. This filling rule is more versatile than the <em>Odd-Even</em> rule and, consequently, very suitable for fonts and user defined shapes. In some cases, however, applications may want to call this method to utilize the simpler <em>Odd-Even</em> filling rule.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>fill_rule</em></p>
+</td><td>
+<p>0 (DV_NZW_OFF) &mdash; Use the <em>Odd-Even</em> filling rule<br />
+1 (DV_NZW_ON) &mdash; Use the <em>Nonzero Winding Number</em> filling rule</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+
+<p>Both the <em>Nonzero Winding Number</em> rule and the <em>Odd-Even</em> rule and described in general computer graphics literature.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a></li>
+<li><a href="../../dc/manual/intro.htm">D-Type Direct Color Rasterizer</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

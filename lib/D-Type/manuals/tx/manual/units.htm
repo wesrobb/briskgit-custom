@@ -1,0 +1,58 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Text Engine Units</h1>
+
+
+<h2>Document Units</h2>
+
+
+<p>Virtually all distances, coordinates and sizes in D-Type Text Engine are expressed in logical units called <em>document units</em>. Document units are device and resolution independent and have no particular physical meaning &mdash; their interpretation is entirely up to the application.</p>
+
+<p>When rendering text, D-Type Text Engine uses a zoom factor and/or transformation matrices to convert document units to the output pixel coordinates. When the zoom factor multiplied by the product of all the transformation matrices applied to the current textflow area is an identity matrix, the pixel coordinates and document units are the same.</p>
+
+
+<p>Note that the following text styling/formatting attributes have a non-zero default value (in document units):</p>
+
+<ul>
+
+<li>
+<p><strong>Font Width</strong> (<tt><a href="txattrids.htm#TX_ATTR_FONT_WIDTH">TX_ATTR_FONT_WIDTH</a></tt>) and <strong>Font Height</strong> (<tt><a href="txattrids.htm#TX_ATTR_FONT_HEIGHT">TX_ATTR_FONT_HEIGHT</a></tt>): If the font width and/or font height is not specified when creating a new text document, the default value is 36 document units. This default applies even to empty textflow areas.</p>
+</li>
+
+<li>
+<p><strong>Row Spacing</strong> (<tt><a href="txattrids.htm#TX_ATTR_SPACING_ROW">TX_ATTR_SPACING_ROW</a></tt>): If row spacing is not specified when creating a new text document, the default value is 10 document units. This default applies even to empty textflow areas.</p>
+</li>
+
+<!--
+<li>
+<p><strong>Horizontal Shadow Offset</strong> (<tt><a href="txattrids.htm#TX_ATTR_SHADOW_DX">TX_ATTR_SHADOW_DX</a></tt>) and <strong>Vertical Shadow Offset</strong> (<tt><a href="txattrids.htm#TX_ATTR_SHADOW_DY">TX_ATTR_SHADOW_DY</a></tt>): If the horizontal and/or vertical offset of a shadow is not specified when applying the shadow style, the default value is 10 document units.</p>
+</li>
+
+<li>
+<p><strong>Outline Thickness</strong> (<tt><a href="txattrids.htm#TX_ATTR_OUTLINE_THICKNESS">TX_ATTR_OUTLINE_THICKNESS</a></tt>): If the thickness of an outline is not specified when applying the outline style, the default value is 1 document unit.</p>
+</li>
+-->
+
+</ul>
+
+<p>If necessary, these default values can be changed by calling the <a href="../funcs/txTextSetNumericValue.htm">txTextSetNumericValue</a> function, an a per-document basis. Just remember to call <a href="../funcs/txTextSetNumericValue.htm">txTextSetNumericValue</a> before building the text using the <a href="../funcs/txTextMakeViaStream.htm">txTextMakeViaStream</a> or <a href="../funcs/txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

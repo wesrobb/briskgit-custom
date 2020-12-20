@@ -1,0 +1,3 @@
+Link to the {a href="../objects/011.htm"}Font Data{/a} object.
+
+This is an optional link. It indicates that the font data (file) is embedded in the document. This link should only be used when the font is specified by the pdFontUniqueID property. If the font is specified by the pdFontIndex property, this link is ignored and, therefore, should be omitted.

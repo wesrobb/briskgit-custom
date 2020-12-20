@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtEngineIniViaStream</h2><div class="box_prototype"><strong>
+DT_SWORD dtEngineIniViaStream(DT_DTENGINE* engine, const DT_STREAM_DESC* sd, DT_INIT_INFO* init_info)</strong></div><br /><strong>Short Description:</strong> <em>Create and initialize D-Type Standard Engine - via stream</em><br /><br />
+
+<p>This function creates and initializes a new instance of D-Type Standard Engine (or simply <em>Engine</em> within the scope of D-Type Standard Engine Manual) using a set of external initialization streams. The dtEngineIniViaStream function must be called before any other D-Type Standard Engine function can be used.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Pointer to the handle of the newly created Standard Engine instance (also called D-Type Engine instance).</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the main D-Type initialization file. Typically, this is <em><a href="../manual/inifiles.htm#inf">dtype.inf</a></em>. When appropriate, your application can provide its own (i.e. altered) version of the dtype.inf file. Also, it is possible for each Standard Engine instance to be initialized via its own unique initialization file, meaning that different Standard Engine instances can be initialized using a different set of initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>init_info</em></p>
+</td><td>
+<p>A pointer to the <a href="../manual/structs.htm#DT_INIT_INFO">DT_INIT_INFO</a> structure that provides additional initialization information to D-Type Engine and receives additional initialization information from D-Type Engine. If you do not wish to make use of this parameter, simply set it to DV_NULL.</p>
+<p>The members of this structure have the following meaning:</p>
+
+<p><em>init_key</em> &mdash; this parameter is reserved for future and must be set to 0:</p>
+
+<p><em>init_flag</em> &mdash; this parameter is reserved for future and must be set to 0:</p>
+
+<p><em>init_status</em> &mdash; this parameter provides extended initialization information and is set by D-Type Engine. One of the following values will be returned:</p>
+
+<ul>
+<li><p><em>init_status</em> = 0 &mdash; OK &mdash; The engine did not detect any critical errors during the initialization, or they were automatically corrected or ignored. The engine initialized successfully.</p></li>
+
+<li><p><em>init_status</em> = -1 &mdash; Warning &mdash; At least one initialization path is invalid. The engine initialized in a degraded mode.</p></li>
+
+<li><p><em>init_status</em> = 1 &mdash; Error &mdash; At least one initialization path is invalid. The engine could not be initialized.</p></li>
+
+<li><p><em>init_status</em> = -2 &mdash; Warning &mdash; There was not enough memory for full initialization. The engine initialized in a degraded mode.</p></li>
+
+<li><p><em>init_status</em> = 2 &mdash; Error &mdash; There was not enough memory for full initialization. The engine could not be initialized.</p></li>
+
+<li><p><em>init_status</em> = -3 or any other negative value indicates that an unspecified or unknown warning was encountered during the initialization and the engine initialized in a degraded mode.</p></li>
+
+<li><p><em>init_status</em> = 3 or any other positive value indicates that an unspecified or unknown error was encountered during the initialization and the engine could not be initialized.</p></li>
+
+</ul>
+
+<p><em>reserved1</em> &mdash; reserved for future and must be set to 0.</p>
+
+<p><em>reserved2</em> &mdash; reserved for future and must be set to 0.</p>
+
+<p><em>reserved3</em> &mdash; reserved for future and must be set to DV_NULL.</p>
+
+<p><em>reserved4</em> &mdash; reserved for future and must be set to DV_NULL.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the initialization was successful, the return value is 1 and <em>engine</em> holds a handle of the newly created Standard Engine instance. Otherwise, the function returns 0 and <em>engine</em> holds DV_NULL. Applications that make use of the <em>init_info</em> structure can get extended error information via its <em>init_status</em> member.</p>
+
+
+<h3>Comments</h3>
+
+<p>An application can create multiple instances of D-Type Standard Engine by calling the <a href="dtEngineIniViaStream.htm">dtEngineIniViaStream</a> function more than once. Each instance is created dynamically and must be destroyed by calling the <a href="dtEngineExt.htm">dtEngineExt</a> function before the application terminates. In multi-threaded applications, each thread can initialize its own Standard Engine instance. This approach allows multiple threads to call the library's functions simultaneously (without using mutexes or other synchronization or blocking code). However, depending on the font cache, number of fonts and other utilized resources, a large number of Standard Engine instances may require a significant amount of RAM.</p>
+
+
+<h3>Note 1</h3>
+<p>To ensure that the initialization is successful, the location that <em>sd</em> holds must point to the main D-Type initialization file. For more information on the structure of the main D-Type initialization file, see the <a href="../manual/inifiles.htm">Initialization Files</a> section of this document. In addition, any other stream descriptors that the main D-Type initialization file may contain (e.g. locations of the initial font list, pattern catalog, etc.) must be valid and should stay valid until the corresponding Standard Engine instance is destroyed by calling <a href="dtEngineExt.htm">dtEngineExt</a>. Remember that D-Type Engine might attempt to open some of these streams later during the execution of your application so it is important to ensure that they remain accessible to D-Type Engine even after the <a href="dtEngineIniViaStream.htm">dtEngineIniViaStream</a> function returns.</p>
+
+
+<h3>Note 2</h3>
+<p>See <a href="../manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+<h3>Note 3</h3>
+<p>See our <a href="../manual/fpaths.htm">notes regarding file based streams</a>.</p>
+
+
+<h3>Note 4</h3>
+<p>See our <a href="../manual/vcnote.htm">note for MS Visual C++ users</a>.</p>
+
+
+<h3>Note 5</h3>
+<p>Please note that any stream descriptors that are part of the <em>Optional Secondary Initialization Files</em> section of <em><a href="../manual/inifiles.htm#inf">dtype.inf</a></em> are optional. If not needed, they can be specified as NONE streams (<em>Stream&nbsp;ID</em>&nbsp;=&nbsp;-1, <em>Stream&nbsp;Locator</em>&nbsp;=&nbsp;NONE). Otherwise they must be valid or your initialization could fail.</p>
+
+
+<h3>Note 6</h3>
+<p><em>Char Translation and Alignment</em> stream descriptors (the <em>.ccv</em> file paths) that are specified within the <em>Font Factories</em> section of <em><a href="../manual/inifiles.htm#inf">dtype.inf</a></em> are highly recommended
+because those files allow your application to create custom character encodings and, additionally, contain instruction designed to improve font rendering. Therefore, we do not recommend you specify them as NONE streams.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

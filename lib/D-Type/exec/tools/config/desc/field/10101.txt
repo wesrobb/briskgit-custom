@@ -1,0 +1,1 @@
+An array containing indexes of the selected items in the list.

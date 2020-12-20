@@ -1,0 +1,74 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextRefresh</h2><div class="box_prototype"><strong>
+DT_SWORD txTextRefresh(DT_TXDOC text_doc, DT_SLONG area_index)</strong></div><br /><strong>Short Description:</strong> <em>Refresh state</em><br /><br />
+
+<p>This function refreshes the state of the associated text document instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>area_index</em></p>
+</td><td>
+<p>The index of the textflow area to refresh. Set to -1 to refresh all textflow areas in the specified text document.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+<p>A call to this function tells D-Type Text Engine that the entire visible screen area is about to be repainted, due to some important change made to the current state of the text document. This will cause D-Type Text Engine to clear any device specific metrics cached during previous calls to <a href="txTextDraw.htm">txTextDraw</a> so that subsequent text selection actions (e.g. cursor movement and/or selection highlighting) can be performed correctly.</p>
+
+<p>The following are situations when it is necessary to repaint the entire visible screen area and call the <a href="txTextRefresh.htm">txTextRefresh</a> function:</p>
+<ul>
+<li>the contents of the text document changes (e.g. some text is deleted and/or new text is inserted)</li>
+<li>some of the styling/formatting attributes applied to the text change</li>
+<li>the <em>area_index</em> parameter passed to the <a href="txTextDraw.htm">txTextDraw</a> changes</li>
+<li>the transformation matrix passed to the <a href="txTextSetTransformPlus.htm">txTextSetTransformPlus</a> (or <a href="txTextSetTransformPlus.htm">txTextSetTransform</a> or <a href="txTextSetTransformPlus.htm">txTextSetScale</a>) changes</li>
+<li>the transformation matrix associated with one of the textflow areas changes</li>
+</ul>
+
+<p>The following are situations when it is <strong>not</strong> necessary to repaint the entire visible screen area and call the <a href="txTextRefresh.htm">txTextRefresh</a> function:</p>
+<ul>
+<li>the <em>x_off</em> or <em>y_off</em> parameters passed to the <a href="txTextDraw.htm">txTextDraw</a> change</li>
+<li>the <em>format</em>, <em>subformat</em> or <em>memory_surface</em> parameters passed to the <a href="txTextDraw.htm">txTextDraw</a> change</li>
+</ul>
+
+
+<h3>Note 1</h3>
+<p>In the future this function may become obsolete. It is expected that D-Type Text Engine will automatically take care of clearing device specific metrics. Until then, the <a href="txTextRefresh.htm">txTextRefresh</a> function must be called manually.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

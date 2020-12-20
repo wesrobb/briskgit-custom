@@ -1,0 +1,64 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdImgGetTransformPlus</h2><div class="box_prototype"><strong>
+void pdImgGetTransformPlus(DT_PDDOC power_doc, DT_SLONG img, DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Get image's 3X3 transformation matrix</em><br /><br />
+<h2>pdImgGetTransform</h2><div class="box_prototype"><strong>
+void pdImgGetTransform(DT_PDDOC power_doc, DT_SLONG img, DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Get image's 2x2 transformation matrix</em><br /><br />
+
+<p>The pdImgGetTransformPlus (or pdImgGetTransform) function returns the transformation matrix associated with an existing PowerDoc image.</p>
+
+<p>The only difference between pdImgGetTransformPlus and pdImgGetTransform is that pdImgGetTransformPlus returns the full 3x3 transformation matrix while pdImgGetTransform only returns its top two rows and columns. Therefore, pdImgGetTransform is more limited (i.e. this function cannot be used to retrieve the full perspective transform associated with a PowerDoc image).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>img</em></p>
+</td><td>
+<p>Image's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For pdImgGetTransformPlus, this is a 3x3 transformation matrix. This matrix represents the 2D perspective (or projective) transform currently associated with the specified PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+
+<p>For pdImgGetTransform, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of the 2D perspective transform currently associated with the specified PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdImgSetTransformPlus.htm">pdImgSetTransformPlus</a>, <a href="pdImgSetTransformPlus.htm">pdImgSetTransform</a><br />
+<a href="pdImgAddPlus.htm">pdImgAddPlus</a>, <a href="pdImgAddPlus.htm">pdImgAdd</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

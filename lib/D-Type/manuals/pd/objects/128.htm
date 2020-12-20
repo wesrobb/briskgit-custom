@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Rich Text Design</h2>
+<h3 id="overview">Overview</h3>
+This objects represents a rich text design. In Power Engine API, a rich text design is an array of manually positioned text fragments. Functionally, the Rich Text Design object is similar to the <a href="127.htm">Text Design</a> object but is more complex. This is because a typical rich text design usually consists of many text fragments, while each fragment is formatted using a different set of typographic and layout attributes.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawRichTextDesign (27)<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTextFragmentPtr"><em><span class="field">pdTextFragmentPtr</span> (1038)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextFragmentPtr">Text Fragment</a>, <a href="104.htm#pdTextFragmentPtr">Rich Text Line</a>, <a href="105.htm#pdTextFragmentPtr">Rich Text Arc</a>, <a href="106.htm#pdTextFragmentPtr">Rich Text Area</a>, <a href="131.htm#pdTextFragmentPtr">Rich Text Path</a>, <a href="308.htm#pdTextFragmentPtr">Rich Text Box</a>, <a href="309.htm#pdTextFragmentPtr">Rich Button</a>, <a href="310.htm#pdTextFragmentPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="007.htm">Text Fragment</a> object.<br />
+<br />
+This link in used to establish a link to the next text fragment. This can be the first text fragment or the fragment that follows the current one.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdAngleRotation"><em><span class="field">pdAngleRotation</span> (1034)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#pdAngleRotation">Text Line</a>, <a href="127.htm#pdAngleRotation">Text Design</a>, <a href="104.htm#pdAngleRotation">Rich Text Line</a></small></p>
+<p>
+Angle in degrees. Must be between 0 and 360.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[5];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Text Fragment Body Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Text Fragment Typography");<br />
+obj[2] = pdObjAdd(pd, 0, "Text Fragment Layout");<br />
+obj[3] = pdObjAdd(pd, 0, "Text Fragment");<br />
+<strong>obj[4] = pdObjAdd(pd, 0, "RichTextDesign");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdBodyPtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdFontIndex, "2", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdFontDw, "90", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdFontDh, "90", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdPosArrX_32, "15600, 22600, 18600, 15600, 10000, 11000, 8000, 10000, 4100, 3000", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdPosArrY_32, "0, -1000, -1000, -1000, -1000, -3000, -5000, -11000, -14000, -15000", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdHinting, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[2], pdPositioning, "1", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdTypographyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[3], pdTextLayoutPtr, obj[2]);<br />
+pdPropAdd(pd, obj[3], pdTextString_08, "Positioned", PD_ASC);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+<strong>pdLinkAdd(pd, obj[4], pdTextFragmentPtr, obj[3]);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[4], 0, 124, 425, 0, 0, 0, pdDrawRichTextDesign, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Text Fragment Body Style");<br />
+local obj_1 = o("Text Fragment Typography");<br />
+local obj_2 = o("Text Fragment Layout");<br />
+local obj_3 = o("Text Fragment");<br />
+local obj_4 = o("RichTextDesign");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_1 + l(pdBodyPtr, obj_0);<br />
+obj_1 + i(pdFontIndex, 2);<br />
+obj_1 + i(pdFontDw, 90);<br />
+obj_1 + i(pdFontDh, 90);<br />
+<br />
+obj_2 + p(pdPosArrX_32, "15600, 22600, 18600, 15600, 10000, 11000, 8000, 10000, 4100, 3000");<br />
+obj_2 + p(pdPosArrY_32, "0, -1000, -1000, -1000, -1000, -3000, -5000, -11000, -14000, -15000");<br />
+obj_2 + i(pdHinting, 1);<br />
+obj_2 + i(pdPositioning, 1);<br />
+<br />
+obj_3 + l(pdTypographyPtr, obj_1);<br />
+obj_3 + l(pdTextLayoutPtr, obj_2);<br />
+obj_3 + s(pdTextString_08, "Positioned");<br />
+<br />
+obj_4 + l(pdTextFragmentPtr, obj_3);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_4.Pin(0, 124, 425, pdDrawRichTextDesign);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

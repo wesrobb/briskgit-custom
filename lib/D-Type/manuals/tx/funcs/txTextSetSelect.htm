@@ -1,0 +1,89 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextSetSelect</h2><div class="box_prototype"><strong>
+DT_SWORD txTextSetSelect(DT_TXDOC text_doc, const DT_SLONG first_char[], const DT_SLONG last_char[], DT_SLONG array_len, DT_RECT_SLONG* extent, DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set text selection(s)</em><br /><br />
+
+<p>This function sets the boundaries of the active text selection(s).</p>
+
+<p>This function should be used after a texflow area is rendered by calling the <a href="txTextDraw.htm">txTextDraw</a> function with its <em>flags</em> parameter set to instruct D-Type Text Engine to generate text flows and frames.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>first_char</em></p>
+</td><td>
+<p>An input array of start positions of the selected character range(s).</p>
+</td></tr>
+
+<tr><td>
+<p><em>last_char</em></p>
+</td><td>
+<p>An input array of end positions of the selected character range(s).</p>
+</td></tr>
+
+<tr><td>
+<p><em>array_len</em></p>
+</td><td>
+<p>The number of selected character ranges, i.e. the size of the <em>first_char</em> and <em>last_char</em> arrays.</p>
+<p>If only a single selected character range (i.e. a single text selection) is needed, <em>first_char</em> and <em>last_char</em> should be single element arrays and <em>array_len</em> should be set to 1. If multiple (non-contiguous) or block (rectangular) text selections are needed, <em>first_char</em> and <em>last_char</em> should be multi-element arrays and <em>array_len</em> should be set accordingly. Additionally, the selected character ranges must not intersect each other.</p>
+</td></tr>
+
+<tr><td>
+<p><em>extent</em></p>
+</td><td>
+<p>A pointer to the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure that will receive a rectangle describing the smallest enclosing box of the screen area that needs to be repainted following the text selection operation.<br />
+<br />
+If you do not wish to receive this rectangle, you may set <em>extent</em> to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If a portion of the screen area needs to be repainted, the return value is 1. If no portion of the screen area needs to be repainted, the return value is 2. In this case all members of the <a href="../manual/txstructs1.htm#DT_RECT_SLONG">DT_RECT_SLONG</a> structure will be set to 0.</p>
+<p>If the function was not successful (e.g. invalid input parameters), the return value is 0.</p>
+
+<h3>Note</h3>
+<p>In D-Type Text Engine API, the cursor is a single text selection with equal start and end position (i.e. the length of the selected character range is zero).</p>
+
+<h3>Comments</h3>
+<p>The <em>extent</em> returned by this function is a rectangle that describes the smallest enclosing box of the screen area that needs to be repainted following a text selection operation. After that, the <a href="txTextDraw.htm">txTextDraw</a> function can be called again in order to repaint the area defined by <em>extent</em>.</p>
+
+<h3>Related Functions</h3>
+<p><a href="txTextGetSelect.htm">txTextGetSelect</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,446 @@
+0|0=library/group_a/line.pdc=Basic
+1|0=library/group_a/line_dashed.pdc=Dashed
+2|0=library/group_a/powerline.pdc=Advanced
+3|0=library/group_b/line.pdc=Basic with shadow
+4|0=library/group_b/line_dashed.pdc=Dashed with shadow
+5|0=library/group_b/powerline.pdc=Advanced with shadow
+6|1=library/group_a/arc.pdc=Basic
+7|1=library/group_a/arc_dashed.pdc=Dashed
+8|1=library/group_a/powerarc.pdc=Advanced
+9|1=library/group_b/arc.pdc=Basic with shadow
+10|1=library/group_b/arc_dashed.pdc=Dashed with shadow
+11|1=library/group_b/powerarc.pdc=Advanced with shadow
+12|2=library/group_a/bspline.pdc=Basic
+13|2=library/group_a/bspline_dashed.pdc=Dashed
+14|2=library/group_a/powerbspline.pdc=Advanced
+15|2=library/group_b/bspline.pdc=Basic with shadow
+16|2=library/group_b/bspline_dashed.pdc=Dashed with shadow
+17|2=library/group_b/powerbspline.pdc=Advanced with shadow
+18|3=library/group_a/bezier.pdc=Basic
+19|3=library/group_a/bezier_dashed.pdc=Dashed
+20|3=library/group_a/powerbezier.pdc=Advanced
+21|3=library/group_b/bezier.pdc=Basic with shadow
+22|3=library/group_b/bezier_dashed.pdc=Dashed with shadow
+23|3=library/group_b/powerbezier.pdc=Advanced with shadow
+24|4=library/group_a/polyline.pdc=Basic
+25|4=library/group_a/polyline_dashed.pdc=Dashed
+26|4=library/group_a/powerpolyline.pdc=Advanced
+27|4=library/group_b/polyline.pdc=Basic with shadow
+28|4=library/group_b/polyline_dashed.pdc=Dashed with shadow
+29|4=library/group_b/powerpolyline.pdc=Advanced with shadow
+30|5=library/group_a/libpolyline.pdc=Basic
+31|5=library/group_a/libpolyline_dashed.pdc=Dashed
+32|5=library/group_b/libpolyline.pdc=Basic with shadow
+33|5=library/group_b/libpolyline_dashed.pdc=Dashed with shadow
+34|6=library/group_a/rect.pdc=Filled
+35|6=library/group_b/rect.pdc=Filled with shadow
+36|6=library/group_c/rect.pdc=Filled with solid outline
+37|6=library/group_c/rect_dashed.pdc=Filled with dashed outline
+38|6=library/group_d/rect.pdc=Filled with solid outline and shadow
+39|6=library/group_d/rect_dashed.pdc=Filled with dashed outline and shadow
+40|6=library/group_e/rect.pdc=No fill, solid outline and shadow
+41|6=library/group_e/rect_dashed.pdc=No fill, dashed outline and shadow
+42|6=library/group_f/rect.pdc=No fill, only solid outline
+43|6=library/group_f/rect_dashed.pdc=No fill, only dashed outline
+44|7=library/group_a/ellipse.pdc=Filled
+45|7=library/group_b/ellipse.pdc=Filled with shadow
+46|7=library/group_c/ellipse.pdc=Filled with solid outline
+47|7=library/group_c/ellipse_dashed.pdc=Filled with dashed outline
+48|7=library/group_d/ellipse.pdc=Filled with solid outline and shadow
+49|7=library/group_d/ellipse_dashed.pdc=Filled with dashed outline and shadow
+50|7=library/group_e/ellipse.pdc=No fill, solid outline and shadow
+51|7=library/group_e/ellipse_dashed.pdc=No fill, dashed outline and shadow
+52|7=library/group_f/ellipse.pdc=No fill, only solid outline
+53|7=library/group_f/ellipse_dashed.pdc=No fill, only dashed outline
+54|8=library/group_a/trueellipse.pdc=Filled
+55|8=library/group_b/trueellipse.pdc=Filled with shadow
+56|8=library/group_c/trueellipse.pdc=Filled with solid outline
+57|8=library/group_c/trueellipse_dashed.pdc=Filled with dashed outline
+58|8=library/group_d/trueellipse.pdc=Filled with solid outline and shadow
+59|8=library/group_d/trueellipse_dashed.pdc=Filled with dashed outline and shadow
+60|8=library/group_e/trueellipse.pdc=No fill, solid outline and shadow
+61|8=library/group_e/trueellipse_dashed.pdc=No fill, dashed outline and shadow
+62|8=library/group_f/trueellipse.pdc=No fill, only solid outline
+63|8=library/group_f/trueellipse_dashed.pdc=No fill, only dashed outline
+64|9=library/group_a/slice.pdc=Filled
+65|9=library/group_b/slice.pdc=Filled with shadow
+66|9=library/group_c/slice.pdc=Filled with solid outline
+67|9=library/group_c/slice_dashed.pdc=Filled with dashed outline
+68|9=library/group_d/slice.pdc=Filled with solid outline and shadow
+69|9=library/group_d/slice_dashed.pdc=Filled with dashed outline and shadow
+70|9=library/group_e/slice.pdc=No fill, solid outline and shadow
+71|9=library/group_e/slice_dashed.pdc=No fill, dashed outline and shadow
+72|9=library/group_f/slice.pdc=No fill, only solid outline
+73|9=library/group_f/slice_dashed.pdc=No fill, only dashed outline
+74|10=library/group_a/shape.pdc=Filled
+75|10=library/group_b/shape.pdc=Filled with shadow
+76|10=library/group_c/shape.pdc=Filled with solid outline
+77|10=library/group_c/shape_dashed.pdc=Filled with dashed outline
+78|10=library/group_d/shape.pdc=Filled with solid outline and shadow
+79|10=library/group_d/shape_dashed.pdc=Filled with dashed outline and shadow
+80|10=library/group_e/shape.pdc=No fill, solid outline and shadow
+81|10=library/group_e/shape_dashed.pdc=No fill, dashed outline and shadow
+82|10=library/group_f/shape.pdc=No fill, only solid outline (Closed)
+83|10=library/group_f/shape_dashed.pdc=No fill, only dashed outline (Closed)
+84|10=library/group_f/shape_open.pdc=No fill, only solid outline (Open)
+85|10=library/group_f/shape_open_dashed.pdc=No fill, only dashed outline (Open)
+86|11=library/group_a/libshape.pdc=Filled
+87|11=library/group_b/libshape.pdc=Filled with shadow
+88|11=library/group_c/libshape.pdc=Filled with solid outline
+89|11=library/group_c/libshape_dashed.pdc=Filled with dashed outline
+90|11=library/group_d/libshape.pdc=Filled with solid outline and shadow
+91|11=library/group_d/libshape_dashed.pdc=Filled with dashed outline and shadow
+92|11=library/group_e/libshape.pdc=No fill, solid outline and shadow
+93|11=library/group_e/libshape_dashed.pdc=No fill, dashed outline and shadow
+94|11=library/group_f/libshape.pdc=No fill, only solid outline
+95|11=library/group_f/libshape_dashed.pdc=No fill, only dashed outline
+96|12=library/group_a/glyph.pdc=Basic
+97|12=library/group_b/glyph.pdc=With shadow
+98|12=library/group_c/glyph.pdc=With outline
+99|12=library/group_d/glyph.pdc=With outline and shadow
+100|12=library/group_e/glyph.pdc=Outlined with shadow
+101|12=library/group_f/glyph.pdc=Outlined
+102|13=library/group_a/char.pdc=Basic
+103|13=library/group_b/char.pdc=With shadow
+104|13=library/group_c/char.pdc=With outline
+105|13=library/group_d/char.pdc=With outline and shadow
+106|13=library/group_e/char.pdc=Outlined with shadow
+107|13=library/group_f/char.pdc=Outlined
+108|14=library/symbol/table.pdc=Table
+109|14=library/symbol/symbol_1.pdc=Traffic Sign
+110|14=library/symbol/symbol_1_persp.pdc=Traffic Sign in Perspective 1A
+111|15=library/group_a/textline.pdc=Basic (8-bit ANSI)
+112|15=library/group_a/textline_2.pdc=Basic (16-bit Unicode)
+113|15=library/group_b/textline.pdc=With shadow (8-bit ANSI)
+114|15=library/group_b/textline_2.pdc=With shadow (16-bit Unicode)
+115|15=library/group_c/textline.pdc=With outline (8-bit ANSI)
+116|15=library/group_c/textline_2.pdc=With outline (16-bit Unicode)
+117|15=library/group_d/textline.pdc=With outline and shadow (8-bit ANSI)
+118|15=library/group_d/textline_2.pdc=With outline and shadow (16-bit Unicode)
+119|15=library/group_e/textline.pdc=Outlined with shadow (8-bit ANSI)
+120|15=library/group_e/textline_2.pdc=Outlined with shadow (16-bit Unicode)
+121|15=library/group_f/textline.pdc=Outlined (8-bit ANSI)
+122|15=library/group_f/textline_2.pdc=Outlined (16-bit Unicode)
+123|16=library/group_a/textarc.pdc=Outer Edge, Basic (8-bit ANSI)
+124|16=library/group_a/textarc_2.pdc=Outer Edge, Basic (16-bit Unicode)
+125|16=library/group_b/textarc.pdc=Outer Edge, With shadow (8-bit ANSI)
+126|16=library/group_b/textarc_2.pdc=Outer Edge, With shadow (16-bit Unicode)
+127|16=library/group_c/textarc.pdc=Outer Edge, With outline (8-bit ANSI)
+128|16=library/group_c/textarc_2.pdc=Outer Edge, With outline (16-bit Unicode)
+129|16=library/group_d/textarc.pdc=Outer Edge, With outline and shadow (8-bit ANSI)
+130|16=library/group_d/textarc_2.pdc=Outer Edge, With outline and shadow (16-bit Unicode)
+131|16=library/group_e/textarc.pdc=Outer Edge, Outlined with shadow (8-bit ANSI)
+132|16=library/group_e/textarc_2.pdc=Outer Edge, Outlined with shadow (16-bit Unicode)
+133|16=library/group_f/textarc.pdc=Outer Edge, Outlined (8-bit ANSI)
+134|16=library/group_f/textarc_2.pdc=Outer Edge, Outlined (16-bit Unicode)
+135|16=library/group_a/textarc_i.pdc=Inner Edge, Basic (8-bit ANSI)
+136|16=library/group_a/textarc_i_2.pdc=Inner Edge, Basic (16-bit Unicode)
+137|16=library/group_b/textarc_i.pdc=Inner Edge, With shadow (8-bit ANSI)
+138|16=library/group_b/textarc_i_2.pdc=Inner Edge, With shadow (16-bit Unicode)
+139|16=library/group_c/textarc_i.pdc=Inner Edge, With outline (8-bit ANSI)
+140|16=library/group_c/textarc_i_2.pdc=Inner Edge, With outline (16-bit Unicode)
+141|16=library/group_d/textarc_i.pdc=Inner Edge, With outline and shadow (8-bit ANSI)
+142|16=library/group_d/textarc_i_2.pdc=Inner Edge, With outline and shadow (16-bit Unicode)
+143|16=library/group_e/textarc_i.pdc=Inner Edge, Outlined with shadow (8-bit ANSI)
+144|16=library/group_e/textarc_i_2.pdc=Inner Edge, Outlined with shadow (16-bit Unicode)
+145|16=library/group_f/textarc_i.pdc=Inner Edge, Outlined (8-bit ANSI)
+146|16=library/group_f/textarc_i_2.pdc=Inner Edge, Outlined (16-bit Unicode)
+147|17=library/group_a/textpath.pdc=Basic (8-bit ANSI)
+148|17=library/group_a/textpath_2.pdc=Basic (16-bit Unicode)
+149|17=library/group_b/textpath.pdc=With shadow (8-bit ANSI)
+150|17=library/group_b/textpath_2.pdc=With shadow (16-bit Unicode)
+151|17=library/group_c/textpath.pdc=With outline (8-bit ANSI)
+152|17=library/group_c/textpath_2.pdc=With outline (16-bit Unicode)
+153|17=library/group_d/textpath.pdc=With outline and shadow (8-bit ANSI)
+154|17=library/group_d/textpath_2.pdc=With outline and shadow (16-bit Unicode)
+155|17=library/group_e/textpath.pdc=Outlined with shadow (8-bit ANSI)
+156|17=library/group_e/textpath_2.pdc=Outlined with shadow (16-bit Unicode)
+157|17=library/group_f/textpath.pdc=Outlined (8-bit ANSI)
+158|17=library/group_f/textpath_2.pdc=Outlined (16-bit Unicode)
+159|18=library/group_a/textarea.pdc=Basic (8-bit ANSI)
+160|18=library/group_a/textarea_2.pdc=Basic (16-bit Unicode)
+161|18=library/group_b/textarea.pdc=With shadow (8-bit ANSI)
+162|18=library/group_b/textarea_2.pdc=With shadow (16-bit Unicode)
+163|18=library/group_c/textarea.pdc=With outline (8-bit ANSI)
+164|18=library/group_c/textarea_2.pdc=With outline (16-bit Unicode)
+165|18=library/group_d/textarea.pdc=With outline and shadow (8-bit ANSI)
+166|18=library/group_d/textarea_2.pdc=With outline and shadow (16-bit Unicode)
+167|18=library/group_e/textarea.pdc=Outlined with shadow (8-bit ANSI)
+168|18=library/group_e/textarea_2.pdc=Outlined with shadow (16-bit Unicode)
+169|18=library/group_f/textarea.pdc=Outlined (8-bit ANSI)
+170|18=library/group_f/textarea_2.pdc=Outlined (16-bit Unicode)
+171|19=library/group_a/textdesign.pdc=Basic (8-bit ANSI)
+172|19=library/group_a/textdesign_2.pdc=Basic (16-bit Unicode)
+173|19=library/group_0/textdesign.pdc=Example
+174|20=library/group_a/richtextline.pdc=Basic (8-bit ANSI)
+175|20=library/group_a/richtextline_2.pdc=Basic (16-bit Unicode)
+176|20=library/group_d/richtextline.pdc=Advanced (8-bit ANSI)
+177|20=library/group_d/richtextline_2.pdc=Advanced (16-bit Unicode)
+178|20=library/group_a/richtextline_empty.pdc=Empty (8-bit ANSI)
+179|20=library/group_a/richtextline_empty_2.pdc=Empty (16-bit Unicode)
+180|21=library/group_a/richtextarc.pdc=Outer Edge, Basic (8-bit ANSI)
+181|21=library/group_a/richtextarc_2.pdc=Outer Edge, Basic (16-bit Unicode)
+182|21=library/group_d/richtextarc.pdc=Outer Edge, Advanced (8-bit ANSI)
+183|21=library/group_d/richtextarc_2.pdc=Outer Edge, Advanced (16-bit Unicode)
+184|21=library/group_a/richtextarc_empty.pdc=Outer Edge, Empty (8-bit ANSI)
+185|21=library/group_a/richtextarc_empty_2.pdc=Outer Edge, Empty (16-bit Unicode)
+186|21=library/group_a/richtextarc_i.pdc=Inner Edge, Basic (8-bit ANSI)
+187|21=library/group_a/richtextarc_i_2.pdc=Inner Edge Basic (16-bit Unicode)
+188|21=library/group_d/richtextarc_i.pdc=Inner Edge, Advanced (8-bit ANSI)
+189|21=library/group_d/richtextarc_i_2.pdc=Inner Edge, Advanced (16-bit Unicode)
+190|21=library/group_a/richtextarc_i_empty.pdc=Inner Edge, Empty (8-bit ANSI)
+191|21=library/group_a/richtextarc_i_empty_2.pdc=Inner Edge, Empty (16-bit Unicode)
+192|22=library/group_a/richtextpath.pdc=Basic (8-bit ANSI)
+193|22=library/group_a/richtextpath_2.pdc=Basic (16-bit Unicode)
+194|22=library/group_d/richtextpath.pdc=Advanced (8-bit ANSI)
+195|22=library/group_d/richtextpath_2.pdc=Advanced (16-bit Unicode)
+196|22=library/group_a/richtextpath_empty.pdc=Empty (8-bit ANSI)
+197|22=library/group_a/richtextpath_empty_2.pdc=Empty (16-bit Unicode)
+198|22=library/group_a/richtextpath_persp_a.pdc=In Perspective 1A (8-bit ANSI)
+199|22=library/group_a/richtextpath_persp_a_2.pdc=In Perspective 1A (16-bit ANSI)
+200|23=library/group_a/richtextarea.pdc=Basic (8-bit ANSI)
+201|23=library/group_a/richtextarea_2.pdc=Basic (16-bit Unicode)
+202|23=library/group_d/richtextarea.pdc=Advanced (8-bit ANSI)
+203|23=library/group_d/richtextarea_2.pdc=Advanced (16-bit Unicode)
+204|23=library/group_a/richtextarea_empty.pdc=Empty (8-bit ANSI)
+205|23=library/group_a/richtextarea_empty_2.pdc=Empty (16-bit Unicode)
+206|23=library/group_a/richtextarea_persp_a.pdc=In Perspective 1A (8-bit ANSI)
+207|23=library/group_a/richtextarea_persp_a_2.pdc=In Perspective 1A (16-bit ANSI)
+208|23=library/group_a/richtextarea_persp_b.pdc=In Perspective 2A (8-bit ANSI)
+209|23=library/group_a/richtextarea_persp_b_2.pdc=In Perspective 2A (16-bit ANSI)
+210|24=library/group_a/richtextdesign.pdc=Basic (8-bit ANSI)
+211|24=library/group_a/richtextdesign_2.pdc=Basic (16-bit Unicode)
+212|24=library/group_0/richtextdesign.pdc=Example
+213|25=library/group_0/grid.pdc=Empty
+214|25=library/group_a/grid.pdc=Filled
+215|25=library/group_b/grid.pdc=Filled with shadow
+216|25=library/group_c/grid.pdc=Filled with solid outline
+217|25=library/group_c/grid_dashed.pdc=Filled with dashed outline
+218|25=library/group_d/grid.pdc=Filled with solid outline and shadow
+219|25=library/group_d/grid_dashed.pdc=Filled with dashed outline and shadow
+220|25=library/group_e/grid.pdc=No fill, solid outline and shadow
+221|25=library/group_e/grid_dashed.pdc=No fill, dashed outline and shadow
+222|25=library/group_f/grid.pdc=No fill, only solid outline
+223|25=library/group_f/grid_dashed.pdc=No fill, only dashed outline
+224|26=library/pattern/pattern_1.pdc=Photo Shades
+225|26=library/pattern/pattern_2.pdc=Fine Shades
+226|26=library/pattern/pattern_3.pdc=Stripes
+227|26=library/pattern/pattern_4.pdc=Patterns
+228|27=library/gradient/gradient_h.pdc=Horizontal gradient
+229|27=library/gradient/gradient_v.pdc=Vertical gradient
+230|27=library/gradient/gradient_h2.pdc=Bi-Horizontal gradient
+231|27=library/gradient/gradient_v2.pdc=Bi-Vertical gradient
+232|27=library/gradient/gradient_qc_a.pdc=Quarter-Circular gradient A
+233|27=library/gradient/gradient_qc_b.pdc=Quarter-Circular gradient B
+234|27=library/gradient/gradient_qc_c.pdc=Quarter-Circular gradient C
+235|27=library/gradient/gradient_qc_d.pdc=Quarter-Circular gradient D
+236|27=library/gradient/gradient_hc_a.pdc=Half-Circular gradient A
+237|27=library/gradient/gradient_hc_b.pdc=Half-Circular gradient B
+238|27=library/gradient/gradient_hc_c.pdc=Half-Circular gradient C
+239|27=library/gradient/gradient_hc_d.pdc=Half-Circular gradient D
+240|27=library/gradient/gradient_c.pdc=Circular gradient
+241|27=library/gradient/gradient_qd_a.pdc=Quarter-Diamond gradient A
+242|27=library/gradient/gradient_qd_b.pdc=Quarter-Diamond gradient B
+243|27=library/gradient/gradient_qd_c.pdc=Quarter-Diamond gradient C
+244|27=library/gradient/gradient_qd_d.pdc=Quarter-Diamond gradient D
+245|27=library/gradient/gradient_hd_a.pdc=Half-Diamond gradient A
+246|27=library/gradient/gradient_hd_b.pdc=Half-Diamond gradient B
+247|27=library/gradient/gradient_hd_c.pdc=Half-Diamond gradient C
+248|27=library/gradient/gradient_hd_d.pdc=Half-Diamond gradient D
+249|27=library/gradient/gradient_d.pdc=Diamond gradient
+250|28=library/image/image_rgb.pdc=Standard RGB image
+251|28=library/image/image_gray.pdc=Standard Grayscale image
+252|28=library/image/image_gray-duo.pdc=Duotone Grayscale image
+253|28=library/image/image_mono.pdc=Standard Monochrome image
+254|28=library/image/image_mono-duo.pdc=Duotone Monochrome image
+255|28=library/image/image_rgb_persp_a.pdc=Standard RGB image in Perspective 1A
+256|28=library/image/image_rgb_persp_b.pdc=Standard RGB image in Perspective 2A
+257|29=library/image/libimage.pdc=Library image
+258|30=library/mask/mask1.pdc=Character masked with text
+259|30=library/mask/mask2.pdc=Gradient masked with text
+260|30=library/mask/mask3.pdc=Image masked with ellipse
+261|30=library/mask/mask4.pdc=Image masked with circular gradient
+262|30=library/mask/mask5.pdc=Text masked with bi-vertical gradient
+263|30=library/mask/mask6.pdc=Pattern masked with text arc
+264|30=library/mask/mask7.pdc=Gradient masked with ellipse
+265|30=library/mask/mask8.pdc=Embossed Text
+266|31=library/misc/empty.pdc=Empty Object
+267|31=library/misc/generic.pdc=Generic Object
+268|31=library/misc/inverter.pdc=Inverter
+269|31=library/misc/fast_rect.pdc=Fast Rectangle
+270|31=library/misc/text_arc_pattern.pdc=Colored text with pattern
+271|31=library/misc/smiley.pdc=Smiley
+272|31=library/misc/table.pdc=Table
+273|32=library/controls/basic/button.pdc=Button (Rect)
+274|32=library/controls/basic/button_arabic.pdc=Button (Rect) - Arabic
+275|32=library/controls/basic/button_r.pdc=Button (Round)
+276|32=library/controls/basic/button_r_arabic.pdc=Button (Round) - Arabic
+277|32=library/controls/basic/button_up.pdc=Button (Arrow Up)
+278|32=library/controls/basic/button_down.pdc=Button (Arrow Down)
+279|32=library/controls/basic/button_left.pdc=Button (Arrow Left)
+280|32=library/controls/basic/button_right.pdc=Button (Arrow Right)
+281|32=library/controls/basic/richbutton.pdc=Rich Button (Rect)
+282|32=library/controls/basic/richbutton_r.pdc=Rich Button (Round)
+283|32=library/controls/basic/radiobutton.pdc=Radio Button
+284|32=library/controls/basic/checkbox.pdc=Check Box
+285|32=library/controls/basic/textbox.pdc=Text Box (Small)
+286|32=library/controls/basic/textbox_arabic.pdc=Text Box (Small) - Arabic
+287|32=library/controls/basic/textbox2.pdc=Text Box (Large)
+288|32=library/controls/basic/textbox2_arabic.pdc=Text Box (Large) - Arabic
+289|32=library/controls/basic/richtextbox.pdc=Rich Text Box (Small)
+290|32=library/controls/basic/richtextbox2.pdc=Rich Text Box (Large)
+291|32=library/controls/basic/listbox.pdc=List Box (1 column)
+292|32=library/controls/basic/listbox_arabic.pdc=List Box (1 column) - Arabic
+293|32=library/controls/basic/listbox_2_col.pdc=List Box (2 columns)
+294|32=library/controls/basic/listbox_3_col.pdc=List Box (3 columns)
+295|32=library/controls/basic/listbox_3_col_bkg.pdc=List Box With Background (3 columns)
+296|32=library/controls/basic/richlistbox.pdc=Rich List Box
+297|32=library/controls/basic/hslider.pdc=Horizontal Slider
+298|32=library/controls/basic/vslider.pdc=Vertical Slider
+299|32=library/controls/basic/hprogress.pdc=Horizontal Slider as Progress Bar
+300|32=library/controls/basic/vprogress.pdc=Vertical Slider as Progress Bar
+301|33=library/controls/advanced/hscroll_1.pdc=Horizontal Scroll Bar - version 1
+302|33=library/controls/advanced/hscroll_2.pdc=Horizontal Scroll Bar - version 2
+303|33=library/controls/advanced/vscroll_1.pdc=Vertical Scroll Bar - version 1
+304|33=library/controls/advanced/vscroll_2.pdc=Vertical Scroll Bar - version 2
+305|33=library/controls/advanced/textbox_scroll.pdc=Text Box with Scroll Bar
+306|33=library/controls/advanced/richtextbox_scroll.pdc=Rich Text Box with Scroll Bar
+307|33=library/controls/advanced/listbox_scroll_1.pdc=List Box with Scroll Bar - version 1
+308|33=library/controls/advanced/listbox_scroll_1_arabic.pdc=List Box with Scroll Bar - version 1 - Arabic
+309|33=library/controls/advanced/listbox_scroll_2.pdc=List Box with Scroll Bar - version 2
+310|33=library/controls/advanced/listbox_scroll_2_arabic.pdc=List Box with Scroll Bar - version 2 - Arabic
+311|33=library/controls/advanced/double_listbox_scroll.pdc=Double List Box with Scroll Bar
+312|33=library/controls/advanced/combobox.pdc=Combo Box
+313|33=library/controls/advanced/combobox_arabic.pdc=Combo Box - Arabic
+314|33=library/controls/advanced/popupbox_1.pdc=Popup Box (with text)
+315|33=library/controls/advanced/popupbox_1_arabic.pdc=Popup Box (with text) - Arabic
+316|33=library/controls/advanced/popupbox_2.pdc=Popup Box (with buttons)
+317|33=library/controls/advanced/slider_text.pdc=Slider updating Text Box
+318|33=library/controls/advanced/tabsystem_3.pdc=Tab System (3 sheets)
+319|33=library/controls/advanced/tabsystem_4.pdc=Tab System (4 sheets)
+320|33=library/controls/advanced/tabsystem_5.pdc=Tab System (5 sheets)
+321|34=library/guide/hor.pdc=Horizontal
+322|34=library/guide/hor2.pdc=Horizontal 2
+323|34=library/guide/hor_l.pdc=Horizontal - To Left
+324|34=library/guide/hor2_l.pdc=Horizontal2 - To Left
+325|34=library/guide/hor_r.pdc=Horizontal - To Right
+326|34=library/guide/hor2_r.pdc=Horizontal2 - To Right
+327|34=library/guide/ver.pdc=Vertical
+328|34=library/guide/ver2.pdc=Vertical 2
+329|34=library/guide/ver_t.pdc=Vertical - To Top
+330|34=library/guide/ver2_t.pdc=Vertical 2 - To Top
+331|34=library/guide/ver_b.pdc=Vertical - To Bottom
+332|34=library/guide/ver2_b.pdc=Vertical 2 - To Bottom
+333|34=library/guide/corner_tl.pdc=Corner - Top Left
+334|34=library/guide/corner_tr.pdc=Corner - Top Right
+335|34=library/guide/corner_bl.pdc=Corner - Bottom Left
+336|34=library/guide/corner_br.pdc=Corner - Bottom Right
+337|34=library/guide/cross.pdc=Cross
+338|34=library/guide/cross_nl.pdc=Cross - Without Left Ray
+339|34=library/guide/cross_nr.pdc=Cross - Without Right Ray
+340|34=library/guide/cross_nt.pdc=Cross - Without Top Ray
+341|34=library/guide/cross_nb.pdc=Cross - Without Bottom Ray
+342|34=library/guide/cross_short.pdc=Cross - Short
+343|35=library/guide/dashed_hor.pdc=Horizontal
+344|35=library/guide/dashed_hor2.pdc=Horizontal 2
+345|35=library/guide/dashed_hor_l.pdc=Horizontal - To Left
+346|35=library/guide/dashed_hor2_l.pdc=Horizontal2 - To Left
+347|35=library/guide/dashed_hor_r.pdc=Horizontal - To Right
+348|35=library/guide/dashed_hor2_r.pdc=Horizontal2 - To Right
+349|35=library/guide/dashed_ver.pdc=Vertical
+350|35=library/guide/dashed_ver2.pdc=Vertical 2
+351|35=library/guide/dashed_ver_t.pdc=Vertical - To Top
+352|35=library/guide/dashed_ver2_t.pdc=Vertical 2 - To Top
+353|35=library/guide/dashed_ver_b.pdc=Vertical - To Bottom
+354|35=library/guide/dashed_ver2_b.pdc=Vertical 2 - To Bottom
+355|35=library/guide/dashed_corner_tl.pdc=Corner - Top Left
+356|35=library/guide/dashed_corner_tr.pdc=Corner - Top Right
+357|35=library/guide/dashed_corner_bl.pdc=Corner - Bottom Left
+358|35=library/guide/dashed_corner_br.pdc=Corner - Bottom Right
+359|35=library/guide/dashed_cross.pdc=Cross
+360|35=library/guide/dashed_cross_nl.pdc=Cross - Without Left Ray
+361|35=library/guide/dashed_cross_nr.pdc=Cross - Without Right Ray
+362|35=library/guide/dashed_cross_nt.pdc=Cross - Without Top Ray
+363|35=library/guide/dashed_cross_nb.pdc=Cross - Without Bottom Ray
+364|35=library/guide/dashed_cross_short.pdc=Cross - Short
+365|36=../../files/powerdoc/analogue_clock.pdc=Analogue Clock
+366|36=../../files/powerdoc/anchored_objects-rich_text_arc.pdc=Anchored Objects - Rich Text Arc
+367|36=../../files/powerdoc/anchored_objects-rich_text_arc-perspective.pdc=Anchored Objects - Rich Text Arc in Perspective
+368|36=../../files/powerdoc/anchored_objects-rich_text_path.pdc=Anchored Objects - Rich Text Path
+369|36=../../files/powerdoc/anchored_objects-rich_text_path-perspective.pdc=Anchored Objects - Rich Text Path in Perspective
+370|36=../../files/powerdoc/anchored_objects-rich_text_area.pdc=Anchored Objects - Rich Text Area
+371|36=../../files/powerdoc/anchored_objects-rich_text_area-perspective.pdc=Anchored Objects - Rich Text Area in Perspective
+372|36=../../files/powerdoc/arabic.pdc=Arabic Script
+373|36=../../files/powerdoc/arabic-perspective.pdc=Arabic Script in Perspective
+374|36=../../files/powerdoc/arabic_dialog.pdc=Arabic Dialog
+375|36=../../files/powerdoc/api_overview.pdc=API Overview
+376|36=../../files/powerdoc/basic_concepts.pdc=Basic Concepts
+377|36=../../files/powerdoc/basic_example1.pdc=Basic Example 1
+378|36=../../files/powerdoc/basic_example2.pdc=Basic Example 2
+379|36=../../files/powerdoc/bidi_reordering-horizontal.pdc=Bidirectional Reordering - Horizontal
+380|36=../../files/powerdoc/bidi_reordering-vertical.pdc=Bidirectional Reordering - Vertical
+381|36=../../files/powerdoc/bidi_rotation-horizontal.pdc=Bidirectional Rotation - Horizontal
+382|36=../../files/powerdoc/bidi_rotation-vertical.pdc=Bidirectional Rotation - Vertical
+383|36=../../files/powerdoc/chinese_text.pdc=Chinese Text (Embedded Font Subset)
+384|36=../../files/powerdoc/chinese_text-vertical-rtl.pdc=Chinese Text, Vertical, Right-to-Left
+385|36=../../files/powerdoc/chinese_text-vertical-ltr.pdc=Chinese Text, Vertical, Left-to-Right
+386|36=../../files/powerdoc/complex_scripts.pdc=Complex Scripts (Hindi, Thai, Arabic)
+387|36=../../files/powerdoc/complex_scripts-perspective.pdc=Complex Scripts (Hindi, Thai, Arabic) in Perspective
+388|36=../../files/powerdoc/custom_pattern_fill.pdc=Custom Pattern Fill
+389|36=../../files/powerdoc/dtype1.pdc=D-Type 1
+390|36=../../files/powerdoc/dtype2.pdc=D-Type 2
+391|36=../../files/powerdoc/dtype_engines.pdc=D-Type Engines
+392|36=../../files/powerdoc/dc_example-gulls.pdc=Direct Color RGBA Example: Gulls In Silhouette
+393|36=../../files/powerdoc/dc_example-cranes.pdc=Direct Color RGBA Example: Sandhill Cranes In Flight
+394|36=../../files/powerdoc/dc_example-portrait.pdc=Direct Color RGBA Example: Portrait
+395|36=../../files/powerdoc/dc_example-rodin.pdc=Direct Color RGBA Example: Rodin Sculpture
+396|36=../../files/powerdoc/dc_example-rose.pdc=Direct Color RGBA Example: Rose
+397|36=../../files/powerdoc/dc_example-sunset.pdc=Direct Color RGBA Example: Sunset
+398|36=../../files/powerdoc/dc_rasterization-ultra_fast.pdc=Direct Color RGBA Rasterization: Ultra-Fast Rasterizer
+399|36=../../files/powerdoc/dc_rasterization-comparison.pdc=Direct Color RGBA Rasterization: Comparison of Rasterizers
+400|36=../../files/powerdoc/effect_catalogue.pdc=Effect Catalogue
+401|36=../../files/powerdoc/eiffel_tower.pdc=Eiffel Tower
+402|36=../../files/powerdoc/financial.pdc=Financial
+403|36=../../files/powerdoc/font_embedding.pdc=Font Embedding
+404|36=../../files/powerdoc/font_embedding-perspective.pdc=Font Embedding in Perspective
+405|36=../../files/powerdoc/gradient_catalogue.pdc=Gradient Catalogue
+406|36=../../files/powerdoc/guitar.pdc=Guitar
+407|36=../../files/powerdoc/hyphenation_and_vertical_justification.pdc=Hyphenation and Advanced Vertical Justification
+408|36=../../files/powerdoc/image_catalogue.pdc=Image Catalogue
+409|36=../../files/powerdoc/international_cookbook.pdc=International Cookbook
+410|36=../../files/powerdoc/layered_text.pdc=Layered Text
+411|36=../../files/powerdoc/ligature.pdc=Ligature Samples
+412|36=../../files/powerdoc/lion.pdc=Lion
+413|36=../../files/powerdoc/longhorn.pdc=Longhorn
+414|36=../../files/powerdoc/multiple_master.pdc=Multiple-Master Fonts
+415|36=../../files/powerdoc/pattern_catalogue.pdc=Pattern Catalogue
+416|36=../../files/powerdoc/pie_chart.pdc=Pie Chart
+417|36=../../files/powerdoc/reflection.pdc=Reflection (Text)
+418|36=../../files/powerdoc/reflection2.pdc=Reflection (Vector Art)
+419|36=../../files/powerdoc/relative_text_orientation_and_baseline.pdc=Relative Text Orientation and Baseline Options
+420|36=../../files/powerdoc/rich_text_arcs.pdc=Rich Text Arcs - Inner and Outer Edge
+421|36=../../files/powerdoc/rich_text_catalogue.pdc=Rich Text Catalogue
+422|36=../../files/powerdoc/saturn.pdc=Saturn
+423|36=../../files/powerdoc/saturn2.pdc=Saturn II
+424|36=../../files/powerdoc/shading_rasterizer.pdc=Shading Rasterizer
+425|36=../../files/powerdoc/shape_catalogue.pdc=Shape Catalogue
+426|36=../../files/powerdoc/starburst.pdc=Starburst
+427|36=../../files/powerdoc/starburst-with_text.pdc=Starburst With Text
+428|36=../../files/powerdoc/style_effects_combined.pdc=Style Effects (Combined)
+429|36=../../files/powerdoc/summer.pdc=Summer
+430|36=../../files/powerdoc/summer-perspective.pdc=Summer in Perspective
+431|36=../../files/powerdoc/tab_dialog.pdc=Tab Dialog (Gray Theme)
+432|36=../../files/powerdoc/tab_dialog2.pdc=Tab Dialog (Blue Theme)
+433|36=../../files/powerdoc/tab_stops.pdc=Text Ruler With Tab Stops
+434|36=../../files/powerdoc/text_area_catalogue.pdc=Text Area Catalogue
+435|36=../../files/powerdoc/text_directions.pdc=Text Directions
+436|36=../../files/powerdoc/text_flow_in_two_columns.pdc=Text Flow In Two Columns
+437|36=../../files/powerdoc/text_flow_with_rich_text_path.pdc=Text Flow With Two Rich Text Paths
+438|36=../../files/powerdoc/text_objects-with_baselines.pdc=Text Objects - With Baselines
+439|36=../../files/powerdoc/text_waterfall.pdc=Text Waterfall
+440|36=../../files/powerdoc/text_waterfall-with_baselines.pdc=Text Waterfall - With Baselines
+441|36=../../files/powerdoc/tiger.pdc=Tiger
+442|36=../../files/powerdoc/tiger-perspective.pdc=Tiger in Perspective
+443|36=../../files/powerdoc/traffic_signs.pdc=Traffic Signs
+444|36=../../files/powerdoc/underline.pdc=Underline/Strike-Through Modes
+445|36=../../files/powerdoc/valign_row.pdc=Vertical Alignment Within Current Text Row

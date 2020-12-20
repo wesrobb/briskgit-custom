@@ -1,0 +1,3 @@
+Misc Text Attributes
+
+Bit 0: 1 = Don't allow line break at the end of the text fragment

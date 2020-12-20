@@ -1,0 +1,11 @@
+The size of the dash, a quantity in the 0 - 65,535 range. This quantity should be understood as a percentage of the line segment length; therefore 0 means 0% of the line segment length while 65,535 means 100% of the line segment length.
+
+The value 0 is special and means "default dash size". In this case the dash uses approximately two thirds of the segment's length, while the gap uses the remaining one third. Therefore, if the segment is 30 document units long, then each dash will be approximately 20 document units long while each gap will be approximately 10 units long.
+
+{strong}Sample values:{/strong}
+
+0 = default dash size
+9830 = dash size is 15% of the line segment length
+13107 = dash size is 20% of the line segment length
+32768 = dash size is 50% of the line segment length
+52428 = dash size is 80% of the line segment length

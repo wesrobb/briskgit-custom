@@ -1,0 +1,608 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Text Line</h2>
+<h3 id="overview">Overview</h3>
+This objects represents a simple text line. In Power Engine API, a simple text line is an array of characters or glyphs drawn on an imaginary straight line and formatted according to the specified parameters. Text lines can be used to draw various types of labels, titles, headings etc.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawTextLine (1)<br />
+<br />
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTypographyPtr"><em><span class="field">pdTypographyPtr</span> (1018)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTypographyPtr">Text Fragment</a>, <a href="102.htm#pdTypographyPtr">Text Arc</a>, <a href="103.htm#pdTypographyPtr">Text Area</a>, <a href="127.htm#pdTypographyPtr">Text Design</a>, <a href="107.htm#pdTypographyPtr">Glyph</a>, <a href="108.htm#pdTypographyPtr">Char</a>, <a href="109.htm#pdTypographyPtr">PowerGlyph</a>, <a href="130.htm#pdTypographyPtr">Text Path</a></small></p>
+<p>
+Link to the Typography object. When standard glyphs or characters are used, this should be a link to the <a href="004.htm">Typography (For Outline Fonts)</a> object. When PowerGlyphs (or PowerChars in the future) are used, this should be a link to the <a href="014.htm">Typography (For PowerFonts)</a> object.<br />
+<br />
+In either case, this link supplies typographic parameters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTypoFramePtr"><em><span class="field">pdTypoFramePtr</span> (1177)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTypoFramePtr">Text Fragment</a>, <a href="102.htm#pdTypoFramePtr">Text Arc</a>, <a href="103.htm#pdTypoFramePtr">Text Area</a>, <a href="130.htm#pdTypoFramePtr">Text Path</a></small></p>
+<p>
+Link to the <a href="023.htm">Typographic Frame</a> object.<br />
+<br />
+This link supplies parameters necessary to render frames of glyphs and characters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextLayoutPtr"><em><span class="field">pdTextLayoutPtr</span> (1084)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextLayoutPtr">Text Fragment</a>, <a href="102.htm#pdTextLayoutPtr">Text Arc</a>, <a href="103.htm#pdTextLayoutPtr">Text Area</a>, <a href="127.htm#pdTextLayoutPtr">Text Design</a>, <a href="130.htm#pdTextLayoutPtr">Text Path</a></small></p>
+<p>
+This link supplies text layout attributes. When building the Text Design or Rich Text Design object, this is a link to the <a href="016.htm">Text Layout (Manual)</a> object. When building any other text object, this is a link to the <a href="005.htm">Text Layout (Automatic)</a> object.<br />
+<br />
+Text Design and Rich Text Design utilize a manual text layout algorithm which means that the (x, y) position of each glyph/character must be supplied explicitly by the user. All other text objects utilize an automatic text layout algorithm which means that the position of their glyphs/characters is calculated automatically by the text layout engine while the user only supplies higher-level layout attributes such as direction, alignment, kerning, letter/row spacing etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdBaselinePtr"><em><span class="field">pdBaselinePtr</span> (1113)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="022.htm#pdBaselinePtr">Text Extras</a>, <a href="102.htm#pdBaselinePtr">Text Arc</a>, <a href="103.htm#pdBaselinePtr">Text Area</a>, <a href="104.htm#pdBaselinePtr">Rich Text Line</a>, <a href="105.htm#pdBaselinePtr">Rich Text Arc</a>, <a href="106.htm#pdBaselinePtr">Rich Text Area</a>, <a href="130.htm#pdBaselinePtr">Text Path</a>, <a href="131.htm#pdBaselinePtr">Rich Text Path</a></small></p>
+<p>
+Link to the <a href="020.htm">Baseline</a> object.<br />
+<br />
+This link supplies parameters necessary to render the baselines of text rows.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextExtrasPtr"><em><span class="field">pdTextExtrasPtr</span> (1172)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextExtrasPtr">Text Fragment</a>, <a href="102.htm#pdTextExtrasPtr">Text Arc</a>, <a href="103.htm#pdTextExtrasPtr">Text Area</a>, <a href="130.htm#pdTextExtrasPtr">Text Path</a></small></p>
+<p>
+Link to the <a href="022.htm">Text Extras</a> object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_08"><em><span class="field">pdTextString_08</span> (1023)</em> &nbsp; <small class="label">PD_ASC</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_08">Text Fragment</a>, <a href="102.htm#pdTextString_08">Text Arc</a>, <a href="103.htm#pdTextString_08">Text Area</a>, <a href="127.htm#pdTextString_08">Text Design</a>, <a href="130.htm#pdTextString_08">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 1 byte per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"Test"<br />
+"D-Type"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_16"><em><span class="field">pdTextString_16</span> (1024)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_16">Text Fragment</a>, <a href="102.htm#pdTextString_16">Text Arc</a>, <a href="103.htm#pdTextString_16">Text Area</a>, <a href="127.htm#pdTextString_16">Text Design</a>, <a href="130.htm#pdTextString_16">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 2 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 65 00 73 00 74 00" ('T', 'e', 's', 't')<br />
+"44 00 2D 00 54 00 79 00 70 00 65 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_24"><em><span class="field">pdTextString_24</span> (1118)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_24">Text Fragment</a>, <a href="102.htm#pdTextString_24">Text Arc</a>, <a href="103.htm#pdTextString_24">Text Area</a>, <a href="127.htm#pdTextString_24">Text Design</a>, <a href="130.htm#pdTextString_24">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 3 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 00 65 00 00 73 00 00 74 00 00" ('T', 'e', 's', 't')<br />
+"44 00 00 2D 00 00 54 00 00 79 00 00 70 00 00 65 00 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_32"><em><span class="field">pdTextString_32</span> (1119)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_32">Text Fragment</a>, <a href="102.htm#pdTextString_32">Text Arc</a>, <a href="103.htm#pdTextString_32">Text Area</a>, <a href="127.htm#pdTextString_32">Text Design</a>, <a href="130.htm#pdTextString_32">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 4 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 00 00 65 00 00 00 73 00 00 00 74 00 00 00" ('T', 'e', 's', 't')<br />
+"44 00 00 00 2D 00 00 00 54 00 00 00 79 00 00 00 70 00 00 00 65 00 00 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdUserSpecificContent"><em><span class="field">pdUserSpecificContent</span> (1120)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdUserSpecificContent">Text Fragment</a>, <a href="102.htm#pdUserSpecificContent">Text Arc</a>, <a href="103.htm#pdUserSpecificContent">Text Area</a>, <a href="127.htm#pdUserSpecificContent">Text Design</a>, <a href="130.htm#pdUserSpecificContent">Text Path</a></small></p>
+<p>
+User-specific content (variable length)<br />
+<br />
+This property allows end-user applications to store their own (i.e. user-specific) content with each text fragment. This property is suitable for user-specific content of variable length (e.g. strings, custom structures etc). D-Type Engine does not use or interpret this content in any way; the interpretation of the user-specific content is entirely up to the end-user application.<br />
+<br />
+Note: Additional technical information about this property is available to customers with a support contract.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAngleRotation"><em><span class="field">pdAngleRotation</span> (1034)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="127.htm#pdAngleRotation">Text Design</a>, <a href="104.htm#pdAngleRotation">Rich Text Line</a>, <a href="128.htm#pdAngleRotation">Rich Text Design</a></small></p>
+<p>
+Angle in degrees. Must be between 0 and 360.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdGlobalDirection"><em><span class="field">pdGlobalDirection</span> (1075)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="102.htm#pdGlobalDirection">Text Arc</a>, <a href="103.htm#pdGlobalDirection">Text Area</a>, <a href="104.htm#pdGlobalDirection">Rich Text Line</a>, <a href="105.htm#pdGlobalDirection">Rich Text Arc</a>, <a href="106.htm#pdGlobalDirection">Rich Text Area</a>, <a href="130.htm#pdGlobalDirection">Text Path</a>, <a href="131.htm#pdGlobalDirection">Rich Text Path</a></small></p>
+<p>
+Global text direction and bidirectional text display method.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+A) Horizontal Layout (Text in Rows) and Bidirectional Reordering:<br />
+<br />
+0 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)<br />
+1 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)<br />
+2 = Left-to-Right, Bottom-to-Top<br />
+3 = Right-to-Left, Bottom-to-Top<br />
+4 = Same as 0 but swap Portrait &amp; Landscape<br />
+5 = Same as 1 but swap Portrait &amp; Landscape<br />
+6 = Same as 2 but swap Portrait &amp; Landscape<br />
+7 = Same as 3 but swap Portrait &amp; Landscape<br />
+<br />
+B) Vertical Layout (Text in Columns) and Bidirectional Reordering:<br />
+<br />
+8 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)<br />
+9 = Bottom-to-Top, Right-to-Left<br />
+10 = Top-to-Bottom, Left-to-Right<br />
+11 = Bottom-to-Top, Left-to-Right<br />
+12 = Same as 8 but swap Portrait &amp; Landscape<br />
+13 = Same as 9 but swap Portrait &amp; Landscape<br />
+14 = Same as 10 but swap Portrait &amp; Landscape<br />
+15 = Same as 11 but swap Portrait &amp; Landscape<br />
+<br />
+C) Horizontal Layout (Text in Rows) and Bidirectional Rotation:<br />
+<br />
+16 = Left-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek)<br />
+17 = Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew)<br />
+18 = Left-to-Right, Bottom-to-Top<br />
+19 = Right-to-Left, Bottom-to-Top<br />
+20 = Same as 16 but swap Portrait &amp; Landscape<br />
+21 = Same as 17 but swap Portrait &amp; Landscape<br />
+22 = Same as 18 but swap Portrait &amp; Landscape<br />
+23 = Same as 19 but swap Portrait &amp; Landscape<br />
+<br />
+D) Vertical Layout (Text in Columns) and Bidirectional Rotation:<br />
+<br />
+24 = Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese)<br />
+25 = Bottom-to-Top, Right-to-Left<br />
+26 = Top-to-Bottom, Left-to-Right<br />
+27 = Bottom-to-Top, Left-to-Right<br />
+28 = Same as 24 but swap Portrait &amp; Landscape<br />
+29 = Same as 25 but swap Portrait &amp; Landscape<br />
+30 = Same as 26 but swap Portrait &amp; Landscape<br />
+31 = Same as 27 but swap Portrait &amp; Landscape<br />
+<br />
+<strong>Notes:</strong><br />
+<br />
+D-Type Engine can display text in horizontal writing mode (text in rows) and vertical writing mode (text in columns). In horizontal writing mode, the global text progression can be Letf-to-Right/Top-to-Bottom, Right-to-Left/Top-to-Bottom, Letf-to-Right/Bottom-to-Top or Right-to-Left/Bottom-to-Top. In vertical writing mode, the global text progression can be Top-to-Bottom/Right-to-Left, Bottom-to-Top/Right-to-Left, Top-to-Bottom/Left-to-Right or Bottom-to-Top/Left-to-Right.<br />
+<br />
+Additionally, D-Type Engine can display bidirectional text (e.g. a mixture of left-to-right text such as English or Chinese and right-to-left text such as Arabic or Hebrew) using two different methods: the first method is Bidirectional Reordering, the second method is Bidirectional Rotation. Visually, these two methods produce quite different output. However, both are suitable for displaying text that was processed by the Unicode Bidirectional Algorithm (BiDi).<br />
+<br />
+With Bidirectional Reordering the characters are reordered for display depending on the relative direction of the containing text fragment. Thus, a left-to-right text fragment has its characters ordered (visually) in the opposite order from a right-to-left text fragment. While reading bidirectional text, from start to end, the reader must alternate the reading direction (left-to-right/right-to-left in horizontal writing mode or top-to-bottom/bottom-to-top in vertical writing mode) each time a change of direction occurs. This is also the progression of the cursor as it advances from one character to another. This means that with Bidirectional Reordering, the order in which the characters are displayed is not the same as the order in which they are stored in memory (logical or storage order).<br />
+<br />
+With Bidirectional Rotation all characters are ordered uniformly (e.g. from left-to-right in horizontal writing mode or top-to-bottom in vertical writing mode) regardless of whether the containing text fragment has a left-to-right or right-to-left direction. However, their rotation depends on the relative direction of the containing text fragment. More specifically, characters that are part of a left-to-right text fragment are rotated 180 degrees relative to the characters that are part of a right-to-left text fragment. Thus, while reading bidirectional text, from start to end, the reader must rotate the display surface or tilt his/her head (clockwise or counterclockwise) each time a change of direction occurs. However, the reading direction and the progression of the cursor remain uniform. This also means that with Bidirectional Rotation, the order in which the characters are displayed is the same as the order in which they are stored in memory.<br />
+<br />
+Bidirectional Reordering is frequently used in horizontal writing mode and also works well in vertical writing mode. Bidirectional Rotation is typically not used in horizontal writing mode due to the fact that almost all Unicode scripts, when displayed in horizontal writing mode, have their orientation set to portrait (meaning that the glyph's x-axis in font design space is parallel with the baseline). Using Bidirectional Rotation in this case would require the user to rotate the display surface by 180 degrees (clockwise or counterclockwise) each time a change of direction is encountered -- which is, needles to say, far from practical. However, Bidirectional Rotation works well in vertical writing mode. This is due to the fact that vertical writing is used mostly with CJK scripts (Chinese/Japanese/Korean) which typically have their orientation set to landscape (meaning that the glyph's x-axis in font design space is perpendicular to the baseline). Non-CJK scripts, such as Latin or Arabic then have their orientation set to portrait. Under this scheme, the reading direction and the progression of the cursor is always top-to-bottom. When reading the majority of content (i.e. CJK text), there is no need to rotate the display surface. However, when a left-to-right text fragment (e.g. English) is encountered, the reader rotates the display surface by 90 degrees clockwise. Similarly, when a right-to-left text fragment (e.g. Arabic) is encountered, the reader rotates the display surface by 90 degrees counterclockwise. In all three cases (Chinese, English and Arabic) the characters are ordered from top to bottom and the reader is never expected to alter the reading direction (which would otherwise be required if Bidirectional Reordering was used). This is not to say that Bidirectional Reordering cannot be used in vertical writing mode. However, Bidirectional Rotation might work better in certain applications as rotating the display surface by 90 degrees clockwise or counterclockwise relative to the vertical baseline is sometimes considered a more practical way of reading vertical bidirectional text.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="txLockStatus"><em><span class="field">txLockStatus</span> (2005)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="102.htm#txLockStatus">Text Arc</a>, <a href="103.htm#txLockStatus">Text Area</a>, <a href="104.htm#txLockStatus">Rich Text Line</a>, <a href="105.htm#txLockStatus">Rich Text Arc</a>, <a href="106.htm#txLockStatus">Rich Text Area</a>, <a href="130.htm#txLockStatus">Text Path</a>, <a href="131.htm#txLockStatus">Rich Text Path</a></small></p>
+<p>
+A flag that indicates whether and how the text is locked for user interactions.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Text is not locked (all user interactions are enabled)<br />
+<br />
+1 = Text is completely locked (all user interactions are disabled)<br />
+<br />
+2 = Text is locked for both editing and formatting/styling (but a user can still move the cursor and make text selections)<br />
+<br />
+3 = Text is locked for editing but not for formatting/styling (and a user can still move the cursor and make text selections)<br />
+<br />
+4 = Text is locked for formatting/styling but not for editing (and a user can still move the cursor and make text selections)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDeviceMode"><em><span class="field">pdDeviceMode</span> (1101)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="103.htm#pdDeviceMode">Text Area</a>, <a href="104.htm#pdDeviceMode">Rich Text Line</a>, <a href="106.htm#pdDeviceMode">Rich Text Area</a></small></p>
+<p>
+Indicates whether text should be rendered in a device independent, device dependent or mixed mode. Review the "Rendering Great Looking Text With D-Type" document for a comprehensive overview.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Device Independent Mode. Text will be rendered in a device independent mode, which means that text metrics are independent of the device, resolution or zoom factor and are mathematically accurate. Therefore, in text areas and rich text areas, characters that are supposed to vertically line up will always line up. In addition, all text lines will always fit within the width of the enclosing area. This is the default mode. Recommended for WYSIWYG applications.<br />
+<br />
+1 = Device Dependent Mode #1. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode utilizes a complex device dependent formula that is specially crafted to give good looking character spacing (calculated in whole-pixel units). This mode corresponds to the DV_TEXTMODE_DEVICE value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.<br />
+<br />
+Important note for text areas and rich text areas: Because this mode is device dependent, please be aware that the length of certain text lines will sometimes exceed the width of the enclosing area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.<br />
+<br />
+2 = Device Dependent Mode #2. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode is similar to Device Dependent Mode #1 since it also utilizes a complex device dependent formula crafted to give good looking character spacing. However, this mode produces even better looking and easier to read text, especially at smaller sizes. This is accomplished by artificially increasing the amount of character spacing between certain characters and in certain conditions. This mode corresponds to the DV_TEXTMODE_DEVICE_2 value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.<br />
+<br />
+Important note for text areas and rich text areas: Because this mode is device dependent (and also because the character spacing may be artificially increased), please be aware that the length of certain text lines will sometimes exceed the width of the enclosing area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.<br />
+<br />
+101 = Mixed Mode #1. By default, the engine will render all text using Device Dependent Mode #1. In text areas and rich text areas, however, if there are any text lines whose length would exceed the width of the enclosing area, then those text lines will be rendered in a device independent manner. Consequently, for text areas and rich text areas, this mode guarantees that all text lines will always fit within the width of the enclosing area.<br />
+<br />
+102 = Mixed Mode #2. By default, the engine will render all text using Device Dependent Mode #2. In text areas and rich text areas, however, if there are any text lines whose length would exceed the width of the enclosing area, then the engine will attempt to render those lines using Device Dependent Mode #1. If, after this, there are still some text lines whose length exceeds the width of the enclosing area, then those lines will be rendered in a device independent manner. Consequently, for text areas and rich text areas, this mode guarantees that all text lines will always fit within the width of the enclosing area. This mode usually produces great looking character spacing and is highly recommended whenever true WYSIWYG support is not a priority.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdGlyphStart"><em><span class="field">pdGlyphStart</span> (1076)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="102.htm#pdGlyphStart">Text Arc</a>, <a href="103.htm#pdGlyphStart">Text Area</a>, <a href="104.htm#pdGlyphStart">Rich Text Line</a>, <a href="105.htm#pdGlyphStart">Rich Text Arc</a>, <a href="106.htm#pdGlyphStart">Rich Text Area</a>, <a href="130.htm#pdGlyphStart">Text Path</a>, <a href="131.htm#pdGlyphStart">Rich Text Path</a></small></p>
+<p>
+Start glyph position within the first text fragment, i.e. the index of the glyph in the first text fragment from which the text layout and display starts. This value cannot be negative and must be less than the length of the first text fragment.<br />
+<br />
+This property is useful when building text flows (i.e. when text fragments span more than one text area). In most other cases, this property should be omitted or its value should be set to 0.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextEncoding"><em><span class="field">pdTextEncoding</span> (1079)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextEncoding">Text Fragment</a>, <a href="102.htm#pdTextEncoding">Text Arc</a>, <a href="103.htm#pdTextEncoding">Text Area</a>, <a href="127.htm#pdTextEncoding">Text Design</a>, <a href="130.htm#pdTextEncoding">Text Path</a></small></p>
+<p>
+Text encoding format. If this property is not specified, then the value 0 (Unicode character codes) is assumed.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Unicode character codes<br />
+1 = Glyph codes (font dependent)<br />
+2 = Unicode PowerChar codes - reserved for future use<br />
+3 = PowerGlyph codes (font dependent)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextShaping"><em><span class="field">pdTextShaping</span> (1080)</em> &nbsp; <small class="label">PD_LONG_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextShaping">Text Fragment</a>, <a href="102.htm#pdTextShaping">Text Arc</a>, <a href="103.htm#pdTextShaping">Text Area</a>, <a href="130.htm#pdTextShaping">Text Path</a></small></p>
+<p>
+Text shaping. Complex features and scripts (e.g. ligatures, Arabic and various Indic scripts) require D-Type or TrueType/OpenType fonts with advanced typography tables.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = None<br />
+1 = Default<br />
+2 = Feature: Optional Latin Ligatures<br />
+3 = Feature: Standard Arabic Ligatures<br />
+4 = Feature: Discretionary Latin Ligatures<br />
+5 = Feature: Historical Latin Ligatures<br />
+6 = Feature: Vertical CJK Ideographic Forms<br />
+7 = Feature: Vertical Hiragana/Katakana Forms<br />
+101 = Script &amp; Line Breaking: Default<br />
+102 = Script &amp; Line Breaking: Latin<br />
+103 = Script &amp; Line Breaking: Arabic<br />
+104 = Script &amp; Line Breaking: Hebrew<br />
+105 = Script &amp; Line Breaking: Greek<br />
+106 = Script &amp; Line Breaking: CJK Ideographic<br />
+107 = Script &amp; Line Breaking: Hiragana/Katakana<br />
+108 = Script &amp; Line Breaking: Cyrillic<br />
+1001 = Script &amp; Line Breaking: Vertical Default<br />
+1002 = Script &amp; Line Breaking: Vertical Latin<br />
+1006 = Script &amp; Line Breaking: Vertical CJK Ideographic<br />
+1007 = Script &amp; Line Breaking: Vertical Hiragana/Katakana<br />
+10000 = Unicode Script &amp; Line Breaking: Common<br />
+10001 = Unicode Script &amp; Line Breaking: Inherited<br />
+10002 = Unicode Script &amp; Line Breaking: Arabic<br />
+10003 = Unicode Script &amp; Line Breaking: Armenian<br />
+10004 = Unicode Script &amp; Line Breaking: Bengali<br />
+10005 = Unicode Script &amp; Line Breaking: Bopomofo<br />
+10006 = Unicode Script &amp; Line Breaking: Cherokee<br />
+10007 = Unicode Script &amp; Line Breaking: Coptic<br />
+10008 = Unicode Script &amp; Line Breaking: Cyrillic<br />
+10009 = Unicode Script &amp; Line Breaking: Deseret<br />
+10010 = Unicode Script &amp; Line Breaking: Devanagari<br />
+10011 = Unicode Script &amp; Line Breaking: Ethiopic<br />
+10012 = Unicode Script &amp; Line Breaking: Georgian<br />
+10013 = Unicode Script &amp; Line Breaking: Gothic<br />
+10014 = Unicode Script &amp; Line Breaking: Greek<br />
+10015 = Unicode Script &amp; Line Breaking: Gujarati<br />
+10016 = Unicode Script &amp; Line Breaking: Gurmukhi<br />
+10017 = Unicode Script &amp; Line Breaking: Han<br />
+10018 = Unicode Script &amp; Line Breaking: Hangul<br />
+10019 = Unicode Script &amp; Line Breaking: Hebrew<br />
+10020 = Unicode Script &amp; Line Breaking: Hiragana<br />
+10021 = Unicode Script &amp; Line Breaking: Kannada<br />
+10022 = Unicode Script &amp; Line Breaking: Katakana<br />
+10023 = Unicode Script &amp; Line Breaking: Khmer<br />
+10024 = Unicode Script &amp; Line Breaking: Lao<br />
+10025 = Unicode Script &amp; Line Breaking: Latin<br />
+10026 = Unicode Script &amp; Line Breaking: Malayalam<br />
+10027 = Unicode Script &amp; Line Breaking: Mongolian<br />
+10028 = Unicode Script &amp; Line Breaking: Myanmar<br />
+10029 = Unicode Script &amp; Line Breaking: Ogham<br />
+10030 = Unicode Script &amp; Line Breaking: Old Italic<br />
+10031 = Unicode Script &amp; Line Breaking: Oriya<br />
+10032 = Unicode Script &amp; Line Breaking: Runic<br />
+10033 = Unicode Script &amp; Line Breaking: Sinhala<br />
+10034 = Unicode Script &amp; Line Breaking: Syriac<br />
+10035 = Unicode Script &amp; Line Breaking: Tamil<br />
+10036 = Unicode Script &amp; Line Breaking: Telugu<br />
+10037 = Unicode Script &amp; Line Breaking: Thaana<br />
+10038 = Unicode Script &amp; Line Breaking: Thai<br />
+10039 = Unicode Script &amp; Line Breaking: Tibetan<br />
+10040 = Unicode Script &amp; Line Breaking: Unified Canadian Aboriginal Symbols<br />
+10041 = Unicode Script &amp; Line Breaking: Yi syllables<br />
+10042 = Unicode Script &amp; Line Breaking: Tagalog<br />
+10043 = Unicode Script &amp; Line Breaking: Hanunoo<br />
+10044 = Unicode Script &amp; Line Breaking: Buhid<br />
+10045 = Unicode Script &amp; Line Breaking: Tagbanwa<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextLanguage"><em><span class="field">pdTextLanguage</span> (1135)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextLanguage">Text Fragment</a>, <a href="102.htm#pdTextLanguage">Text Arc</a>, <a href="103.htm#pdTextLanguage">Text Area</a>, <a href="130.htm#pdTextLanguage">Text Path</a></small></p>
+<p>
+Language of the text. Although optional and rarely used, this value is primarily a hint needed to influence the text shaping process with certain Unicode scripts.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = None<br />
+1 = araLanguageCode = Arabic<br />
+2 = asmLanguageCode = Assamese<br />
+3 = benLanguageCode = Bengali<br />
+4 = farLanguageCode = Farsi<br />
+5 = gujLanguageCode = Gujarati<br />
+6 = hinLanguageCode = Hindi<br />
+7 = iwrLanguageCode = Hebrew<br />
+8 = jiiLanguageCode = Yiddish<br />
+9 = janLanguageCode = Japanese<br />
+10 = kanLanguageCode = Kannada<br />
+11 = kokLanguageCode = Konkani<br />
+12 = korLanguageCode = Korean<br />
+13 = kshLanguageCode = Kashmiri<br />
+14 = malLanguageCode = Malayalam Traditional<br />
+15 = marLanguageCode = Marathi<br />
+16 = mlrLanguageCode = Malayalam Reformed<br />
+17 = mniLanguageCode = Manipuri<br />
+18 = oriLanguageCode = Oriya<br />
+19 = sanLanguageCode = Sanskrit<br />
+20 = sndLanguageCode = Sindhi<br />
+21 = snhLanguageCode = Sinhalese<br />
+22 = syrLanguageCode = Syriac<br />
+23 = tamLanguageCode = Tamil<br />
+24 = telLanguageCode = Telugu<br />
+25 = thaLanguageCode = Thai<br />
+26 = urdLanguageCode = Urdu<br />
+27 = zhpLanguageCode = Chinese Phonetic<br />
+28 = zhsLanguageCode = Chinese Simplified<br />
+29 = zhtLanguageCode = Chinese Traditional<br />
+30 = afkLanguageCode = Afrikaans<br />
+31 = belLanguageCode = Belarussian<br />
+32 = bgrLanguageCode = Bulgarian<br />
+33 = catLanguageCode = Catalan<br />
+34 = cheLanguageCode = Chechen<br />
+35 = copLanguageCode = Coptic<br />
+36 = csyLanguageCode = Czech<br />
+37 = danLanguageCode = Danish<br />
+38 = deuLanguageCode = German<br />
+39 = dznLanguageCode = Dzongkha<br />
+40 = ellLanguageCode = Greek<br />
+41 = engLanguageCode = English<br />
+42 = espLanguageCode = Spanish<br />
+43 = etiLanguageCode = Estonian<br />
+44 = euqLanguageCode = Basque<br />
+45 = finLanguageCode = Finnish<br />
+46 = fraLanguageCode = French<br />
+47 = gaeLanguageCode = Gaelic<br />
+48 = hauLanguageCode = Hausa<br />
+49 = hrvLanguageCode = Croatian<br />
+50 = hunLanguageCode = Hungarian<br />
+51 = hyeLanguageCode = Armenian<br />
+52 = indLanguageCode = Indonesian<br />
+53 = itaLanguageCode = Italian<br />
+54 = khmLanguageCode = Khmer<br />
+55 = mngLanguageCode = Mongolian<br />
+56 = mtsLanguageCode = Maltese<br />
+57 = nepLanguageCode = Nepali<br />
+58 = nldLanguageCode = Dutch<br />
+59 = pasLanguageCode = Pashto<br />
+60 = plkLanguageCode = Polish<br />
+61 = ptgLanguageCode = Portuguese<br />
+62 = romLanguageCode = Romanian<br />
+63 = rusLanguageCode = Russian<br />
+64 = skyLanguageCode = Slovak<br />
+65 = slvLanguageCode = Slovenian<br />
+66 = sqiLanguageCode = Albanian<br />
+67 = srbLanguageCode = Serbian<br />
+68 = sveLanguageCode = Swedish<br />
+69 = tibLanguageCode = Tibetan<br />
+70 = trkLanguageCode = Turkish<br />
+71 = welLanguageCode = Welsh<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextShapingParam0"><em><span class="field">pdTextShapingParam0</span> (1136)</em> &nbsp; <small class="label">PD_LONG_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextShapingParam0">Text Fragment</a>, <a href="102.htm#pdTextShapingParam0">Text Arc</a>, <a href="103.htm#pdTextShapingParam0">Text Area</a>, <a href="130.htm#pdTextShapingParam0">Text Path</a></small></p>
+<p>
+A value consisting of 4 independent bits. Each bit indicates whether a certain typographic feature for a script is enabled or disabled. This makes it possible to fine tune the text shaping process.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+1 (bit 0 set) = Disable kerning<br />
+2 (bit 1 set) = Disable optional ligatures<br />
+131072 (bit 17 set) = Enable discretionary ligatures<br />
+262144 (bit 18 set) = Enable historical ligatures<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+3 = Disable kerning and optional ligatures<br />
+131074 = Enable discretionary ligatures and disable optional ligatures<br />
+393216 = Enable discretionary and historical ligatures<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextBreakFlags"><em><span class="field">pdTextBreakFlags</span> (1116)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextBreakFlags">Text Fragment</a>, <a href="102.htm#pdTextBreakFlags">Text Arc</a>, <a href="103.htm#pdTextBreakFlags">Text Area</a>, <a href="130.htm#pdTextBreakFlags">Text Path</a></small></p>
+<p>
+A value consisting of 5 independent bits. Each bit indicates whether a line break is allowed after a certain user-selectble class of characters. This makes it possible to fine tune the behaviour of the text wrapping algorithm (on arbitrary text selections) in order to improve the appearance of text.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+Bit 0 - If set, line break is allowed after common punctuation marks (e.g. period, comma, exclamation mark, question mark, colon, semi-colon)<br />
+Bit 1 - If set, line break is allowed after other punctuation marks (e.g. middle dot, inverted exclamation mark, inverted question mark)<br />
+Bit 2 - If set, line break is allowed after minus/hyphen signs and dashes (e.g. en dash, em dash, horizontal bar)<br />
+Bit 3 - If set, line break is allowed after forward or backward slashes<br />
+Bit 4 - If set, line break is allowed after other separators (e.g. pipe)<br />
+Bit 5 - If set, line break is allowed after closing brackets/parentheses<br />
+Bit 6 - If set, line break is allowed after other terminating symbols (e.g. percent, degree, cent sign)<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+0 = Line break is not allowed after any user-selectable class of characters<br />
+1 = Line break is allowed after common punctuation marks<br />
+8 = Line break is allowed after  forward or backward slashes<br />
+9 = Line break is allowed after common punctuation marks and forward or backward slashes<br />
+11 = Line break is allowed after common punctuation marks, other punctuation marks and forward or backward slashes<br />
+31 = Line break is allowed after all user-selectable classes of characters<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextHyphenBits"><em><span class="field">pdTextHyphenBits</span> (1117)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextHyphenBits">Text Fragment</a>, <a href="102.htm#pdTextHyphenBits">Text Arc</a>, <a href="103.htm#pdTextHyphenBits">Text Area</a>, <a href="130.htm#pdTextHyphenBits">Text Path</a></small></p>
+<p>
+Index of the hyphenation dictionary (1 byte) followed by one reserved byte (must be zero) followed by an array of hyphen bits (variable length, one bit for each glyph or character).<br />
+<br />
+This property makes it possible to apply language specific hyphenation rules to arbitrary text selections. This typically results in improved text wrapping behaviour, especially when text is laid out in narrow columns. This is useful in high-end text layout applications that require more professional justification of text lines.<br />
+<br />
+Hyphenation dictionaries are set up via dtype.inf. Each hyphenation dictionary is a file (steam) that contains specific hyphenation instructions and hyphenation patterns for the supported target language. The index of the hyphenation dictionary (first byte) simply references one of these files (streams). For example, index 1 references the first hyphenation dictionary set up via dtype.inf (which is the English hyphenation dictionary), index 2 references the second one (which is the French hyphenation dictionary) and so on. Consequently, a positive index enables automatic hyphenation while the index 0 disables the hyphenation (in which case no additional bytes are needed).<br />
+<br />
+D-Type Power Engine by itself does not use the index of the hyphenation dictionary as parsing the hyphenation instructions and patterns in real time can be slow. The purpose of this index is to allow text processing clients to re-hyphenate text as the user makes changes to it and store processed hyphenation results in the array of hyphen bits. D-Type Power Engine then reads the array of hyphen bits to extract these processed hyphenation results. The array of hyphen bits tells D-Type Power Engine whether a hyphen is allowed after the glyph or character in the corresponding text fragment. If a bit in the array of hyphen bits is set (1), a hyphen is allowed after the corresponding glyph/character; if unset (0) then the hyphen is not allowed after the corresponding glyph/character. Any trailing unset bits can be omitted. This means that the number of bits in the array of hyphen bits can be less than the number of glyphs/characters in the corresponding text fragment.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+0 = Disable hyphenation<br />
+<br />
+1, 0, 12, 10, 128, 136 = Enable automatic hyphenation; use the English hyphenation dictionary to hyphenate text. The array 12, 10, 128, 136 (00001100, 00001010, 10000000, 10001000) means that a hyphen can be inserted after the 5th, 6th, 13th, 15th, 17th, 25th and 29th character in the corresponding text fragment.<br />
+<br />
+2, 0, 33, 112, 128 = Enable automatic hyphenation; use the French hyphenation dictionary to hyphenate text. The array 33, 112, 128 (00100001, 01110000, 10000000) means that a hyphen can be inserted after the 3rd, 8th, 10th, 11th, 12th and 17th character in the corresponding text fragment.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextMiscAttribs"><em><span class="field">pdTextMiscAttribs</span> (1128)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextMiscAttribs">Text Fragment</a>, <a href="102.htm#pdTextMiscAttribs">Text Arc</a>, <a href="103.htm#pdTextMiscAttribs">Text Area</a>, <a href="130.htm#pdTextMiscAttribs">Text Path</a></small></p>
+<p>
+Misc Text Attributes<br />
+<br />
+Bit 0: 1 = Don't allow line break at the end of the text fragment<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[9];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "TextLine Outline Style");<br />
+obj[1] = pdObjAdd(pd, 0, "TextLine Body Style");<br />
+obj[2] = pdObjAdd(pd, 0, "TextLine Shadow Style");<br />
+obj[3] = pdObjAdd(pd, 0, "TextLine Outline");<br />
+obj[4] = pdObjAdd(pd, 0, "TextLine Shadow");<br />
+obj[5] = pdObjAdd(pd, 0, "TextLine Typography");<br />
+obj[6] = pdObjAdd(pd, 0, "TextLine Layout");<br />
+obj[7] = pdObjAdd(pd, 0, "TextLine Ruler");<br />
+<strong>obj[8] = pdObjAdd(pd, 0, "TextLine");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);<br />
+pdPropAdd(pd, obj[2], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "150", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);<br />
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);<br />
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);<br />
+pdPropAdd(pd, obj[5], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDw, "70", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDh, "70", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+pdPropAdd(pd, obj[6], pdSpacingRow, "10", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdSpacingLetter, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdKerning, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[6], pdAlign, "3", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 7 */</span><br />
+pdPropAdd(pd, obj[7], pdTabStopPositions, "40, 80, 150, 220", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 8 */</span><br />
+<strong>pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[5]);<br />
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[6]);<br />
+pdLinkAdd(pd, obj[8], pdTextRulerHorPtr, obj[7]);<br />
+pdPropAdd(pd, obj[8], pdTextString_08, "This is a simple text line", PD_ASC);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[8], 0, 50, 50, 0, 0, 0, pdDrawTextLine, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("TextLine Outline Style");<br />
+local obj_1 = o("TextLine Body Style");<br />
+local obj_2 = o("TextLine Shadow Style");<br />
+local obj_3 = o("TextLine Outline");<br />
+local obj_4 = o("TextLine Shadow");<br />
+local obj_5 = o("TextLine Typography");<br />
+local obj_6 = o("TextLine Layout");<br />
+local obj_7 = o("TextLine Ruler");<br />
+local obj_8 = o("TextLine");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_2 + s(pdRGBT, "80808078");<br />
+obj_2 + s(pdEP, "030A");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_0);<br />
+obj_3 + i(pdLineThickness, 150);<br />
+<br />
+obj_4 + l(pdStylePtr, obj_2);<br />
+obj_4 + i(pdShadowDx, 5);<br />
+obj_4 + i(pdShadowDy, 5);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_1);<br />
+obj_5 + l(pdShadowPtr, obj_4);<br />
+obj_5 + l(pdOutlinePtr, obj_3);<br />
+obj_5 + i(pdFontIndex, 0);<br />
+obj_5 + i(pdFontDw, 70);<br />
+obj_5 + i(pdFontDh, 70);<br />
+<br />
+obj_6 + i(pdSpacingRow, 10);<br />
+obj_6 + i(pdSpacingLetter, 5);<br />
+obj_6 + i(pdKerning, 1);<br />
+obj_6 + i(pdAlign, 3);<br />
+<br />
+obj_7 + p(pdTabStopPositions, "40, 80, 150, 220");<br />
+obj_7 + p(pdTabStopFlags, "1, 0, 0, 2");<br />
+<br />
+obj_8 + l(pdTypographyPtr, obj_5);<br />
+obj_8 + l(pdTextLayoutPtr, obj_6);<br />
+obj_8 + l(pdTextRulerHorPtr, obj_7);<br />
+obj_8 + s(pdTextString_08, "This is a simple text line");<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_8.Pin(0, 50, 150, pdDrawTextLine);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

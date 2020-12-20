@@ -1,0 +1,13 @@
+This objects represents a simple grid. In Power Engine API, a grid is a tabular structure representing rows and/or columns. Grids are typically used to draw tables, matrices and similar structures.
+
+{strong}Designated Rendering Function:{/strong} pdDrawGrid (12)
+
+Note 1: pdNw, pdPosArrX_08, pdPosArrX_16, pdPosArrX_24 and pdPosArrX_32 cannot be used at the same time. pdPosArrX_32 takes precedence over pdPosArrX_24. pdPosArrX_24 takes precedence over pdPosArrX_16. pdPosArrX_16 takes precedence over pdPosArrX_08. Finally, pdPosArrX_08 takes precedence over pdNw.
+
+Note 2: pdNh, pdPosArrY_08, pdPosArrY_16, pdPosArrY_24 and pdPosArrY_32 cannot be used at the same time. pdPosArrY_32 takes precedence over pdPosArrY_24. pdPosArrY_24 takes precedence over pdPosArrY_16. pdPosArrY_16 takes precedence over pdPosArrY_08. Finally, pdPosArrY_08 takes precedence over pdNh.
+
+Note 3: If pdPosArrX_08, pdPosArrX_16, pdPosArrX_24 or pdPosArrX_32 is used, the grid will contain n manually positioned vertical grid lines, where n is the number of elements in the array. Each element then specifies the X coordinate of the corresponding vertical grid line). If pdNw is used, the grid will contain pdNw vertical grid lines that are equally spaced apart.
+
+Note 4: If pdPosArrY_08, pdPosArrY_16, pdPosArrY_24 or pdPosArrY_32 is used, the grid will contain n manually positioned horizontal grid lines, where n is the number of elements in the array. Each element then specifies the Y coordinate of the corresponding horizontal grid line). If pdNh is used, the will grid contain pdNh horizontal grid lines that are equally spaced apart.
+
+Note 5: Although pdLinePtr and pdOutlinePtr are both key links, they are not mandatory. This means it is possible to construct a grid that has no border or has no inner grid lines. Also, pdBodyPtr is not mandatory either. This means it is possible to construct a grid that has no body, only an outline and/or inner grid lines and/or a shadow.

@@ -1,0 +1,7 @@
+This object represents an open arc. In Power Engine API, this is simply a section of a circle or an ellipse.
+
+While constructing the Arc object, an optional shadow may be specified. Also, depending on the pdLinePtr link, arcs can be drawn solid or dashed, while their ends can be styled (flat, rounded, peak).
+
+{strong}Designated Rendering Function:{/strong} pdDrawArc (2)
+
+Tip: A closed arc can be constructed using the {a href="../objects/115.htm"}Slice{/a} object.

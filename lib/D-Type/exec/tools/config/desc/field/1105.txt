@@ -1,0 +1,80 @@
+Relative text orientation (Portrait or Landscape) and baseline, for horizontal and vertical text layout.
+
+This is a 32-bit value that consists of the following 4 bytes:
+
+{u}BYTE 3{/u} - Reserved for future use. All bits in this byte must be set to 0.
+
+{u}BYTE 2{/u} - Relative text orientation and baseline for vertical text layout (text in columns). The bits in this byte are interpreted as follows:
+
+Bit 7: Relative text orientation - If unset (0), the orientation is Portrait. If set (1), the orientation is Landscape. Portrait means that the glyph's x-axis (in font design space) is parallel with the baseline. Landscape means that the glyph's x-axis (in font design space) is perpendicular to the baseline.
+Bit 6: Reserved for future use - Must be set to 0.
+Bit 5: Reserved for future use - Must be set to 0.
+Bit 4: Reserved for future use - Must be set to 0.
+Bit 3: Reserved for future use - Must be set to 0.
+Bit 2: Reserved for future use - Must be set to 0.
+Bit 1 & 0: Baseline - These two bits represent a single 2-bit value which, depending on the relative text orientation, identifies one of the 4 available baselines.
+
+In Portrait Mode (when Bit 7 is unset), the available baselines are:
+
+00 (0) - Default - coincides with glyph's zero y coordinate (in font design space).
+01 (1) - Shifted (Middle) - above the Default baseline, shifted by an amount that equals half the distance between the font's ascend and descend.
+10 (2) - Top - coincides with glyph's ascend (in font design space).
+11 (3) - Bottom - coincides with glyph's descend (in font design space).
+
+In Landscape Mode (when Bit 7 is set), the available baselines are:
+
+00 (0) - Default - coincides with glyph's mid-x point (in font design space). The definition of the mid-x point depends on the currently active algorithm for calculating the glyph mid-x points in vertical text layout. If the active algorithm is "Glyph Width" the mid-x point is half way between the glyph's minimum and maximum x coordinate. If the active algorithm is "Advance Width" the mid-x point is half way between the glyph's left and right side-bearing. Note that the left side-bearing coincides with the x coordinate 0 while the right side-bearing coincides with the glyph's advance width.
+01 (1) - Shifted (Left) - to the left of the Default baseline, shifted by an amount that equals half the font's em square.
+10 (2) - Center - same as the Default baseline.
+11 (3) - Right - to the right of the Default baseline, shifted by an amount that equals half the font's em square.
+
+{u}BYTE 1{/u} - Relative text orientation and baseline for horizontal text layout (text in rows). The bits in this byte are interpreted precisely the same as in BYTE 2. The only difference is that they control the relative text orientation and baseline in horizontal text layout (e.g. when text is laid out in rows), unlike the bits in BYTE 2 which control the relative text orientation and baseline in vertical text layout (e.g. when text is laid out in columns).
+
+{u}BYTE 0{/u} - Flags and presets. This byte contains the following bits:
+
+Bit 7: Advanced Configuration Mode - If unset (0), Advanced Configuration Mode is off. If set (1), Advanced Configuration Mode is on. In Advanced Configuration Mode, bits in BYTE 1 and 2 are respected and presets are ignored. When Advanced Configuration Mode is off, bits in BYTE 1 and 2 are ignored and instead presets are used. See below the list of available presets.
+Bit 6: Reserved for future use - Must be set to 0.
+Bit 5: Reserved for future use - Must be set to 0.
+Bit 4: Flip Mode - If unset (0), Flip Mode is off. If set (1), Flip Mode is on. Flip Mode simply rotates glyphs 180 degrees. This bit is always respected i.e. regardless of whether Advanced Configuration Mode is on or off.
+Bit 3, 2, 1 & 0: Presets - These four bits represent a single 4-bit value, which identifies one of the 16 available presets.
+
+0000 (0) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Portrait + Default Baseline
+0001 (1) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Landscape + Default Baseline
+0010 (2) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Landscape + Default Baseline
+0011 (3) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Portrait + Default Baseline
+0100 (4) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Portrait + Shifted Baseline
+0101 (5) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Landscape + Shifted Baseline
+0110 (6) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Landscape + Shifted Baseline
+0111 (7) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Portrait + Shifted Baseline
+1000 (8) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Portrait + Shifted Baseline
+1001 (9) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Landscape + Shifted Baseline
+1010 (10) - Hor. Layout: Portrait + Default Baseline / Ver. Layout: Landscape + Shifted Baseline
+1011 (11) - Hor. Layout: Landscape + Default Baseline / Ver. Layout: Portrait + Shifted Baseline
+1100 (12) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Portrait + Default Baseline
+1101 (13) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Landscape + Default Baseline
+1110 (14) - Hor. Layout: Portrait + Shifted Baseline / Ver. Layout: Landscape + Default Baseline
+1111 (15) - Hor. Layout: Landscape + Shifted Baseline / Ver. Layout: Portrait + Default Baseline
+
+Value 0010 (2) is particularly useful for Unicode scripts that are typically written in portrait mode when the text is in horizontal layout (rows) and landscape mode when the text is in vertical layout (columns). Such scripts primarily include CJK scripts (Chinese/Japanese/Korean) and sometimes Latin or Cyrillic.
+
+Value 1000 (8) is particularly useful for Unicode scripts that are always written in portrait mode, regardless of whether the text is in horizontal layout (rows) or vertical layout (columns). Such scripts include Arabic, Indic or any scripts that have horizontally joined characters. Value 8 also works well for Latin or Cyrillic scripts and can be applied to mirrored Unicode characters such as the parenthesis, square and curly brackets etc.
+
+{strong}Sample values:{/strong}
+
+"0" = Preset #0: Portrait orientation and Default Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.
+
+"6" = Preset #6: Portrait orientation and Shifted Baseline with horizontal layout; Landscape orientation and Shifted Baseline with vertical layout.
+
+"8" = Preset #8: Portrait orientation and Default Baseline with horizontal layout; Portrait orientation and Shifted Baseline with vertical layout.
+
+"18" = Flip Mode & Preset #2: Glyphs are rotated 180 degrees; Portrait orientation and Default Baseline with horizontal layout; Landscape orientation and Default Baseline with vertical layout.
+
+"22" = Flip Mode & Preset #6: Glyphs are rotated 180 degrees; Portrait orientation and Shifted Baseline with horizontal layout; Landscape orientation and Shifted Baseline with vertical layout.
+
+"896" = Advanced Configuration: Portrait orientation and Bottom Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.
+
+"912" = Flip Mode & Advanced Configuration: Glyphs are rotated 180 degrees; Portrait orientation and Bottom Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.
+
+"33664" = Advanced Configuration: Landscape orientation and Right Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.
+
+"33680" = Flip Mode & Advanced Configuration: Glyphs are rotated 180 degrees; Landscape orientation and Right Baseline with horizontal layout; Portrait orientation and Default Baseline with vertical layout.

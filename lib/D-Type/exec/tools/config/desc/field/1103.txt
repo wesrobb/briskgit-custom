@@ -1,0 +1,9 @@
+An array containing X coordinates for manual positioning (variable length, 4 bytes per coordinate).
+
+When used in the context of the Text Layout (Manual) object, pdPosArrX_32 is an array containing X coordinates or relative deltas needed to manually position the corresponding letters (i.e. characters or glyphs). The length of the array should be the same as the number of letters. If the array is shorter, any missing coordinates will assume the value 0. If the array is longer, any extra coordinates will be ignored. All X coordinates and relative deltas are specified in 1/256 document units (i.e. they are document units multiplied by 256). This provides the extra precision needed for precise text layout. Whether a value is an absolute X coordinate or relative delta depends on the corresponding instruction in the pdPosArrI.
+
+When used in the context of the Grid object, pdPosArrX_32 is an array containing X coordinates needed to manually position the vertical grid lines, relative to the grid's origin. The length of the array equals the number of vertical grid lines. All X coordinates are in document units. They must be non-negative and must not exceed the width of the Grid object.
+
+{strong}Sample values:{/strong}
+
+0, 12800, 25600, -16000, 15360, 15360, 15360, 29360, 15360, 25600, 25600, 25600, 25600

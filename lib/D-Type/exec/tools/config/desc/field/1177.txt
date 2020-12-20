@@ -1,0 +1,3 @@
+Link to the {a href="../objects/023.htm"}Typographic Frame{/a} object.
+
+This link supplies parameters necessary to render frames of glyphs and characters.

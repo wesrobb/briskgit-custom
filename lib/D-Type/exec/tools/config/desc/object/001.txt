@@ -1,0 +1,7 @@
+This object represents a set of standard surface properties. This includes color, transparency and any special effects (e.g. blur, emboss, pattern fill etc.). The Surface Definition object is one of the elementary PowerDoc objects; virtually all higher-level objects link (either directly or indirectly) to this object.
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note 1: The pdEffectsArr property has the same purpose as pdEP but is more sophisticated. It allows several style effects to be combined and applied to a surface at the same time. It also allows certain style effects to use multiple effect parameters (e.g. Gaussian blur with a different amount of blur in the horizontal and vertical direction).
+
+Note 2: pdEP and pdEffectsArr cannot be used at the same time. pdEffectsArr takes precedence over pdEP.

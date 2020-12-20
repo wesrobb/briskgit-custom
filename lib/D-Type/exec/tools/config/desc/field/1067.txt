@@ -1,0 +1,7 @@
+An array of Multiple-Master font contributions. The value of each element must be in the 0 - 1024 range, where zero means "no contribution" (or 0% contribution) and 1024 means "full contribution" (or 100% contribution). The number of elements in this array must correspond to the number of base designs in the font. Additionally, the sum of all the elements must equal 1024.
+
+This field is useful only when it refers to a Multiple-Master font. With regular (single-master) fonts, this field has no meaning and is ignored. See D-Type Standard Engine Manual for more information on Multiple-Master fonts.
+
+{strong}Sample values:{/strong}
+
+'205, 307, 307, 205' = Contributions of 20%, 30%, 30%, 20%  for a multiple-master font with 4 base designs

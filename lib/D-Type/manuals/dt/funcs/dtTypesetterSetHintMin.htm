@@ -1,0 +1,110 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterSetHintMin</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterSetHintMin(DT_DTENGINE engine, DT_SWORD min_hint_dpx, DT_SWORD min_hint_dpy, DT_UBYTE flag)</strong></div><br /><strong>Short Description:</strong> <em>Set minimum pixel size when Typesetter scales narrow horizontal and vertical glyph features in hinted fonts to small sizes</em><br /><br />
+
+<p>This function sets the minimum pixel size for narrow horizontal and vertical glyph features in hinted fonts. More precisely, this setting specifies the minimum thickness for narrow vertical and horizontal stems when the Typesetter scales glyphs/characters to small pixel sizes. This ensures that narrow horizontal and vertical stems remain reasonably sharp (dark) when the font is scaled to smaller pixel sizes.</p>
+
+<p>When D-Type Engine is initialized, the default minimum pixel size for narrow horizontal and vertical glyph features is set to approximately 78 (0.78 pixels). This is a good value for most applications. However, applications that require very sharp (dark) output, even when the fonts are scaled to very small pixel sizes, may want to increase this value somewhat.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>min_hint_dpx</em></p>
+</td><td>
+<p>Minimum thickness for narrow vertical glyph stems in hinted fonts, in 1/100 pixels. When scaling hinted fonts to small pixel sizes, the Typesetter will ensure that narrow vertical stems remain at least <em>min_hint_dpx</em> pixels thick.</p>
+
+<p>This value must be between 10 and 100 (0.1 and 1.0 pixels). The larger the value is, the thicker and sharper (darker) the hinted stems will appear at small pixel sizes. However, values very close to 100 (1.0 pixels) will also increase hinting distortions which, in some rare cases, may become too noticeable or result in some extra (unwanted) pixels. Therefore, values very close to 100 (1.0 pixels) should be avoided. Also, values smaller than 50 (0.5 pixels) are not recommended because hinted stems will appear too narrow (gray). The best values are in the 50 and 90 range (0.5 to 0.9 pixels).</p>
+
+<p>In general, the <em>min_hint_dpx</em> parameter has a noticeable impact only on fonts that contain glyphs with narrow vertical stems and only when scaling to small sizes (i.e. when the vertical stems become narrower than 1 pixel). Bold fonts or fonts containing vertical stems that are thicker than 1 pixel at small sizes will not be affected by this parameter. Thus, at larger pixel sizes this parameter has virtually no effect on any fonts.</p>
+
+<p>Please note this parameter is only respected when using hinted (auto-hinted) fonts and when font hinting is enabled. If the font is not hinted or font hinting is disabled, this parameter is completely ignored.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>min_hint_dpy</em></p>
+</td><td>
+<p>Minimum thickness for narrow horizontal glyph stems in hinted fonts, in 1/100 pixels. When scaling hinted fonts to small pixel sizes, the Typesetter will ensure that narrow horizontal stems remain at least <em>min_hint_dpy</em> pixels thick.</p>
+
+<p>This value must be between 10 and 100 (0.1 and 1.0 pixels). The larger the value is, the thicker and sharper (darker) the hinted stems will appear at small pixel sizes. However, values very close to 100 (1.0 pixels) will also increase hinting distortions which, in some rare cases, may become too noticeable or result in some extra (unwanted) pixels. Therefore, values very close to 100 (1.0 pixels) should be avoided. Also, values smaller than 50 (0.5 pixels) are not recommended because hinted stems will appear too narrow (gray). The best values are in the 50 and 90 range (0.5 to 0.9 pixels).</p>
+
+<p>In general, the <em>min_hint_dpy</em> parameter has a noticeable impact only on fonts that contain glyphs with narrow horizontal stems and only when scaling to small sizes (i.e. when the horizontal stems become narrower than 1 pixel). Bold fonts or fonts containing horizontal stems that are thicker than 1 pixel at small sizes will not be affected by this parameter. Thus, at larger pixel sizes this parameter has virtually no effect on any fonts.</p>
+
+<p>Please note this parameter is only respected when using hinted (auto-hinted) fonts and when font hinting is enabled. If the font is not hinted or font hinting is disabled, this parameter is completely ignored.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Example</h3>
+
+<p>The following images show a sample text paragraph rendered using the Courier font and three different <em>min_hint_dpx</em> (<em>min_hint_dpy</em>) values. Courier is a font that contains glyphs with quite narrow horizontal and vertical stems. When scaled to a relatively small pixel size, as in this example, its horizontal and vertical stems become narrower than 1 pixel. In this case, the Typesetter ensures that narrow vertical stems remain at least <em>min_hint_dpx</em> pixels thick and narrow horizontal stems remain at least <em>min_hint_dpy</em> pixels thick.</p>
+
+<p>The resulting output is first shown at normal size and then magnified 3 times so that subtle sub-pixel differences between different images can be viewed more easily. Note the higher the value of <em>min_hint_dpx</em> (<em>min_hint_dpy</em>) is, the wider the stems appear at small sizes and, consequently, the sharper (darker) the overall output is.</p>
+
+<p>a) <em>min_hint_dpx</em> and <em>min_hint_dpy</em> set to 50 (0.5 pixels)</p>
+<p class="center">
+<img src="../images/hint_d_05.gif" vspace="8" width="534" height="158" alt="min_hint_dpx = 50" border="1" /><br />
+<img src="../images/hint_d_05b.gif" vspace="8" width="534" height="238" alt="min_hint_dpx = 50 (magnified 3X)" border="1" /><br />
+</p>
+
+<p>b) <em>min_hint_dpx</em> and <em>min_hint_dpy</em> set to 70 (0.7 pixels)</p>
+<p class="center">
+<img src="../images/hint_d_07.gif" vspace="8" width="534" height="158" alt="min_hint_dpx = 70" border="1" /><br />
+<img src="../images/hint_d_07b.gif" vspace="8" width="534" height="238" alt="min_hint_dpx = 70 (magnified 3X)" border="1" /><br />
+</p>
+
+<p>c) <em>min_hint_dpx</em> and <em>min_hint_dpy</em> set to 90 (0.9 pixels)</p>
+<p class="center">
+<img src="../images/hint_d_09.gif" vspace="8" width="534" height="158" alt="min_hint_dpx = 90" border="1" /><br />
+<img src="../images/hint_d_09b.gif" vspace="8" width="534" height="238" alt="min_hint_dpx = 90 (magnified 3X)"  border="1" /><br />
+</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

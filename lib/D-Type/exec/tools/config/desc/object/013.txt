@@ -1,0 +1,3 @@
+The Group Member object is the building block used in the construction of the {a href="../objects/123.htm"}Group{/a} object. This object can represent any other visual PowerDoc object (i.e. object with a designated FnDraw rendering function) and can have its own horizontal and/or vertical offset within the group, transformation matrix, masking page and/or other attributes.
+
+{strong}Designated Rendering Function:{/strong} NONE

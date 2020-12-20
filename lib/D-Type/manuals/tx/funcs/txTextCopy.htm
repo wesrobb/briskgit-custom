@@ -1,0 +1,77 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextCopy</h2><div class="box_prototype"><strong>
+DT_SWORD txTextCopy(DT_TXDOC text_doc, DT_UBYTE* buffer, DT_SLONG max_buffer_len, DT_ID_SWORD buffer_format)</strong></div><br /><strong>Short Description:</strong> <em>Copy plain text to user-supplied buffer</em><br /><br />
+
+<p>This function extracts plain text from the active text selection and copies it to a user-supplied memory buffer.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>buffer</em></p>
+</td><td>
+<p>A valid pointer to a user-supplied memory buffer to which the function will copy the plain text.</p>
+</td></tr>
+
+<tr><td>
+<p><em>max_buffer_len</em></p>
+</td><td>
+<p>Size of the user-supplied buffer, i.e. the maximum number of bytes (not characters) that can be stored in the buffer.</p>
+<p>Applications can use the <a href="txTextGetSelectSize.htm">txTextGetSelectSize</a> function to determine the total number of characters in all the active text selection(s). This makes it possible to easily calculate the required <em>max_buffer_len</em> value.</p>
+</td></tr>
+
+<tr><td>
+<p><em>buffer_format</em></p>
+</td><td>
+<p>Specifies how the plain text is to be stored in the buffer. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_BUFFER_FORMAT_1  1   <span class="codecomment">/* 1 byte per character &mdash; for ANSI */</span>&nbsp;
+TX_BUFFER_FORMAT_2  2   <span class="codecomment">/* 2 bytes per character &mdash; for UCS2 */</span>&nbsp;
+TX_BUFFER_FORMAT_3  3   <span class="codecomment">/* 3 bytes per character */</span>&nbsp;
+TX_BUFFER_FORMAT_4  4   <span class="codecomment">/* 4 bytes per character &mdash; for UCS4 */</span>&nbsp;
+</pre></div>
+<p>These values have the following meaning:</p>
+<ul>
+<li><p>TX_BUFFER_FORMAT_1 indicates that the size of each character in the buffer will be 1 byte. All characters will have codepoints in the 0 - 255 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_2 indicates that the size of each character in the buffer will be 2 bytes (little endian byte ordering). All characters will have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_3 indicates that the size of each character in the buffer will be 3 bytes (little endian byte ordering). All characters will have codepoints in the 0&nbsp;-&nbsp;16,777,215 range.</p></li>
+<li><p>TX_BUFFER_FORMAT_4 indicates that the size of each character in the buffer will be 4 bytes (little endian byte ordering). All characters will have codepoints in the 0&nbsp;-&nbsp;4,294,967,295 range.</p></li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,765 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTRasterizerV8</h1>
+
+<h2>MultiSegment, MultiSegmentFrac</h2>
+
+<div class="box_prototype"><strong>DT_SWORD MultiSegment(DT_FLOAT x, DT_FLOAT y, DT_ID_SWORD flag, const DT_UBYTE i_arr[], const DT_UBYTE c_arr[], const DT_FLOAT x_arr[], const DT_FLOAT y_arr[])</strong></div><br />
+<div class="box_prototype"><strong>DT_SWORD MultiSegmentFrac(DT_SFRAC_L x, DT_SFRAC_L y, DT_ID_SWORD flag, const DT_UBYTE i_arr[], const DT_UBYTE c_arr[], const DT_SFRAC_L x_arr[], const DT_SFRAC_L y_arr[])</strong></div><br />
+
+<p>The MultiSegment (or MultiSegmentFrac) method instructs CDTRasterizerV8 to add one or more line and/or curve segments to the current contour and/or one or more contours to the current scene. This method can be used in conjunction with other scene construction methods (<a href="MoveTo.htm">MoveTo</a>, <a href="MoveTo.htm">MoveToFrac</a>, <a href="LineTo.htm">LineTo</a>, <a href="LineTo.htm">LineToFrac</a>, <a href="BSplineTo.htm">BSplineTo</a>, <a href="BSplineTo.htm">BSplineToFrac</a>, <a href="BezierTo.htm">BezierTo</a>, <a href="BezierTo.htm">BezierToFrac</a>) or on its own to create a complete scene that CDTRasterizerV8 will render by a subsequent call to <a href="DoOutput.htm">DoOutput</a>.</p>
+
+<p>MultiSegmentFrac is identical to MultiSegment except that some of its parameters are 24.8 signed fractional values. For more details on fractional units, see the <a href="../../dc/manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>Horizontal offset to apply to all X coordinates supplied by this method, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Vertical offset to apply to all Y coordinates supplied by this method, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Tells CDTRasterizerV8 how the segments supplied by this method are defined. The following six options are available:</p>
+<ul>
+<li><p>If <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED), the segments are defined via a buffer using a mixed positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the segments to be rendered while <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> are ignored and should be all set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE), the segments are defined via a buffer using an abolute positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the segments to be rendered while <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> are ignored and should be all set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), the segments are defined via a buffer using a relative positioning mode. In this case, <em>i_arr</em> is a pointer to a buffer that fully describes the segments to be rendered while <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> are ignored and should be all set to DV_NULL.</p></li>
+
+<li><p>If <em>flag</em> = 1 (DV_SHAPE_ARRAY_MIXED), the segments are defined via the <em>i_arr</em>, <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using a mixed positioning mode. In this case all four values must be valid array pointers.</p></li>
+
+<li><p>If <em>flag</em> = 3 (DV_SHAPE_ARRAY_ABSOLUTE), the segments are defined via the <em>i_arr</em>, <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using an abolute positioning mode. In this case all four values must be valid array pointers.</p></li>
+
+<li><p>If <em>flag</em> = 5 (DV_SHAPE_ARRAY_RELATIVE), the segments are defined via the <em>i_arr</em>, <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays using a relative positioning mode. In this case all four values must be valid array pointers.</p></li>
+</ul>
+<p>See the tables below for details on the mixed, absolute and relative positioning modes.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>i_arr</em></p>
+</td><td>
+<p>Depending on <em>flag</em>, this is either a valid pointer to a user-defined buffer that fully describes the segments or an array that contains instructions that describe the corresponding pair of coordinates in the <em>c_arr</em>, <em>x_arr</em> and <em>y_arr</em> arrays. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>c_arr</em></p>
+</td><td>
+<p>An array of colors (RGBT values) for each of the contours.</p>
+
+<p>When <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED) or <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE) or <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), this array is ignored and should be set to DV_NULL. Otherwise, this must be a valid array pointer. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_arr, y_arr</em></p>
+</td><td>
+<p>An array of control points that define the segments.</p>
+
+<p>When <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED) or <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE) or <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), both arrays are ignored and should be set to DV_NULL. Otherwise, they must be valid array pointers. See below for details.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value is 1 if the method was successful. Otherwise, the method returns 0.</p>
+
+
+<h3>Comments</h3>
+
+As mentioned above, the following six options are available when defining the segments:
+
+<ol>
+<li>
+<p>If <em>flag</em> = 0 (DV_SHAPE_BUFFER_MIXED) or <em>flag</em> = 2 (DV_SHAPE_BUFFER_ABSOLUTE) or <em>flag</em> = 4 (DV_SHAPE_BUFFER_RELATIVE), then <em>i_arr</em> is a pointer to a buffer that stores a complete description of the segments to be rendered. This buffer contains a sequence of instruction-parameters.</p>
+
+
+<h4>A) Mixed Positioning Mode</h4>
+
+<p>In this mode, the New Contour (16) and New Contour + Color (14) instructions specify their (X1, Y1) coordinates as absolute positions while all other instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour + Color: 14</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Red component (R). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Green component (G). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Blue component (B). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Transparency of the new contour (T). Must be between 0 and 255.</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />The color and transparency of this contour is identical to the previous contour.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX3 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY3 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Segments: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<h4>B) Absolute Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as absolute positions. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour + Color: 14</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Red component (R). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Green component (G). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Blue component (B). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Transparency of the new contour (T). Must be between 0 and 255.</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />The color and transparency of this contour is identical to the previous contour.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 coordinate in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 coordinate in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X2 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y2 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X1 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y1 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X2 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y2 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; X3 in pixels (absolute position)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; Y3 in pixels (absolute position)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Segments: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<h4>C) Relative Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="30%"><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a> &mdash; Instruction</th>
+<th>Parameters</th>
+</tr>
+
+<tr><td>
+<p><strong>New Contour + Color: 14</strong><br />This must always be the first instruction.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 coordinate in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 coordinate in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Red component (R). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Green component (G). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Color of the new contour &mdash; Blue component (B). Must be between 0 and 255.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Transparency of the new contour (T). Must be between 0 and 255.</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>New Contour: 16</strong><br />The color and transparency of this contour is identical to the previous contour.</p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 coordinate in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 coordinate in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Line: 20</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>Quadratic<br />B-Spline Curve: 25</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>B&eacute;zier Curve: 24</strong></p>
+</td><td>
+<ul>
+<li><strong><a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a></strong> &mdash; Reserved. Must be 0.</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a></strong> &mdash; Number of curve segments</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY1 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY2 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dX3 in pixels (relative delta)</li>
+<li><strong><a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a></strong> or <strong><a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a></strong><sup>*</sup> &mdash; dY3 in pixels (relative delta)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><strong>End Of Segments: 8</strong><br />This must always be the last instruction.</p>
+</td><td>
+<p>No parameters.</p>
+</td></tr>
+
+</table>
+
+
+<p><sup>*</sup>Note: Whether it's <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> or <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> depends on which version of the method is used. If <a href="MultiSegment.htm">MultiSegmentFrac</a> is used, all coordinates in the buffer must be in the <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> format. If <a href="MultiSegment.htm">MultiSegment</a> is used, all coordinates in the buffer must be in the <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> format.</p>
+
+</li>
+
+<li>
+<p>If <em>flag</em> = 1 (DV_SHAPE_ARRAY_MIXED) or <em>flag</em> = 3 (DV_SHAPE_ARRAY_ABSOLUTE) or <em>flag</em> = 5 (DV_SHAPE_ARRAY_RELATIVE), then <em>i_arr</em> contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays. Additionally, the <em>c_arr</em> array contains color and transparency (R, G, B, T) values for all New contour + Color (14) instructions. Possible values for <em>i_arr</em> are:</p>
+
+<ul>
+<li>New contour + Color: <strong>14</strong></li>
+<li>New contour: <strong>16</strong></li>
+<li>Line: <strong>20</strong></li>
+<li>Quadratic B-Spline curve: <strong>25</strong></li>
+<li>B&eacute;zier curve: <strong>24</strong></li>
+<li>End of segments: <strong>8</strong></li>
+</ul>
+
+<p>The following table describes how the arrays should be created. Please note that Quadratic B-Spline curves require two consecutive rows in each array while B&eacute;zier curves require three consecutive rows.</p>
+
+<h4>A) Mixed Positioning Mode</h4>
+
+<p>In this mode, the New Contour (16) and New Contour + Color (14) instructions specify their (X1, Y1) coordinates as absolute positions while all other instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="25%">i_arr</th>
+<th width="25%">c_arr</th>
+<th width="25%">x_arr</th>
+<th width="25%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="4" align="left">New Contour + Color &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">14</p>
+
+</td><td><p align="center">R, G, B, T</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">New Contour &mdash; The color and transparency of this contour is identical to the previous contour</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX3 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY3 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">End Of Segments &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+
+<h4>B) Absolute Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as absolute positions. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="25%">i_arr</th>
+<th width="25%">c_arr</th>
+<th width="25%">x_arr</th>
+<th width="25%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="4" align="left">New Contour + Color &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">14</p>
+
+</td><td><p align="center">R, G, B, T</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">New Contour &mdash; The color and transparency of this contour is identical to the previous contour</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X1 coordinate in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 coordinate in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X2 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y2 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X1 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y1 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X2 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y2 in pixels (absolute position)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">X3 in pixels (absolute position)</p>
+
+</td><td><p align="center">Y3 in pixels (absolute position)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">End Of Segments &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h4>C) Relative Positioning Mode</h4>
+
+<p>In this mode all instructions specify their coordinates as relative deltas. The tables below illustrates the meaning and format of each instruction-parameters sequence:</p>
+
+<table class="table_data">
+
+<tr>
+<th width="25%">i_arr</th>
+<th width="25%">c_arr</th>
+<th width="25%">x_arr</th>
+<th width="25%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="4" align="left">New Contour + Color &mdash; This must always be the first array entry</th>
+</tr>
+
+<tr><td><p align="center">14</p>
+
+</td><td><p align="center">R, G, B, T</p>
+
+</td><td><p align="center">dX1 coordinate in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 coordinate in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">New Contour &mdash; The color and transparency of this contour is identical to the previous contour</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 coordinate in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 coordinate in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX1 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY1 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX2 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY2 in pixels (relative delta)</p>
+</td></tr>
+
+<tr><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">dX3 in pixels (relative delta)</p>
+
+</td><td><p align="center">dY3 in pixels (relative delta)</p>
+</td></tr>
+
+<tr>
+<th colspan="4" align="left">End Of Segments &mdash; This must always be the last array entry</th>
+</tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">-</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+
+</td><td><p align="center">Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<p>n = number of curve segments. Set to 0 and this value will be automatically calculated.</p>
+
+</li>
+</ol>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a></li>
+<li><a href="../../dc/manual/intro.htm">D-Type Direct Color Rasterizer</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,153 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtOutputSetStyleAttribs</h2><div class="box_prototype"><strong>
+DT_SWORD dtOutputSetStyleAttribs(DT_DTENGINE engine, const DT_STYLE_ATTRIBS* style, DT_UBYTE reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set Output style (color, transparency and special effect such as shadow, pattern fill, emboss, emboldening etc.)</em><br /><br />
+
+<p>This function supplies <em>style</em> to the Output of the specified Standard Engine instance. Style is a set of style properties that are applied to output primitives (glyphs/characters, shapes, bitmaps) during rendering. These properties are: color, transparency and various special effects such as shadow, glow, pattern fill, emboss, blur, emboldening etc. All these properties can be defined using the <a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> structure.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>style</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> structure. This structure contains the style to be associated with the Output of the specified Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+This function must be called after <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> or <a href="dtOutputSetAsHDC.htm">dtOutputSetAsHDC</a>. This is necessary because style properties are dependent on the output surface.
+
+
+<h3>Example 1</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{DV_EFFECT_EDGE_100_NE, 15}, {0, 0, 0, 0}, 0, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.ep[0] = DV_EFFECT_EDGE_100_NE;
+   style.ep[1] = 15
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 0;
+   style.rgbt[2] = 0;
+   style.rgbt[3] = 0;
+   style.reserved = 0;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_1.gif" width="140" height="160" alt="R" />
+</p>
+
+
+<h3>Example 2</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{DV_EFFECT_HVBLUR_FUZZY, 15}, {0, 48, 178, 200}, 0, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.ep[0] = DV_EFFECT_HVBLUR_FUZZY;
+   style.ep[1] = 15
+   style.rgbt[0] = 0;
+   style.rgbt[1] = 48;
+   style.rgbt[2] = 178;
+   style.rgbt[3] = 200;
+   style.reserved = 0;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_2.gif" width="140" height="160" alt="R" />
+</p>
+
+
+<h3>Example 3</h3>
+
+<div class="box_field">
+<pre>
+<a href="../manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> style = {{DV_EFFECT_PATTERN_STRIPES, 4}, {255, 0, 0, 0}, 0, DV_NULL};
+
+<span class="codecomment">/*
+   The above initialization is the same as
+
+   style.ep[0] = DV_EFFECT_PATTERN_STRIPES;
+   style.ep[1] = 4
+   style.rgbt[0] = 255;
+   style.rgbt[1] = 0;
+   style.rgbt[2] = 0;
+   style.rgbt[3] = 0;
+   style.reserved = 0;
+   style.palette = DV_NULL;
+*/</span>&nbsp;
+
+dtOutputSetStyleAttribs(engine, &amp;style, 0);
+</pre>
+</div>
+
+<p><em>Output of glyph R using the above style</em>:</p>
+
+<p class="center">
+<img src="../images/style_3.gif" width="140" height="160" alt="R" />
+</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

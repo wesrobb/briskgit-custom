@@ -1,0 +1,1 @@
+Monochrome image data (variable length, 1 byte stores 8 pixels).

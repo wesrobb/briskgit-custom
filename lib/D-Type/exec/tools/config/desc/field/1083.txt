@@ -1,0 +1,14 @@
+An optional array of tab stop flags. Each tab stop flag corresponds to and describes one tab stop position in the pdTabStopPositions array.
+
+{strong}Supported flag values:{/strong}
+
+0 = Left Tab Stop
+1 = Center Tab Stop
+2 = Right Tab Stop
+
+Tab stop positions without explicitly associated tab stop flags are interpreted as left tab stops.
+
+{strong}Sample values:{/strong}
+
+"1"
+"0, 2, 1"

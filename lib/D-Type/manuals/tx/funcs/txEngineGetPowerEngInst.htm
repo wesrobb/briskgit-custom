@@ -1,0 +1,55 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txEngineGetPowerEngInst</h2><div class="box_prototype"><strong>
+void txEngineGetPowerEngInst(DT_TXENGINE engine, DT_PDENGINE* power_engine)</strong></div><br /><strong>Short Description:</strong> <em>Get associated D-Type Power Engine Instance</em><br /><br />
+
+<p>As mentioned earlier, each Text Engine has its own internal instance of D-Type Power Engine. The txEngineGetPowerEngInst function allows applications to get a handle of this instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Text Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>power_engine</em></p>
+</td><td>
+<p>Pointer to the handle of the D-Type Power Engine instance.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+<p>This function is useful for applications that need to access D-Type Power Engine functions directly. For example, applications can call txEngineGetPowerEngInst to obtain the Power Engine instance before rendering PowerDoc objects using D-Type Power Engine.</p>
+
+
+<h3>Related Functions</h3>
+<p>All D-Type Power Engine functions. Please see D-Type Power Engine Manual for more information.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

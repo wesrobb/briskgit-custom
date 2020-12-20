@@ -1,0 +1,198 @@
+!LIB_CATEGORY=Math: Integral (Standard)
+!LIB_CATEGORY=Math: Integral (Expanding)
+!LIB_CATEGORY=Math: Sum (Standard)
+!LIB_CATEGORY=Math: Sum (Expanding)
+!LIB_CATEGORY=Math: Fraction
+!LIB_CATEGORY=Math: Root
+!LIB_CATEGORY=Math: Brackets
+!LIB_CATEGORY=Math: Vector
+!LIB_CATEGORY=Math: Matrices
+!LIB_CATEGORY=Math: Superscript / Subscript
+!LIB_CATEGORY=Math: Vertical Bars
+!LIB_CATEGORY=Math: Other
+
+{
+0|990007-a-01|Integral
+0|990007-b-01|Contour Integral
+0|990007-c-01|Clockwise Integral
+0|990007-f-01|Anticlockwise Integral
+0|990007-d-01|Clockwise Contour Integral
+0|990007-e-01|Anticlockwise Contour Integral
+0|990007-a-02|Double Integral
+0|990007-b-02|Surface Integral
+0|990007-a-03|Triple Integral
+0|990007-b-03|Volume Integral
+0|990019-a-01|Upright Integral
+0|990019-b-01|Upright Contour Integral
+0|990019-c-01|Upright Clockwise Integral
+0|990019-f-01|Upright Anticlockwise Integral
+0|990019-d-01|Upright Clockwise Contour Integral
+0|990019-e-01|Upright Anticlockwise Contour Integral
+0|990019-a-02|Upright Double Integral
+0|990019-b-02|Upright Surface Integral
+0|990019-a-03|Upright Triple Integral
+0|990019-b-03|Upright Volume Integral
+1|990006-a-01|Integral
+1|990006-b-01|Contour Integral
+1|990006-c-01|Clockwise Integral
+1|990006-f-01|Anticlockwise Integral
+1|990006-d-01|Clockwise Contour Integral
+1|990006-e-01|Anticlockwise Contour Integral
+1|990006-a-02|Double Integral
+1|990006-b-02|Surface Integral
+1|990006-a-03|Triple Integral
+1|990006-b-03|Volume Integral
+1|990018-a-01|Upright Integral
+1|990018-b-01|Upright Contour Integral
+1|990018-c-01|Upright Clockwise Integral
+1|990018-f-01|Upright Anticlockwise Integral
+1|990018-d-01|Upright Clockwise Contour Integral
+1|990018-e-01|Upright Anticlockwise Contour Integral
+1|990018-a-02|Upright Double Integral
+1|990018-b-02|Upright Surface Integral
+1|990018-a-03|Upright Triple Integral
+1|990018-b-03|Upright Volume Integral
+2|990009-a|Sum Sign
+2|990009-b|Product Sign
+2|990009-c|Coproduct Sign
+2|990009-d|Union Sign
+2|990009-e|Intersection Sign
+2|990009-f|Logical Or Sign
+2|990009-g|Logical And Sign
+3|990008-a|Sum Sign
+3|990008-b|Product Sign
+3|990008-c|Coproduct Sign
+3|990008-d|Union Sign
+3|990008-e|Intersection Sign
+3|990008-f|Logical Or Sign
+3|990008-g|Logical And Sign
+4|990001-a|Standard
+4|990001-b|Standard Dotted
+4|990001-c|Standard Invisible
+4|990002-a|Diagonal
+4|990002-b|Diagonal Dotted
+4|990002-c|Diagonal Invisible
+5|990003-a|Square Root Type A
+5|990003-b|N-Root Type A
+5|990004-a|Square Root Type B
+5|990004-b|N-Root Type B
+6|990012-01|Regular
+6|990012-02|Square
+6|990012-03|Curly
+6|990012-04|Angle
+6|990012-05|Double Angle
+6|990012-06|
+6|990012-07|
+6|990012-08|
+6|990012-09|
+6|990012-10|
+6|990012-11|
+6|990012-12|
+6|990012-13|
+6|990012-14|
+6|990012-15|
+6|990012-16|
+6|990012-17|
+6|990012-18|
+6|990012-19|Abs
+6|990012-20|Norm
+7|990013-a-01|Right Arrow Above
+7|990013-a-02|Left Arrow Above
+7|990013-a-03|Bidirectional Arrow Above
+7|990013-a-04|Line Above
+7|990013-b-01|Right Arrow Above, Dotted
+7|990013-b-02|Left Arrow Above, Dotted
+7|990013-b-03|Bidirectional Arrow Above, Dotted
+7|990013-b-04|Line Above, Dotted
+7|990013-c-01|Tilde Above
+7|990014-a-01|Right Arrow Below
+7|990014-a-02|Left Arrow Below
+7|990014-a-03|Bidirectional Arrow Below
+7|990014-a-04|Line Below
+7|990014-b-01|Right Arrow Below, Dotted
+7|990014-b-02|Left Arrow Below, Dotted
+7|990014-b-03|Bidirectional Arrow Below, Dotted
+7|990014-b-04|Line Below, Dotted
+7|990014-c-01|Tilde Below
+8|990031-a-01-01|Matrix 1x1
+8|990031-a-01-02|Matrix 1x2
+8|990031-a-01-03|Matrix 1x3
+8|990031-a-02-01|Matrix 2x1
+8|990031-a-02-02|Matrix 2x2
+8|990031-a-02-03|Matrix 2x3
+8|990031-a-03-01|Matrix 3x1
+8|990031-a-03-02|Matrix 3x2
+8|990031-a-03-03|Matrix 3x3
+8|990031-b-01-01|Matrix 1x1, Regular Bracket
+8|990031-b-01-02|Matrix 1x2, Regular Bracket
+8|990031-b-01-03|Matrix 1x3, Regular Bracket
+8|990031-b-02-01|Matrix 2x1, Regular Bracket
+8|990031-b-02-02|Matrix 2x2, Regular Bracket
+8|990031-b-02-03|Matrix 2x3, Regular Bracket
+8|990031-b-03-01|Matrix 3x1, Regular Bracket
+8|990031-b-03-02|Matrix 3x2, Regular Bracket
+8|990031-b-03-03|Matrix 3x3, Regular Bracket
+8|990031-c-01-01|Matrix 1x1, Square Bracket
+8|990031-c-01-02|Matrix 1x2, Square Bracket
+8|990031-c-01-03|Matrix 1x3, Square Bracket
+8|990031-c-02-01|Matrix 2x1, Square Bracket
+8|990031-c-02-02|Matrix 2x2, Square Bracket
+8|990031-c-02-03|Matrix 2x3, Square Bracket
+8|990031-c-03-01|Matrix 3x1, Square Bracket
+8|990031-c-03-02|Matrix 3x2, Square Bracket
+8|990031-c-03-03|Matrix 3x3, Square Bracket
+8|990031-d-01-01|Matrix 1x1, Curly Bracket
+8|990031-d-01-02|Matrix 1x2, Curly Bracket
+8|990031-d-01-03|Matrix 1x3, Curly Bracket
+8|990031-d-02-01|Matrix 2x1, Curly Bracket
+8|990031-d-02-02|Matrix 2x2, Curly Bracket
+8|990031-d-02-03|Matrix 2x3, Curly Bracket
+8|990031-d-03-01|Matrix 3x1, Curly Bracket
+8|990031-d-03-02|Matrix 3x2, Curly Bracket
+8|990031-d-03-03|Matrix 3x3, Curly Bracket
+8|990031-e-01-01|Matrix 1x1, Angle Bracket
+8|990031-e-01-02|Matrix 1x2, Angle Bracket
+8|990031-e-01-03|Matrix 1x3, Angle Bracket
+8|990031-e-02-01|Matrix 2x1, Angle Bracket
+8|990031-e-02-02|Matrix 2x2, Angle Bracket
+8|990031-e-02-03|Matrix 2x3, Angle Bracket
+8|990031-e-03-01|Matrix 3x1, Angle Bracket
+8|990031-e-03-02|Matrix 3x2, Angle Bracket
+8|990031-e-03-03|Matrix 3x3, Angle Bracket
+8|990031-f-01-01|Matrix 1x1, Double Angle Bracket
+8|990031-f-01-02|Matrix 1x2, Double Angle Bracket
+8|990031-f-01-03|Matrix 1x3, Double Angle Bracket
+8|990031-f-02-01|Matrix 2x1, Double Angle Bracket
+8|990031-f-02-02|Matrix 2x2, Double Angle Bracket
+8|990031-f-02-03|Matrix 2x3, Double Angle Bracket
+8|990031-f-03-01|Matrix 3x1, Double Angle Bracket
+8|990031-f-03-02|Matrix 3x2, Double Angle Bracket
+8|990031-f-03-03|Matrix 3x3, Double Angle Bracket
+9|990010|Superscript, After
+9|990020|Subscript, After
+9|990011|Superscript and Subscript, After
+9|990015|Superscript, Before
+9|990021|Subscript, Before
+9|990016|Superscript and Subscript, Before
+9|990017|Superscript and Subscript, 2x2
+9|990022|Text Above
+9|990023|Text Below
+10|990000-a|Tight Vertical Bars
+10|990000-b|Tight Dotted Vertical Bars
+10|990000-c|Tight Vertical Bar - Left
+10|990000-d|Tight Dotted Vertical Bar - Left
+10|990000-e|Tight Vertical Bar - Right
+10|990000-f|Tight Dotted Vertical Bar - Right
+10|990025-a|Loose Vertical Bars
+10|990025-b|Loose Dotted Vertical Bars
+10|990025-c|Loose Vertical Bar - Left
+10|990025-d|Loose Dotted Vertical Bar - Left
+10|990025-e|Loose Vertical Bar - Right
+10|990025-f|Loose Dotted Vertical Bar - Right
+11|990005-a|Crossed Lines
+11|990005-b|Dotted Crossed Lines
+11|990005-c|Diagonal Line - Descending
+11|990005-d|Dotted Diagonal Line - Descending
+11|990005-e|Diagonal Line - Ascending
+11|990005-f|Dotted Diagonal Line - Ascending
+}

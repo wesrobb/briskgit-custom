@@ -1,0 +1,45 @@
+Rendering function that describes the visual object pointed to by the pdFnDrawObjectPtr link.
+
+{strong}Supported values:{/strong}
+
+0 = Nothing
+1 = {a href="../objects/101.htm"}Text Line{/a}
+2 = {a href="../objects/102.htm"}Text Arc{/a}
+3 = {a href="../objects/103.htm"}Text Area{/a}
+4 = {a href="../objects/111.htm"}Line{/a}
+5 = {a href="../objects/113.htm"}Circle/Ellipse{/a}
+6 = {a href="../objects/112.htm"}Rectangle{/a}
+7 = {a href="../objects/114.htm"}True Circle/Ellipse{/a}
+8 = {a href="../objects/115.htm"}Slice{/a}
+9 = {a href="../objects/116.htm"}Arc{/a}
+10 = {a href="../objects/106.htm"}Rich Text Area{/a}
+11 = {a href="../objects/117.htm"}Pattern{/a}
+12 = {a href="../objects/118.htm"}Grid{/a}
+13 = {a href="../objects/119.htm"}Custom Shape or Polygon{/a}
+14 = {a href="../objects/120.htm"}Gradient{/a}, {a href="../objects/125.htm"}Gradient (As Fast Rectangle){/a}, {a href="../objects/126.htm"}Gradient (As Inverter){/a}
+15 = {a href="../objects/121.htm"}Bitmap Image{/a}
+16 = {a href="../objects/108.htm"}Char{/a}
+17 = {a href="../objects/104.htm"}Rich Text Line{/a}
+18 = {a href="../objects/110.htm"}Library Shape{/a}
+19 = {a href="../objects/105.htm"}Rich Text Arc{/a}
+20 = {a href="../objects/107.htm"}Glyph{/a}
+21 = {a href="../objects/122.htm"}Generic Object{/a}
+22 = {a href="../objects/123.htm"}Group{/a}
+23 = {a href="../objects/109.htm"}PowerGlyph{/a}
+24 = {a href="../objects/124.htm"}Polyline (also Bezier and B-Spline curves){/a}
+25 = {a href="../objects/129.htm"}Library Polyline{/a}
+26 = {a href="../objects/127.htm"}Text Design{/a}
+27 = {a href="../objects/128.htm"}Rich Text Design{/a}
+28 = {a href="../objects/130.htm"}Text Path{/a}
+29 = {a href="../objects/131.htm"}Rich Text Path{/a}
+30 = {a href="../objects/132.htm"}Library Bitmap Image{/a}
+31 = {a href="../objects/133.htm"}Background Surface{/a}
+10000 = {a href="../objects/301.htm"}Button{/a}
+10001 = {a href="../objects/302.htm"}Radio Button{/a}
+10002 = {a href="../objects/303.htm"}Check Box{/a}
+10003 = {a href="../objects/304.htm"}Text Box{/a}
+10004 = {a href="../objects/305.htm"}List Box{/a}
+10005 = {a href="../objects/306.htm"}Horizontal Slider{/a}
+10006 = {a href="../objects/307.htm"}Vertical Slider{/a}
+10007 = {a href="../objects/308.htm"}Rich Text Box{/a}
+10008 = {a href="../objects/309.htm"}Rich Button{/a}

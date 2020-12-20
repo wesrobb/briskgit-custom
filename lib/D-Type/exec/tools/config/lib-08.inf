@@ -1,0 +1,43 @@
+!LIB_CATEGORY=Tables With Horizontal and Vertical Gridlines
+!LIB_CATEGORY=Tables With Horizontal Gridlines
+!LIB_CATEGORY=Tables With Vertical Gridlines
+!LIB_CATEGORY=Tables Without Gridlines
+
+{
+0|990032-a-01-01|Table 1x1
+0|990032-a-01-02|Table 1x2
+0|990032-a-01-03|Table 1x3
+0|990032-a-02-01|Table 2x1
+0|990032-a-02-02|Table 2x2
+0|990032-a-02-03|Table 2x3
+0|990032-a-03-01|Table 3x1
+0|990032-a-03-02|Table 3x2
+0|990032-a-03-03|Table 3x3
+1|990032-b-01-01|Table 1x1
+1|990032-b-01-02|Table 1x2
+1|990032-b-01-03|Table 1x3
+1|990032-b-02-01|Table 2x1
+1|990032-b-02-02|Table 2x2
+1|990032-b-02-03|Table 2x3
+1|990032-b-03-01|Table 3x1
+1|990032-b-03-02|Table 3x2
+1|990032-b-03-03|Table 3x3
+2|990032-c-01-01|Table 1x1
+2|990032-c-01-02|Table 1x2
+2|990032-c-01-03|Table 1x3
+2|990032-c-02-01|Table 2x1
+2|990032-c-02-02|Table 2x2
+2|990032-c-02-03|Table 2x3
+2|990032-c-03-01|Table 3x1
+2|990032-c-03-02|Table 3x2
+2|990032-c-03-03|Table 3x3
+3|990032-d-01-01|Table 1x1
+3|990032-d-01-02|Table 1x2
+3|990032-d-01-03|Table 1x3
+3|990032-d-02-01|Table 2x1
+3|990032-d-02-02|Table 2x2
+3|990032-d-02-03|Table 2x3
+3|990032-d-03-01|Table 3x1
+3|990032-d-03-02|Table 3x2
+3|990032-d-03-03|Table 3x3
+}

@@ -1,0 +1,62 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdLinkGet</h2><div class="box_prototype"><strong>
+DT_ID_SLONG pdLinkGet(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG name)</strong></div><br /><strong>Short Description:</strong> <em>Get link</em><br /><br />
+
+<p>The pdLinkGet function returns the index of the object to which the link referenced by the <em>name</em> identifier points to.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the link. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="pdLinkAdd.htm">pdLinkAdd</a> function.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The index of the object to which the link identified by <em>name</em> points to, or -1 in case of an error.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdLinkSet.htm">pdLinkSet</a><br />
+<a href="pdLinkAdd.htm">pdLinkAdd</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

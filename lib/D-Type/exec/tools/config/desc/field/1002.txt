@@ -1,0 +1,3 @@
+Link to the {a href="../objects/001.htm"}Surface Definition{/a} object.
+
+This link supplies style attributes. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.

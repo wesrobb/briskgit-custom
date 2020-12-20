@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdObjGet</h2><div class="box_prototype"><strong>
+DT_SLONG pdObjGet(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG* name, const DT_CHAR** desc)</strong></div><br /><strong>Short Description:</strong> <em>Get object info</em><br /><br />
+
+<p>The pdObjGet function retrieves the numerical value and text description associated with the PowerDoc object referenced by <em>obj</em>. This value and description are set by the <a href="pdObjAdd.htm">pdObjAdd</a> or <a href="pdObjSet.htm">pdObjSet</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A pointer to a <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> variable that will hold the numerical value associated with the referenced object.</p>
+</td></tr>
+
+<tr><td>
+<p><em>desc</em></p>
+</td><td>
+<p>Address of the <a href="../../dt/manual/types.htm#DT_CHAR">DT_CHAR</a>* variable that points to the standard ANSI C/C++ string which represents a user-defined text description associated with the referenced PowerDoc object. This string is inside an internal read-only buffer managed by D-Type Power Engine and must not be freed. Also, the buffer is only for reading the string; applications should not write to it.</p>
+<p>Note that this pointer is valid only until the next call to one of D-Type Power Engine functions that operate on the same Power Engine document. This is because subsequent function calls might reallocate the buffer. Therefore, your application should not permanently record the value of this pointer. Instead, your application should either immediately consume (read) the data in the buffer or copy it to its own buffer for later use.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The return value is the number of fields in the specified PowerDoc object.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdObjSet.htm">pdObjSet</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

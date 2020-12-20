@@ -1,0 +1,70 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontMakeInactive</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontMakeInactive(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_UBYTE respect_multireference)</strong></div><br /><strong>Short Description:</strong> <em>Deactivate font</em><br /><br />
+
+<p>This function deactivates a font in the Font Catalog of the specified Standard Engine instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Index of the font to be deactivated.</p>
+</td></tr>
+
+<tr><td>
+<p><em>respect_multireference</em></p>
+</td><td>
+<p>A flag that tells the Font Engine when/how to deactivate the referenced font.</p>
+
+<ul>
+<li><p>If <em>respect_multireference</em> = 0, the Font Engine will always deactivate the referenced font and, if applicable, all of its Multiple-Master font instances.</p></li>
+<li><p>If <em>respect_multireference</em> = 1, the Font Engine will deactivate the referenced font only if it does not have any Multiple-Master font instances. If the referenced font has at least one Multiple-Master font instance, the font will not be deactivated.</p></li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns 1. Otherwise the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>Applications can call <a href="dtFontMakeInactive.htm">dtFontMakeInactive</a> to deactivate (but not remove) the referenced font in the Font Catalog. This function should be used whenever there is a chance that the referenced font will not be used for a longer period of time. The result is that the Font Engine will release any resources previously allocated for that font. Effectively, the font goes to sleep and uses virtually no memory. However, the font is not permanently removed form the Font Catalog. This means the font retains its unique font index. The font will be activated again either automatically by the Font Engine when it is used next time or explicitly by the application when the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function is called.</p>
+
+<p>When a font or font instance should be permanently removed from the Font Catalog, applications should use the <a href="dtFontRemove.htm">dtFontRemove</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,13 @@
+A flag that indicates whether and how the control is locked for user interactions.
+
+{strong}Supported values:{/strong}
+
+0 = Control is not locked (all user interactions are enabled)
+
+1 = Control is completely locked (all user interactions are disabled)
+
+2 = Control is locked for changes (user changes are disabled, other interactions are enabled)
+
+3 = Control is locked for changes (user changes are disabled, other interactions are enabled), except scrolling
+
+4 = Control is only locked for scrolling

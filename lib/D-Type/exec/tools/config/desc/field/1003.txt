@@ -1,0 +1,7 @@
+Line, outline or underline thickness in document units, multiplied by 100. Must be positive, except when used for glyph or character outlines. In this case, a negative value indicates that the glyph/character outline should be expanded rather than thickened.
+
+{strong}Sample values:{/strong}
+
+350 = Line (or outline) thickness of 3.5 document units
+80 = Line (or outline) thickness of 0.8 document units
+-275 = Outline expansion of 2.75 document units

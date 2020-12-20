@@ -1,0 +1,3 @@
+Link to the {a href="../objects/021.htm"}Row Boundary{/a} object.
+
+This link supplies parameters necessary to render the boundaries of text rows.

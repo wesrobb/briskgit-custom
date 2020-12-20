@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtGlyphDoOutput</h2><div class="box_prototype"><strong>
+DT_SWORD dtGlyphDoOutput(DT_DTENGINE engine, DT_ID_ULONG glyph_index, DT_FLOAT x, DT_FLOAT y, DT_SWORD reserved, DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render glyph to Output - floating point version</em><br /><br />
+
+<h2>dtGlyphDoOutputFrac</h2><div class="box_prototype"><strong>
+DT_SWORD dtGlyphDoOutputFrac(DT_DTENGINE engine, DT_ID_ULONG glyph_index, DT_SFRAC_L x, DT_SFRAC_L y, DT_SWORD reserved, DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render glyph to Output - fractional version</em><br /><br />
+
+<h2>dtCharDoOutput</h2><div class="box_prototype"><strong>
+DT_SWORD dtCharDoOutput(DT_DTENGINE engine, DT_ID_ULONG char_code, DT_FLOAT x, DT_FLOAT y, DT_SWORD reserved, DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render character to Output - floating point version</em><br /><br />
+
+<h2>dtCharDoOutputFrac</h2><div class="box_prototype"><strong>
+DT_SWORD dtCharDoOutputFrac(DT_DTENGINE engine, DT_ID_ULONG char_code, DT_SFRAC_L x, DT_SFRAC_L y, DT_SWORD reserved, DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Render character to Output - fractional version</em><br /><br />
+
+<p>These functions draw a single glyph represented by a Unicode character code (or font dependent glyph index). The glyph is first processed by the Typesetter and then rendered at coordinates (X, Y) of the current Output.</p>
+
+<p>The Typesetter provides type (e.g. font, transformation, outline expansion), hinting and positioning attributes to the glyph to be rendered, while the Output provides the destination surface (which can be either D-Type's Memory Device Context surface or Windows compatible Device Context surface) and style attributes that are applied to the glyph when its image is actually rendered.</p>
+
+<p>In addition, all these functions make an attempt to provide your application with a pointer to the glyph's <em>plain 8-bit grayscale memory bitmap</em>, provided that a) the glyph image is not completely outside the device context's clipping region; b) the glyph image is not too big to fit in the bitmap cache and c) no other bitmap cache restrictions apply (see <a href="dtTypesetterSetSubpixels.htm">dtTypesetterSetSubpixels</a> and <a href="dtTypesetterSetCachePolicy.htm">dtTypesetterSetCachePolicy</a> for details). The plain 8-bit grayscale memory bitmap data can be returned as compressed or non-compressed, depending on whether the compression of glyph images in Typesetter's bitmap cache is enabled or disabled (see <a href="dtTypesetterSetCacheCompression.htm">dtTypesetterSetCacheCompression</a> for details).</p>
+
+<p>When the device context redirection is disabled in the Output, the functions will not render the glyph to the output surface; instead it will only attempt to provide a pointer to the plain 8-bit grayscale memory bitmap provided that the glyph image is not too big to fit in the bitmap cache and no other bitmap cache restrictions apply.</p>
+
+<p><a href="dtGlyphDoOutput.htm">dtGlyphDoOutputFrac</a> is identical to <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a> except that some of its parameters are 24.8 signed fractional values. Similarly, <a href="dtGlyphDoOutput.htm">dtCharDoOutputFrac</a> is identical to <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> except that some of its parameters are 24.8 signed fractional values. For more details on fractional units, see the <a href="../manual/units.htm">D-Type Units</a> section of this document.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>char_code</em></p>
+</td><td>
+<p>Unicode character code of the glyph to be rendered.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_index</em></p>
+</td><td>
+<p>Font dependent index of the glyph to be rendered.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>Glyph's X coordinate in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Glyph's Y coordinate in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_bitmap</em></p>
+</td><td>
+<p>Either a valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure or DV_NULL. If <em>memory_bitmap</em> is a valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure, then the engine will attempt to return information about the glyph's plain 8-bit grayscale memory bitmap. If successful, the structure's members will hold the following information:</p>
+
+<ul>
+<li>
+<p><em>memory_bitmap.m</em> &mdash; pointer to a memory location in the bitmap cache at which the grayscale memory bitmap data begins. If DV_NULL, the bitmap image is not available. In this case all other member variables will be set to 0.</p>
+<p><em><strong>Important Note 1:</strong></em> This pointer is valid only until the next call to one of D-Type functions that operate on the same Standard Engine instance. This is because subsequent function calls might empty or invalidate the bitmap cache. Therefore, your application should not permanently record the value of the <em>memory_bitmap.m</em> pointer. In addition, your application does not own memory pointed by this pointer and should not attempt to write to it or free it. Instead, your application should either immediately consume (read) the bitmap data or copy it to its own buffer for later use.</p>
+
+<p><em><strong>Important Note 2:</strong></em> When the bitmap cache compression is enabled, please remember that in this case the bitmap data pointed by <em>memory_bitmap.m</em> is <strong>always</strong> compressed. You will not be able to properly read this data without first decompressing it. You can use the <a href="dtBitmapDecompress.htm">dtBitmapDecompress</a> function to decompress compressed grayscale bitmap data. So, in order to properly read the bitmap data, you must know the Typesetter's bitmap cache compression state (see <a href="dtTypesetterSetCacheCompression.htm">dtTypesetterSetCacheCompression</a> and <a href="dtTypesetterGetCacheCompression.htm">dtTypesetterGetCacheCompression</a> for details).</p>
+
+<p><em><strong>Important Note 3:</strong></em> Additionally, when the Typesetter's quality level is set to one of the LCD quality levels (DV_QUALITY_LCD_...) or one of the LCD2 quality levels (DV_QUALITY_LCD2_...), the bitmap pointed by <em>memory_bitmap.m</em> <strong>may</strong> be optimized for LCD screens as follows:</p>
+
+<ul>
+<li><p>If DV_QUALITY_LCD_..., the bitmap may be LCD-optimized. LCD-optimized bitmaps contain three 8-bit grayscale values per pixel: the first grayscale value is for the R (or B) subpixel intensity, the second one is for the G subpixel intensity and the third one is for the B (or R) subpixel intensity. Such bitmaps contain three times more 8-bit grayscale values than regular bitmaps so it appears as if they were extended in the horizontal direction by a factor of 3. However, their <em>memory_bitmap.w</em> value described below will <strong>not</strong> be multiplied by 3 as one might expect. In other words, <em>memory_bitmap.w</em> is the same in LCD-optimized bitmaps as in regular bitmaps.</p></li>
+<li><p>If DV_QUALITY_LCD2_..., the bitmap may be LCD2-optimized. LCD2-optimized bitmaps contain two 8-bit grayscale values per pixel: the first grayscale value is for the G subpixel intensity, the second one is for the combined BR (or RB) subpixel intensity. Such bitmaps contain two times more 8-bit grayscale values than regular bitmaps so it appears as if they were extended in the horizontal direction by a factor of 2. However, their <em>memory_bitmap.w</em> value described below will <strong>not</strong> be multiplied by 2 as one might expect. In other words, <em>memory_bitmap.w</em> is the same in LCD2-optimized bitmaps as in regular bitmaps.</p></li>
+</ul>
+
+<p>Note that setting the Typesetter's quality level to one of the LCD quality levels (DV_QUALITY_LCD_...) or one of the LCD2 quality levels (DV_QUALITY_LCD2_...) does not guarantee that the bitmap will be optimized for LCD screens. For example, bitmaps of very small and very large glyphs are never optimized for LCD screens.</p>
+</li>
+
+<li><p><em>memory_bitmap.l</em> &mdash; length of the memory buffer in bytes as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure. <strong>Regardless of whether the bitmap cache compression is enabled or disabled, this is always the length of the non-compressed bitmap data (actual length), calculated as follows:</strong></p>
+
+<p>In regular bitmaps (i.e. bitmaps that are neither LCD-optimized nor LCD2-optimized), <em>memory_bitmap.l</em>&nbsp;=
+abs(<em>memory_bitmap.w</em>) * abs(<em>memory_bitmap.h</em>)<br /><br />
+
+In LCD-optimized bitmaps, <em>memory_bitmap.l</em>&nbsp;=
+3&nbsp;*&nbsp;abs(<em>memory_bitmap.w</em>) * abs(<em>memory_bitmap.h</em>)<br /><br />
+
+In LCD2-optimized bitmaps, <em>memory_bitmap.l</em>&nbsp;=
+2&nbsp;*&nbsp;abs(<em>memory_bitmap.w</em>) * abs(<em>memory_bitmap.h</em>)</p>
+
+<p>The above equations make it possible to determine whether the bitmap is regular, LCD-optimized or LCD2-optimized.</p>
+</li>
+
+<li><p><em>memory_bitmap.w</em> &mdash; width of the bitmap in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure. See Important Note 4 below for additional details.</p></li>
+
+<li><p><em>memory_bitmap.h</em> &mdash; height of the bitmap in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure. See Important Note 4 below for additional details.</p></li>
+
+<li><p><em>memory_bitmap.x</em> &mdash; horizontal distance between the bitmap's left edge and glyph's origin in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.y</em> &mdash; vertical distance between the glyph's origin and bitmap's top edge in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+</ul>
+
+<p><strong>Important Note 4:</strong> <strong><em>memory_bitmap.w</em> and/or <em>memory_bitmap.h</em> can be returned as negative values.</strong> A negative value for <em>memory_bitmap.w</em> simply indicates that the glyph's bitmap was hinted and snapped to the pixel grid in the X direction. Similarly, a negative value for <em>memory_bitmap.h</em> indicates that the glyph's bitmap was hinted and snapped to the pixel grid in the Y direction. Regardless of the sign, the absolute value of <em>memory_bitmap.w</em> is always the width of the bitmap in pixels while the absolute value of <em>memory_bitmap.h</em> is always the height of the bitmap in pixels.</p>
+
+<p>If you do not wish to retrieve information about the glyph's plain 8-bit grayscale memory bitmap, simply set <em>memory_bitmap</em> to DV_NULL.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The term <em>plain 8-bit grayscale memory bitmap</em> means a grayscale bitmap without any style effects (e.g. transparency, blur, emboss etc). Special effects are applied only when the bitmap is actually rendered to the Output surface (MDC or HDC) in which the style effect is selected using the <a href="dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> function. Plain 8-bit grayscale memory bitmaps are sometimes useful to applications that independently post-process plain 8-bit grayscale data.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

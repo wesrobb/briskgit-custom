@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Examples</h1>
+
+
+<h2><a name="E1">Example 1: Layout Without Caching Subsystem</a></h2>
+
+
+<p>The following code fragment illustrates how to lay out and display a line of Unicode text without using D-Type Layout Extension's built-in caching subsystem.</p>
+
+
+<div class="box_field">
+<pre>
+DT_LXLAYOUT layout; <span class="codecomment">/* layout instance */</span>&nbsp;
+DT_DTENGINE engine; <span class="codecomment">/* standard engine instance */</span>&nbsp;
+DT_ID_SWORD font_index; <span class="codecomment">/* font index */</span>&nbsp;
+
+<span class="codecomment">/* set script_code to Devanagari script */</span>&nbsp;
+DT_ID_SLONG script_code = devaScriptCode;
+<span class="codecomment">/* Devanagari is a left-to-right script */</span>&nbsp;
+DT_ID_UBYTE direction = 0;
+<span class="codecomment">/* sample Devanagari text */</span>&nbsp;
+DT_ID_UWORD chars[] = {0x0939, 0x093F, 0x0928, 0x094D, 0x0926, 0x0940};
+DT_SLONG nr_of_chars = 6;
+
+<span class="codecomment">/* output array for positioned glyphs */</span>&nbsp;
+<span class="codecomment">/* (here the array is static; in a real application it would be dynamically allocated) */</span>&nbsp;
+LX_GLYPH glyph_arr[20];
+<span class="codecomment">/* size of the array */</span>&nbsp;
+DT_SLONG max_glyphs = 20;
+
+<span class="codecomment">/* the actual number of positioned glyphs to lay out text */</span>&nbsp;
+DT_SLONG n;
+
+<span class="codecomment">/* factors to scale font units to pixels (see D-Type FAQ: Q-2-5) */</span>&nbsp;
+DT_FLOAT fx, fy;
+
+
+<span class="codecomment">/*
+   before we can use D-Type Text Layout extension, we must:
+   - initialize D-Type Font Engine and get engine
+   - open font(s) and obtain font_index
+   - set Output (surface, style) and Typesetter (type)
+*/</span>&nbsp;
+<span class="codecomment">/* ... */</span>&nbsp;
+
+
+<span class="codecomment">/* create layout instance */</span>&nbsp;
+if (lxLayoutIni(&amp;layout, engine, font_index, script_code) == 1)
+{
+  <span class="codecomment">/* apply layout instance */</span>&nbsp;
+  n = lxLayoutApply(layout, chars, nr_of_chars, direction, glyph_arr, max_glyphs);
+
+  <span class="codecomment">/* calculate fx and fy (see D-Type FAQ: Q-2-5) */</span>&nbsp;
+  <span class="codecomment">/* ... */</span>&nbsp;
+
+  <span class="codecomment">/* now display glyphs */</span>&nbsp;
+  for (DT_SLONG i = 0; i &lt; n; i++)
+  {
+    dtGlyphDoOutput(engine, glyph_arr[i].glyph_index, fx * glyph_arr[i].x, fy * glyph_arr[i].y, 0, DV_NULL);
+  }
+
+  <span class="codecomment">/* destroy layout instance */</span>&nbsp;
+  lxLayoutExt(layout);
+}
+
+
+<span class="codecomment">/* deinitialize D-Type Font Engine */</span>&nbsp;
+<span class="codecomment">/* ... */</span>&nbsp;
+
+</pre>
+</div>
+
+<p><em>Note:</em> In this simplified example, the return value of the lxLayoutApply function is not checked and no attempt is made to deal with the situation when the output array for positioned glyphs is not large enough to accept all the glyphs.</p>
+
+
+<h2><a name="E2">Example 2: Layout With Caching Subsystem</a></h2>
+
+<p>The following code fragment illustrates how to lay out and display a line of Unicode text using D-Type Layout Extension's built-in caching subsystem.</p>
+
+
+<div class="box_field">
+<pre>
+DT_LXLAYOUT layout; <span class="codecomment">/* layout instance */</span>&nbsp;
+DT_LXCACHE layout_cache; <span class="codecomment">/* layout cache */</span>&nbsp;
+DT_DTENGINE engine; <span class="codecomment">/* standard engine instance */</span>&nbsp;
+DT_ID_SWORD font_index; <span class="codecomment">/* font index */</span>&nbsp;
+
+<span class="codecomment">/* set script_code to Devanagari script */</span>&nbsp;
+DT_ID_SLONG script_code = devaScriptCode;
+<span class="codecomment">/* Devanagari is a left-to-right script */</span>&nbsp;
+DT_ID_UBYTE direction = 0;
+<span class="codecomment">/* sample Devanagari text */</span>&nbsp;
+DT_ID_UWORD chars[] = {0x0939, 0x093F, 0x0928, 0x094D, 0x0926, 0x0940};
+DT_SLONG nr_of_chars = 6;
+
+<span class="codecomment">/* output array for positioned glyphs */</span>&nbsp;
+<span class="codecomment">/* (here the array is static; in a real application it would be dynamically allocated) */</span>&nbsp;
+LX_GLYPH glyph_arr[20];
+<span class="codecomment">/* size of the array */</span>&nbsp;
+DT_SLONG max_glyphs = 20;
+
+<span class="codecomment">/* the actual number of positioned glyphs to lay out text */</span>&nbsp;
+DT_SLONG n;
+
+<span class="codecomment">/* factors to scale font units to pixels (see D-Type Units and D-Type FAQ: Q-2-5) */</span>&nbsp;
+DT_FLOAT fx, fy;
+
+
+<span class="codecomment">/*
+   before we can use D-Type Text Layout extension, we must:
+   - initialize D-Type Font Engine and get engine
+   - open font(s) and obtain font_index
+   - set Output (surface, style) and Typesetter (type)
+*/</span>&nbsp;
+<span class="codecomment">/* ... */</span>&nbsp;
+
+
+<span class="codecomment">/* create the layout cache */</span>&nbsp;
+if (lxCacheIni(&amp;layout_cache, engine, 0) != 1)
+{
+  <span class="codecomment">/* deal with the error */</span>&nbsp;
+  <span class="codecomment">/* ... */</span>&nbsp;
+}
+
+
+<span class="codecomment">/* obtain layout instance from the layout cache */</span>&nbsp;
+if (lxCacheObtainLayout(layout_cache, font_index, script_code, &amp;layout) == 1)
+{
+  <span class="codecomment">/* apply layout instance */</span>&nbsp;
+  n = lxLayoutApply(layout, chars, nr_of_chars, direction, glyph_arr, max_glyphs);
+
+  <span class="codecomment">/* calculate fx and fy (see D-Type Units and D-Type FAQ: Q-2-5) */</span>&nbsp;
+  <span class="codecomment">/* ... */</span>&nbsp;
+
+  <span class="codecomment">/* now display glyphs */</span>&nbsp;
+  for (DT_SLONG i = 0; i &lt; n; i++)
+  {
+    dtGlyphDoOutput(engine, glyph_arr[i].glyph_index, fx * glyph_arr[i].x, fy * glyph_arr[i].y, 0, DV_NULL);
+  }
+}
+
+
+<span class="codecomment">/* destroy the layout cache */</span>&nbsp;
+lxCacheExt(layout_cache);
+
+
+<span class="codecomment">/* deinitialize D-Type Font Engine */</span>&nbsp;
+<span class="codecomment">/* ... */</span>&nbsp;
+
+</pre>
+</div>
+
+<p><em>Note:</em> In this simplified example, the return value of the lxLayoutApply function is not checked and no attempt is made to deal with the situation when the output array for positioned glyphs is not large enough to accept all the glyphs.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,7 @@
+This object represents a slice. In Power Engine API, a slice is a piece of a circle or an ellipse. Slices are frequently used to draw pie charts in financial charts and presentations.
+
+While constructing the Slice object, an optional shadow and/or outline may be specified.
+
+{strong}Designated Rendering Function:{/strong} pdDrawSlice (8)
+
+Note: Although pdBodyPtr is a key link, it is not mandatory. This means it is possible to construct a slice that has no body, only an outline and/or a shadow.

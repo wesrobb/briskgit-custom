@@ -1,0 +1,20 @@
+1002|pbcopy
+2002|pbpaste
+3001|explorer
+3002|open
+3003|xdg-open
+4001|explorer
+4002|open
+4003|xdg-open
+10001|"C:\Program Files (x86)\curl\curl.exe"
+10002|/usr/bin/curl
+10003|/usr/bin/curl
+11001|"C:\Program Files (x86)\zip\zip.exe"
+11002|/usr/bin/zip
+11003|/usr/bin/zip
+12001|"C:\Program Files (x86)\php\php.exe"
+12002|/usr/bin/php
+12003|/usr/bin/php
+101001|{{PROG_CURL}} --url {{EMAIL_SMTP_HOST}} --ssl-reqd --mail-from {{EMAIL_FROM_ADDR}} --mail-rcpt {{EMAIL_TO_ADDR}} --user {{EMAIL_USER_AUTH}} --upload-file {{EMAIL_BODY_FILE}}
+101002|{{PROG_CURL}} --url {{EMAIL_SMTP_HOST}} --ssl-reqd --mail-from {{EMAIL_FROM_ADDR}} --mail-rcpt {{EMAIL_TO_ADDR}} --user {{EMAIL_USER_AUTH}} --upload-file {{EMAIL_BODY_FILE}}
+101003|{{PROG_CURL}} --url {{EMAIL_SMTP_HOST}} --ssl-reqd --mail-from {{EMAIL_FROM_ADDR}} --mail-rcpt {{EMAIL_TO_ADDR}} --user {{EMAIL_USER_AUTH}} --upload-file {{EMAIL_BODY_FILE}}

@@ -1,0 +1,117 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>AppendFromStream</strong></div><br />
+
+<p>The AppendFromStream function appends a Power Engine document stored as a file to the master Power Engine document specified by the document instance <em>power_doc</em>. The file must be in the native uncompressed PowerDoc format.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>page_off</em></p>
+</td><td>
+<p>A page offset of the Power Engine document to be appended.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_off</em></p>
+</td><td>
+<p>A horizontal image offset, in document units, of the Power Engine document to be appended.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y_off</em></p>
+</td><td>
+<p>A vertical image offset, in document units, of the Power Engine document to be appended.</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the file containing the Power Engine document to be appended. The file must be in the native uncompressed PowerDoc format. Native PowerDoc files are usually recognized by their <em>.pdc</em> file extension.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns a negative number.</p>
+
+
+<h3>Comments</h3>
+<p>The <em>page_off</em> parameter represents a page offset of the document to be appended. For example, <em>page_off</em> = 1 indicates that all page values in the Power Engine document <em>power_doc2</em> will be increased by 1 before the are appended to the master document <em>power_doc</em>. Similarly, <em>page_off</em> = 0 indicates that the page values will remain unchanged.</p>
+<p>The <em>x_off</em> parameter represents a horizontal image offset, in document units, of the document to be appended. For example, <em>x_off</em> = 100 indicates that all image X coordinates in the Power Engine document <em>power_doc2</em> will be increased by 100 document units before the document is appended to the master document <em>power_doc</em>. Similarly, <em>x_off</em> = 0 indicates that the image X coordinates will remain unchanged.</p>
+<p>The <em>y_off</em> parameter represents a vertical image offset, in document units, of the document to be appended. For example, <em>y_off</em> = 100 indicates that all image Y coordinates in the Power Engine document <em>power_doc2</em> will be increased by 100 document units before the document is appended to the master document <em>power_doc</em>. Similarly, <em>y_off</em> = 0 indicates that the image Y coordinates will remain unchanged.</p>
+
+
+<h3>Note 1</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+<h3>Note 2</h3>
+<p>See our <a href="../../dt/manual/fpaths.htm">notes regarding file based streams</a>.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

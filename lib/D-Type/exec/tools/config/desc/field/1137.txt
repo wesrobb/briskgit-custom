@@ -1,0 +1,7 @@
+Edge smoothing for bitmap images. Respected only when the bitmap image's quality level is set to 1, 2 or 3.
+
+{strong}Supported values:{/strong}
+
+0 = Edge smoothing is off
+1 = Edge smoothing is on, inward (does not change the image boundary)
+2 = Edge smoothing is on, outward (extends the image boundary by a small amount)

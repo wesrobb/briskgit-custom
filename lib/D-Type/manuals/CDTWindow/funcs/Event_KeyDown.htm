@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTWindow</h1>
+
+<h2>Event_KeyDown</h2>
+
+<div class="box_prototype"><strong>virtual void Event_KeyDown(DT_SLONG key)</strong></div><br />
+
+<p>This virtual function is called when a user presses a key on the keyboard while interacting with the window. The function's <em>key</em> parameter provides a platform independent code of the key that was pressed. Your application can override this function in your own class in order to process this event.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>key</em></p>
+</td><td>
+<p>Platform independent code of the key that was pressed.</p>
+<pre>
+enum KeyEnum
+{
+    Enter = '\n', <span class="codecomment">// enter key</span>
+    BackSpace = '\b', <span class="codecomment">// backspace key</span>
+    Tab = '\t', <span class="codecomment">// tab key</span>
+    Cancel = 0x03, <span class="codecomment">// cancel key</span>
+    Clear = 0x0C, <span class="codecomment">// clear key</span>
+    Shift = 0x10, <span class="codecomment">// shift key</span>
+    Control = 0x11, <span class="codecomment">// control key</span>
+    Alt = 0x12, <span class="codecomment">// alt key</span>
+    Pause = 0x13, <span class="codecomment">// pause key</span>
+    CapsLock = 0x14, <span class="codecomment">// capslock key</span>
+    Escape = 0x1B, <span class="codecomment">// escape key</span>
+    Space = 0x20, <span class="codecomment">// space key</span>
+    PageUp = 0x21, <span class="codecomment">// page up key</span>
+    PageDown = 0x22, <span class="codecomment">// page down key</span>
+    End = 0x23, <span class="codecomment">// end key</span>
+    Home = 0x24, <span class="codecomment">// home key</span>
+    Left = 0x25, <span class="codecomment">// left key</span>
+    Up = 0x26, <span class="codecomment">// up arrow key</span>
+    Right = 0x27, <span class="codecomment">// right arrow key</span>
+    Down = 0x28, <span class="codecomment">// down arrow key</span>
+    Comma = 0x2C, <span class="codecomment">// comma key ','</span>
+    Period = 0x2E, <span class="codecomment">// period key '.'</span>
+    Slash = 0x2F, <span class="codecomment">// slash key '/'</span>
+    Zero = 0x30, <span class="codecomment">// zero key</span>
+    One = 0x31, <span class="codecomment">// one key</span>
+    Two = 0x32, <span class="codecomment">// two key</span>
+    Three = 0x33, <span class="codecomment">// three key</span>
+    Four = 0x34, <span class="codecomment">// four key</span>
+    Five = 0x35, <span class="codecomment">// five key</span>
+    Six = 0x36, <span class="codecomment">// six key</span>
+    Seven = 0x37, <span class="codecomment">// seven key</span>
+    Eight = 0x38, <span class="codecomment">// eight key</span>
+    Nine = 0x39, <span class="codecomment">// nine key</span>
+    SemiColon = 0x3B, <span class="codecomment">// semicolon key ';'</span>
+    Equals = 0x3D, <span class="codecomment">// equals key '='</span>
+    A = 0x41, <span class="codecomment">// a key</span>
+    B = 0x42, <span class="codecomment">// b key</span>
+    C = 0x43, <span class="codecomment">// c key</span>
+    D = 0x44, <span class="codecomment">// d key</span>
+    E = 0x45, <span class="codecomment">// e key</span>
+    F = 0x46, <span class="codecomment">// f key</span>
+    G = 0x47, <span class="codecomment">// g key</span>
+    H = 0x48, <span class="codecomment">// h key</span>
+    I = 0x49, <span class="codecomment">// i key</span>
+    J = 0x4A, <span class="codecomment">// j key</span>
+    K = 0x4B, <span class="codecomment">// k key</span>
+    L = 0x4C, <span class="codecomment">// l key</span>
+    M = 0x4D, <span class="codecomment">// m key</span>
+    N = 0x4E, <span class="codecomment">// n key</span>
+    O = 0x4F, <span class="codecomment">// o key</span>
+    P = 0x50, <span class="codecomment">// p key</span>
+    Q = 0x51, <span class="codecomment">// q key</span>
+    R = 0x52, <span class="codecomment">// r key</span>
+    S = 0x53, <span class="codecomment">// s key</span>
+    T = 0x54, <span class="codecomment">// t key</span>
+    U = 0x55, <span class="codecomment">// u key</span>
+    V = 0x56, <span class="codecomment">// v key</span>
+    W = 0x57, <span class="codecomment">// w key</span>
+    X = 0x58, <span class="codecomment">// x key</span>
+    Y = 0x59, <span class="codecomment">// y key</span>
+    Z = 0x5A, <span class="codecomment">// z key</span>
+    OpenBracket = 0x5B, <span class="codecomment">// open bracket key '['</span>
+    BackSlash = 0x5C, <span class="codecomment">// back slash key '\'</span>
+    CloseBracket = 0x5D, <span class="codecomment">// close bracket key ']'</span>
+    NumPad0 = 0x60, <span class="codecomment">// numpad 0 key</span>
+    NumPad1 = 0x61, <span class="codecomment">// numpad 1 key</span>
+    NumPad2 = 0x62, <span class="codecomment">// numpad 2 key</span>
+    NumPad3 = 0x63, <span class="codecomment">// numpad 3 key</span>
+    NumPad4 = 0x64, <span class="codecomment">// numpad 4 key</span>
+    NumPad5 = 0x65, <span class="codecomment">// numpad 5 key</span>
+    NumPad6 = 0x66, <span class="codecomment">// numpad 6 key</span>
+    NumPad7 = 0x67, <span class="codecomment">// numpad 7 key</span>
+    NumPad8 = 0x68, <span class="codecomment">// numpad 8 key</span>
+    NumPad9 = 0x69, <span class="codecomment">// numpad 9 key</span>
+    Multiply = 0x6A, <span class="codecomment">// multiply key '*'</span>
+    Add = 0x6B, <span class="codecomment">// add key '+'</span>
+    Separator = 0x6C, <span class="codecomment">// separator key '-'</span>
+    Subtract = 0x6D, <span class="codecomment">// subtract key '-'</span>
+    Decimal = 0x6E, <span class="codecomment">// decimal key '.'</span>
+    Divide = 0x6F, <span class="codecomment">// divide key '/'</span>
+    F1 = 0x70, <span class="codecomment">// F1 key</span>
+    F2 = 0x71, <span class="codecomment">// F2 key</span>
+    F3 = 0x72, <span class="codecomment">// F3 key</span>
+    F4 = 0x73, <span class="codecomment">// F4 key</span>
+    F5 = 0x74, <span class="codecomment">// F5 key</span>
+    F6 = 0x75, <span class="codecomment">// F6 key</span>
+    F7 = 0x76, <span class="codecomment">// F7 key</span>
+    F8 = 0x77, <span class="codecomment">// F8 key</span>
+    F9 = 0x78, <span class="codecomment">// F9 key</span>
+    F10 = 0x79, <span class="codecomment">// F10 key</span>
+    F11 = 0x7A, <span class="codecomment">// F11 key</span>
+    F12 = 0x7B, <span class="codecomment">// F12 key</span>
+    Delete = 0x7F, <span class="codecomment">// delete key</span>
+    NumLock = 0x90, <span class="codecomment">// numlock key</span>
+    ScrollLock = 0x91, <span class="codecomment">// scroll lock key</span>
+    PrintScreen = 0x9A, <span class="codecomment">// print screen key</span>
+    Insert = 0x9B, <span class="codecomment">// insert key</span>
+    Help = 0x9C, <span class="codecomment">// help key</span>
+    Meta = 0x9D, <span class="codecomment">// meta key</span>
+    BackQuote = 0xC0, <span class="codecomment">// backquote key</span>
+    Quote = 0xDE, <span class="codecomment">// quote key</span>
+    Final = 0x18, <span class="codecomment">// final key</span>
+    Convert = 0x1C, <span class="codecomment">// convert key</span>
+    NonConvert = 0x1D, <span class="codecomment">// non convert key</span>
+    Accept = 0x1E, <span class="codecomment">// accept key</span>
+    ModeChange = 0x1F, <span class="codecomment">// mode change key</span>
+    Kana = 0x15, <span class="codecomment">// kana key</span>
+    Kanji = 0x19, <span class="codecomment">// kanji key</span>
+    Undefined = 0x0 <span class="codecomment">// undefined key</span>
+};
+</pre>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

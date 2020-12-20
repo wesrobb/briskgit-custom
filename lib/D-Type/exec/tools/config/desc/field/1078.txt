@@ -1,0 +1,22 @@
+Right edge polyline for text areas. This property makes it possible to create text areas with a custom (i.e. user-defined) right edge. In order for the custom right edge to take effect, the pdTextAreaType property must be set to 5 or 6.
+
+The right edge polyline is defined as a sequence of connected segments which can be made of lines, Quadratic B-Spline and/or Bezier curves. Each sequence begins with the descriptor (value 20, 25 or 24) followed by an appropriate number of coordinates for the control points as shown below:
+
+{strong}Line{/strong}: 20, X1, Y1
+{strong}Quadratic B-Spline Curve{/strong}: 25, X1, Y1, X2, Y2
+{strong}Bezier Curve{/strong}: 24, X1, Y1, X2, Y2, X3, Y3
+
+The size of each descriptor value (20, 25 or 24) is always 1 byte.
+
+When pdTextAreaType is 5, the size of each coordinate is 1 byte. In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area width while the value 255 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0-255 range. The value 0 means 0% of the text area height while the value 255 means 100% of the text area height.
+
+When pdTextAreaType is 6, the size of each coordinate is 2 bytes (little endian byte ordering). In this case X1, X2 and X3 represent X coordinates of the segment's control points and must be in the 0 - 65,535 range. The value 0 means 0% of the text area width while the value 65,535 means 100% of the text area width. Similarly, Y1, Y2 and Y3 represent Y coordinates of the segment's control points and must be in the 0 - 65,535 range. The value 0 means 0% of the text area height while the value 65,535 means 100% of the text area height.
+
+Implicitly, the first control point is always located at the coordinate (0, 0) which is the top right corner of the text area. Therefore, the user definition of the polyline starts with the second control point. In addition, the last control point is automatically placed at the coordinate (x_last, y_max) where x_last is the X coordinate of the last user defined control point and y_max is 255 (when pdTextAreaType is 5) or 65,535 (when pdTextAreaType is 6). In this way the polyline and the text area always have the same height.
+
+Although any sequence of connected lines, Quadratic B-Spline and/or Bezier curves can be used to define a polyline, the Y coordinates should be specified in a non-decreasing order. That is, any time a new Y coordinates is specified, its value should not be less than the value of the previously specified Y coordinate. This is to ensure that the polyline does not have multiple intersections with any horizontal line. This restriction does not apply to X coordinates.
+
+{strong}Sample values (when pdTextAreaType is 5):{/strong}
+
+"{strong}20{/strong}, 70, 45, {strong}24{/strong}, 140, 55, 190, 55, 190, 165, {strong}20{/strong}, 255, 255"
+"{strong}20{/strong}, 51, 64, {strong}20{/strong}, 26, 128, {strong}20{/strong}, 102, 192"

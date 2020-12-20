@@ -1,0 +1,1306 @@
+//print("Note: ini.dts included\r\n"); /* REMOVE_IN_DISTRIB */
+//print("clock1=" + clock() + "\n"); /* REMOVE_IN_DISTRIB */
+
+// --------------- Standard Engine ---------------
+
+const DV_RET_ERR = 0;
+const DV_RET_OK = 1;
+
+const DV_COMPRESS_CONFIG = -2;
+const DV_COMPRESS_AUTO = -1;
+const DV_COMPRESS_NONE = 0;
+const DV_COMPRESS_GZIP = 1;
+
+const DV_ES = "";
+const DV_PI = 3.141592653589793;
+const DV_2PI = 6.28318530717959;
+
+
+/* Style Effects */
+const DV_EFFECT_NONE = 0;
+const DV_EFFECT_HBLUR_FUZZY = 1;
+const DV_EFFECT_VBLUR_FUZZY = 2;
+const DV_EFFECT_HVBLUR_FUZZY = 3;
+const DV_EFFECT_HBLUR_GAUSS = 4;
+const DV_EFFECT_VBLUR_GAUSS = 5;
+const DV_EFFECT_HVBLUR_GAUSS = 6;
+const DV_EFFECT_EMBOSS_50_NW = 7;
+const DV_EFFECT_EMBOSS_50_NE = 8;
+const DV_EFFECT_EMBOSS_50_SW = 9;
+const DV_EFFECT_EMBOSS_50_SE = 10;
+const DV_EFFECT_PATTERN_PHOTO = 11;
+const DV_EFFECT_PATTERN_SHADES = 12;
+const DV_EFFECT_PATTERN_STRIPES = 13;
+const DV_EFFECT_PATTERN_ORNAMENTAL = 14;
+const DV_EFFECT_EDGE_50_NW = 15;
+const DV_EFFECT_EDGE_50_NE = 16;
+const DV_EFFECT_EDGE_50_SW = 17;
+const DV_EFFECT_EDGE_50_SE = 18;
+const DV_EFFECT_BODY_50_NW = 19;
+const DV_EFFECT_BODY_50_NE = 20;
+const DV_EFFECT_BODY_50_SW = 21;
+const DV_EFFECT_BODY_50_SE = 22;
+const DV_EFFECT_EDGE_100_NW = 23;
+const DV_EFFECT_EDGE_100_NE = 24;
+const DV_EFFECT_EDGE_100_SW = 25;
+const DV_EFFECT_EDGE_100_SE = 26;
+const DV_EFFECT_BODY_100_NW = 27;
+const DV_EFFECT_BODY_100_NE = 28;
+const DV_EFFECT_BODY_100_SW = 29;
+const DV_EFFECT_BODY_100_SE = 30;
+const DV_EFFECT_SHADE_INNER_A = 31;
+const DV_EFFECT_SHADE_INNER_B = 32;
+const DV_EFFECT_SHADE_INNER_C = 33;
+const DV_EFFECT_HBOLD = 34;
+const DV_EFFECT_VBOLD = 35;
+const DV_EFFECT_HVBOLD = 36;
+const DV_EFFECT_HBOLD_VBLUR_FUZZY = 37;
+const DV_EFFECT_VBOLD_HBLUR_FUZZY = 38;
+const DV_EFFECT_PATTERN_INVPHOTO = 39;
+const DV_EFFECT_PATTERN_INVSHADES = 40;
+const DV_EFFECT_PATTERN_INVSTRIPES = 41;
+const DV_EFFECT_PATTERN_INVORNAMENTAL = 42;
+const DV_EFFECT_PATTERN_CUSTOM = 43;
+const DV_EFFECT_RESERVED_A = 44;
+const DV_EFFECT_RESERVED_B = 45;
+const DV_EFFECT_HBLUR_STACK = 46;
+const DV_EFFECT_VBLUR_STACK = 47;
+const DV_EFFECT_HVBLUR_STACK = 48;
+const DV_EFFECT_HBOLD_VBLUR_GAUSS = 49;
+const DV_EFFECT_VBOLD_HBLUR_GAUSS = 50;
+const DV_EFFECT_HBOLD_VBLUR_STACK = 51;
+const DV_EFFECT_VBOLD_HBLUR_STACK = 52;
+const DV_EFFECT_RESERVED_C = 53;
+const DV_EFFECT_RESERVED_D = 54;
+const DV_EFFECT_HOUTLINE = 55;
+const DV_EFFECT_VOUTLINE = 56;
+const DV_EFFECT_HVOUTLINE = 57;
+
+
+/* Hinting */
+const DV_HINTING_ENGINE_DEFAULT_A = 0;
+const DV_HINTING_ENGINE_DEFAULT_B = 1;
+const DV_HINTING_USER_DEFAULT_A = 2;
+const DV_HINTING_USER_DEFAULT_B = 3;
+const DV_HINTING_XON_YON = 4;
+const DV_HINTING_XON_YOFF = 5;
+const DV_HINTING_XOFF_YON = 6;
+const DV_HINTING_XOFF_YOFF = 7;
+const DV_HINTING_AUTO_A = 8;
+const DV_HINTING_AUTO_B = 9;
+
+
+/* Positioning */
+const DV_POSITIONING_ENGINE_DEFAULT_A = 0;
+const DV_POSITIONING_ENGINE_DEFAULT_B = 1;
+const DV_POSITIONING_USER_DEFAULT_A = 2;
+const DV_POSITIONING_USER_DEFAULT_B = 3;
+const DV_POSITIONING_FRACX_FRACY = 4;
+const DV_POSITIONING_FRACX_INTY = 5;
+const DV_POSITIONING_INTX_FRACY = 6;
+const DV_POSITIONING_INTX_INTY = 7;
+const DV_POSITIONING_AUTO_A = 8;
+const DV_POSITIONING_AUTO_B = 9;
+
+
+/* Transformation Matrices - was required for demos in the plus folder which used calls such as ImgSetTransform(img, DV_TM_3X3, z); */ /* REMOVE_IN_DISTRIB */
+//const DV_TM_1X1 = 1; /* REMOVE_IN_DISTRIB */
+//const DV_TM_2X2 = 2; /* REMOVE_IN_DISTRIB */
+//const DV_TM_3X3 = 3; /* REMOVE_IN_DISTRIB */
+
+
+/* Output Formats */
+const DV_FORMAT_8 = 8;
+const DV_FORMAT_24 = 24;
+const DV_FORMAT_32 = 32;
+
+
+// --------------- Power Engine ---------------
+
+const PD_APPLY_STANDARD = 0;
+/* New PowerDoc Object */
+const PD_NEW = -1;
+
+/* Power Engine Format Identifiers */
+const PD_BYTE = -1;
+const PD_WORD = -2;
+const PD_TRIO = -3;
+const PD_LONG = -4;
+const PD_BYTE_SIGNED = -1;
+const PD_WORD_SIGNED = -2;
+const PD_TRIO_SIGNED = -3;
+const PD_LONG_SIGNED = -4;
+const PD_BYTE_UNSIGNED = -10;
+const PD_WORD_UNSIGNED = -20;
+const PD_TRIO_UNSIGNED = -30;
+const PD_LONG_UNSIGNED = -40;
+
+const PD_ARR_BYTE = -5;
+const PD_ARR_WORD = -6;
+const PD_ARR_TRIO = -7;
+const PD_ARR_LONG = -8;
+const PD_ARR_BYTE_SIGNED = -5;
+const PD_ARR_WORD_SIGNED = -6;
+const PD_ARR_TRIO_SIGNED = -7;
+const PD_ARR_LONG_SIGNED = -8;
+const PD_ARR_BYTE_UNSIGNED = -50;
+const PD_ARR_WORD_UNSIGNED = -60;
+const PD_ARR_TRIO_UNSIGNED = -70;
+const PD_ARR_LONG_UNSIGNED = -80;
+
+const PD_ASC = -100;
+const PD_HEX = -101;
+const PD_DEFAULT = -128;
+const PD_LINK = -129;
+const PD_OTHER = -130;
+
+const PD_ARR_BYTE_SIGNED_COMPRESS = -51;
+const PD_ARR_WORD_SIGNED_COMPRESS = -61;
+const PD_ARR_TRIO_SIGNED_COMPRESS = -71;
+const PD_ARR_LONG_SIGNED_COMPRESS = -81;
+const PD_ARR_BYTE_UNSIGNED_COMPRESS = -52;
+const PD_ARR_WORD_UNSIGNED_COMPRESS = -62;
+const PD_ARR_TRIO_UNSIGNED_COMPRESS = -72;
+const PD_ARR_LONG_UNSIGNED_COMPRESS = -82;
+
+const PD_ARR_COMPRESSED = -110;
+const PD_HEX_COMPRESSED = -111;
+
+//const PD_HEX_COMPRESS_METHOD_FIRST = -200;
+//const PD_HEX_COMPRESS_METHOD_000 = -200;
+//const PD_HEX_COMPRESS_METHOD_002 = -202;
+//const PD_HEX_COMPRESS_METHOD_004 = -204;
+//const PD_HEX_COMPRESS_METHOD_006 = -206;
+//const PD_HEX_COMPRESS_METHOD_008 = -208;
+//const PD_HEX_COMPRESS_METHOD_009 = -209;
+//const PD_HEX_COMPRESS_METHOD_010 = -210;
+//const PD_HEX_COMPRESS_METHOD_011 = -211;
+//const PD_HEX_COMPRESS_METHOD_012 = -212;
+//const PD_HEX_COMPRESS_METHOD_015 = -215;
+//const PD_HEX_COMPRESS_METHOD_LAST = -217;
+//
+//const PD_ARR_COMPRESS_METHOD_FIRST = -500;
+//const PD_ARR_COMPRESS_METHOD_000 = -500;
+//const PD_ARR_COMPRESS_METHOD_002 = -502;
+//const PD_ARR_COMPRESS_METHOD_004 = -504;
+//const PD_ARR_COMPRESS_METHOD_006 = -506;
+//const PD_ARR_COMPRESS_METHOD_008 = -508;
+//const PD_ARR_COMPRESS_METHOD_009 = -509;
+//const PD_ARR_COMPRESS_METHOD_010 = -510;
+//const PD_ARR_COMPRESS_METHOD_011 = -511;
+//const PD_ARR_COMPRESS_METHOD_012 = -512;
+//const PD_ARR_COMPRESS_METHOD_015 = -515;
+//const PD_ARR_COMPRESS_METHOD_LAST = -517;
+
+
+/* Bitmap Image Quality Levels */
+const PD_QUALITY_LOW = 0; /* Low Quality But Fast */
+const PD_QUALITY_HIGH = 1; /* High Quality But Slower */
+const PD_QUALITY_HIGH2 = 2; /* Very High Quality But Slower */
+const PD_QUALITY_HIGH3 = 3; /* Very High Quality (More Blur) But Slower */
+
+
+/* PowerDoc Fields */
+const pd0 = 0;
+const pdBackgroundPtr = 1173;
+const pdBodyPtr = 1013;
+const pdBaselinePtr = 1113;
+const pdFnDrawObjectPtr = 1085;
+const pdFontDataPtr = 1069;
+const pdTypoFramePtr = 1177;
+const pdGroupMemberPtr = 1087;
+const pdImageDataPtr = 1048;
+const pdLinePtr = 1015;
+const pdOutlinePtr = 1014;
+const pdPatternFillPtr = 1130;
+const pdPowerFontPtr = 1091;
+const pdPowerFontRecordPtr = 1092;
+const pdShadowPtr = 1016;
+const pdStylePtr = 1002;
+const pdTextExtrasPtr = 1172;
+const pdTextFragmentPtr = 1038;
+const pdTextLayoutPtr = 1084;
+const pdTextRulerHorPtr = 1111;
+const pdTypographyPtr = 1018;
+const pdUnderlinePtr = 1114;
+const pdAlign = 1019;
+const pdAlignEnd = 1062;
+const pdAlphaTreatment = 1097;
+const pdAngleAlpha = 1032;
+const pdAngleRotation = 1034;
+const pdAngleTheta = 1037;
+const pdAttribs = 1094;
+const pdBackground = 1138;
+const pdBoundingBox = 1089;
+const pdChannelFilter = 1155;
+const pdDeviceMode = 1101;
+const pdDh = 1030;
+const pdDw = 1029;
+const pdDx = 1027;
+const pdDy = 1028;
+const pdDynamicDw = 1163;
+const pdEdges = 1132;
+const pdEffectsArr = 1127;
+const pdEP = 1063;
+const pdFnDraw = 1086;
+const pdFontDataBytes = 1071;
+const pdFontDataCaching = 1099;
+const pdFontDataFormat = 1070;
+const pdFontDataHinting = 1098;
+const pdFontDataNumber = 1072;
+const pdFontDh = 1008;
+const pdFontDw = 1007;
+const pdFontIndex = 1006;
+const pdFontUniqueID = 1068;
+const pdGlobalDirection = 1075;
+const pdGlyphStart = 1076;
+const pdGradientType = 1044;
+const pdHinting = 1100;
+const pdID = 1017;
+const pdImageDataGray = 1046;
+const pdImageDataGrayAlpha = 1096;
+const pdImageDataMono = 1129;
+const pdImageDataRGB = 1045;
+const pdImageDataRGBAlpha = 1095;
+const pdIndentLeft = 1106;
+const pdIndentRight = 1107;
+const pdRowInvertArr = 1179;
+const pdKerning = 1020;
+const pdLineDashSize = 1156;
+const pdLineEnd = 1057;
+const pdLineEndSize = 1061;
+const pdLineEndTheta = 1059;
+const pdLinePerimeterGrow = 1178;
+const pdLineSegment = 1052;
+const pdLineShift = 1157;
+const pdLineStart = 1056;
+const pdLineStartSize = 1060;
+const pdLineStartTheta = 1058;
+const pdLineThickness = 1003;
+const pdLineTreatment = 1108;
+const pdMarginBottom = 1175;
+const pdMarginLeft = 1159;
+const pdMarginRight = 1160;
+const pdMarginTop = 1174;
+const pdMask = 1093;
+const pdMerge = 1176;
+const pdMMContributions = 1067;
+const pdName = 1139;
+const pdNh = 1040;
+const pdNhHead = 1169;
+const pdNhFoot = 1170;
+const pdPowerGlyphStatus = 1171;
+const pdNw = 1039;
+const pdOrderingArr = 1134;
+const pdPatternGroup = 1054;
+const pdPatternItem = 1055;
+const pdPatternROP = 1131;
+const pdPictureNumber = 1158;
+const pdPitch = 1133;
+const pdPolyArrC = 1146;
+const pdPolyArrI = 1041;
+const pdPolyArrX_08 = 1142;
+const pdPolyArrX_16 = 1141;
+const pdPolyArrX_24 = 1140;
+const pdPolyArrX_32 = 1042;
+const pdPolyArrY_08 = 1145;
+const pdPolyArrY_16 = 1144;
+const pdPolyArrY_24 = 1143;
+const pdPolyArrY_32 = 1043;
+const pdPolyFillRule = 1064;
+const pdPosArrI = 1102;
+const pdPosArrX_08 = 1149;
+const pdPosArrX_16 = 1148;
+const pdPosArrX_24 = 1147;
+const pdPosArrX_32 = 1103;
+const pdPosArrY_08 = 1152;
+const pdPosArrY_16 = 1151;
+const pdPosArrY_24 = 1150;
+const pdPosArrY_32 = 1104;
+const pdPositioning = 1053;
+const pdPowerGlyphAttribs = 1161;
+const pdQuality = 1047;
+const pdRadius = 1031;
+const pdRadiusHor = 1035;
+const pdRadiusVer = 1036;
+const pdRangeBB = 1051;
+const pdRangeGG = 1050;
+const pdRangeRR = 1049;
+const pdRasterizer = 1154;
+const pdRelativeDirection = 1074;
+const pdRelativeOrientation = 1105;
+const pdRGBT = 1001;
+const pdRotation = 1011;
+const pdRound = 1033;
+const pdShadowDx = 1004;
+const pdShadowDy = 1005;
+const pdSkewHor = 1009;
+const pdSkewVer = 1010;
+const pdSmoothing = 1137;
+const pdSpacingBaseline = 1112;
+const pdSpacingFactor = 1115;
+const pdSpacingFont = 1090;
+const pdSpacingLetter = 1021;
+const pdSpacingRow = 1022;
+const pdStitching = 1153;
+const pdT = 1000;
+const pdTabStopFlags = 1083;
+const pdTabStopPositions = 1082;
+const pdTextAreaDh = 1026;
+const pdTextAreaDw = 1025;
+const pdTextAreaEdgeLeft = 1077;
+const pdTextAreaEdgeRight = 1078;
+const pdTextAreaRowType = 1065;
+const pdTextAreaType = 1073;
+const pdTextAreaVAlign = 1109;
+const pdTextAreaVAlignEnd = 1110;
+const pdTextBreakFlags = 1116;
+const pdTextEncoding = 1079;
+const pdTextHyphenBits = 1117;
+const pdTextLanguage = 1135;
+const pdTextMiscAttribs = 1128;
+const pdTextMiscAttribs2 = 1162;
+const pdTextShaping = 1080;
+const pdTextShapingParam0 = 1136;
+const pdTextString_08 = 1023;
+const pdTextString_16 = 1024;
+const pdTextString_24 = 1118;
+const pdTextString_32 = 1119;
+const pdTransformMatrix = 1088;
+const pdUnderline = 1012;
+const pdUnderlineParam0 = 1121;
+const pdUnderlineParam1 = 1122;
+const pdUnderlineParam2 = 1123;
+const pdUnderlineParam3 = 1124;
+const pdUnderlineParam4 = 1125;
+const pdUserSpecificContent = 1120;
+const pdVAlignRow = 1126;
+const pdWrapType = 1066;
+const txRichTextFirstPtr = 2000;
+const txRichTextNextPtr = 2001;
+const txStatsMaxCharIndex = 2003;
+const txStatsMinCharIndex = 2002;
+const txStatsNrOfRows = 2004;
+const txLockStatus = 2005;
+const pdxMediaDataPtr = 2115;
+const pdxByteCode = 2121;
+const pdxMediaClipID = 2105;
+const pdxMediaDataBytes = 2116;
+const pdxMediaDataFormat = 2117;
+const pdxMediaDescriptor = 2104;
+const pdxMediaInfoCurrentFrame= 2111;
+const pdxMediaInfoCurrentTime = 2110;
+const pdxMediaInfoDuration = 2108;
+const pdxMediaInfoFPS = 2107;
+const pdxMediaInfoFramesCount = 2109;
+const pdxMediaNextCommand = 2120;
+const pdxMediaNextFrame = 2119;
+const pdxMediaNextTime = 2118;
+const pdxMediaPlayState = 2106;
+const pdxMediaReserved1 = 2112;
+const pdxMediaReserved2 = 2113;
+const pdxMediaStartTime = 2114;
+const pdxNh = 2102;
+const pdxNw = 2101;
+const pdxOriginLocation = 2123;
+const pdxSourceCode = 2103;
+const pdxVAlignCell = 2122;
+const pdxVAlignRow = 2100;
+const fcColumnNextPtr = 10011;
+const fcConfigPtr = 10000;
+const fcProgramPtr = 10030;
+const fcAlign = 10104;
+const fcAlignEnd = 10105;
+const fcCnfButtonNormal = 10050;
+const fcCnfButtonPushed = 10051;
+const fcCnfCharBox = 10016;
+const fcCnfCheckBoxNormal = 10070;
+const fcCnfCheckBoxPushed = 10071;
+const fcCnfCheckBoxSelected = 10072;
+const fcCnfCtrlStyleOnFocus = 10020;
+const fcCnfLib = 10015;
+const fcCnfRadioButtonNormal = 10060;
+const fcCnfRadioButtonPushed = 10061;
+const fcCnfRadioButtonSelected= 10062;
+const fcCnfSliderNormal = 10080;
+const fcCnfSliderPushed = 10081;
+const fcConnectionID = 10001;
+const fcDh = 10007;
+const fcDw = 10006;
+const fcGroupID = 10010;
+const fcItemFirst = 10100;
+const fcListColOffset = 10103;
+const fcListMultiSelect = 10102;
+const fcListSelectedItems = 10101;
+const fcLockStatus = 10002;
+const fcName = 10004;
+const fcOnCtrlChange = 10201;
+const fcOnCtrlFocusLose = 10206;
+const fcOnCtrlFocusReceive = 10204;
+const fcOnCtrlHold = 10205;
+const fcOnCtrlPush = 10203;
+const fcOnCtrlRelease = 10200;
+const fcOnCtrlScroll = 10202;
+const fcResizeGuideIndexHor = 10209;
+const fcResizeGuideIndexVer = 10210;
+const fcSliderCoverage = 10111;
+const fcSliderLimit = 10110;
+const fcSliderPosition = 10112;
+const fcSliderFlags = 10211;
+const fcState = 10003;
+const fcTabOrderID = 10009;
+const fcTextScrollType = 10207;
+const fcTextWrapType = 10208;
+const fcUserParam = 10008;
+const fcValue_08 = 10005;
+const fcValue_16 = 10012;
+const fcValue_24 = 10013;
+const fcValue_32 = 10014;
+const txStoredFormatPtr = 11003;
+const txAttribsData = 11000;
+const txCharFirst = 11001;
+const txCharLast = 11002;
+const psInstrPtr = 20011;
+const psImgID = 20000;
+const psParentObjID = 20001;
+const psCharPosArr_Start = 20002;
+const psCharPosArr_End = 20003;
+const psCategoryID = 20004;
+const psOptionID = 20005;
+const psX = 20006;
+const psY = 20007;
+const psFilename = 20008;
+const psText = 20009;
+const psCharPos = 20010;
+const psValue = 20012;
+const psValueAdd = 20013;
+const psValueEnd = 20014;
+const psPastedTextIsSelected = 20015;
+
+
+/* PowerDoc Rendering Functions */
+const pdDrawSysGuideDashed = -3;
+const pdDrawSysGuide = -2;
+const pdDrawError = -1;
+const pdDrawNothing = 0;
+const pdDrawTextLine = 1;
+const pdDrawTextArc = 2;
+const pdDrawTextArea = 3;
+const pdDrawLine = 4;
+const pdDrawEllipse = 5;
+const pdDrawCircle = 5;
+const pdDrawRect = 6;
+const pdDrawTrueEllipse = 7;
+const pdDrawTrueCircle = 7;
+const pdDrawSlice = 8;
+const pdDrawArc = 9;
+const pdDrawRichTextArea = 10;
+const pdDrawPattern = 11;
+const pdDrawGrid = 12;
+const pdDrawPoly = 13;
+const pdDrawPolygon = 13;
+const pdDrawShape = 13;
+const pdDrawGradient = 14;
+const pdDrawInverter = 14;
+const pdDrawFastRect = 14;
+const pdDrawImage = 15;
+const pdDrawBitmap = 15;
+const pdDrawChar = 16;
+const pdDrawRichTextLine = 17;
+const pdDrawLibraryPoly = 18;
+const pdDrawLibraryPolygon = 18;
+const pdDrawLibraryShape = 18;
+const pdDrawRichTextArc = 19;
+const pdDrawGlyph = 20;
+const pdDrawGenericObject = 21;
+const pdDrawGroup = 22;
+const pdDrawDefault = 22;
+const pdDrawPowerGlyph = 23;
+const pdDrawPolyline = 24;
+const pdDrawLibraryPolyline = 25;
+const pdDrawTextDesign = 26;
+const pdDrawRichTextDesign = 27;
+const pdDrawTextPath = 28;
+const pdDrawRichTextPath = 29;
+const pdDrawLibraryImage = 30;
+const pdDrawLibraryBitmap = 30;
+const pdDrawBackground = 31;
+const pdDrawUser = 9999;
+const fcDrawButton = 10000;
+const fcDrawRadioButton = 10001;
+const fcDrawCheckBox = 10002;
+const fcDrawTextBox = 10003;
+const fcDrawListBox = 10004;
+const fcDrawHSlider = 10005;
+const fcDrawVSlider = 10006;
+const fcDrawRichTextBox = 10007;
+const fcDrawRichButton = 10008;
+const fcDrawRichListBox = 10009;
+
+
+
+// --------------- Animation [100001..100002] ---------------
+
+
+const DV_CMD_RETURN_NOREDRAW = 100001;
+const DV_CMD_RETURN_REDIRECT = 100002;
+
+
+// --------------- Font Utility [10001..10400] ---------------;
+
+const DV_CMF_FILE_FONT_LOAD = 10050;
+const DV_CMF_FILE_FONT_LOAD_ADVANCED = 10051;
+const DV_CMF_FILE_LIST_LOAD = 10055;
+const DV_CMF_FILE_LIST_APPEND = 10056;
+const DV_CMF_FILE_LIST_SAVE = 10057;
+const DV_CMF_FILE_FONT_SAVE = 10052;
+const DV_CMF_FILE_FONT_SAVE_SUBSET = 10053;
+const DV_CMF_FILE_CLOSE = 10054;
+
+const DV_CMF_FONT_PREV = 10102;
+const DV_CMF_FONT_CHOOSE = 10103;
+const DV_CMF_FONT_NEXT = 10104;
+
+const DV_CMF_EDIT_COPY = 10090;
+const DV_CMF_EDIT_INSERT = 10091;
+const DV_CMF_EDIT_PRESERVE_FONT = 10092;
+
+const DV_CMF_VIEW_GLYPH_OUTLINE = 10012;
+const DV_CMF_VIEW_GLYPH_TABLE = 10013;
+const DV_CMF_VIEW_CHAR_TABLE = 10014;
+
+/*
+const DV_CMF_VIEW_ZOOM_SET_ZOOM_FACTOR = 10300;
+const DV_CMF_VIEW_ZOOM_50 = 10301;
+const DV_CMF_VIEW_ZOOM_75 = 10302;
+const DV_CMF_VIEW_ZOOM_100 = 10303;
+const DV_CMF_VIEW_ZOOM_150 = 10304;
+const DV_CMF_VIEW_ZOOM_200 = 10305;
+const DV_CMF_VIEW_ZOOM_250 = 10306;
+const DV_CMF_VIEW_ZOOM_300 = 10307;
+const DV_CMF_VIEW_ZOOM_400 = 10308;
+const DV_CMF_VIEW_ZOOM_500 = 10309;
+const DV_CMF_VIEW_ZOOM_OUT = 10310;
+const DV_CMF_VIEW_ZOOM_IN = 10311;
+*/
+
+const DV_CMF_VIEW_SETTINGS = 10100;
+
+const DV_CMF_VIEW_HINT_NO = 10350;
+const DV_CMF_VIEW_HINT_HOR = 10351;
+const DV_CMF_VIEW_HINT_VER = 10352;
+const DV_CMF_VIEW_HINT_HOR_VER = 10353;
+
+const DV_CMF_VIEW_POINT_NO = 10354;
+const DV_CMF_VIEW_POINT_IDX = 10355;
+const DV_CMF_VIEW_POINT_X = 10356;
+const DV_CMF_VIEW_POINT_Y = 10357;
+const DV_CMF_VIEW_POINT_HZ = 10358;
+const DV_CMF_VIEW_POINT_VZ = 10359;
+
+const DV_CMF_VIEW_CHAR_PLANE_0 = 10361;
+const DV_CMF_VIEW_CHAR_PLANE_1 = 10362;
+const DV_CMF_VIEW_CHAR_PLANE_2 = 10363;
+const DV_CMF_VIEW_CHAR_PLANE_3 = 10364;
+const DV_CMF_VIEW_CHAR_PLANE_4 = 10365;
+const DV_CMF_VIEW_CHAR_PLANE_5 = 10366;
+const DV_CMF_VIEW_CHAR_PLANE_6 = 10367;
+const DV_CMF_VIEW_CHAR_PLANE_7 = 10368;
+const DV_CMF_VIEW_CHAR_PLANE_8 = 10369;
+const DV_CMF_VIEW_CHAR_PLANE_9 = 10370;
+const DV_CMF_VIEW_CHAR_PLANE_10 = 10371;
+const DV_CMF_VIEW_CHAR_PLANE_11 = 10372;
+const DV_CMF_VIEW_CHAR_PLANE_12 = 10373;
+const DV_CMF_VIEW_CHAR_PLANE_13 = 10374;
+const DV_CMF_VIEW_CHAR_PLANE_14 = 10375;
+const DV_CMF_VIEW_CHAR_PLANE_15 = 10376;
+const DV_CMF_VIEW_CHAR_PLANE_16 = 10377;
+
+const DV_CMF_HELP_ABOUT_DTYPE_FONT_UTILITY = 10400;
+
+
+// --------------- Document Editor [1..418] ---------------;
+
+const DV_CMD_MODE_PLACE = 234;
+const DV_CMD_MODE_SELECT_MOVE = 235;
+const DV_CMD_MODE_OBJ_EDIT = 236;
+const DV_CMD_MODE_TEXT_EDIT = 237;
+const DV_CMD_MODE_FORM_PLAY = 238;
+
+const DV_CMD_FILE_NEW = 7;
+const DV_CMD_FILE_OPEN = 8;
+const DV_CMD_FILE_OPEN_NO_AUTORUN = 377;
+const DV_CMD_FILE_OPEN_AS_READ_ONLY = 273;
+const DV_CMD_FILE_CLOSE = 9;
+const DV_CMD_FILE_PLACE_POWERDOC = 11;
+const DV_CMD_FILE_PLACE_POWERDOC_TEMPLATE = 12;
+const DV_CMD_FILE_PLACE_VERSAWRITE_OBJ = 334;
+const DV_CMD_FILE_PLACE_VERSAWRITE_COMPONENTS = 333;
+const DV_CMD_FILE_SAVE_AS_POWERDOC = 14;
+const DV_CMD_FILE_SAVE_AS_COMPACT_POWERDOC = 15;
+const DV_CMD_FILE_SAVE_AS_TEXT = 328;
+const DV_CMD_FILE_PAGE_SETTINGS = 29;
+const DV_CMD_FILE_PRINT = 27;
+const DV_CMD_FILE_EXIT = 31;
+
+const DV_CMD_NEW_DOC_FROM_VERSAWRITE_OBJ = 336;
+const DV_CMD_NEW_DOC_FROM_VERSAWRITE_COMPONENTS = 335;
+const DV_CMD_NEW_EMPTY_TEXT_DOC = 299;
+
+const DV_CMD_SAVE_C_CPP = 112;
+const DV_CMD_SAVE_C_CPP_WITH_POWERDOC = 113;
+
+const DV_CMD_SAVE_CS = 114;
+const DV_CMD_SAVE_CS_WITH_POWERDOC = 115;
+
+const DV_CMD_SAVE_VB = 116;
+const DV_CMD_SAVE_VB_WITH_POWERDOC = 117;
+
+const DV_CMD_SAVE_VB_SCRIPT = 118;
+const DV_CMD_SAVE_VB_SCRIPT_WITH_POWERDOC = 119;
+
+const DV_CMD_SAVE_JSCRIPT_JAVASCRIPT = 120;
+const DV_CMD_SAVE_JSCRIPT_JAVASCRIPT_WITH_POWERDOC = 121;
+
+const DV_CMD_SAVE_ASP_VB_SCRIPT = 122;
+const DV_CMD_SAVE_ASP_VB_SCRIPT_WITH_POWERDOC = 123;
+const DV_CMD_SAVE_ASP_JSCRIPT_JAVASCRIPT = 125;
+const DV_CMD_SAVE_ASP_JSCRIPT_JAVASCRIPT_WITH_POWERDOC = 126;
+
+const DV_CMD_SAVE_ASPNET_VB = 127;
+const DV_CMD_SAVE_ASPNET_VB_WITH_POWERDOC = 128;
+const DV_CMD_SAVE_ASPNET_JSCRIPT = 130;
+const DV_CMD_SAVE_ASPNET_JSCRIPT_WITH_POWERDOC = 131;
+const DV_CMD_SAVE_ASPNET_CS = 133;
+const DV_CMD_SAVE_ASPNET_CS_WITH_POWERDOC = 134;
+
+const DV_CMD_SAVE_JAVA = 340;
+const DV_CMD_SAVE_JAVA_WITH_POWERDOC = 341;
+
+const DV_CMD_SAVE_JSP_JAVA = 343;
+const DV_CMD_SAVE_JSP_JAVA_WITH_POWERDOC = 344;
+
+const DV_CMD_SAVE_INTEGRAL = 437;
+const DV_CMD_SAVE_INTEGRAL_WITH_POWERDOC = 438;
+
+const DV_CMD_SAVE_CPP = 440;
+const DV_CMD_SAVE_CPP_WITH_POWERDOC = 441;
+
+const DV_CMD_IMPORT_SIMPLE_TEXT_AREA = 135;
+const DV_CMD_IMPORT_TEXT_FLOW = 136;
+const DV_CMD_IMPORT_BMP = 138;
+const DV_CMD_IMPORT_PNG = 139;
+const DV_CMD_IMPORT_JPEG = 140;
+const DV_CMD_IMPORT_SHAPE_DEF_TABLE = 142;
+const DV_CMD_IMPORT_VECTOR_PICTURE = 221;
+
+const DV_CMD_EXPORT_TEXT_SELECTION = 285;
+const DV_CMD_EXPORT_PAGE_AS_BMP = 143;
+const DV_CMD_EXPORT_PAGE_AS_PNG = 144;
+const DV_CMD_EXPORT_PAGE_AS_JPEG = 145;
+const DV_CMD_EXPORT_PAGE_AS_RAW_24_BPP = 146;
+const DV_CMD_EXPORT_PAGE_AS_PDF_BITMAP = 431;
+const DV_CMD_EXPORT_PAGE_AS_PDF_VECTOR = 432;
+const DV_CMD_EXPORT_PAGE_AS_PDF_NORMAL = 433;
+const DV_CMD_EXPORT_PAGE_AS_PDF_VECTOR = 442;
+const DV_CMD_EXPORT_PAGE_AS_SVG_LARGE = 430;
+const DV_CMD_EXPORT_PAGE_AS_SVG_SMALL = 443;
+const DV_CMD_EXPORT_PAGE_AS_SVG_LARGE_MODERN = 444;
+const DV_CMD_EXPORT_PAGE_AS_SVG_SMALL_MODERN = 445;
+const DV_CMD_EXPORT_PAGE_AS_GIF = 446;
+
+const DV_CMD_EDIT_UNDO = 32;
+const DV_CMD_EDIT_REDO = 33;
+const DV_CMD_EDIT_SELECT_ALL = 35;
+const DV_CMD_EDIT_CUT = 37;
+const DV_CMD_EDIT_COPY = 38;
+const DV_CMD_EDIT_PASTE = 39;
+const DV_CMD_EDIT_DELETE = 40;
+const DV_CMD_EDIT_MULTIPLY = 41;
+const DV_CMD_EDIT_CUT_IMGS = 43;
+const DV_CMD_EDIT_COPY_IMGS = 44;
+const DV_CMD_EDIT_PASTE_IMGS = 45;
+const DV_CMD_EDIT_DELETE_IMGS = 46;
+const DV_CMD_EDIT_MULTIPLY_IMGS = 47;
+const DV_CMD_EDIT_UNDO_REDO_SETTINGS = 52;
+const DV_CMD_EDIT_REFRESH_ALL_PANELS = 225;
+
+const DV_CMD_IMG_HIDE = 53;
+const DV_CMD_IMG_UNHIDE = 54;
+const DV_CMD_IMG_TO_TOP = 56;
+const DV_CMD_IMG_TO_BOTTOM = 57;
+const DV_CMD_IMG_ALIGN_LEFT = 59;
+const DV_CMD_IMG_ALIGN_RIGHT = 60;
+const DV_CMD_IMG_ALIGN_TOP = 61;
+const DV_CMD_IMG_ALIGN_BOTTOM = 62;
+const DV_CMD_IMG_MOVE_LEFT = 64;
+const DV_CMD_IMG_MOVE_RIGHT = 65;
+const DV_CMD_IMG_MOVE_UP = 66;
+const DV_CMD_IMG_MOVE_DOWN = 67;
+const DV_CMD_IMG_TRANSFORM = 69;
+const DV_CMD_IMG_RESET_TRANSFORM = 70;
+const DV_CMD_IMG_MAKE_GROUP = 72;
+const DV_CMD_IMG_DESTROY_GROUP = 73;
+
+const DV_CMD_IMG_LEFT = 154;
+const DV_CMD_IMG_RIGHT = 155;
+const DV_CMD_IMG_UP = 156;
+const DV_CMD_IMG_DOWN = 157;
+
+const DV_CMD_VIEW_MENUBAR = 232;
+const DV_CMD_VIEW_TOOLBAR = 76;
+const DV_CMD_VIEW_STATUS_BAR = 77;
+const DV_CMD_VIEW_VER_SCROLL_BARS = 372;
+const DV_CMD_VIEW_HOR_SCROLL_BARS = 373;
+const DV_CMD_VIEW_SETTINGS = 79;
+const DV_CMD_VIEW_RGB_PLUS_SURFACE = 275;
+const DV_CMD_VIEW_RGB_SURFACE = 84;
+const DV_CMD_VIEW_ALPHA_CHANNEL_SURFACE = 85;
+const DV_CMD_VIEW_IMG_ORIGINS = 87;
+const DV_CMD_VIEW_IMG_BOUNDARIES = 88;
+const DV_CMD_VIEW_EXTENT_BOX = 89;
+const DV_CMD_VIEW_GRID = 90;
+const DV_CMD_VIEW_PAGE_PREV = 96;
+const DV_CMD_VIEW_PAGE_NEXT = 97;
+const DV_CMD_VIEW_PAGE_GOTO = 98;
+
+const DV_CMD_VIEW_TEXT_LAYOUT_PRIMARY = 425;
+const DV_CMD_VIEW_TEXT_LAYOUT_SECONDARY = 426;
+
+const DV_CMD_VIEW_TEXT_MEDIUM = 158;
+const DV_CMD_VIEW_TEXT_HIGH = 159;
+const DV_CMD_VIEW_TEXT_VERY_HIGH = 160;
+const DV_CMD_VIEW_TEXT_DISPERSION_FILTER_1 = 162;
+const DV_CMD_VIEW_TEXT_DISPERSION_FILTER_2 = 163;
+const DV_CMD_VIEW_TEXT_HINT_FILTER_1 = 165;
+const DV_CMD_VIEW_TEXT_HINT_FILTER_2 = 166;
+const DV_CMD_VIEW_TEXT_HINT_FILTER_3 = 167;
+const DV_CMD_VIEW_TEXT_HINT_FILTER_4 = 168;
+const DV_CMD_VIEW_TEXT_LCD_RGB_SUB_1 = 170;
+const DV_CMD_VIEW_TEXT_LCD_RGB_INT_1 = 171;
+const DV_CMD_VIEW_TEXT_LCD_BGR_SUB_1 = 172;
+const DV_CMD_VIEW_TEXT_LCD_BGR_INT_1 = 173;
+const DV_CMD_VIEW_TEXT_LCD_RGB_SUB_2 = 175;
+const DV_CMD_VIEW_TEXT_LCD_RGB_INT_2 = 176;
+const DV_CMD_VIEW_TEXT_LCD_BGR_SUB_2 = 177;
+const DV_CMD_VIEW_TEXT_LCD_BGR_INT_2 = 178;
+const DV_CMD_VIEW_TEXT_LCD_RGB_SUB_3 = 180;
+const DV_CMD_VIEW_TEXT_LCD_RGB_INT_3 = 181;
+const DV_CMD_VIEW_TEXT_LCD_BGR_SUB_3 = 182;
+const DV_CMD_VIEW_TEXT_LCD_BGR_INT_3 = 183;
+const DV_CMD_VIEW_TEXT_LCD2_RGB_SUB_1 = 185;
+const DV_CMD_VIEW_TEXT_LCD2_RGB_INT_1 = 186;
+const DV_CMD_VIEW_TEXT_LCD2_BGR_SUB_1 = 187;
+const DV_CMD_VIEW_TEXT_LCD2_BGR_INT_1 = 188;
+const DV_CMD_VIEW_TEXT_LCD2_RGB_SUB_2 = 190;
+const DV_CMD_VIEW_TEXT_LCD2_RGB_INT_2 = 191;
+const DV_CMD_VIEW_TEXT_LCD2_BGR_SUB_2 = 192;
+const DV_CMD_VIEW_TEXT_LCD2_BGR_INT_2 = 193;
+
+const DV_CMD_VIEW_OUTPUT_TRADITIONAL_GRAYSCALE = 194;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_A_RGB = 196;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_B_RGB = 197;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_C_RGB = 198;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_D_RGB = 199;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_A_BGR = 201;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_B_BGR = 202;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_C_BGR = 203;
+const DV_CMD_VIEW_OUTPUT_LCD_ENHANCED_D_BGR = 204;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_A_RGB = 206;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_B_RGB = 207;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_C_RGB = 208;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_D_RGB = 209;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_A_BGR = 211;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_B_BGR = 212;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_C_BGR = 213;
+const DV_CMD_VIEW_OUTPUT_LCD2_ENHANCED_D_BGR = 214;
+
+const DV_CMD_VIEW_RAST_ULTRAFAST = 215;
+const DV_CMD_VIEW_RAST_PERFECT = 216;
+const DV_CMD_VIEW_RAST_UNIVERSAL = 217;
+const DV_CMD_VIEW_RAST_UNIVERSAL_BW = 218;
+const DV_CMD_VIEW_RAST_ZOOM = 219;
+
+const DV_CMD_VIEW_ZOOM_SET_ZOOM_FACTOR = 300;
+const DV_CMD_VIEW_ZOOM_50 = 301;
+const DV_CMD_VIEW_ZOOM_75 = 302;
+const DV_CMD_VIEW_ZOOM_100 = 303;
+const DV_CMD_VIEW_ZOOM_150 = 304;
+const DV_CMD_VIEW_ZOOM_200 = 305;
+const DV_CMD_VIEW_ZOOM_250 = 306;
+const DV_CMD_VIEW_ZOOM_300 = 307;
+const DV_CMD_VIEW_ZOOM_400 = 308;
+const DV_CMD_VIEW_ZOOM_500 = 309;
+const DV_CMD_VIEW_ZOOM_OUT = 310;
+const DV_CMD_VIEW_ZOOM_IN = 311;
+
+const DV_CMD_VIEW_ANIM_PLAY_OR_PAUSE = 356;
+const DV_CMD_VIEW_ANIM_PLAY = 264;
+const DV_CMD_VIEW_ANIM_PAUSE = 228;
+const DV_CMD_VIEW_ANIM_END = 274;
+const DV_CMD_VIEW_ANIM_RESET = 357;
+const DV_CMD_VIEW_ANIM_1_FPS = 359;
+const DV_CMD_VIEW_ANIM_2_FPS = 360;
+const DV_CMD_VIEW_ANIM_4_FPS = 361;
+const DV_CMD_VIEW_ANIM_8_FPS = 362;
+const DV_CMD_VIEW_ANIM_12_FPS = 363;
+const DV_CMD_VIEW_ANIM_24_FPS = 364;
+const DV_CMD_VIEW_ANIM_30_FPS = 365;
+const DV_CMD_VIEW_ANIM_35_FPS = 366;
+const DV_CMD_VIEW_ANIM_40_FPS = 367;
+const DV_CMD_VIEW_ANIM_45_FPS = 368;
+const DV_CMD_VIEW_ANIM_50_FPS = 369;
+const DV_CMD_VIEW_ANIM_55_FPS = 370;
+const DV_CMD_VIEW_ANIM_60_FPS = 371;
+const DV_CMD_VIEW_ANIM_OTHER = 376;
+const DV_CMD_VIEW_ANIM_VBSYNC = 223;
+const DV_CMD_TOOL_EXEC_PDSCRIPT = 224;
+
+const DV_CMD_VIEW_GRAY_COLOR_AVERAGING = 229;
+const DV_CMD_VIEW_GRAY_NORMALIZED = 230;
+const DV_CMD_VIEW_GRAY_R_CHANNEL = 380;
+const DV_CMD_VIEW_GRAY_G_CHANNEL = 381;
+const DV_CMD_VIEW_GRAY_B_CHANNEL = 382;
+const DV_CMD_VIEW_GRAY_INVERTED_COLOR_AVERAGING = 383;
+const DV_CMD_VIEW_GRAY_INVERTED_NORMALIZED = 384;
+const DV_CMD_VIEW_GRAY_INVERTED_R_CHANNEL = 385;
+const DV_CMD_VIEW_GRAY_INVERTED_G_CHANNEL = 386;
+const DV_CMD_VIEW_GRAY_INVERTED_B_CHANNEL = 387;
+const DV_CMD_VIEW_GRAY_Y_CHANNEL = 406;
+const DV_CMD_VIEW_GRAY_U_CHANNEL = 407;
+const DV_CMD_VIEW_GRAY_V_CHANNEL = 408;
+
+const DV_CMD_VIEW_DITHER_COLOR_AVERAGING = 329;
+const DV_CMD_VIEW_DITHER_NORMALIZED = 330;
+const DV_CMD_VIEW_DITHER_R_CHANNEL = 388;
+const DV_CMD_VIEW_DITHER_G_CHANNEL = 389;
+const DV_CMD_VIEW_DITHER_B_CHANNEL = 390;
+const DV_CMD_VIEW_DITHER_INVERTED_COLOR_AVERAGING = 391;
+const DV_CMD_VIEW_DITHER_INVERTED_NORMALIZED = 392;
+const DV_CMD_VIEW_DITHER_INVERTED_R_CHANNEL = 393;
+const DV_CMD_VIEW_DITHER_INVERTED_G_CHANNEL = 394;
+const DV_CMD_VIEW_DITHER_INVERTED_B_CHANNEL = 395;
+const DV_CMD_VIEW_DITHER_LEVELS_2 = 412;
+const DV_CMD_VIEW_DITHER_LEVELS_3 = 413;
+const DV_CMD_VIEW_DITHER_LEVELS_4 = 414;
+const DV_CMD_VIEW_DITHER_LEVELS_5 = 415;
+const DV_CMD_VIEW_DITHER_LEVELS_6 = 416;
+const DV_CMD_VIEW_DITHER_LEVELS_7 = 417;
+const DV_CMD_VIEW_DITHER_LEVELS_8 = 418;
+
+const DV_CMD_VIEW_PANEL_SHOW_FOCUS_BOX = 374;
+const DV_CMD_VIEW_PANEL_SHOW_CURSOR_AND_TEXT_SELECTIONS = 375;
+
+const DV_CMD_PAGE_INSERT_PAGES = 99;
+const DV_CMD_PAGE_REMOVE_PAGES = 100;
+const DV_CMD_PAGE_SELECT_IMGS_BY_PAGE_RANGE = 102;
+
+const DV_CMD_TEXT_FORMAT = 103;
+const DV_CMD_TEXT_BUILDER_IMAGE = 420;
+const DV_CMD_TEXT_BUILDER_FRAGMENT = 429;
+const DV_CMD_TEXT_QUICK_FORMAT = 220;
+const DV_CMD_TEXT_USER_SPECIFIC_FORMAT = 268;
+const DV_CMD_TEXT_GET_TEXT_FORMAT = 152;
+const DV_CMD_TEXT_APPLY_TEXT_FORMAT = 153;
+const DV_CMD_TEXT_APPLY_MODIFIED_TEXT_FORMAT = 298;
+const DV_CMD_TEXT_INSERT_MATH_FORMULA = 259;
+const DV_CMD_TEXT_INSERT_USER_SPECIFIC_TEXT = 269;
+const DV_CMD_TEXT_INSERT_VERSAWRITE_OBJ = 337;
+const DV_CMD_TEXT_INSERT_TABLE = 345;
+const DV_CMD_TEXT_DELETE_MATRIX_TABLE_ROW = 289;
+const DV_CMD_TEXT_DELETE_MATRIX_TABLE_COL = 290;
+const DV_CMD_TEXT_INSERT_BEFORE_MATRIX_TABLE_ROW = 291;
+const DV_CMD_TEXT_INSERT_BEFORE_MATRIX_TABLE_COL = 292;
+const DV_CMD_TEXT_INSERT_AFTER_MATRIX_TABLE_ROW = 421;
+const DV_CMD_TEXT_INSERT_AFTER_MATRIX_TABLE_COL = 422;
+const DV_CMD_TEXT_MATRIX_SETTINGS = 423;
+const DV_CMD_TEXT_ROW_SETTINGS = 346;
+const DV_CMD_TEXT_COL_SETTINGS = 347;
+const DV_CMD_TEXT_CELL_SETTINGS = 348;
+const DV_CMD_TEXT_CELL_PROPERTIES = 419;
+const DV_CMD_TEXT_ADD_FORMAT_TO_USER_LIB = 267;
+const DV_CMD_TEXT_ADD_TEXT_TO_USER_LIB = 260;
+const DV_CMD_TEXT_EDIT_SETTINGS = 270;
+const DV_CMD_TEXT_IMMEDIATE_TEXT_REFLOW = 51;
+
+const DV_CMD_TEXT_SELECT_WORD = 320;
+const DV_CMD_TEXT_SELECT_WORDS = 325;
+const DV_CMD_TEXT_SELECT_LINE = 321;
+const DV_CMD_TEXT_SELECT_PARAGRAPH = 322;
+const DV_CMD_TEXT_SELECT_PARAGRAPHS = 326;
+const DV_CMD_TEXT_SELECT_AREA = 323;
+const DV_CMD_TEXT_SELECT_ALL = 324;
+const DV_CMD_TEXT_PASTE_OBJ_CLIPBOARD = 147;
+const DV_CMD_TEXT_PASTE_IMG_CLIPBOARD = 148;
+const DV_CMD_TEXT_PASTE_OS_CLIPBOARD_PLAIN_TEXT = 150;
+
+const DV_CMD_TEXT_INSERT_MATH_VECTOR = 251;
+const DV_CMD_TEXT_INSERT_MATH_FRACTION = 242;
+const DV_CMD_TEXT_INSERT_MATH_ROOT = 243;
+const DV_CMD_TEXT_INSERT_MATH_SUM_PRODUCT_STANDARD = 244;
+const DV_CMD_TEXT_INSERT_MATH_SUM_PRODUCT_EXPANDING = 245;
+const DV_CMD_TEXT_INSERT_MATH_INTEGRAL_STANDARD = 246;
+const DV_CMD_TEXT_INSERT_MATH_INTEGRAL_EXPANDING = 247;
+const DV_CMD_TEXT_INSERT_MATH_BRACKETS = 248;
+const DV_CMD_TEXT_INSERT_MATH_MATRICES = 287;
+const DV_CMD_TEXT_INSERT_MATH_SUPSUB = 434;
+const DV_CMD_TEXT_INSERT_MATH_VBARS = 435;
+const DV_CMD_TEXT_INSERT_MATH_OTHER = 249;
+
+const DV_CMD_TEXT_INSERT_FORM_BUTTON_RICH_BUTTON = 250;
+const DV_CMD_TEXT_INSERT_FORM_RADIO_BUTTON = 252;
+const DV_CMD_TEXT_INSERT_FORM_CHECK_BOX = 253;
+const DV_CMD_TEXT_INSERT_FORM_TEXT_BOX_RICH_TEXT_BOX = 254;
+const DV_CMD_TEXT_INSERT_FORM_LIST_BOX = 255;
+const DV_CMD_TEXT_INSERT_FORM_HOR_SLIDER = 256;
+const DV_CMD_TEXT_INSERT_FORM_VER_SLIDER = 257;
+const DV_CMD_TEXT_INSERT_FORM_ARROW_SETS = 258;
+const DV_CMD_TEXT_INSERT_FORM_OTHER = 265;
+
+const DV_CMD_TEXT_INSERT_CHAR_COL_BREAK = 227;
+const DV_CMD_TEXT_INSERT_CHAR_TAB_U0009 = 277;
+const DV_CMD_TEXT_INSERT_CHAR_NEW_LINE_U000D = 278;
+const DV_CMD_TEXT_INSERT_CHAR_NO_BREAK_SPACE_U00A0 = 279;
+const DV_CMD_TEXT_INSERT_CHAR_ZERO_WIDTH_SPACE_U200B = 280;
+const DV_CMD_TEXT_INSERT_CHAR_SOFT_HYPHEN_U00AD = 281;
+const DV_CMD_TEXT_INSERT_CHAR_NO_BREAK_HYPHEN_U2011 = 282;
+const DV_CMD_TEXT_INSERT_CHAR_UNICODE_CHARS = 284;
+
+const DV_CMD_TEXT_INSERT_OBJ_BULLET_POINT_NON_EDITABLE = 294;
+const DV_CMD_TEXT_INSERT_OBJ_BULLET_POINT_EDITABLE = 295;
+const DV_CMD_TEXT_INSERT_OBJ_OTHER = 297;
+
+const DV_CMD_TOOL_STYLE_GENERATOR = 104;
+const DV_CMD_TOOL_TEXT_FLOW_AND_COL_BUILDER = 106;
+const DV_CMD_TOOL_POWERFONT_BUILDER = 107;
+const DV_CMD_TOOL_DOC_OPTIMIZER = 109;
+const DV_CMD_TOOL_PROP_AND_LINK_EXPLORER = 110;
+const DV_CMD_TOOL_APP_SETTINGS = 231;
+const DV_CMD_TOOL_VERSAWRITE_SERVICE = 332;
+const DV_CMD_TOOL_EXEC_PROG_1 = 349;
+const DV_CMD_TOOL_EXEC_PROG_2 = 350;
+const DV_CMD_TOOL_EXEC_PROG_3 = 351;
+const DV_CMD_TOOL_EXEC_PROG = 354;
+const DV_CMD_TOOL_LOAD_AND_EXEC_PROG = 353;
+const DV_CMD_TOOL_EXIT_TO_CMD_SHELL = 352;
+const DV_CMD_TOOL_FONT_UTILITY = 405;
+
+const DV_CMD_HELP_ABOUT_DTYPE_POWERDOC_EDITOR = 111;
+const DV_CMD_HELP_WINDOWS_MONITOR = 239;
+const DV_CMD_HELP_DEBUG_DUMP_TEXT_FLOWS = 400;
+const DV_CMD_SIGNAL = 401;
+const DV_CMD_EXIT = 402;
+const DV_CMD_HELP_FILE_README = 403;
+const DV_CMD_HELP_FILE_LEGAL = 404;
+
+
+// --------------- Drivers ---------------;
+
+const DB_DRIVER_POSTGRESQL = 0;
+const DB_EXEC_COMMAND = 0;
+const DB_EXEC_DATASET = 1;
+
+
+// --------------- Builders ---------------;
+
+const DE_LAYOUT_FIRST = 0;
+const DE_LAYOUT_DEVICE_INDEPENDENT_FRAC = 0;
+const DE_LAYOUT_DEVICE_INDEPENDENT_INT = 1;
+const DE_LAYOUT_DEVICE_DEPENDENT_1 = 2;
+const DE_LAYOUT_DEVICE_DEPENDENT_2 = 3;
+const DE_LAYOUT_MIXED_1 = 4;
+const DE_LAYOUT_MIXED_2 = 5;
+const DE_LAYOUT_LAST = 5;
+
+const DE_ALIGN_FIRST = 0;
+const DE_ALIGN_LEFT = 0;
+const DE_ALIGN_CENTER = 1;
+const DE_ALIGN_RIGHT = 2;
+const DE_ALIGN_JUSTIFY_A_LEFT = 3;
+const DE_ALIGN_JUSTIFY_B_LEFT = 4;
+const DE_ALIGN_JUSTIFY_A_CENTER = 5;
+const DE_ALIGN_JUSTIFY_B_CENTER = 6;
+const DE_ALIGN_JUSTIFY_A_RIGHT = 7;
+const DE_ALIGN_JUSTIFY_B_RIGHT = 8;
+const DE_ALIGN_JUSTIFY_B_JUSTIFY_A_LEFT = 9;
+const DE_ALIGN_JUSTIFY_B_JUSTIFY_A_CENTER = 10;
+const DE_ALIGN_JUSTIFY_B_JUSTIFY_A_RIGHT = 11;
+const DE_ALIGN_LAST = 11;
+
+const DE_VALIGN_FIRST = 0;
+const DE_VALIGN_TOP = 0;
+const DE_VALIGN_MIDDLE = 1;
+const DE_VALIGN_BOTTOM = 2;
+const DE_VALIGN_JUSTIFIED = 3;
+const DE_VALIGN_LAST = 3;
+
+const DE_AREA_FIRST = 0;
+const DE_AREA_RECT = 0;
+const DE_AREA_QUARTER_CIRCULAR_A = 10;
+const DE_AREA_QUARTER_CIRCULAR_B = 11;
+const DE_AREA_QUARTER_CIRCULAR_C = 12;
+const DE_AREA_QUARTER_CIRCULAR_D = 13;
+const DE_AREA_HALF_CIRCULAR_A = 14;
+const DE_AREA_HALF_CIRCULAR_B = 15;
+const DE_AREA_HALF_CIRCULAR_C = 16;
+const DE_AREA_HALF_CIRCULAR_D = 17;
+const DE_AREA_CIRCULAR = 18;
+const DE_AREA_QUARTER_DIAMOND_A = 20;
+const DE_AREA_QUARTER_DIAMOND_B = 21;
+const DE_AREA_QUARTER_DIAMOND_C = 22;
+const DE_AREA_QUARTER_DIAMOND_D = 23;
+const DE_AREA_HALF_DIAMOND_A = 24;
+const DE_AREA_HALF_DIAMOND_B = 25;
+const DE_AREA_HALF_DIAMOND_C = 26;
+const DE_AREA_HALF_DIAMOND_D = 27;
+const DE_AREA_DIAMOND = 28;
+const DE_AREA_LAST = 28;
+
+const DE_ROW_FIRST = 0;
+const DE_ROW_MATH = 0;
+const DE_ROW_TYPO = 10;
+const DE_ROW_TYPO_LINEGAP = 20;
+const DE_ROW_STANDARD = 20;
+const DE_ROW_WIN = 30;
+const DE_ROW_TYPO_CJK = 110;
+const DE_ROW_TYPO_LINEGAP_CJK = 120;
+const DE_ROW_LAST = 120;
+
+const DE_BASEALIGN_FIRST = 0;
+const DE_BASEALIGN_TOP = 0;
+const DE_BASEALIGN_BOTTOM = 1;
+const DE_BASEALIGN_MIDDLE = 2;
+const DE_BASEALIGN_LAST = 2;
+
+const DE_BULLET_FIRST = 0;
+const DE_BULLET_CUSTOMTEXT = 0;
+const DE_BULLET_CIRCSOLID = 1;
+const DE_BULLET_CIRC = 2;
+const DE_BULLET_LINE = 3;
+const DE_BULLET_LAST = 3;
+
+const DE_RULE_FIRST = 0;
+const DE_RULE_NOLINE = 0;
+const DE_RULE_SOLIDLINE = 1;
+const DE_RULE_LAST = 1;
+
+const DE_TABLE_FIRST = 0;
+const DE_TABLE_NOHEAD = 0;
+const DE_TABLE_HHEAD = 1;
+const DE_TABLE_VHEAD = 2;
+const DE_TABLE_HVHEAD = 3;
+const DE_TABLE_LAST = 3;
+
+const DE_QUALITY_FIRST = 0;
+const DE_QUALITY_FAST = 0;
+const DE_QUALITY_HIGH = 1;
+const DE_QUALITY_BEST1 = 2;
+const DE_QUALITY_BEST2 = 3;
+const DE_QUALITY_LAST = 3;
+
+const DE_DIR_FIRST = 0;
+const DE_DIR_LTR = 0;
+const DE_DIR_RTL = 1;
+const DE_DIR_LAST = 1;
+
+
+/* Text formatting/styling attribute identifiers */
+const TX_ATTR_BUFFER = 1024;
+const TX_ATTR_UNUSED = 0;
+/* Typography */
+const TX_ATTR_FONT_INDEX = 1;
+const TX_ATTR_FONT_UNIQUEID = 2;
+const TX_ATTR_FONT_MMCONTRIBUTIONS = 3;
+const TX_ATTR_FONT_WIDTH = 4;
+const TX_ATTR_FONT_HEIGHT = 5;
+const TX_ATTR_SKEW_HOR = 6;
+const TX_ATTR_SKEW_VER = 7;
+const TX_ATTR_ROTATION = 8;
+const TX_ATTR_EFFECT = 9;
+const TX_ATTR_EFFECT_PARAM0 = 54;
+const TX_ATTR_EFFECT_PARAM1 = 55;
+const TX_ATTR_EFFECT_PARAM2 = 56;
+const TX_ATTR_EFFECT_PARAM3 = 57;
+const TX_ATTR_EFFECT_PARAM4 = 58;
+/* Text Body */
+const TX_ATTR_BODY = 38;
+const TX_ATTR_BODY_RGBT = 10;
+const TX_ATTR_BODY_EP = 11;
+const TX_ATTR_BODY_EFFECTS = 60;
+/* Text Shadow */
+const TX_ATTR_SHADOW = 39;
+const TX_ATTR_SHADOW_DX = 12;
+const TX_ATTR_SHADOW_DY = 13;
+const TX_ATTR_SHADOW_RGBT = 14;
+const TX_ATTR_SHADOW_EP = 15;
+const TX_ATTR_SHADOW_EFFECTS = 61;
+/* Text Outline */
+const TX_ATTR_OUTLINE = 40;
+const TX_ATTR_OUTLINE_TREATMENT = 37;
+const TX_ATTR_OUTLINE_THICKNESS = 16;
+const TX_ATTR_OUTLINE_SEGMENT = 17;
+const TX_ATTR_OUTLINE_DASHSIZE = 69;
+const TX_ATTR_OUTLINE_RGBT = 18;
+const TX_ATTR_OUTLINE_EP = 19;
+const TX_ATTR_OUTLINE_EFFECTS = 62;
+/* Text Underline */
+const TX_ATTR_UNDERLINE = 44;
+const TX_ATTR_UNDERLINE_THICKNESS = 45;
+const TX_ATTR_UNDERLINE_SEGMENT = 46;
+const TX_ATTR_UNDERLINE_DASHSIZE = 70;
+const TX_ATTR_UNDERLINE_RGBT = 47;
+const TX_ATTR_UNDERLINE_EP = 48;
+const TX_ATTR_UNDERLINE_EFFECTS = 63;
+/* Text Layout */
+const TX_ATTR_TEXTLAYOUT = 41;
+const TX_ATTR_SPACING_LETTER = 20;
+const TX_ATTR_SPACING_ROW = 21;
+const TX_ATTR_SPACING_BASELINE = 43;
+const TX_ATTR_SPACING_FACTOR = 49;
+const TX_ATTR_DX = 22;
+const TX_ATTR_DY = 23;
+const TX_ATTR_ALIGN = 24;
+const TX_ATTR_ALIGNEND = 25;
+const TX_ATTR_VALIGN_ROW = 59;
+const TX_ATTR_KERNING = 26;
+const TX_ATTR_HINTING = 27;
+const TX_ATTR_POSITIONING = 28;
+const TX_ATTR_DIRECTION = 29;
+const TX_ATTR_ORIENTATION = 30;
+/* Text Ruler */
+const TX_ATTR_TEXTRULER = 42;
+const TX_ATTR_TABSTOP_POSITIONS = 31;
+const TX_ATTR_TABSTOP_FLAGS = 32;
+const TX_ATTR_MARGIN_LEFT = 67;
+const TX_ATTR_MARGIN_RIGHT = 68;
+const TX_ATTR_INDENT_LEFT = 33;
+const TX_ATTR_INDENT_RIGHT = 34;
+/* Miscellaneous */
+const TX_ATTR_ENCODING = 35;
+const TX_ATTR_SHAPING = 36;
+const TX_ATTR_SHAPING_PARAM0 = 66;
+const TX_ATTR_BREAK_FLAGS = 50;
+const TX_ATTR_HYPHENATION = 51;
+const TX_ATTR_MISC_ATTRIBS = 64;
+const TX_ATTR_LANGUAGE = 65;
+const TX_ATTR_POWERFONT_PTR = 52; /* not supported */
+const TX_ATTR_USER_SPECIFIC_CONTENT = 53;
+/* TypoFrame Body */
+const TX_ATTR_TYPOFRAME_BODY = 71;
+const TX_ATTR_TYPOFRAME_BODY_RGBT = 72;
+const TX_ATTR_TYPOFRAME_BODY_EP = 73;
+const TX_ATTR_TYPOFRAME_BODY_EFFECTS = 74;
+/* TypoFrame Shadow */
+const TX_ATTR_TYPOFRAME_SHADOW = 75;
+const TX_ATTR_TYPOFRAME_SHADOW_DX = 76;
+const TX_ATTR_TYPOFRAME_SHADOW_DY = 77;
+const TX_ATTR_TYPOFRAME_SHADOW_RGBT = 78;
+const TX_ATTR_TYPOFRAME_SHADOW_EP = 79;
+const TX_ATTR_TYPOFRAME_SHADOW_EFFECTS = 80;
+/* TypoFrame Outline */
+const TX_ATTR_TYPOFRAME_OUTLINE = 81;
+const TX_ATTR_TYPOFRAME_OUTLINE_TREATMENT = 82;
+const TX_ATTR_TYPOFRAME_OUTLINE_THICKNESS = 83;
+const TX_ATTR_TYPOFRAME_OUTLINE_SEGMENT = 84;
+const TX_ATTR_TYPOFRAME_OUTLINE_DASHSIZE = 85;
+const TX_ATTR_TYPOFRAME_OUTLINE_RGBT = 86;
+const TX_ATTR_TYPOFRAME_OUTLINE_EP = 87;
+const TX_ATTR_TYPOFRAME_OUTLINE_EFFECTS = 88;
+/* Text Extras - RowBound Body */
+const TX_ATTR_ROWBOUND_BODY = 89;
+const TX_ATTR_ROWBOUND_BODY_RGBT = 90;
+const TX_ATTR_ROWBOUND_BODY_EP = 91;
+const TX_ATTR_ROWBOUND_BODY_EFFECTS = 92;
+/* Text Extras - RowBound Shadow */
+const TX_ATTR_ROWBOUND_SHADOW = 93;
+const TX_ATTR_ROWBOUND_SHADOW_DX = 94;
+const TX_ATTR_ROWBOUND_SHADOW_DY = 95;
+const TX_ATTR_ROWBOUND_SHADOW_RGBT = 96;
+const TX_ATTR_ROWBOUND_SHADOW_EP = 97;
+const TX_ATTR_ROWBOUND_SHADOW_EFFECTS = 98;
+/* Text Extras - RowBound Outline */
+const TX_ATTR_ROWBOUND_OUTLINE = 99;
+const TX_ATTR_ROWBOUND_OUTLINE_TREATMENT = 100;
+const TX_ATTR_ROWBOUND_OUTLINE_THICKNESS = 101;
+const TX_ATTR_ROWBOUND_OUTLINE_SEGMENT = 102;
+const TX_ATTR_ROWBOUND_OUTLINE_DASHSIZE = 103;
+const TX_ATTR_ROWBOUND_OUTLINE_RGBT = 104;
+const TX_ATTR_ROWBOUND_OUTLINE_EP = 105;
+const TX_ATTR_ROWBOUND_OUTLINE_EFFECTS = 106;
+const TX_ATTR_ROWBOUND_MARGIN_LEFT = 107;
+const TX_ATTR_ROWBOUND_MARGIN_RIGHT = 108;
+const TX_ATTR_ROWBOUND_MARGIN_TOP = 109;
+const TX_ATTR_ROWBOUND_MARGIN_BOTTOM = 110;
+const TX_ATTR_ROWBOUND_ROUND = 111;
+const TX_ATTR_ROWBOUND_MERGE = 112;
+/* Text Extras - Baseline Line */
+const TX_ATTR_BASELINE_LINE = 113;
+const TX_ATTR_BASELINE_LINE_THICKNESS = 114;
+const TX_ATTR_BASELINE_LINE_SEGMENT = 115;
+const TX_ATTR_BASELINE_LINE_DASHSIZE = 116;
+const TX_ATTR_BASELINE_LINE_START = 117;
+const TX_ATTR_BASELINE_LINE_END = 118;
+const TX_ATTR_BASELINE_LINE_RGBT = 119;
+const TX_ATTR_BASELINE_LINE_EP = 120;
+const TX_ATTR_BASELINE_LINE_EFFECTS = 121;
+const TX_ATTR_BASELINE_MARGIN_LEFT = 122;
+const TX_ATTR_BASELINE_MARGIN_RIGHT = 123;
+/* Text Extras - Baseline Shadow */
+const TX_ATTR_BASELINE_SHADOW = 124;
+const TX_ATTR_BASELINE_SHADOW_DX = 125;
+const TX_ATTR_BASELINE_SHADOW_DY = 126;
+const TX_ATTR_BASELINE_SHADOW_RGBT = 127;
+const TX_ATTR_BASELINE_SHADOW_EP = 128;
+const TX_ATTR_BASELINE_SHADOW_EFFECTS = 129;
+const TX_ATTR_FONT_UNIQUEID_RULE = 130;
+const TX_ATTR_FONT_UNIQUEID_RULE_CHECK = 131;
+
+/* Count/End */
+const TX_ATTR_COUNT = 132;
+const TX_ATTR_END = -1;
+
+
+const DV_SEL_ALL = -1;
+const DV_SEL_LAST = -2;
+
+
+// --------------- Export ---------------;
+
+const DX_PAGE_CURR = -1;
+
+const DX_TRANSP_NO = 0;
+const DX_TRANSP_BASIC = 1;
+const DX_TRANSP_PALETTE = 2;
+const DX_TRANSP_ALPHA = 3;
+
+const DX_FORMAT_APNG = 301;
+const DX_FORMAT_GIF = 300;
+
+const DX_FORMAT_SVG_LARGE = 200;
+const DX_FORMAT_SVG_SMALL = 201;
+const DX_FORMAT_SVG_LARGE_MODERN = 202;
+const DX_FORMAT_SVG_SMALL_MODERN = 203;
+const DX_FORMAT_SVG = 201;
+
+const DX_FORMAT_PDF_WFRAME = 103;
+const DX_FORMAT_PDF_NORMAL = 102;
+const DX_FORMAT_PDF_VECTOR = 101;
+const DX_FORMAT_PDF_BITMAP = 100;
+const DX_FORMAT_PDF = 102;
+
+const DX_FORMAT_JPG = 3;
+const DX_FORMAT_PNG = 2;
+const DX_FORMAT_BMP = 1;
+const DX_FORMAT_RAW = 0;
+
+
+// --------------- Code ---------------;
+
+//print("clock2=" + clock() + "\n"); /* REMOVE_IN_DISTRIB */
+dofile("system/prog/include_b/ini-startup.dts");
+
+//print("clock3=" + clock() + "\n"); /* REMOVE_IN_DISTRIB */
+dofile("system/prog/include_b/ini-integral.dts"); /* REMOVE_IN_DISTRIB */
+
+//print("END OF ini.dts\n"); /* REMOVE_IN_DISTRIB */
+//print("clock4=" + clock() + "\n"); /* REMOVE_IN_DISTRIB */

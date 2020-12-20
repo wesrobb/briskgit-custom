@@ -1,0 +1,26 @@
+DT_ID_SLONG obj[4];
+
+obj[0] = pdObjAdd(pd, 0, "Outline Style");
+obj[1] = pdObjAdd(pd, 0, "Line Definition");
+obj[2] = pdObjAdd(pd, 0, "LibShape");
+{strong}obj[3] = pdObjAdd(pd, 0, "Group Member");{/strong}
+
+/* Properties for object 1 */
+pdPropAdd(pd, obj[0], pdRGBT, "00000000", PD_HEX);
+
+/* Properties for object 3 */
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[1], pdLineThickness, "400", PD_WORD_SIGNED);
+
+/* Properties for object 4 */
+pdLinkAdd(pd, obj[2], pdOutlinePtr, obj[1]);
+pdPropAdd(pd, obj[2], pdID, "56", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[2], pdDw, "300", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[2], pdDh, "300", PD_LONG_SIGNED);
+
+/* Properties for object 9 */
+{strong}pdLinkAdd(pd, obj[3], pdFnDrawObjectPtr, obj[2]);
+pdPropAdd(pd, obj[3], pdTransformMatrix, "262144, -46223, 0, 262144", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[3], pdFnDraw, "18", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[3], pdDx, "0", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[3], pdDy, "-300", PD_LONG_SIGNED);{/strong}

@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Standard Format Identifiers</h2>
+
+<p class="box_field" id="PD_BYTE_SIGNED"><strong class="metatype">PD_BYTE_SIGNED</strong> &mdash; a string converted to a single signed byte</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-128 to 127</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">80</span>", &nbsp;"<span class="valid">-50</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">100</span>", &nbsp;"<span class="valid">-100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-500</span>", &nbsp;"<span class="invalid">130</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_BYTE_SIGNED"><strong class="metatype">PD_ARR_BYTE_SIGNED</strong> &mdash; a string converted to an array of signed bytes</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-128 to 127 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">20, 40, 60, 80</span>", &nbsp;"<span class="valid">-10 -20 -30 0 50 80 90</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-500, 130, 3.8</span>", &nbsp;"<span class="invalid">0.00 5E4 -2</span>"</dd></dl>
+<p class="box_field" id="PD_BYTE_UNSIGNED"><strong class="metatype">PD_BYTE_UNSIGNED</strong> &mdash; a string converted to a single unsigned byte</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 255</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">120</span>", &nbsp;"<span class="valid">50</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-2</span>", &nbsp;"<span class="invalid">350</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_BYTE_UNSIGNED"><strong class="metatype">PD_ARR_BYTE_UNSIGNED</strong> &mdash; a string converted to an array of unsigned bytes</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 255 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">20, 40, 160, 220</span>", &nbsp;"<span class="valid">100 200 250 180</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">0 -20 0 520 50 280 -90</span>", &nbsp;"<span class="invalid">0.00 5E4 -2</span>"</dd></dl>
+<p class="box_field" id="PD_WORD_SIGNED"><strong class="metatype">PD_WORD_SIGNED</strong> &mdash; a string converted to a signed 2-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-32,768 to 32,767</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">1000</span>", &nbsp;"<span class="valid">-30150</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">-100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-40000</span>", &nbsp;"<span class="invalid">40000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_WORD_SIGNED"><strong class="metatype">PD_ARR_WORD_SIGNED</strong> &mdash; a string converted to an array of signed 2-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-32,768 to 32,767 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">0, 600, 25000, -30000, -50 31000</span>", &nbsp;"<span class="valid">-200 20000</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">0 60000 2e2 -0.6</span>", &nbsp;"<span class="invalid">33000, -33000</span>"</dd></dl>
+<p class="box_field" id="PD_WORD_UNSIGNED"><strong class="metatype">PD_WORD_UNSIGNED</strong> &mdash; a string converted to an unsigned 2-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 65,535</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">20000</span>", &nbsp;"<span class="valid">50</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-50</span>", &nbsp;"<span class="invalid">150000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_WORD_UNSIGNED"><strong class="metatype">PD_ARR_WORD_UNSIGNED</strong> &mdash; a string converted to an array of unsigned 2-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 65,535 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">1, 2, 3</span>", &nbsp;"<span class="valid">50000 60000 120 5000</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-1, -2, -3, -4</span>", &nbsp;"<span class="invalid">0.5 -2E2 70000</span>"</dd></dl>
+<p class="box_field" id="PD_TRIO_SIGNED"><strong class="metatype">PD_TRIO_SIGNED</strong> &mdash; a string converted to a signed 3-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-8,388,608 to 8,388,607</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">10000</span>", &nbsp;"<span class="valid">-300800</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">-100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-9000000</span>", &nbsp;"<span class="invalid">9000000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_TRIO_SIGNED"><strong class="metatype">PD_ARR_TRIO_SIGNED</strong> &mdash; a string converted to an array of signed 3-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-8,388,608 to 8,388,607 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">0, 600, 25000, -30000, -50 31000</span>", &nbsp;"<span class="valid">-200 20000</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">0 15000000 2e2 -0.6</span>", &nbsp;"<span class="invalid">9000000, -9000000</span>"</dd></dl>
+<p class="box_field" id="PD_TRIO_UNSIGNED"><strong class="metatype">PD_TRIO_UNSIGNED</strong> &mdash; a string converted to an unsigned 3-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 16,777,216</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">14000000</span>", &nbsp;"<span class="valid">50</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-50</span>", &nbsp;"<span class="invalid">17000000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_TRIO_UNSIGNED"><strong class="metatype">PD_ARR_TRIO_UNSIGNED</strong> &mdash; a string converted to an array of unsigned 3-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 16,777,216 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">1, 2, 3</span>", &nbsp;"<span class="valid">50000 60000 120 5000</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-1, -2, -3, -4</span>", &nbsp;"<span class="invalid">0.5 -2E2 17000000</span>"</dd></dl>
+<p class="box_field" id="PD_LONG_SIGNED"><strong class="metatype">PD_LONG_SIGNED</strong> &mdash; a string converted to a signed 4-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-2,147,483,648 to 2,147,483,647</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">1555000</span>", &nbsp;"<span class="valid">-4110000</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">-100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-5000000000</span>", &nbsp;"<span class="invalid">3000000000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_LONG_SIGNED"><strong class="metatype">PD_ARR_LONG_SIGNED</strong> &mdash; a string converted to an array of signed 4-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>-2,147,483,648 to 2,147,483,647 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">-1500400200, 2000000000, 80</span>", &nbsp;"<span class="valid">0 0 0 0 0</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">2147483648, 0</span>", &nbsp;"<span class="invalid">0.001 -3.2 5E7 2000</span>"</dd></dl>
+<p class="box_field" id="PD_LONG_UNSIGNED"><strong class="metatype">PD_LONG_UNSIGNED</strong> &mdash; a string converted to an unsigned 4-byte integer</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 4,294,967,295</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">120</span>", &nbsp;"<span class="valid">50</span>", &nbsp;"<span class="valid">0</span>", &nbsp;"<span class="valid">4000000000</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-50</span>", &nbsp;"<span class="invalid">5000000000</span>", &nbsp;"<span class="invalid">3.8</span>", &nbsp;"<span class="invalid">0.002</span>", &nbsp;"<span class="invalid">5E4</span>"</dd></dl>
+<p class="box_field" id="PD_ARR_LONG_UNSIGNED"><strong class="metatype">PD_ARR_LONG_UNSIGNED</strong> &mdash; a string converted to an array of unsigned 4-byte integers</p>
+<p>Individual elements of the array should be seprated by a single comma and/or space character.</p>
+<dl><dt><strong>Operating Range:</strong></dt><dd>0 to 4,294,967,295 for each array element</dd></dl>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">500, 4294967295, 0</span>", &nbsp;"<span class="valid">100 100 100 100 100 100 100 100 100</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">-1, -2, -3</span>", &nbsp;"<span class="invalid">0.2 abc 8123222100</span>", &nbsp;"<span class="invalid">500, 4294967296, 0</span>"</dd></dl>
+<p class="box_field" id="PD_ASC"><strong class="metatype">PD_ASC</strong> &mdash; a string of ASCII characters converted to an array of bytes</p>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">test</span>", &nbsp;"<span class="valid">1e345fg6</span>", &nbsp;"<span class="valid">x y z</span>", &nbsp;"<span class="valid">- / $ \ +</span>"</dd></dl>
+<p class="box_field" id="PD_HEX"><strong class="metatype">PD_HEX</strong> &mdash; a string of 2-digit HEX values converted to an array of bytes.<br />(when applicable, the expected length of the array will be indicated)</p>
+<p>Although PD_HEX is a general purpose format, it is used as the default storage format only for properties whose value strings cannot be conveniently represented in any other way (for example: bitmap's pixels or other binary data).</p>
+<dl><dt><strong>Valid Examples:</strong></dt><dd>"<span class="valid">23A4E8</span>", &nbsp;"<span class="valid">23 A4 E8</span>", &nbsp;"<span class="valid">23 a4 e8</span>", &nbsp;"<span class="valid">F2 e5 14 C4 e8</span>"</dd></dl>
+<dl><dt><strong>Invalid Examples:</strong></dt><dd>"<span class="invalid">23 A4 E</span>", &nbsp;"<span class="invalid">12mk34</span>", &nbsp;"<span class="invalid">-50 e8</span>", &nbsp;"<span class="invalid">a2.05</span>"</dd></dl>
+<p class="box_field" id="PD_DEFAULT"><strong class="metatype">PD_DEFAULT</strong> &mdash; a string converted to the property's default storage format.</p>
+<p>Depending on the property in question, this can be any of the above format identifiers.</p>
+
+
+<p><em>Note:</em> When PD_DEFAULT is used, the property's value string will be stored in the property's default storage format. This is particularly useful in PowerDoc For ASP because the format identifier is an optional parameter that can be omitted. In such cases, PD_DEFAULT is used by default. <strong>This means that ASP applications do not have to specify the property's identifier at all. ASP applications should only ensure that the property's value string is correctly supplied and does not exceed the operating range.</strong></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

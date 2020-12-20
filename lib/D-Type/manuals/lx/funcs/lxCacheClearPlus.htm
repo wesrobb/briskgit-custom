@@ -1,0 +1,76 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxCacheClearPlus</h2><div class="box_prototype"><strong>
+void lxCacheClearPlus(DT_LXCACHE layout_cache, DT_ID_SWORD font_index, DT_ID_SLONG script_code, DT_ID_SLONG language_code, DT_SLONG typo_flags)</strong></div><br /><strong>Short Description:</strong> <em>Clear layout cache of text layout instances</em><br /><br />
+
+<h2>lxCacheClear</h2><div class="box_prototype"><strong>
+void lxCacheClear(DT_LXCACHE layout_cache, DT_ID_SWORD font_index, DT_ID_SLONG script_code)</strong></div><br /><strong>Short Description:</strong> <em>Clear layout cache of text layout instances</em><br /><br />
+
+<p>These functions clear the layout cache of text layout instances based on the specified criteria. More specifically, all layout instances that match the specified font, script, language and/or typographic control flags are removed from the layout cache by these functions.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>layout_cache</em></p>
+</td><td>
+<p>Handle of the previously created cache instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>All layout instances with the specified <em>font_index</em> will be removed from the layout cache. <em>font_index</em> must be a valid font index of the font or font instance in the Font Catalog (associated with the Standard Engine instance that was used to create the layout cache). However, you can set this value to -1 to disable matching based on the font. In other words, -1 means "any font".</p>
+</td></tr>
+
+<tr><td>
+<p><em>script_code</em></p>
+</td><td>
+<p>All layout instances with the specified <em>script_code</em> will be removed from the layout cache. <em>script_code</em> must be a code from the list of <a href="../manual/scripts.htm">defined scripts</a>. However, you can set this value to -1 to disable matching based on the script code. In other words, -1 means "any script".</p>
+</td></tr>
+
+<tr><td>
+<p><em>language_code</em></p>
+</td><td>
+<p>All layout instances with the specified <em>language_code</em> will be removed from the layout cache. <em>language_code</em> must be a code from the list of <a href="../manual/languages.htm">defined languages</a>. However, you can set this value to -1 to disable matching based on the language_code code. In other words, -1 means "any language".</p>
+</td></tr>
+
+<tr><td>
+<p><em>typo_flags</em></p>
+</td><td>
+<p>Typographic control flags. Use 0 for no specific typographic features, 1 for kerning, 2 for ligature formation, and 3 for kerning and ligature formation. Others values are reserved for future.
+</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+
+<p>You can call these functions to remove any layout instances associated with a given font, script, language and/or typographic control flags from the layout cache. These functions can be used, for example, after removing a font from the Font Catalog in order to ensure that all layout instances associated with the removed font are also removed.</p>
+
+<p>lxCacheClear has the same effect as <a href="lxCacheClearPlus.htm">lxCacheClearPlus</a>(layout_cache, font_index, script_code, -1, 3).</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

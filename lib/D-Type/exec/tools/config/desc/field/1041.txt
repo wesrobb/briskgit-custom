@@ -1,0 +1,33 @@
+Instructions for PolyArrX and PolyArrY (variable length, 1 byte per instruction).
+
+pdPolyArrI is an array containing instructions that describe the corresponding pair of coordinates in the pdPolyArrX_... and pdPolyArrY_... arrays. Possible values for pdPolyArrI are:
+
+{strong}A. Standard segment construction instructions:{/strong}
+
+ {strong}16{/strong} = New closed contour
+ {strong}17{/strong} = New open contour
+ {strong}20{/strong} = Line
+ {strong}24{/strong} = Bezier curve. Must be followed by n and 0 (see below).
+ {strong}25{/strong} = Quadratic B-Spline curve. Must be followed by n (see below).
+
+{strong}B. Instructions that can only follow 24 or 25:{/strong}
+
+ {strong}n{/strong} = A positive number or zero. Used only when the preceding instruction is 24 (Bezier curve) or 25 (Quadratic B-Spline curve). A positive number represents the suggested number of line segments that the curve will be approximated with. Zero means that the rendering engine should automatically calculate the optimum number of line segments when rendering the curve.
+
+ {strong}0{/strong} = Reserved. Used only when the first instruction in a segment is 24.
+
+{strong}C. Special "one byte does it all" instructions:{/strong}
+
+ {strong}254{/strong} = Open Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are not automatically closed.
+
+ {strong}255{/strong} = Closed Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are automatically closed.
+
+The instruction 254 and 255 are special. Only one of them can be used per single Polyline/Polygon. When specified, this instruction must be the only instruction in the pdPolyArrI array. In other words, pdPolyArrI must be a single element array, containing only the instruction 254 or 255.
+
+{strong}Sample values:{/strong}
+
+"16, 20, 20, 20"
+"16, 20, 25, 0, 20"
+"16, 20, 20, 24, 0, 0, 20, 25, 10, 20, 20"
+"254"
+"255"

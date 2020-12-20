@@ -1,0 +1,3 @@
+Link to the {a href="../objects/013.htm"}Group Member{/a} object.
+
+This link in used to establish a link to the next group member.

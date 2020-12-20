@@ -1,0 +1,407 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Text Engine Core Structures</h1>
+
+
+<p>In addition to the <a href="../../dt/manual/types.htm">basic data types</a>, D-Type Text Engine also defines and utilizes the following structure types:</p>
+
+
+<h2><strong id="DT_RECT_SLONG">DT_RECT_SLONG</strong></h2>
+
+<p>This structure type describers a rectangle whose coordinates are expressed as 32-bit signed integers.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type Rectangle (coordinates expressed as 32-bit signed integers) */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG xmn, ymn, xmx, ymx;
+
+} DT_RECT_SLONG;
+</pre>
+</div>
+
+<p>Here, <em>xmn</em> and <em>ymn</em> represent the minimum (x,&nbsp;y) coordinate of the rectangle (or its top left corner) while
+<em>xmx</em> and <em>ymx</em> represent the maximum (x,&nbsp;y) coordinate of the rectangle (or its bottom right corner).</p>
+
+
+<h2><strong id="DT_MDC">DT_MDC</strong></h2>
+
+<p>This structure type contains information about D-Type's memory (off-screen) surfaces.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* D-Type's memory (off-screen) surface */</span>&nbsp;
+typedef struct
+{
+    DT_SRAST_L w, h; <span class="codecomment">/* Surface's dimensions in pixels */</span>&nbsp;
+    DT_UBYTE* m;     <span class="codecomment">/* Pointer to surface's memory buffer */</span>&nbsp;
+    DT_SLONG l;      <span class="codecomment">/* Length of the buffer in bytes (defines pitch) */</span>&nbsp;
+
+} DT_MDC;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>w</em> &mdash; width of the memory surface in pixels. This value must be positive. <!--For best performance on all platforms, it should also be a multiple of 4.--></p></li>
+
+<li><p><em>h</em> &mdash; height of the memory surface in pixels. D-Type supports bottom-to-top and top-to-bottom surfaces. A positive <em>h</em> value indicates a bottom-to-top surface; a negative <em>h</em> value indicates a top-to-bottom surface. The value 0 is illegal.</p></li>
+
+<li><p><em>m</em> &mdash; pointer to a memory buffer that stores the surface's pixels. Depending on the format of the surface, each pixel in the buffer is represented with 8, 16, 24 or 32 bits (i.e. 1, 2, 3 or 4 <em>bytes per pixel</em>). <!--As a result, each scan-line consists of exactly <span class="nobreak"><em>bytes-per-pixel</em> * <em>w</em> bytes</span>.--></p></li>
+
+<li><p><em>l</em> &mdash; length of the memory buffer in bytes; must equal <span class="nobreak"><em>pitch</em> * abs(<em>h</em>)</span></p>
+<p>In the above equation, <em>pitch</em> is the distance, in bytes, between two memory addresses in the buffer that represent the beginning of two neighbouring pixel rows. Each pixel row consists of precisely <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes that represent the surface's pixels. Consequently, a valid <em>pitch</em> value must not be less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. A pitch value that is exactly <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are contiguous; in other words there are no extra bytes between the neighbouring pixel rows. A pitch value that is larger than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> bytes indicates that the pixel rows are non contiguous; in other words at the end of each row there are some extra bytes (the number of extra bytes is <span class="nobreak"><em>pitch</em> - <em>w</em> * <em>bytes per pixel</em></span>). Note that when rendering to the memory surface D-Type never reads or writes these extra bytes.</p>
+
+<p>Although not explicitly specified, <em>pitch</em> is an important value that has a direct impact on how D-Type renders pixels to your memory surface. To obtain the surface's pitch, D-Type divides the length of the memory buffer <em>l</em> by the absolute height of the memory surface <em>h</em>. For this reason, you must ensure that <em>l</em> is divisible by abs(<em>h</em>) and that the result of this division is not less than <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span>. If these conditions are not met, your pitch value is not properly defined and D-Type will assume the value <span class="nobreak"><em>w</em> * <em>bytes per pixel</em></span> instead.</p>
+</li>
+</ul>
+
+
+<h2><strong id="DT_TX_DOC_PARAMS">DT_TX_DOC_PARAMS</strong></h2>
+
+<p>This structure is used by the <a href="../funcs/txTextSetParams.htm">txTextSetParams</a> and <a href="../funcs/txTextGetParams.htm">txTextGetParams</a> functions. For details, see the <a href="../funcs/txTextSetParams.htm">txTextSetParams</a> function.</p>
+
+<p><strong>Deprecation Notice:</strong> As of D-Type 8.0.1.3 this structure is deprecated and might be removed in the future.</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Parameters for text documents */</span>&nbsp;
+typedef struct
+{
+    DT_ULONG EnableBits;          <span class="codecomment">/* A set of bit values to enable or disable various text document features */</span>&nbsp;
+    DT_ULONG ConfigBits;          <span class="codecomment">/* Various configuration bits */</span>&nbsp;
+    const DT_PD_DOC_PARAMS* Extra <span class="codecomment">/* Optional extra parameters (can be DV_NULL) */</span>&nbsp;
+
+} DT_TX_DOC_PARAMS;
+</pre>
+</div>
+
+
+<h2><strong id="DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</strong></h2>
+
+<p>This structure represents a single textflow area and contains parameters such as the area's (x,&nbsp;y) location (in document units), width and height (in document units), type (rectangular, circular, diamond-like etc.), row spacing calculation method (e.g. typographical, mathematical etc.), global text direction (e.g. Letf-to-Right &amp; Top-to-Bottom, Top-to-Bottom &amp; Left-to-Right, Top-to-Bottom &amp; Right-to-Left etc.), bidirectional text display method (bidirectional reordering or bidirectional rotation), device mode (e.g. device dependent, device independent, mixed) and, optionally, a transformation matrix (affine or 2D perspective).</p>
+
+<p>This structure type is utilized by the <a href="../funcs/txTextSetFlow.htm">txTextSetFlow</a> function, but can also be supplied while creating a new Unicode text document using the <a href="../funcs/txTextIniViaStream.htm">txTextIniViaStream</a> or <a href="../funcs/txTextIniViaBuffer.htm">txTextIniViaBuffer</a> function.</p>
+
+<p>The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Textflow area attributes */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG X, Y, W, H;            <span class="codecomment">/* Textflow area's bounding box in document units */</span>&nbsp;
+    DT_ID_UBYTE Type;               <span class="codecomment">/* Type of textflow area and control of empty text lines */</span>&nbsp;
+    DT_ID_UBYTE RowType;            <span class="codecomment">/* Row type within the textflow area */</span>&nbsp;
+    DT_ID_UBYTE WrapType;           <span class="codecomment">/* Text wrap method */</span>&nbsp;
+    DT_ID_UBYTE GlobalDirection;    <span class="codecomment">/* Global text direction and bidirectional text display method for a textflow area */</span>&nbsp;
+    DT_ID_UBYTE TargetDeviceID;     <span class="codecomment">/* Textflow area's device mode */</span>&nbsp;
+    DT_ID_UBYTE TransformAndExtras; <span class="codecomment">/* Identifies the type of the transformation matrix and/or any extra parameters. Can be one of the following:
+                                       TX_TM_NULL       = no transformation matrix and no extra parameters - TransformArray/Extra is DV_NULL
+                                       TX_TM_1X1        = 1x1 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 1 element
+                                       TX_TM_2X2        = 2x2 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 4 elements
+                                       TX_TM_3X3        = 3x3 transformation matrix only - TransformArray is a valid pointer to an array
+                                                          containing 9 elements
+                                       TX_TM_EXTRA_NULL = extra parameters only - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                                                          structure, Extra->TransformArray is DV_NULL
+                                       TX_TM_EXTRA_1X1  = 1x1 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 1 element
+                                       TX_TM_EXTRA_2X2  = 2x2 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 4 elements
+                                       TX_TM_EXTRA_3X3  = 3x3 transformation matrix and extra parameters - Extra is a valid pointer to
+                                                          the DT_TX_TEXTFLOW_AREA_EXTRA structure, Extra->TransformArray is a valid pointer
+                                                          to an array containing 9 elements
+                                    */</span>&nbsp;
+    union
+    {
+        <span class="codecomment">/* An affine or perspective transformation to apply to the textflow area */</span>&nbsp;
+        const DT_FLOAT* TransformArray;
+        <span class="codecomment">/* An affine or perspective transformation and any extra parameters to apply to the textflow area */</span>&nbsp;
+        const DT_TX_TEXTFLOW_AREA_EXTRA* Extra;
+    };
+
+} DT_TX_TEXTFLOW_AREA;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li>
+<p><em>X</em>, <em>Y</em> &mdash; (x,&nbsp;y) coordinate of the textflow area's bounding box (its top left corner), in document units.</p>
+</li>
+<li>
+<p><em>W</em>, <em>H</em> &mdash; width and height of the textflow area's bounding box, in document units. Both values must be positive.</p>
+</li>
+<li>
+<p><em>Type</em> &mdash; type of textflow area and control of empty text lines. The first 6 bits (Bit 0 - Bit 5) are interpreted as a single 6 bit value. This value specifies the type of the text area and can be one of the following:</p>
+<div class="box_field"><pre>
+TX_RECT         0    <span class="codecomment">/* Rectangular */</span>&nbsp;
+TX_CUSTOM       5    <span class="codecomment">/* Custom */</span>&nbsp;
+TX_CUSTOM2      6    <span class="codecomment">/* Custom With Extra Precision */</span>&nbsp;
+TX_CIRC_QRTR_A  10   <span class="codecomment">/* Quarter-Circular A */</span>&nbsp;
+TX_CIRC_QRTR_B  11   <span class="codecomment">/* Quarter-Circular B */</span>&nbsp;
+TX_CIRC_QRTR_C  12   <span class="codecomment">/* Quarter-Circular C */</span>&nbsp;
+TX_CIRC_QRTR_D  13   <span class="codecomment">/* Quarter-Circular D */</span>&nbsp;
+TX_CIRC_HALF_A  14   <span class="codecomment">/* Half-Circular A */</span>&nbsp;
+TX_CIRC_HALF_B  15   <span class="codecomment">/* Half-Circular B */</span>&nbsp;
+TX_CIRC_HALF_C  16   <span class="codecomment">/* Half-Circular C */</span>&nbsp;
+TX_CIRC_HALF_D  17   <span class="codecomment">/* Half-Circular D */</span>&nbsp;
+TX_CIRC         18   <span class="codecomment">/* Circular */</span>&nbsp;
+TX_DIAM_QRTR_A  20   <span class="codecomment">/* Quarter-Diamond A */</span>&nbsp;
+TX_DIAM_QRTR_B  21   <span class="codecomment">/* Quarter-Diamond B */</span>&nbsp;
+TX_DIAM_QRTR_C  22   <span class="codecomment">/* Quarter-Diamond C */</span>&nbsp;
+TX_DIAM_QRTR_D  23   <span class="codecomment">/* Quarter-Diamond D */</span>&nbsp;
+TX_DIAM_HALF_A  24   <span class="codecomment">/* Half-Diamond A */</span>&nbsp;
+TX_DIAM_HALF_B  25   <span class="codecomment">/* Half-Diamond B */</span>&nbsp;
+TX_DIAM_HALF_C  26   <span class="codecomment">/* Half-Diamond C */</span>&nbsp;
+TX_DIAM_HALF_D  27   <span class="codecomment">/* Half-Diamond D */</span>&nbsp;
+TX_DIAM         28   <span class="codecomment">/* Diamond */</span>&nbsp;
+</pre></div>
+<p>The seventh bit (Bit 6) is interpreted as a single bit value that specifies how the left (pdTextAreaEdgeLeft) and right edge (pdTextAreaEdgeRight) in non-rectangular text areas will be calculated. If this bit is set (1), the calculation will be more precise but slower; otherwise, if this bit is unset (0), the calculation will be less precise but faster. In rectangular text areas, this bit is ignored.</p>
+<p>The final bit (Bit 7) is interpreted as a single bit value that signifies whether the control of empty text lines is enabled. If this bit is set (1), the control of empty text lines is enabled; otherwise, if this bit is unset (0), the control of empty text lines is disabled.</p>
+<p>When the control of empty text lines is enabled, D-Type Engine will ignore any trailing empty text lines (i.e. text lines that only contain white characters such as spaces or carriage returns) when performing vertical alignment of text in this text area. This is useful in high-end text layout applications that require more professional vertical alignment of text.</p>
+</li>
+<li>
+<p><em>RowType</em> &mdash; specifies the way spacing between rows is calculated within the textflow area. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_MATHROW            0    <span class="codecomment">/* mathematically calculate spacing between text rows */</span>&nbsp;
+TX_TYPOROW            10   <span class="codecomment">/* respect typographic values (i.e. sTypoAscender, sTypoDescender) when calculating spacing between text rows */</span>&nbsp;
+TX_TYPOROW_LINEGAP    20   <span class="codecomment">/* same as TX_TYPOROW but adds additional linegap (i.e. sTypoLineGap), if available in the font */</span>&nbsp;
+TX_WINTYPOROW         30   <span class="codecomment">/* respect Windows specific typographic values (i.e. usWinAscent, usWinDescent) when calculating spacing between text rows */</span>&nbsp;
+TX_HORTYPOROW         110  <span class="codecomment">/* same as TX_TYPOROW but horizontal typographic values are used for text in vertical layout (columns) */</span>&nbsp;
+TX_HORTYPOROW_LINEGAP 120  <span class="codecomment">/* same as TX_TYPOROW_LINEGAP but horizontal typographic values are used for text in vertical layout (columns) */</span>&nbsp;
+</pre></div>
+<p>
+Explanation of row spacing calculation methods:
+</p>
+<ul>
+<li>
+<p>
+TX_MATHROW (0) = Mathematically calculate spacing between text rows.
+</p>
+</li>
+<li>
+<p>
+TX_TYPOROW (10) = Respect typographic values when calculating spacing between text rows. The typographic values must be defined in the font file in order for this method to function as intended. For text in horizontal layout (rows), the typographic values are supplied by the sTypoAscender and sTypoDescender fields of the OS/2 table (TrueType/OpenType fonts) or the Ascender and Descender key of the Font Metrics (AFM) file (Type 1/Type 3 fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_ASCENDER and DV_NVAL_DESCENDER identifiers. For text in vertical layout (columns), the typographic values are supplied by the vertTypoAscender and vertTypoDescender fields of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_VER_ASCENDER and DV_NVAL_VER_DESCENDER identifiers. If the typographic values are not defined in the font file, method 0 will be used instead.
+</p>
+</li>
+<li>
+<p>
+TX_TYPOROW_LINEGAP (20) = Same as method 10 but adds an additional linegap, if available in the font. For text in horizontal layout (rows), this additional linegap is supplied by the sTypoLineGap field of the OS/2 table (TrueType/OpenType fonts); in Type 1 and Type 3 fonts, this information is most likely not available. D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_LINEGAP identifier. For text in vertical layout (columns), the additional linegap is supplied by the vertTypoLineGap field of the vhea table (TrueType/OpenType fonts). D-Type Font Engine refers to this value in a portable fashion via the DV_NVAL_VER_LINEGAP identifier.
+</p>
+</li>
+<li>
+<p>
+TX_WINTYPOROW (30) = Respect Windows specific typographic values when calculating spacing between text rows. The Windows specific typographic values must be defined in the font file in order for this method to function as intended. For text in either horizontal layout (rows) or vertical layout (columns), the Windows specific typographic values are supplied by the usWinAscent and usWinDescent fields of the OS/2 table (TrueType/OpenType fonts). D-Type Font Engine refers to these values in a portable fashion via the DV_NVAL_WIN_ASCENT and DV_NVAL_WIN_DESCENT identifiers. If the Windows specific typographic values are not defined in the font file, method 0 will be used instead.
+</p>
+</li>
+<li>
+<p>
+TX_HORTYPOROW (110) = Same as method 10, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+</p>
+</li>
+<li>
+<p>
+TX_HORTYPOROW_LINEGAP (120) = Same as method 20, but horizontal typographic values are used for text in vertical layout (columns). Although not ideal from a purely mathematical standpoint, this method seems to work well with most CJK fonts.
+</p>
+</li>
+</ul>
+
+</li>
+<li>
+<p><em>WrapType</em> &mdash; text wrap method. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_WRAP     0   <span class="codecomment">/* Soft Wrap Enabled */</span>&nbsp;
+TX_NOWRAP_A 1   <span class="codecomment">/* Soft Wrap Disabled - trim text after any character */</span>&nbsp;
+TX_NOWRAP_B 2   <span class="codecomment">/* Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) but not after a hyphen */</span>&nbsp;
+TX_NOWRAP_C 3   <span class="codecomment">/* Soft Wrap Disabled - trim text only after space or some other breakable character (e.g. CJK) or after a hyphen */</span>&nbsp;
+TX_NOWRAP_D 4   <span class="codecomment">/* Soft Wrap Disabled - trim text after any character and add a horizontal ellipsis */</span>&nbsp;
+</pre></div>
+<p>Most applications will set <em>WrapType</em> to TX_WRAP (0).</p>
+</li>
+<li>
+<p><em>GlobalDirection</em> &mdash; specifies the global text direction and bidirectional text display method for a textflow area. Can be one of the following:</p>
+<div class="box_field"><pre>
+<span class="codecomment">/* Horizontal Layout (Text in Rows) and Bidirectional Reordering: */</span>&nbsp;
+TX_DIR_ROW_LR_TB               0   <span class="codecomment">/* Letf-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek) */</span>&nbsp;
+TX_DIR_ROW_RL_TB               1   <span class="codecomment">/* Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew) */</span>&nbsp;
+TX_DIR_ROW_LR_BT               2   <span class="codecomment">/* Letf-to-Right, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_RL_BT               3   <span class="codecomment">/* Right-to-Left, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_LR_TB_SWAP          4   <span class="codecomment">/* Same as TX_DIR_ROW_LR_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_RL_TB_SWAP          5   <span class="codecomment">/* Same as TX_DIR_ROW_RL_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_LR_BT_SWAP          6   <span class="codecomment">/* Same as TX_DIR_ROW_LR_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_RL_BT_SWAP          7   <span class="codecomment">/* Same as TX_DIR_ROW_RL_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Vertical Layout (Text in Columns) and Bidirectional Reordering: */</span>&nbsp;
+TX_DIR_COL_TB_RL               8   <span class="codecomment">/* Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese) */</span>&nbsp;
+TX_DIR_COL_BT_RL               9   <span class="codecomment">/* Bottom-to-Top, Right-to-Left */</span>&nbsp;
+TX_DIR_COL_TB_LR              10   <span class="codecomment">/* Top-to-Bottom, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BT_LR              11   <span class="codecomment">/* Bottom-to-Top, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_TB_RL_SWAP         12   <span class="codecomment">/* Same as TX_DIR_COL_TB_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BT_RL_SWAP         13   <span class="codecomment">/* Same as TX_DIR_COL_BT_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_TB_LR_SWAP         14   <span class="codecomment">/* Same as TX_DIR_COL_TB_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BT_LR_SWAP         15   <span class="codecomment">/* Same as TX_DIR_COL_BT_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Horizontal Layout (Text in Rows) and Bidirectional Rotation: */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_TB      16   <span class="codecomment">/* Letf-to-Right, Top-to-Bottom (e.g. Latin, Cyrillic, Greek) */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_TB      17   <span class="codecomment">/* Right-to-Left, Top-to-Bottom (e.g. Arabic, Hebrew) */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_BT      18   <span class="codecomment">/* Letf-to-Right, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_BT      19   <span class="codecomment">/* Right-to-Left, Bottom-to-Top */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_TB_SWAP 20   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_LR_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_TB_SWAP 21   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_RL_TB but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_LR_BT_SWAP 22   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_LR_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_ROW_BIDIROT_RL_BT_SWAP 23   <span class="codecomment">/* Same as TX_DIR_ROW_BIDIROT_RL_BT but swap Portrait &amp; Landscape */</span>&nbsp;
+<span class="codecomment">/* Vertical Layout (Text in Columns) and Bidirectional Rotation: */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_RL      24   <span class="codecomment">/* Top-to-Bottom, Right-to-Left (e.g. Vertical Chinese) */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_RL      25   <span class="codecomment">/* Bottom-to-Top, Right-to-Left */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_LR      26   <span class="codecomment">/* Top-to-Bottom, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_LR      27   <span class="codecomment">/* Bottom-to-Top, Left-to-Right */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_RL_SWAP 28   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_TB_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_RL_SWAP 29   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_BT_RL but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_TB_LR_SWAP 30   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_TB_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+TX_DIR_COL_BIDIROT_BT_LR_SWAP 31   <span class="codecomment">/* Same as TX_DIR_COL_BIDIROT_BT_LR but swap Portrait &amp; Landscape */</span>&nbsp;
+</pre></div>
+<p>
+D-Type Engine can display text in horizontal writing mode (text in rows) and vertical writing mode (text in columns). In horizontal writing mode, the global text progression can be Letf-to-Right/Top-to-Bottom, Right-to-Left/Top-to-Bottom, Letf-to-Right/Bottom-to-Top or Right-to-Left/Bottom-to-Top. In vertical writing mode, the global text progression can be Top-to-Bottom/Right-to-Left, Bottom-to-Top/Right-to-Left, Top-to-Bottom/Left-to-Right or Bottom-to-Top/Left-to-Right.
+</p>
+<p>
+Additionally, D-Type Engine can display bidirectional text (e.g. a mixture of left-to-right text such as English or Chinese and right-to-left text such as Arabic or Hebrew) using two different methods: the first method is Bidirectional Reordering, the second method is Bidirectional Rotation. Visually, these two methods produce quite different output. However, both are suitable for displaying text that was processed by the Unicode Bidirectional Algorithm (BiDi).
+</p>
+<p>
+With Bidirectional Reordering the characters are reordered for display depending on the relative direction of the containing text fragment. Thus, a left-to-right text fragment has its characters ordered (visually) in the opposite order from a right-to-left text fragment. While reading bidirectional text, from start to end, the reader must alternate the reading direction (left-to-right/right-to-left in horizontal writing mode or top-to-bottom/bottom-to-top in vertical writing mode) each time a change of direction occurs. This is also the progression of the cursor as it advances from one character to another. This means that with Bidirectional Reordering, the order in which the characters are displayed is not the same as the order in which they are stored in memory (logical or storage order).
+</p>
+<p>
+With Bidirectional Rotation all characters are ordered uniformly (e.g. from left-to-right in horizontal writing mode or top-to-bottom in vertical writing mode) regardless of whether the containing text fragment has a left-to-right or right-to-left direction. However, their rotation depends on the relative direction of the containing text fragment. More specifically, characters that are part of a left-to-right text fragment are rotated 180 degrees relative to the characters that are part of a right-to-left text fragment. Thus, while reading bidirectional text, from start to end, the reader must rotate the display surface or tilt his/her head (clockwise or counterclockwise) each time a change of direction occurs. However, the reading direction and the progression of the cursor remain uniform. This also means that with Bidirectional Rotation, the order in which the characters are displayed is the same as the order in which they are stored in memory.
+</p>
+<p>
+Bidirectional Reordering is frequently used in horizontal writing mode and also works well in vertical writing mode. Bidirectional Rotation is typically not used in horizontal writing mode due to the fact that almost all Unicode scripts, when displayed in horizontal writing mode, have their orientation set to portrait (meaning that the glyph's x-axis in font design space is parallel with the baseline). Using Bidirectional Rotation in this case would require the user to rotate the display surface by 180 degrees (clockwise or counterclockwise) each time a change of direction is encountered &mdash; which is, needles to say, far from practical. However, Bidirectional Rotation works well in vertical writing mode. This is due to the fact that vertical writing is used mostly with CJK scripts (Chinese/Japanese/Korean) which typically have their orientation set to landscape (meaning that the glyph's x-axis in font design space is perpendicular to the baseline). Non-CJK scripts, such as Latin or Arabic then have their orientation set to portrait. Under this scheme, the reading direction and the progression of the cursor is always top-to-bottom. When reading the majority of content (i.e. CJK text), there is no need to rotate the display surface. However, when a left-to-right text fragment (e.g. English) is encountered, the reader rotates the display surface by 90 degrees clockwise. Similarly, when a right-to-left text fragment (e.g. Arabic) is encountered, the reader rotates the display surface by 90 degrees counterclockwise. In all three cases (Chinese, English and Arabic) the characters are ordered from top to bottom and the reader is never expected to alter the reading direction (which would otherwise be required if Bidirectional Reordering was used). This is not to say that Bidirectional Reordering cannot be used in vertical writing mode. However, Bidirectional Rotation might work better in certain applications as rotating the display surface by 90 degrees clockwise or counterclockwise relative to the vertical baseline is sometimes considered a more practical way of reading vertical bidirectional text.
+</p>
+</li>
+<li>
+<p><em>TargetDeviceID</em> &mdash; specifies textflow area's device mode. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_LAY_FRAC      0   <span class="codecomment">/* Device Independent (Mode 0, Enhanced Fractional Positioning) */</span>&nbsp;
+TX_LAY_WHOLE     1   <span class="codecomment">/* Device Independent (Mode 0, Enhanced Whole Pixel Positioning) */</span>&nbsp;
+TX_LAY_DEVICE_A  2   <span class="codecomment">/* Device Dependent (Mode 1) */</span>&nbsp;
+TX_LAY_DEVICE_B  3   <span class="codecomment">/* Device Dependent (Mode 2) */</span>&nbsp;
+TX_LAY_MIXED_A   4   <span class="codecomment">/* Mixed (Mode 101) */</span>&nbsp;
+TX_LAY_MIXED_B   5   <span class="codecomment">/* Mixed (Mode 102) */</span>&nbsp;
+</pre></div>
+<p>
+Explanation of device modes:
+</p>
+<ul>
+<li>
+<p>
+0 = Device Independent Mode. Text will be rendered in a device independent mode, which means that text metrics are independent of the device, resolution or zoom factor and are mathematically accurate. Therefore, characters that are supposed to vertically line up will always line up. In addition, all text lines will always fit within the width of the textflow area. Recommended for WYSIWYG applications.
+</p>
+</li>
+<li>
+<p>
+1 = Device Dependent Mode #1. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode utilizes a complex device dependent formula that is specially crafted to give good looking character spacing (calculated in whole-pixel units). This mode corresponds to the DV_TEXTMODE_DEVICE value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.
+</p>
+<p>
+Because this mode is device dependent, please be aware that the length of certain text lines will sometimes exceed the width of the textflow area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.
+</p>
+</li>
+<li>
+<p>
+2 = Device Dependent Mode #2. Text will be rendered in a device dependent mode, which means that text metrics are device specific. This mode is similar to Device Dependent Mode #1 since it also utilizes a complex device dependent formula crafted to give good looking character spacing. However, this mode produces even better looking and easier to read text, especially at smaller sizes. This is accomplished by artificially increasing the amount of character spacing between certain characters and in certain conditions. This mode corresponds to the DV_TEXTMODE_DEVICE_2 value in D-Type Standard Engine. See the dtxTextDoOutput family of functions in D-Type Standard Engine Manual for details.
+</p>
+<p>
+Because this mode is device dependent (and also because the character spacing may be artificially increased), please be aware that the length of certain text lines will sometimes exceed the width of the textflow area; also characters that are supposed to vertically line up will usually not line up. This behaviour is by design.
+</p>
+</li>
+<li>
+<p>
+101 = Mixed Mode #1. By default, the engine will render all text using Device Dependent Mode #1. However, if there are any text lines whose length would exceed the width of the textflow area, those text lines will be rendered in a device independent manner. Consequently, this mode guarantees that all text lines will always fit within the width of the textflow area.
+</p>
+</li>
+<li>
+<p>
+102 = Mixed Mode #2. By default, the engine will render all text using Device Dependent Mode #2. However, if there are any text lines whose length would exceed the width of the textflow area, then the engine will attempt to render those lines using Device Dependent Mode #1. If, after this, there are still some text lines whose length exceeds the width of the textflow area, those lines will be rendered in a device independent manner. Consequently, this mode guarantees that all text lines will always fit within the width of the textflow area. This mode usually produces great looking character spacing and is highly recommended whenever true WYSIWYG support is not a priority.
+</p>
+</li>
+</ul>
+
+</li>
+<li>
+<p><em>TransformAndExtras</em> &mdash; type of transformation matrix held in the TransformArray member or extra parameters. It is used in conjunction with the <em>TransformArray</em> or <em>Extra</em> members and can be one of the following:</p>
+<div class="box_field"><pre>
+TX_TM_NULL        0   <span class="codecomment">/* no transformation matrix and no extra parameters - TransformArray/Extra is DV_NULL */</span>&nbsp;
+TX_TM_1X1         1   <span class="codecomment">/* 1x1 transformation matrix only - TransformArray is a valid pointer to an array containing 1 element */</span>&nbsp;
+TX_TM_2X2         2   <span class="codecomment">/* 2x2 transformation matrix only - TransformArray is a valid pointer to an array containing 4 elements */</span>&nbsp;
+TX_TM_3X3         3   <span class="codecomment">/* 3x3 transformation matrix only - TransformArray is a valid pointer to an array containing 9 elements */</span>&nbsp;
+TX_TM_EXTRA_NULL  4   <span class="codecomment">/* extra parameters only - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA structure,
+                         Extra->TransformArray is DV_NULL */</span>&nbsp;
+TX_TM_EXTRA_1X1   5   <span class="codecomment">/* 1x1 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 1 element */</span>&nbsp;
+TX_TM_EXTRA_2X2   6   <span class="codecomment">/* 2x2 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 4 elements */</span>&nbsp;
+TX_TM_EXTRA_3X3   7   <span class="codecomment">/* 3x3 transformation matrix and extra parameters - Extra is a valid pointer to the DT_TX_TEXTFLOW_AREA_EXTRA
+                         structure. Extra->TransformArray is a valid pointer to an array containing 9 elements */</span>&nbsp;
+</pre></div>
+</li>
+<li>
+<p><em>TransformArray</em> &mdash; a pointer to an array that holds an affine or perspective transformation to apply to the textflow area. Depending on the value of the <em>TransformAndExtras</em> member, this pointer is either DV_NULL or points to an array of floats containing 1, 4 or 9 elements.</p>
+</li>
+
+<li>
+<p><em>Extra</em> &mdash; a pointer to the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA_EXTRA">DT_TX_TEXTFLOW_AREA_EXTRA</a> structure. This structure contains a pointer to an array that holds an affine or perspective transformation and any additional parameters (e.g. vertical text alignment, user-defined left/right edge) to apply to the textflow area.</p>
+</li>
+</ul>
+
+
+
+<h2><strong id="DT_TX_TEXTFLOW_AREA_EXTRA">DT_TX_TEXTFLOW_AREA_EXTRA</strong></h2>
+
+<p>This structure type supplements the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure, providing additional information. The structure is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Extra information for DT_TX_TEXTFLOW_AREA */</span>&nbsp;
+typedef struct
+{
+    const DT_FLOAT* TransformArray; <span class="codecomment">/* An affine or perspective transformation to apply to the textflow area */</span>&nbsp;
+    const DT_UBYTE* EdgeArrayLeft;  <span class="codecomment">/* Left edge polyline for text areas with a custom (i.e. user-defined) left edge.
+                                       Should be used only with custom text areas (Type=TX_CUSTOM or Type=TX_CUSTOM2). */</span>&nbsp;
+    const DT_UBYTE* EdgeArrayRight; <span class="codecomment">/* Right edge polyline for text areas with a custom (i.e. user-defined) right edge.
+                                       Should be used only with custom text areas (Type=TX_CUSTOM or Type=TX_CUSTOM2). */</span>&nbsp;
+    DT_SLONG EdgeLenLeft;           <span class="codecomment">/* Length of the EdgeArrayLeft array */</span>&nbsp;
+    DT_SLONG EdgeLenRight;          <span class="codecomment">/* Length of the EdgeArrayRight array */</span>&nbsp;
+    DT_ID_UBYTE VAlign;             <span class="codecomment">/* Vertical alignment of text inside the text area, when the text flow does not end in this text area.
+                                       Should be used only with rectangular text areas (Type=TX_RECT). */</span>&nbsp;
+    DT_ID_UBYTE VAlignEnd;          <span class="codecomment">/* Vertical alignment of text inside the text area, when the text flow ends in this text area.
+                                       Should be used only with rectangular text areas (Type=TX_RECT). */</span>&nbsp;
+} DT_TX_TEXTFLOW_AREA_EXTRA;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li>
+<p><em>TransformArray</em> &mdash; a pointer to an array that holds an affine or perspective transformation to apply to the textflow area. Depending on the value of the <em>TransformAndExtras</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure, this pointer is either DV_NULL or points to an array of floats containing 1, 4 or 9 elements.</p>
+</li>
+<li>
+<p><em>EdgeArrayLeft</em> &mdash; a pointer to an array that defines the left edge polyline for text areas with a custom (i.e. user-defined) left edge. In order for this feature to work, the <em>Type</em> member of the <a href="txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure must be set to TX_CUSTOM or TX_CUSTOM2. In all other cases, <em>EdgeArrayLeft</em> should be set to DV_NULL and <em>EdgeLenLeft</em> should be set to 0.</p>
+<p>
+Explanation of the left edge polyline:
+</p>
+<p>

@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Advanced Typography Structures</h1>
+
+
+<p><em><strong>Note 1:</strong> D-Type Text Layout Extension provides a quick, easy and straightforward way to access and utilize advanced OpenType typography features and shaping rules needed to render complex scripts such as Arabic, Indic or Thai. Thus, D-Type Text Layout Extension makes the advanced typography structures described below obsolete.</em></p>
+
+<p><em><strong>Note 2:</strong> D-Type Power Engine makes it easy to render complex rich text in both device dependent and device independent manner. In addition, D-Type Power Engine supports all of the advanced OpenType features described below and all of the complex scripts defined in D-Type Text Layout Extension.</em></p>
+
+<p><em><strong>Note 3:</strong> Even better, use D-Type Text Engine to render Unicode text and complex scripts such as Arabic, Indic or Thai without the need to know anything about the advanced typography structures described below.</em></p>
+
+
+<br />
+
+<p>In addition to the <a href="structs.htm">common D-Type structure types</a>, D-Type Engine also defines and utilizes the following advanced typography structure types:</p>
+
+
+<h2><strong id="DT_AT_GLYPH_SUBSTS_SET">DT_AT_GLYPH_SUBSTS_SET</strong></h2>
+
+<p>This structure type provides information for substituting glyphs to properly render the advanced typography scripts and features supported in a font. For example, in the Arabic script, the glyph shape that depicts a particular character varies according to its position in a word or text string. The same character will have a different glyph shape depending on whether it is located at the beginning, in the middle or at the end of the word. In this case, glyph substitutes are essential to properly render the string. In other scripts, glyph substitutes are aesthetic options for the user, such as ligatures or alternative forms.</p>
+
+<p>Not all fonts support glyph substitutions. In order for glyph substitutions to function as described below, an OpenType font with the GSUB table is needed. For more details on how to access glyph substitutions in a font, see the <a href="../funcs/dtFontGetGlyphSubsts.htm">dtFontGetGlyphSubsts</a> function.</p>
+
+<p>The <a href="types.htm#DT_AT_GLYPH_SUBSTS_SET">DT_AT_GLYPH_SUBSTS_SET</a> structure type is defined as follows:</p>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* A set of glyph substitutions for the specified script and feature in a font */</span>&nbsp;
+typedef struct
+{
+    DT_AT_GLYPH_SUBSTS* subst_arr; <span class="codecomment">/* array of substitution instructions */</span>&nbsp;
+    DT_AT_GLYPH_INDEX* glyph_arr;  <span class="codecomment">/* array of glyphs */</span>&nbsp;
+    DT_SLONG nr_of_substs;         <span class="codecomment">/* number of substitution instructions in the array */</span>&nbsp;
+    DT_SLONG nr_of_glyphs;         <span class="codecomment">/* number of glyphs in the array */</span>&nbsp;
+    DT_ID_UBYTE script_id;         <span class="codecomment">/* specified script */</span>&nbsp;
+    DT_ID_UBYTE feature_id;        <span class="codecomment">/* specified feature */</span>&nbsp;
+
+} DT_AT_GLYPH_SUBSTS_SET;
+</pre>
+</div>
+
+<p>The structure members have the following purpose:</p>
+
+<ul>
+<li><p><em>subst_arr</em> &mdash; a pointer to an array of glyph substitution instructions. Each individual glyph substitution instruction is described using the <a href="types.htm#DT_AT_GLYPH_SUBSTS">DT_AT_GLYPH_SUBSTS</a> structure type, which is more thoroughly described below.</p></li>
+
+
+<li><p><em>glyph_arr</em> &mdash; a pointer to an array of glyphs. This array contains the glyphs that are to be substituted and the glyphs that substitute them. Each single glyph is represented using the DT_AT_GLYPH_INDEX type, which is merely an alias for the basic <a href="types.htm#DT_ID_ULONG">DT_ID_ULONG</a> data type.</p></li>
+
+<li><p><em>nr_of_substs</em> &mdash; specifies the total number of substitution instructions that is necessary to perform in order to complete all glyph substitutions for the specified script and feature.</p></li>
+
+<li><p><em>nr_of_glyphs</em> &mdash; specifies the total number of glyphs in the glyph array. The glyphs in the glyph array serve as data (operands) for the glyph substitution instructions.</p></li>
+
+<li><p><em>script_id</em> &mdash; identifies the script.</p></li>
+
+
+<li><p><em>nr_of_glyphs</em> &mdash; identifies the glyph substitution feature.</p></li>
+
+</ul>
+
+
+<h2><strong id="DT_AT_GLYPH_SUBSTS">DT_AT_GLYPH_SUBSTS</strong></h2>
+
+<p>As mentioned above, this structure type defines a single glyph substitution instruction. In D-Type API, glyph substitution instructions can be <strong>1-to-1</strong>, <strong>N-to-1</strong>, <strong>1-to-N</strong> and <strong>N-to-M</strong>. A glyph substitution is 1-to-1 when a single glyph is substituted by another single glyph. This is the simplest substitution type. A glyph substitution is N-to-1 when several glyphs are substituted by a single glyph. This substitution type is also called glyph composition or ligature. Similarly, a glyph substitution is 1-to-N when a single glyph is substituted by several glyphs. This substitution type is also called glyph decomposition. Finally, a glyph substitution in N-to-M when N glyphs are substituted by M glyphs. The N-to-M substitution is the most generic glyph substitution type.</p>
+
+<p>As it can be seen, 1-to-1, N-to-1 and 1-to-N glyph substitutions are all special cases of the N-to-M glyph substitution. Thus, applications that implement support for N-to-M substitutions can automatically support 1-to-1, N-to-1 and 1-to-N substitutions.</p>
+
+<p>In D-Type API, glyphs that are to be substituted are also called <strong>in-glyphs</strong> while glyphs that substitute them are called <strong>out-glyphs</strong>.</p>
+
+<p>The <a href="types.htm#DT_AT_GLYPH_SUBSTS">DT_AT_GLYPH_SUBSTS</a> structure type is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* A single N-to-M glyph substitution instruction */</span>&nbsp;
+typedef struct
+{
+    DT_SLONG glyph_arr_offset; <span class="codecomment">/* start location in the array of glyphs */</span>&nbsp;
+    DT_UBYTE count_in;         <span class="codecomment">/* number of in-glyphs to read (N) */</span>&nbsp;
+    DT_UBYTE count_out;        <span class="codecomment">/* number of out-glyphs to read (M) */</span>&nbsp;
+
+} DT_AT_GLYPH_SUBSTS;
+</pre>
+</div>
+
+<p>This structure consists of the following components:</p>
+
+<ul>
+<li><p><em>glyph_arr_offset</em> &mdash; this is the start location (offset) in the array of glyphs at which the in-glyphs begin. The array of glyphs is accessed via the <em>glyph_arr</em> member of the <a href="types.htm#DT_AT_GLYPH_SUBSTS_SET">DT_AT_GLYPH_SUBSTS_SET</a> structure described above.</p></li>
+
+<li><p><em>count_in</em> &mdash; tells how many in-glyphs to read from the array of glyphs. This is the N value in the generic N-to-M glyph substitution type described above. For 1-to-1 and 1-to-N substitutions, <em>count_in</em> will be 1. The in-glyphs begin immediately at the <em>glyph_arr_offset</em> location in the array of glyphs.</p></li>
+
+
+<li><p><em>count_out</em> &mdash; tells how many out-glyphs to read from the array of glyphs. This is the M value in the generic N-to-M glyph substitution type described above. For 1-to-1 and N-to-1 substitutions, <em>count_out</em> will be 1. The out-glyphs immediately follow the in-glyphs in the array of glyphs.</p></li>
+
+</ul>
+
+
+<h2>How To Perform Glyph Substitutions?</h2>
+
+<p>The process of applying glyph substitution features and performing the actual glyph substitutions is not trivial, but is dictated by the OpenType architecture and the complexity of certain scripts and features. The following steps describe this process:</p>
+
+<ol>
+<li><p>For each Unicode character code in the initial text string, retrieve its default (or nominal) glyph index
+by calling the <a href="../funcs/dtFontGetGlyphIndex.htm">dtFontGetGlyphIndex</a> function. Based on this, generate an initial array of glyphs (or the initial glyph string).</p></li>
+
+<li><p>Call <a href="../funcs/dtFontGetGlyphSubsts.htm">dtFontGetGlyphSubsts</a> to get a set of glyph substitutions for the specified font, script and feature. For example, to retrieve glyph substitutions necessary to implement the initial forms in the Arabic script, call <a href="../funcs/dtFontGetGlyphSubsts.htm">dtFontGetGlyphSubsts</a> and set the <em>feature_id</em> to DV_AT_GSUBST_INIT and <em>script_id</em> to DV_AT_SCRIPT_ARAB. The set of glyph substitution instructions will be returned via the <a href="types.htm#DT_AT_GLYPH_SUBSTS_SET">DT_AT_GLYPH_SUBSTS_SET</a> structure.</p></li>
+
+<li><p>For each individual glyph substitution instruction in the set of glyph substitutions, test the initial glyph string for the presence of any matching in-glyphs. If they are found, replace them with the corresponding out-glyphs. To do so, you must respect the values in the <a href="types.htm#DT_AT_GLYPH_SUBSTS">DT_AT_GLYPH_SUBSTS</a> structure. Furthermore, you must implement all the glyph lookups and substitutions in the string yourself. Note that after all the glyph substitutions are done, the resulting glyph string may have a diferent length than the initial glyph string (unless all the glyph substitution instructions are 1-to-1). Thus, you should allow the glyph array to change its size in a dynamic fashion.</p></li>
+
+<li><p>Repeat step 2 and 3 for all the features that are required or you wish to support in the specified script. For example, initial forms (DV_AT_GSUBST_INIT), medial forms (DV_AT_GSUBST_MEDI), final forms (DV_AT_GSUBST_FINA), required ligatures (DV_AT_GSUBST_RLIG) and ligatures (DV_AT_GSUBST_LIGA) are all applicable to Arabic scripts. Or, required ligatures (DV_AT_GSUBST_RLIG) and discretionary ligatures (DV_AT_GSUBST_DLIG) may be applicable to Latin scripts.</p></li>
+
+</ol>
+
+
+<p>In general, the order in which glyph substitution features are applied is important. For example, substitution of ligatures in Arabic scripts should be applied after the substitution of initial or final forms. Consequently, applying glyph substitution features in an incorrect order may result in a wrong output. Developers who wish to support these advanced typography features should consult OpenType specifications and its advanced typography guidelines for additional information. Alternatively, developers may use D-Type Power Engine that has built-in support some of the most important advanced typography scripts and features.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

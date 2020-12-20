@@ -1,0 +1,7 @@
+This object represents a set of typographic parameters that apply to {a href="../objects/010.htm"}PowerFonts{/a}. It is one of the elementary PowerDoc objects; many higher-level objects that contain PowerGlyphs or PowerChars link to this object.
+
+Unlike the {a href="../objects/004.htm"}Typography (For Outline Fonts){/a} object which specifies the target font via the pdFontIndex or pdFontUniqueID property, the Typography (For PowerFonts) object specifies the target PowerFont via the pdPowerFontPtr link. Also, the Typography (For PowerFonts) object does not support all the features that the Typography (For Outline Fonts) object does. For example, body, outline and shadow styles are not supported and neither are multiple-master font instances.
+
+In any other respect, this object serves the same purpose as the Typography (For Outline Fonts) object.
+
+{strong}Designated Rendering Function:{/strong} NONE

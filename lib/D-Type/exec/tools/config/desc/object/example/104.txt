@@ -1,0 +1,61 @@
+DT_ID_SLONG obj[10];
+
+obj[0] = pdObjAdd(pd, 0, "Text Fragment Outline Style");
+obj[1] = pdObjAdd(pd, 0, "Text Fragment Body Style");
+obj[2] = pdObjAdd(pd, 0, "Text Fragment Shadow Style");
+obj[3] = pdObjAdd(pd, 0, "Text Fragment Outline");
+obj[4] = pdObjAdd(pd, 0, "Text Fragment Shadow");
+obj[5] = pdObjAdd(pd, 0, "Text Fragment Typography");
+obj[6] = pdObjAdd(pd, 0, "Text Fragment Layout");
+obj[7] = pdObjAdd(pd, 0, "Text Fragment Ruler");
+obj[8] = pdObjAdd(pd, 0, "Text Fragment");
+{strong}obj[9] = pdObjAdd(pd, 0, "RichTextLine");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);
+
+/* Properties for object 1 */
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);
+
+/* Properties for object 2 */
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);
+pdPropAdd(pd, obj[2], pdEP, "030A", PD_HEX);
+
+/* Properties for object 3 */
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[3], pdLineThickness, "150", PD_WORD_SIGNED);
+
+/* Properties for object 4 */
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);
+
+/* Properties for object 5 */
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);
+pdPropAdd(pd, obj[5], pdFontIndex, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[5], pdFontDw, "70", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[5], pdFontDh, "70", PD_WORD_SIGNED);
+
+/* Properties for object 6 */
+pdPropAdd(pd, obj[6], pdSpacingRow, "10", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdSpacingLetter, "5", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdKerning, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[6], pdAlign, "3", PD_BYTE_UNSIGNED);
+
+/* Properties for object 7 */
+pdPropAdd(pd, obj[7], pdTabStopPositions, "40, 80, 150, 220", PD_ARR_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[7], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);
+
+/* Properties for object 8 */
+pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[5]);
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[6]);
+pdLinkAdd(pd, obj[8], pdTextRulerHorPtr, obj[7]);
+pdPropAdd(pd, obj[8], pdTextString_08, "This is a text fragment", PD_ASC);
+
+/* Properties for object 9 */
+{strong}pdLinkAdd(pd, obj[9], pdTextFragmentPtr, obj[8]);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[9], 0, 50, 150, 0, 0, 0, pdDrawRichTextLine, DV_NULL);{/strong}

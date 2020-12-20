@@ -1,0 +1,30 @@
+An array of actions executed when a change inside the control is made.
+
+Each element of the array can have one of the following values:
+
+0 = Do nothing
+1 = Call the callback function
+2 = Jump to the page specified in fcUserParam
+3 = Scroll up (left) connected sliders, text boxes and list boxes
+4 = Scroll down (right) connected sliders, text boxes and list boxes
+5 = Scroll connected list boxes and text boxes according to the slider's position
+6 = Copy the value of the slider's position to connected text boxes
+7 = Scroll connected sliders according to the first visible item in the list box or text box
+8 = Copy the value of the selected item in the list to connected text boxes
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam
+10 = Show all controls whose GroupID matches the value specified in fcUserParam
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam
+12 = Jump to the previous page
+13 = Jump to the next page
+14 = Update connected sliders to reflect the amount of content in the text box
+15 = Copy the value of the slider's position to joined media - by time
+16 = Copy the value of the slider's position to joined media - by frame
+17 = Pause joined media
+18 = Play joined media
+19 = Restart joined media
+20 = Toggle joined media
+21 = Open URL specified in fcUserString using the default Web browser
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam
+24 = Open address specified in fcUserString using the default E-mail client
+100 = Call the Program object via fcProgramPtr

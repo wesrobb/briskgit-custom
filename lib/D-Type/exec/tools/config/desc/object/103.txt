@@ -1,0 +1,5 @@
+This objects represents a simple text area. In Power Engine API, a text area is an array of characters or glyphs drawn within the bounds of an invisible rectangular area and formatted according to the specified parameters. Text areas are frequently used to draw formatted text.
+
+{strong}Designated Rendering Function:{/strong} pdDrawTextArea (3)
+
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.

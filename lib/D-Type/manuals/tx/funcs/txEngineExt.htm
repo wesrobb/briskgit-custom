@@ -1,0 +1,47 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txEngineExt</h2><div class="box_prototype"><strong>
+void txEngineExt(DT_TXENGINE engine)</strong></div><br /><strong>Short Description:</strong> <em>Deinitialize and destroy D-Type Text Engine</em><br /><br />
+
+<p>The txEngineExt function deinitializes and destroys the Text Engine instance created by <a href="txEngineIniViaStream.htm">txEngineIniViaStream</a>. Since each Text Engine instance has its own internal instance of D-Type Power Engine, this function also deinitializes and destroys that instance. The txEngineExt function must be called before the application terminates for each instance of D-Type Text Engine.</p>
+
+<p>As mentioned earlier, a Text Engine instance can be referenced by multiple text documents. This means that before a Text Engine instance is destroyed using this function, all of its text document instances must first be destroyed by calling the <a href="txTextExt.htm">txTextExt</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the Text Engine instance to be destroyed.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="txEngineIniViaStream.htm">txEngineIniViaStream</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

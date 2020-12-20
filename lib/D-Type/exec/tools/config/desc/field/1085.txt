@@ -1,0 +1,3 @@
+Link to any visual PowerDoc object (i.e. any object with a designated FnDraw rendering function).
+
+The pdFnDraw property describes the visual object pointed by the pdFnDrawObjectPtr link. If pdFnDraw is missing, it is assumed pdFnDrawObjectPtr points to the {a href="../objects/123.htm"}Group{/a} object.

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTWindow</h1>
+
+<h2>SetPixels</h2>
+
+<div class="box_prototype"><strong>DT_SWORD SetPixels(void* pixels, DT_ULONG flags)</strong></div><br />
+
+<p>This function attaches to the window a memory buffer that stores the surface's pixels and then immediately refreshes the window and displays the surface's pixels.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>pixels</em></p>
+</td><td>
+<p>Pointer to a memory buffer that stores the surface's pixels.</p>
+<p>The pixels must be stored in D-Type's 32 RGB format. This format uses four bytes per pixel: the first three bytes represent the B, G and R color components, while the last byte is unused. Pixels in this surface format can be generated, for example, by calling the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function and setting its <em>format</em> parameter to 32 and <em>subformat</em> parameter to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask of event flags. Currently only bit value 1 is supported. When set, this value tells the display to immediately dispatch any event messages accumulated during the refresh of the window to the event-driven callbacks.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

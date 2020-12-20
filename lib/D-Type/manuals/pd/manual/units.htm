@@ -1,0 +1,50 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Power Engine Units</h1>
+
+
+<h2>Document Units</h2>
+
+
+<p>All PowerDoc image coordinates and many PowerDoc properties are expressed in
+logical units called <em>document units</em>. Document units are device and
+resolution independent and are used to measure or specify distances in Power Engine documents.
+Document units have no particular physical meaning and their interpretation is
+entirely up to the application. However, certain limitations apply:</p>
+
+<ul>
+<li>All image coordinates and many PowerDoc properties are specified in integral document units; only certain specialized properties are specified in fractional document units.</li>
+<li>The <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> type is used for distances that are expected to be
+&quot;large&quot;;</li>
+<li>The <a href="../../dt/manual/types.htm#DT_SWORD">DT_SWORD</a> or <a href="../../dt/manual/types.htm#DT_UWORD">DT_UWORD</a> type is used for distances that are expected to be
+&quot;medium&quot; or &quot;small&quot;.</li>
+</ul>
+<p>Because of these limitations, application developers should ensure their
+document units do not exceed the maximum (or minimum) value but at the same time
+allow for sufficient precision. For example, if a page size in a text processing
+application is 21.65 cm x 27.95 cm, it might be convenient to interpret a
+document unit as a 1/100 cm. In this case the page width would be 2165 document
+units while the page height would be 2795 document units.</p>
+
+<p>Additionally, care should be taken when using extremely large document units. Although the <a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> type is capable of storing 32-bit integers (i.e. integers in the [-2<sup>31</sup>&nbsp;..&nbsp;+2<sup>31</sup>&nbsp;-&nbsp;1] range), numerical overflows and unexpected rendering results may occur when pixel coordinates (obtained by scaling document units) approach or exceed the limits imposed by 24-bit integers. This is because D-Type Power Engine internally stores all pixel quantities as 24.8 signed fractional values (see the <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> type) in order to allow D-Type Rasterizer to render text and vectorial shapes using sub-pixel precision. In other words, it is important to remember that the final output coordinates (in whole pixels) are limited to the [-2<sup>23</sup>&nbsp;..&nbsp;+2<sup>23</sup>&nbsp;-&nbsp;1] range.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

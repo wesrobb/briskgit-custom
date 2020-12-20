@@ -1,0 +1,75 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontFindMMInstance</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontFindMMInstance(DT_DTENGINE engine, DT_ID_SWORD font_index, const DT_SWORD contribs[])</strong></div><br /><strong>Short Description:</strong> <em>Find font index of a Multiple-Master font instance</em><br /><br />
+<h2>dtFontFindMMInstancePlus</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontFindMMInstancePlus(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SWORD contribs_flag, DT_SWORD contribs_len, const DT_SLONG contribs[])</strong></div><br /><strong>Short Description:</strong> <em>Find font index of a Multiple-Master font instance</em><br /><br />
+
+<p>These two functions search the Font Catalog for the specified interpolated Multiple-Master font instance.</p>
+
+<p>dtFontFindMMInstance is deprecated; this function has the same effect as calling dtFontFindMMInstancePlus with <em>contribs_flag</em> set to DV_MMCONTRIB_TYPE_DIM_NORM1024 and <em>contribs_len</em> set to <em>dim</em>, where <em>dim</em> can be obtained by calling the <a href="dtFontGetDim.htm">dtFontGetDim</a> or <a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Index of the font whose interpolated Multiple-Master instance is searched for.</p>
+</td></tr>
+
+<tr><td>
+<p><em>contribs_flag</em></p>
+</td><td>
+<p>See <a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstancePlus</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>contribs_len</em></p>
+</td><td>
+<p>See <a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstancePlus</a>.</p>
+</td></tr>
+
+
+<tr><td>
+<p><em>contribs</em></p>
+</td><td>
+<p>See <a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstancePlus</a>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the searched interpolated Multiple-Master font instance was found, the function returns its font index in the Font Catalog. If not found, the function returns -1.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

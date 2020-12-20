@@ -1,0 +1,16 @@
+Origin location for tables and matrices
+
+Bits 0 - 7: Vertical origin location
+
+0 = Default (Bottom for tables, Matrix Middle for matrices)
+1 = Top
+2 = Middle
+3 = Bottom
+4 = Matrix Middle
+
+Bits 8 - 15: Horizontal origin location
+
+0 = Default (Left)
+1 = Left
+2 = Center
+3 = Right

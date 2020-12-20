@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtGlyphDoTransform</h2><div class="box_prototype"><strong>
+DT_SLONG dtGlyphDoTransform(DT_DTENGINE engine, DT_ID_ULONG glyph_index, DT_FLOAT x, DT_FLOAT y, DT_ID_SWORD flag, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_FLOAT x_arr[], DT_FLOAT y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Scale glyph - floating point version</em><br /><br />
+
+<h2>dtGlyphDoTransformFrac</h2><div class="box_prototype"><strong>
+DT_SLONG dtGlyphDoTransformFrac(DT_DTENGINE engine, DT_ID_ULONG glyph_index, DT_SFRAC_L x, DT_SFRAC_L y, DT_ID_SWORD flag, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_SFRAC_L x_arr[], DT_SFRAC_L y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Scale glyph - fractional version</em><br /><br />
+
+<h2>dtCharDoTransform</h2><div class="box_prototype"><strong>
+DT_SLONG dtCharDoTransform(DT_DTENGINE engine, DT_ID_ULONG char_code, DT_FLOAT x, DT_FLOAT y, DT_ID_SWORD flag, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_FLOAT x_arr[], DT_FLOAT y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Scale character - floating point version</em><br /><br />
+
+<h2>dtCharDoTransformFrac</h2><div class="box_prototype"><strong>
+DT_SLONG dtCharDoTransformFrac(DT_DTENGINE engine, DT_ID_ULONG char_code, DT_SFRAC_L x, DT_SFRAC_L y, DT_ID_SWORD flag, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_SFRAC_L x_arr[], DT_SFRAC_L y_arr[], DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Scale character - fractional version</em><br /><br />
+
+<p>These functions process a single glyph represented by a Unicode character code (or font dependent glyph index) and retrieve its transformed (scaled) bitmap and/or outline description in pixels units. The glyph is processed by the Typesetter which provides type (e.g. font, transformation, outline expansion), hinting and positioning attributes to the glyph.</p>
+
+<p>The Typesetter processes the outline curve in precisely the same way as in <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a> or <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a>. This means that hinting and outline transformations are preserved. Also, if the retrieved outline description is passed back to D-Type Rasterizer via
+the <a href="dtShapeDoOutput.htm">dtShapeDoOutput</a> function (and without applying any additional transformations), the resulting 8-bit grayscale bitmap image will look the same as if the glyph was rendered by a direct call to <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a> or <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a>*.</p>
+
+<p><a href="dtGlyphDoTransform.htm">dtGlyphDoTransformFrac</a> is identical to <a href="dtGlyphDoTransform.htm">dtGlyphDoTransform</a> except that some of its parameters are 24.8 signed fractional values. Similarly, <a href="dtGlyphDoTransform.htm">dtCharDoTransformFrac</a> is identical to <a href="dtGlyphDoTransform.htm">dtCharDoTransform</a> except that some of its parameters are 24.8 signed fractional values. For more details on fractional units, see the <a href="../manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<p>*<em>Exception:</em> Font outline thickness and expansion are ignored in this case!</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>char_code</em></p>
+</td><td>
+<p>Unicode character code of the glyph to be processed.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_index</em></p>
+</td><td>
+<p>Font dependent index of the glyph to be processed.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>Glyph's X coordinate in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Glyph's Y coordinate in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Type of processing to perform. Presently, this can be one of the following:</p>
+
+<ul>
+
+<li><p><em>flag</em> = 0 &mdash; Only return the glyph's extent.</p></li>
+
+<li><p><em>flag</em> = 1 &mdash; Return the glyph's extent and its outline description.</p></li>
+
+<li><p><em>flag</em> = 2 &mdash; Return the glyph's extent and attempt to provide a pointer to its <em>plain 8-bit grayscale memory bitmap</em>. This option is currently not supported but may be implemented in the future.</p></li>
+
+<li><p><em>flag</em> = 3 &mdash; Return the glyph's extent, its outline description and also attempt to provide a pointer to its <em>plain 8-bit grayscale memory bitmap</em>. This option is currently not supported but may be implemented in the future.</p></li>
+
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>max_points</em></p>
+</td><td>
+<p>Specifies the size of the 3-dimensional array into which the function copies the glyph's transformed outline description.</p>
+</td></tr>
+
+<tr><td>
+<p><em>i_arr, x_arr, y_arr</em></p>
+</td><td>
+<p>A 3-dimensional array into which the function copies the glyph's transformed outline description.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_bitmap</em></p>
+</td><td>
+
+<p>Either a valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure or DV_NULL. If <em>memory_bitmap</em> is a valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure, then the engine will attempt to return information about the glyph's extent (and in the future its plain 8-bit grayscale memory bitmap). If successful, the structure's members will hold the following information:</p>
+
+<ul>
+<li><p><em>memory_bitmap.m</em> &mdash; Presently this function cannot render the bitmap. As a result, this will be set to DV_NULL.</p></li>
+
+<li><p><em>memory_bitmap.l</em> &mdash; Presently this function cannot render the bitmap. As a result, this will be set to 0.</p></li>
+
+<li><p><em>memory_bitmap.w</em> &mdash; width of the bitmap/extent in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.h</em> &mdash; height of the bitmap/extent in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.x</em> &mdash; horizontal distance between the bitmap's/extent's left edge and glyph's origin in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+<li><p><em>memory_bitmap.y</em> &mdash; vertical distance between the glyph's origin and bitmap's/extent's top edge in pixels as defined by the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure</p></li>
+
+</ul>
+
+<p>If you do not wish to retrieve information about the glyph's extent, simply set <em>memory_bitmap</em> to DV_NULL.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns the actual number of points needed for the outline description. Otherwise, the return value is -1.</p>
+
+<p>If the 3-dimensional array is not large enough to accept all the outline points (i.e. <em>max_points</em> is less than the return value, the function copies only the first <em>max_points</em> elements into the 3-dimensional array (i.e. the array will be truncated). In this case, your application can increase the size of the 3-dimensional array and call this function again with the updated value for <em>max_points</em>.</p>
+
+<p><em>Note:</em> Recommended value for <em>max_points</em> is 500.</p>
+
+
+<h3>Comments</h3>
+
+<p><em>The i_arr</em> array contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays. Possible values for <em>i_arr</em> are:</p>
+
+<ul>
+<li>New contour: <strong>16</strong></li>
+<li>Line: <strong>20</strong></li>
+<li>Quadratic B-Spline curve: <strong>25</strong></li>
+<li>B&eacute;zier curve: <strong>24</strong></li>
+</ul>
+
+<p>The following table describes how the 3-dimensional array should be interpreted. Please note that Quadratic B-Spline curves require two consecutive rows in the 3-dimensional array while B&eacute;zier curves require three consecutive rows.</p>
+
+<table class="table_data">
+
+<tr>
+<th width="33%">i_arr</th>
+<th width="33%">x_arr</th>
+<th width="33%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="3" align="left">New Contour</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">X1 in pixels</p>
+
+</td><td><p align="center">Y1 in pixels</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">X1 in pixels</p>
+
+</td><td><p align="center">Y1 in pixels</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">X1 in pixels</p>
+
+</td><td><p align="center">Y1 in pixels</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in pixels</p>
+
+</td><td><p align="center">Y2 in pixels</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">X1 in pixels</p>
+
+</td><td><p align="center">Y1 in pixels</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in pixels</p>
+
+</td><td><p align="center">Y2 in pixels</p>
+</td></tr>
+
+<tr><td><p align="center">0</p>
+
+</td><td><p align="center">X3 in pixels</p>
+
+</td><td><p align="center">Y3 in pixels</p>
+</td></tr>
+
+</table>
+
+<p><em>Note:</em> n = recommended number of curve segments</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

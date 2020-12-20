@@ -1,0 +1,1 @@
+Control's value in ANSI format (1 byte per character). Any form control can have a value. Most controls (e.g. buttons, radio buttons, check boxes, text boxes) need a value to function in a useful way. Some controls, however, can function without a value (e.g. sliders).

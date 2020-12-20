@@ -1,0 +1,3 @@
+Link to the {a href="../objects/002.htm"}Shadow Definition{/a} object.
+
+Used to render the shadow of a line, shape or some other object.

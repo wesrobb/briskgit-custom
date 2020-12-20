@@ -1,0 +1,5 @@
+This objects represents a single text fragment. In Power Engine API, a text fragment is a sequence of characters or glyphs that share the same typographic and layout properties. Text fragments are the key building blocks used in the construction of other higher-level rich text objects (i.e. {a href="../objects/104.htm"}Rich Text Line{/a}, {a href="../objects/105.htm"}Rich Text Arc{/a}, {a href="../objects/131.htm"}Rich Text Path{/a}, {a href="../objects/106.htm"}Rich Text Area{/a}, {a href="../objects/127.htm"}Rich Text Design{/a}).
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.

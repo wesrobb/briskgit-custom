@@ -1,0 +1,3 @@
+Link to the {a href="../objects/201.htm"}Control Configuration{/a} object.
+
+This link supplies the control's configuration parameters.

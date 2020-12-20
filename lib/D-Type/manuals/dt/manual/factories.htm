@@ -1,0 +1,102 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Predefined Font Factory Configurations</h1>
+
+
+<h2><a name="FF0">Blank Font Factory (factory_config_id = 0)</a></h2>
+<p>When this values is used, no font formats will be defined within the scope of the specified Standard Engine instance. Consequently, applications will not be able to open any fonts.</p>
+
+
+<h2><a name="FF1">Legacy Font Factory A (factory_config_id = 1)</a></h2>
+<p>Font format IDs in this factory configuration are defined as follows:</p>
+
+
+<table class="table_data">
+
+<tr><th>font_format_id</th><th>Description</th><th>Char Translation and Alignment (.ccv) File Path</th></tr>
+
+<tr><td align="center"> 0 <br /><small><small>(DV_FONT_DTYPE)</small></small></td><td>D-Type Font Format (.dtf) utilizing Unicode Encoding</td><td>N/A</td></tr>
+
+<tr><td align="center"> 1 <br /><small><small>(DV_FONT_OPENTYPE_TTF_MACASCII)</small></small></td><td>TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collections (.ttc) utilizing Apple Mac ASCII Encoding</td><td>ot-mac-ascii.ccv</td></tr>
+
+<tr><td align="center"> 3 <br /><small><small>(DV_FONT_OPENTYPE_TTF_WINUNICODE)</small></small></td><td>TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collections (.ttc) utilizing Windows Unicode Encoding</td><td>ot-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 6 <br /><small><small>(DV_FONT_OPENTYPE_CFF_MACASCII)</small></small></td><td>OpenType (.otf) with Type 2/CFF outlines utilizing Apple Mac ASCII Encoding</td><td>ot-mac-ascii.ccv</td></tr>
+
+<tr><td align="center"> 5 <br /><small><small>(DV_FONT_OPENTYPE_CFF_WINUNICODE)</small></small></td><td>OpenType (.otf) with Type 2/CFF outlines utilizing Windows Unicode Encoding</td><td>ot-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 2 <br /><small><small>(DV_FONT_TYPE1_ADOBE)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing Adobe Standard Encoding</td><td>t1-adobe-std.ccv</td></tr>
+
+<tr><td align="center"> 7 <br /><small><small>(DV_FONT_TYPE1_ISOLATIN)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing ISO Latin Encoding</td><td>t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 8 <br /><small><small>(DV_FONT_TYPE1_WINUNICODE)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing Synthesized Windows Unicode Encoding</td><td>t1-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 11 <br /><small><small>(DV_FONT_PSTYPE3_ISOLATIN)</small></small></td><td>Adobe Type 3 PostScript (.ps) utilizing ISO Latin Encoding<br /><strong>Note: Only Type 3 PostScript fonts that obey <a href="psfonts.htm">D-Type's strict parsing rules</a> are supported.</strong></td><td>t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 12 <br /><small><small>(DV_FONT_PSTYPE3_WINUNICODE)</small></small></td><td>Adobe Type 3 PostScript (.ps) utilizing Synthesized Windows Unicode Encoding<br /><strong>Note: Only Type 3 PostScript fonts that obey <a href="psfonts.htm">D-Type's strict parsing rules</a> are supported.</strong></td><td>t1-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 14 <br /><small><small>(DV_FONT_BARECFF_ADOBE)</small></small></td><td>Bare CFF (.cff) utilizing Adobe Standard Encoding</td><td>t1-adobe-std.ccv</td></tr>
+
+<tr><td align="center"> 15 <br /><small><small>(DV_FONT_BARECFF_ISOLATIN)</small></small></td><td>Bare CFF (.cff) utilizing ISO Latin Encoding</td><td>t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 16 <br /><small><small>(DV_FONT_BARECFF_WINUNICODE)</small></small></td><td>Bare CFF (.cff) utilizing Synthesized Windows Unicode Encoding</td><td>t1-win-unicode.ccv</td></tr>
+
+</table>
+
+
+<h2><a name="FF2">Legacy Font Factory B (factory_config_id = 2)</a></h2>
+<p>Font format IDs in this factory configuration are defined as follows:</p>
+
+
+<table class="table_data">
+
+<tr><th>font_format_id</th><th>Description</th><th>Char Translation and Alignment (.ccv) File Path</th></tr>
+
+<tr><td align="center"> 0 <br /><small><small>(DV_FONT_DTYPE)</small></small></td><td>D-Type Font Format (.dtf) utilizing Unicode Encoding</td><td>N/A</td></tr>
+
+<tr><td align="center"> 1 <br /><small><small>(DV_FONT_OPENTYPE_TTF_MACASCII)</small></small></td><td>TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collections (.ttc) utilizing Apple Mac ASCII Encoding</td><td>system/ccv/ot-mac-ascii.ccv</td></tr>
+
+<tr><td align="center"> 3 <br /><small><small>(DV_FONT_OPENTYPE_TTF_WINUNICODE)</small></small></td><td>TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collections (.ttc) utilizing Windows Unicode Encoding</td><td>system/ccv/ot-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 6 <br /><small><small>(DV_FONT_OPENTYPE_CFF_MACASCII)</small></small></td><td>OpenType (.otf) with Type 2/CFF outlines utilizing Apple Mac ASCII Encoding</td><td>system/ccv/ot-mac-ascii.ccv</td></tr>
+
+<tr><td align="center"> 5 <br /><small><small>(DV_FONT_OPENTYPE_CFF_WINUNICODE)</small></small></td><td>OpenType (.otf) with Type 2/CFF outlines utilizing Windows Unicode Encoding</td><td>system/ccv/ot-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 2 <br /><small><small>(DV_FONT_TYPE1_ADOBE)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing Adobe Standard Encoding</td><td>system/ccv/t1-adobe-std.ccv</td></tr>
+
+<tr><td align="center"> 7 <br /><small><small>(DV_FONT_TYPE1_ISOLATIN)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing ISO Latin Encoding</td><td>system/ccv/t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 8 <br /><small><small>(DV_FONT_TYPE1_WINUNICODE)</small></small></td><td>Adobe Type 1 (.pfb or .pfa) utilizing Synthesized Windows Unicode Encoding</td><td>system/ccv/t1-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 11 <br /><small><small>(DV_FONT_PSTYPE3_ISOLATIN)</small></small></td><td>Adobe Type 3 PostScript (.ps) utilizing ISO Latin Encoding<br /><strong>Note: Only Type 3 PostScript fonts that obey <a href="psfonts.htm">D-Type's strict parsing rules</a> are supported.</strong></td><td>system/ccv/t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 12 <br /><small><small>(DV_FONT_PSTYPE3_WINUNICODE)</small></small></td><td>Adobe Type 3 PostScript (.ps) utilizing Synthesized Windows Unicode Encoding<br /><strong>Note: Only Type 3 PostScript fonts that obey <a href="psfonts.htm">D-Type's strict parsing rules</a> are supported.</strong></td><td>system/ccv/t1-win-unicode.ccv</td></tr>
+
+<tr><td align="center"> 14 <br /><small><small>(DV_FONT_BARECFF_ADOBE)</small></small></td><td>Bare CFF (.cff) utilizing Adobe Standard Encoding</td><td>system/ccv/t1-adobe-std.ccv</td></tr>
+
+<tr><td align="center"> 15 <br /><small><small>(DV_FONT_BARECFF_ISOLATIN)</small></small></td><td>Bare CFF (.cff) utilizing ISO Latin Encoding</td><td>system/ccv/t1-iso-latin.ccv</td></tr>
+
+<tr><td align="center"> 16 <br /><small><small>(DV_FONT_BARECFF_WINUNICODE)</small></small></td><td>Bare CFF (.cff) utilizing Synthesized Windows Unicode Encoding</td><td>system/ccv/t1-win-unicode.ccv</td></tr>
+
+</table>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

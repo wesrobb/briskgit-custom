@@ -1,0 +1,5 @@
+This objects represents a text arc. In Power Engine API, a text arc is an array of characters or glyphs drawn on the inner or outer edge of an imaginary circle and formatted according to the specified parameters.
+
+{strong}Designated Rendering Function:{/strong} pdDrawTextArc (2)
+
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.

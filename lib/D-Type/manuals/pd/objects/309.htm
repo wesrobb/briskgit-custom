@@ -1,0 +1,479 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Rich Button</h2>
+<h3 id="overview">Overview</h3>
+The Rich Button object is a visual and interactive form control whose purpose is to trigger certain action(s) when an event occurs (e.g. the user presses the button, releases it, etc.).<br />
+<br />
+<strong>Designated Rendering Function:</strong> fcDrawRichButton (10008)<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTextFragmentPtr"><em><span class="field">pdTextFragmentPtr</span> (1038)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextFragmentPtr">Text Fragment</a>, <a href="104.htm#pdTextFragmentPtr">Rich Text Line</a>, <a href="105.htm#pdTextFragmentPtr">Rich Text Arc</a>, <a href="106.htm#pdTextFragmentPtr">Rich Text Area</a>, <a href="128.htm#pdTextFragmentPtr">Rich Text Design</a>, <a href="131.htm#pdTextFragmentPtr">Rich Text Path</a>, <a href="308.htm#pdTextFragmentPtr">Rich Text Box</a>, <a href="310.htm#pdTextFragmentPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="007.htm">Text Fragment</a> object.<br />
+<br />
+This link in used to establish a link to the next text fragment. This can be the first text fragment or the fragment that follows the current one.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcConfigPtr"><em><span class="field">fcConfigPtr</span> (10000)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcConfigPtr">Button</a>, <a href="302.htm#fcConfigPtr">Radio Button</a>, <a href="303.htm#fcConfigPtr">Check Box</a>, <a href="304.htm#fcConfigPtr">Text Box</a>, <a href="305.htm#fcConfigPtr">List Box</a>, <a href="306.htm#fcConfigPtr">Horizontal Slider</a>, <a href="307.htm#fcConfigPtr">Vertical Slider</a>, <a href="308.htm#fcConfigPtr">Rich Text Box</a>, <a href="310.htm#fcConfigPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="201.htm">Control Configuration</a> object.<br />
+<br />
+This link supplies the control's configuration parameters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcProgramPtr"><em><span class="field">fcProgramPtr</span> (10030)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcProgramPtr">Button</a>, <a href="302.htm#fcProgramPtr">Radio Button</a>, <a href="303.htm#fcProgramPtr">Check Box</a>, <a href="304.htm#fcProgramPtr">Text Box</a>, <a href="305.htm#fcProgramPtr">List Box</a>, <a href="306.htm#fcProgramPtr">Horizontal Slider</a>, <a href="307.htm#fcProgramPtr">Vertical Slider</a>, <a href="308.htm#fcProgramPtr">Rich Text Box</a>, <a href="310.htm#fcProgramPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="019.htm">Program</a> object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="fcConnectionID"><em><span class="field">fcConnectionID</span> (10001)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcConnectionID">Button</a>, <a href="302.htm#fcConnectionID">Radio Button</a>, <a href="303.htm#fcConnectionID">Check Box</a>, <a href="304.htm#fcConnectionID">Text Box</a>, <a href="305.htm#fcConnectionID">List Box</a>, <a href="306.htm#fcConnectionID">Horizontal Slider</a>, <a href="307.htm#fcConnectionID">Vertical Slider</a>, <a href="308.htm#fcConnectionID">Rich Text Box</a>, <a href="310.htm#fcConnectionID">Rich List Box</a></small></p>
+<p>
+An ID used to establish a connection between several independent form controls. Controls with the same fcConnectionID are connected.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcLockStatus"><em><span class="field">fcLockStatus</span> (10002)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcLockStatus">Button</a>, <a href="302.htm#fcLockStatus">Radio Button</a>, <a href="303.htm#fcLockStatus">Check Box</a>, <a href="304.htm#fcLockStatus">Text Box</a>, <a href="305.htm#fcLockStatus">List Box</a>, <a href="306.htm#fcLockStatus">Horizontal Slider</a>, <a href="307.htm#fcLockStatus">Vertical Slider</a>, <a href="308.htm#fcLockStatus">Rich Text Box</a>, <a href="310.htm#fcLockStatus">Rich List Box</a></small></p>
+<p>
+A flag that indicates whether and how the control is locked for user interactions.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Control is not locked (all user interactions are enabled)<br />
+<br />
+1 = Control is completely locked (all user interactions are disabled)<br />
+<br />
+2 = Control is locked for changes (user changes are disabled, other interactions are enabled)<br />
+<br />
+3 = Control is locked for changes (user changes are disabled, other interactions are enabled), except scrolling<br />
+<br />
+4 = Control is only locked for scrolling<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcState"><em><span class="field">fcState</span> (10003)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcState">Button</a>, <a href="302.htm#fcState">Radio Button</a>, <a href="303.htm#fcState">Check Box</a>, <a href="304.htm#fcState">Text Box</a>, <a href="305.htm#fcState">List Box</a>, <a href="306.htm#fcState">Horizontal Slider</a>, <a href="307.htm#fcState">Vertical Slider</a>, <a href="308.htm#fcState">Rich Text Box</a>, <a href="310.htm#fcState">Rich List Box</a></small></p>
+<p>
+A flag indicating the state of a control.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Normal<br />
+1 = Pushed<br />
+2 = Selected<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcName"><em><span class="field">fcName</span> (10004)</em> &nbsp; <small class="label">PD_ASC</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcName">Button</a>, <a href="302.htm#fcName">Radio Button</a>, <a href="303.htm#fcName">Check Box</a>, <a href="304.htm#fcName">Text Box</a>, <a href="305.htm#fcName">List Box</a>, <a href="306.htm#fcName">Horizontal Slider</a>, <a href="307.htm#fcName">Vertical Slider</a>, <a href="308.htm#fcName">Rich Text Box</a>, <a href="310.htm#fcName">Rich List Box</a></small></p>
+<p>
+Name of the control. Controls representing different variables or features should have different names. Controls representing the same variable or feature (e.g. a group of radio buttons) should have the same name.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcDw"><em><span class="field">fcDw</span> (10006)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcDw">Button</a>, <a href="302.htm#fcDw">Radio Button</a>, <a href="303.htm#fcDw">Check Box</a>, <a href="304.htm#fcDw">Text Box</a>, <a href="305.htm#fcDw">List Box</a>, <a href="306.htm#fcDw">Horizontal Slider</a>, <a href="307.htm#fcDw">Vertical Slider</a>, <a href="308.htm#fcDw">Rich Text Box</a>, <a href="310.htm#fcDw">Rich List Box</a></small></p>
+<p>
+Width of the control in document units.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcDh"><em><span class="field">fcDh</span> (10007)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcDh">Button</a>, <a href="302.htm#fcDh">Radio Button</a>, <a href="303.htm#fcDh">Check Box</a>, <a href="304.htm#fcDh">Text Box</a>, <a href="305.htm#fcDh">List Box</a>, <a href="306.htm#fcDh">Horizontal Slider</a>, <a href="307.htm#fcDh">Vertical Slider</a>, <a href="308.htm#fcDh">Rich Text Box</a>, <a href="310.htm#fcDh">Rich List Box</a></small></p>
+<p>
+Height of the control in document units.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcUserParam"><em><span class="field">fcUserParam</span> (10008)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcUserParam">Button</a>, <a href="302.htm#fcUserParam">Radio Button</a>, <a href="303.htm#fcUserParam">Check Box</a>, <a href="304.htm#fcUserParam">Text Box</a>, <a href="305.htm#fcUserParam">List Box</a>, <a href="306.htm#fcUserParam">Horizontal Slider</a>, <a href="307.htm#fcUserParam">Vertical Slider</a>, <a href="308.htm#fcUserParam">Rich Text Box</a>, <a href="310.htm#fcUserParam">Rich List Box</a></small></p>
+<p>
+An arbitrary user parameter.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcTabOrderID"><em><span class="field">fcTabOrderID</span> (10009)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcTabOrderID">Button</a>, <a href="302.htm#fcTabOrderID">Radio Button</a>, <a href="303.htm#fcTabOrderID">Check Box</a>, <a href="304.htm#fcTabOrderID">Text Box</a>, <a href="305.htm#fcTabOrderID">List Box</a>, <a href="306.htm#fcTabOrderID">Horizontal Slider</a>, <a href="307.htm#fcTabOrderID">Vertical Slider</a>, <a href="308.htm#fcTabOrderID">Rich Text Box</a>, <a href="310.htm#fcTabOrderID">Rich List Box</a></small></p>
+<p>
+Tab order ID.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcGroupID"><em><span class="field">fcGroupID</span> (10010)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcGroupID">Button</a>, <a href="302.htm#fcGroupID">Radio Button</a>, <a href="303.htm#fcGroupID">Check Box</a>, <a href="304.htm#fcGroupID">Text Box</a>, <a href="305.htm#fcGroupID">List Box</a>, <a href="306.htm#fcGroupID">Horizontal Slider</a>, <a href="307.htm#fcGroupID">Vertical Slider</a>, <a href="308.htm#fcGroupID">Rich Text Box</a>, <a href="310.htm#fcGroupID">Rich List Box</a></small></p>
+<p>
+An ID used to group several form controls. Controls with the same fcGroupID belong to the same group.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcUserString"><em><span class="field">fcUserString</span> (10017)</em> &nbsp; <small class="label">PD_ASC</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcUserString">Button</a>, <a href="302.htm#fcUserString">Radio Button</a>, <a href="303.htm#fcUserString">Check Box</a>, <a href="304.htm#fcUserString">Text Box</a>, <a href="305.htm#fcUserString">List Box</a>, <a href="306.htm#fcUserString">Horizontal Slider</a>, <a href="307.htm#fcUserString">Vertical Slider</a>, <a href="308.htm#fcUserString">Rich Text Box</a>, <a href="310.htm#fcUserString">Rich List Box</a></small></p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcOnCtrlRelease"><em><span class="field">fcOnCtrlRelease</span> (10200)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcOnCtrlRelease">Button</a>, <a href="302.htm#fcOnCtrlRelease">Radio Button</a>, <a href="303.htm#fcOnCtrlRelease">Check Box</a>, <a href="304.htm#fcOnCtrlRelease">Text Box</a>, <a href="305.htm#fcOnCtrlRelease">List Box</a>, <a href="306.htm#fcOnCtrlRelease">Horizontal Slider</a>, <a href="307.htm#fcOnCtrlRelease">Vertical Slider</a>, <a href="308.htm#fcOnCtrlRelease">Rich Text Box</a>, <a href="310.htm#fcOnCtrlRelease">Rich List Box</a></small></p>
+<p>
+An array of actions executed when the control is released.<br />
+<br />
+Each element of the array can have one of the following values:<br />
+<br />
+0 = Do nothing<br />
+1 = Call the callback function<br />
+2 = Jump to the page specified in fcUserParam<br />
+3 = Scroll up (left) connected sliders, text boxes and list boxes<br />
+4 = Scroll down (right) connected sliders, text boxes and list boxes<br />
+5 = Scroll connected list boxes and text boxes according to the slider's position<br />
+6 = Copy the value of the slider's position to connected text boxes<br />
+7 = Scroll connected sliders according to the first visible item in the list box or text box<br />
+8 = Copy the value of the selected item in the list to connected text boxes<br />
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam<br />
+10 = Show all controls whose GroupID matches the value specified in fcUserParam<br />
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam<br />
+12 = Jump to the previous page<br />
+13 = Jump to the next page<br />
+14 = Update connected sliders to reflect the amount of content in the text box<br />
+15 = Copy the value of the slider's position to joined media - by time<br />
+16 = Copy the value of the slider's position to joined media - by frame<br />
+17 = Pause joined media<br />
+18 = Play joined media<br />
+19 = Restart joined media<br />
+20 = Toggle joined media<br />
+21 = Open URL specified in fcUserString using the default Web browser<br />
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam<br />
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam<br />
+24 = Open address specified in fcUserString using the default E-mail client<br />
+100 = Call the Program object via fcProgramPtr<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcOnCtrlPush"><em><span class="field">fcOnCtrlPush</span> (10203)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcOnCtrlPush">Button</a>, <a href="302.htm#fcOnCtrlPush">Radio Button</a>, <a href="303.htm#fcOnCtrlPush">Check Box</a>, <a href="304.htm#fcOnCtrlPush">Text Box</a>, <a href="305.htm#fcOnCtrlPush">List Box</a>, <a href="306.htm#fcOnCtrlPush">Horizontal Slider</a>, <a href="307.htm#fcOnCtrlPush">Vertical Slider</a>, <a href="308.htm#fcOnCtrlPush">Rich Text Box</a>, <a href="310.htm#fcOnCtrlPush">Rich List Box</a></small></p>
+<p>
+An array of actions executed when the control is pushed.<br />
+<br />
+Each element of the array can have one of the following values:<br />
+<br />
+0 = Do nothing<br />
+1 = Call the callback function<br />
+2 = Jump to the page specified in fcUserParam<br />
+3 = Scroll up (left) connected sliders, text boxes and list boxes<br />
+4 = Scroll down (right) connected sliders, text boxes and list boxes<br />
+5 = Scroll connected list boxes and text boxes according to the slider's position<br />
+6 = Copy the value of the slider's position to connected text boxes<br />
+7 = Scroll connected sliders according to the first visible item in the list box or text box<br />
+8 = Copy the value of the selected item in the list to connected text boxes<br />
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam<br />
+10 = Show all controls whose GroupID matches the value specified in fcUserParam<br />
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam<br />
+12 = Jump to the previous page<br />
+13 = Jump to the next page<br />
+14 = Update connected sliders to reflect the amount of content in the text box<br />
+15 = Copy the value of the slider's position to joined media - by time<br />
+16 = Copy the value of the slider's position to joined media - by frame<br />
+17 = Pause joined media<br />
+18 = Play joined media<br />
+19 = Restart joined media<br />
+20 = Toggle joined media<br />
+21 = Open URL specified in fcUserString using the default Web browser<br />
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam<br />
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam<br />
+24 = Open address specified in fcUserString using the default E-mail client<br />
+100 = Call the Program object via fcProgramPtr<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcOnCtrlFocusReceive"><em><span class="field">fcOnCtrlFocusReceive</span> (10204)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcOnCtrlFocusReceive">Button</a>, <a href="302.htm#fcOnCtrlFocusReceive">Radio Button</a>, <a href="303.htm#fcOnCtrlFocusReceive">Check Box</a>, <a href="304.htm#fcOnCtrlFocusReceive">Text Box</a>, <a href="305.htm#fcOnCtrlFocusReceive">List Box</a>, <a href="306.htm#fcOnCtrlFocusReceive">Horizontal Slider</a>, <a href="307.htm#fcOnCtrlFocusReceive">Vertical Slider</a>, <a href="308.htm#fcOnCtrlFocusReceive">Rich Text Box</a>, <a href="310.htm#fcOnCtrlFocusReceive">Rich List Box</a></small></p>
+<p>
+An array of actions executed when the control receives focus.<br />
+<br />
+Each element of the array can have one of the following values:<br />
+<br />
+0 = Do nothing<br />
+1 = Call the callback function<br />
+2 = Jump to the page specified in fcUserParam<br />
+3 = Scroll up (left) connected sliders, text boxes and list boxes<br />
+4 = Scroll down (right) connected sliders, text boxes and list boxes<br />
+5 = Scroll connected list boxes and text boxes according to the slider's position<br />
+6 = Copy the value of the slider's position to connected text boxes<br />
+7 = Scroll connected sliders according to the first visible item in the list box or text box<br />
+8 = Copy the value of the selected item in the list to connected text boxes<br />
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam<br />
+10 = Show all controls whose GroupID matches the value specified in fcUserParam<br />
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam<br />
+12 = Jump to the previous page<br />
+13 = Jump to the next page<br />
+14 = Update connected sliders to reflect the amount of content in the text box<br />
+15 = Copy the value of the slider's position to joined media - by time<br />
+16 = Copy the value of the slider's position to joined media - by frame<br />
+17 = Pause joined media<br />
+18 = Play joined media<br />
+19 = Restart joined media<br />
+20 = Toggle joined media<br />
+21 = Open URL specified in fcUserString using the default Web browser<br />
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam<br />
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam<br />
+24 = Open address specified in fcUserString using the default E-mail client<br />
+100 = Call the Program object via fcProgramPtr<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcOnCtrlHold"><em><span class="field">fcOnCtrlHold</span> (10205)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcOnCtrlHold">Button</a>, <a href="302.htm#fcOnCtrlHold">Radio Button</a>, <a href="303.htm#fcOnCtrlHold">Check Box</a>, <a href="304.htm#fcOnCtrlHold">Text Box</a>, <a href="305.htm#fcOnCtrlHold">List Box</a>, <a href="306.htm#fcOnCtrlHold">Horizontal Slider</a>, <a href="307.htm#fcOnCtrlHold">Vertical Slider</a>, <a href="308.htm#fcOnCtrlHold">Rich Text Box</a>, <a href="310.htm#fcOnCtrlHold">Rich List Box</a></small></p>
+<p>
+An array of actions executed when the control is held.<br />
+<br />
+Each element of the array can have one of the following values:<br />
+<br />
+0 = Do nothing<br />
+1 = Call the callback function<br />
+2 = Jump to the page specified in fcUserParam<br />
+3 = Scroll up (left) connected sliders, text boxes and list boxes<br />
+4 = Scroll down (right) connected sliders, text boxes and list boxes<br />
+5 = Scroll connected list boxes and text boxes according to the slider's position<br />
+6 = Copy the value of the slider's position to connected text boxes<br />
+7 = Scroll connected sliders according to the first visible item in the list box or text box<br />
+8 = Copy the value of the selected item in the list to connected text boxes<br />
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam<br />
+10 = Show all controls whose GroupID matches the value specified in fcUserParam<br />
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam<br />
+12 = Jump to the previous page<br />
+13 = Jump to the next page<br />
+14 = Update connected sliders to reflect the amount of content in the text box<br />
+15 = Copy the value of the slider's position to joined media - by time<br />
+16 = Copy the value of the slider's position to joined media - by frame<br />
+17 = Pause joined media<br />
+18 = Play joined media<br />
+19 = Restart joined media<br />
+20 = Toggle joined media<br />
+21 = Open URL specified in fcUserString using the default Web browser<br />
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam<br />
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam<br />
+24 = Open address specified in fcUserString using the default E-mail client<br />
+100 = Call the Program object via fcProgramPtr<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="fcOnCtrlFocusLose"><em><span class="field">fcOnCtrlFocusLose</span> (10206)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="301.htm#fcOnCtrlFocusLose">Button</a>, <a href="302.htm#fcOnCtrlFocusLose">Radio Button</a>, <a href="303.htm#fcOnCtrlFocusLose">Check Box</a>, <a href="304.htm#fcOnCtrlFocusLose">Text Box</a>, <a href="305.htm#fcOnCtrlFocusLose">List Box</a>, <a href="306.htm#fcOnCtrlFocusLose">Horizontal Slider</a>, <a href="307.htm#fcOnCtrlFocusLose">Vertical Slider</a>, <a href="308.htm#fcOnCtrlFocusLose">Rich Text Box</a>, <a href="310.htm#fcOnCtrlFocusLose">Rich List Box</a></small></p>
+<p>
+An array of actions executed when the control loses focus.<br />
+<br />
+Each element of the array can have one of the following values:<br />
+<br />
+0 = Do nothing<br />
+1 = Call the callback function<br />
+2 = Jump to the page specified in fcUserParam<br />
+3 = Scroll up (left) connected sliders, text boxes and list boxes<br />
+4 = Scroll down (right) connected sliders, text boxes and list boxes<br />
+5 = Scroll connected list boxes and text boxes according to the slider's position<br />
+6 = Copy the value of the slider's position to connected text boxes<br />
+7 = Scroll connected sliders according to the first visible item in the list box or text box<br />
+8 = Copy the value of the selected item in the list to connected text boxes<br />
+9 = Hide all controls whose GroupID matches the value specified in fcUserParam<br />
+10 = Show all controls whose GroupID matches the value specified in fcUserParam<br />
+11 = Alternate the visibility of all controls whose GroupID matches the value specified in fcUserParam<br />
+12 = Jump to the previous page<br />
+13 = Jump to the next page<br />
+14 = Update connected sliders to reflect the amount of content in the text box<br />
+15 = Copy the value of the slider's position to joined media - by time<br />
+16 = Copy the value of the slider's position to joined media - by frame<br />
+17 = Pause joined media<br />
+18 = Play joined media<br />
+19 = Restart joined media<br />
+20 = Toggle joined media<br />
+21 = Open URL specified in fcUserString using the default Web browser<br />
+22 = Jump to the first page that holds an image with the name ID specified in fcUserParam<br />
+23 = Jump to the last page that holds an image with the name ID specified in fcUserParam<br />
+24 = Open address specified in fcUserString using the default E-mail client<br />
+100 = Call the Program object via fcProgramPtr<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[11];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Text Fragment Outline Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Text Fragment Body Style");<br />
+obj[2] = pdObjAdd(pd, 0, "Text Fragment Shadow Style");<br />
+obj[3] = pdObjAdd(pd, 0, "Text Fragment Outline");<br />
+obj[4] = pdObjAdd(pd, 0, "Text Fragment Shadow");<br />
+obj[5] = pdObjAdd(pd, 0, "Text Fragment Typography");<br />
+obj[6] = pdObjAdd(pd, 0, "Text Fragment Layout");<br />
+obj[7] = pdObjAdd(pd, 0, "Text Fragment Ruler");<br />
+obj[8] = pdObjAdd(pd, 0, "Text Fragment");<br />
+obj[9] = pdObjAdd(pd, 0, "Form Configuration");<br />
+<strong>obj[10] = pdObjAdd(pd, 0, "Form Rich Button");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);<br />
+pdPropAdd(pd, obj[2], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "150", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);<br />
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);<br />
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);<br />
+pdPropAdd(pd, obj[5], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDw, "60", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDh, "60", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+pdPropAdd(pd, obj[6], pdSpacingRow, "10", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdSpacingLetter, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[6], pdKerning, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[6], pdAlign, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[6], pdAlignEnd, "1", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 7 */</span><br />
+pdPropAdd(pd, obj[7], pdTabStopPositions, "40, 80, 150, 220", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[7], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 8 */</span><br />
+pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[5]);<br />
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[6]);<br />
+pdLinkAdd(pd, obj[8], pdTextRulerHorPtr, obj[7]);<br />
+pdPropAdd(pd, obj[8], pdTextString_08, "Rich Button", PD_ASC);<br />
+<br />
+<span class="codecomment">/* Properties for object 9 */</span><br />
+pdPropAdd(pd, obj[9], fcCnfLib, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfCtrlStyleOnFocus, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfCharBox, "6", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfButtonNormal, "14", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfButtonPushed, "13", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfSliderNormal, "2", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfSliderPushed, "3", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfRadioButtonNormal, "6", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfRadioButtonPushed, "7", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfRadioButtonSelected, "8", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfCheckBoxNormal, "3", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfCheckBoxPushed, "4", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[9], fcCnfCheckBoxSelected, "5", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 10 */</span><br />
+<strong>pdLinkAdd(pd, obj[10], pdTextFragmentPtr, obj[8]);<br />
+pdLinkAdd(pd, obj[10], fcConfigPtr, obj[9]);<br />
+pdPropAdd(pd, obj[10], fcName, "IDRICHBUTTON", PD_ASC);<br />
+pdPropAdd(pd, obj[10], fcDw, "600", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[10], fcDh, "100", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[10], fcState, "0", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[10], fcUserParam, "100", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[10], fcOnCtrlPush, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[10], fcOnCtrlRelease, "2", PD_BYTE_UNSIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[10], 0, 50, 50, 0, 0, 0, fcDrawRichButton, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Text Fragment Outline Style");<br />
+local obj_1 = o("Text Fragment Body Style");<br />
+local obj_2 = o("Text Fragment Shadow Style");<br />
+local obj_3 = o("Text Fragment Outline");<br />
+local obj_4 = o("Text Fragment Shadow");<br />
+local obj_5 = o("Text Fragment Typography");<br />
+local obj_6 = o("Text Fragment Layout");<br />
+local obj_7 = o("Text Fragment Ruler");<br />
+local obj_8 = o("Text Fragment");<br />
+local obj_9 = o("Form Configuration");<br />
+local obj_10 = o("Form Rich Button");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_2 + s(pdRGBT, "80808078");<br />
+obj_2 + s(pdEP, "030A");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_0);<br />
+obj_3 + i(pdLineThickness, 150);<br />
+<br />
+obj_4 + l(pdStylePtr, obj_2);<br />
+obj_4 + i(pdShadowDx, 5);<br />
+obj_4 + i(pdShadowDy, 5);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_1);<br />
+obj_5 + l(pdShadowPtr, obj_4);<br />
+obj_5 + l(pdOutlinePtr, obj_3);<br />
+obj_5 + i(pdFontIndex, 0);<br />
+obj_5 + i(pdFontDw, 60);<br />
+obj_5 + i(pdFontDh, 60);<br />
+<br />
+obj_6 + i(pdSpacingRow, 10);<br />
+obj_6 + i(pdSpacingLetter, 5);<br />
+obj_6 + i(pdKerning, 1);<br />
+obj_6 + i(pdAlign, 1);<br />
+obj_6 + i(pdAlignEnd, 1);<br />
+<br />
+obj_7 + p(pdTabStopPositions, "40, 80, 150, 220");<br />
+obj_7 + p(pdTabStopFlags, "1, 0, 0, 2");<br />
+<br />
+obj_8 + l(pdTypographyPtr, obj_5);<br />
+obj_8 + l(pdTextLayoutPtr, obj_6);<br />
+obj_8 + l(pdTextRulerHorPtr, obj_7);<br />
+obj_8 + s(pdTextString_08, "Rich Button");<br />
+<br />
+obj_9 + i(fcCnfLib, 0);<br />
+obj_9 + i(fcCnfCtrlStyleOnFocus, 0);<br />
+obj_9 + i(fcCnfCharBox, 6);<br />
+obj_9 + i(fcCnfButtonNormal, 14);<br />
+obj_9 + i(fcCnfButtonPushed, 13);<br />
+obj_9 + i(fcCnfSliderNormal, 2);<br />
+obj_9 + i(fcCnfSliderPushed, 3);<br />
+obj_9 + i(fcCnfRadioButtonNormal, 6);<br />
+obj_9 + i(fcCnfRadioButtonPushed, 7);<br />
+obj_9 + i(fcCnfRadioButtonSelected, 8);<br />
+obj_9 + i(fcCnfCheckBoxNormal, 3);<br />
+obj_9 + i(fcCnfCheckBoxPushed, 4);<br />
+obj_9 + i(fcCnfCheckBoxSelected, 5);<br />
+<br />
+obj_10 + l(pdTextFragmentPtr, obj_8);<br />
+obj_10 + l(fcConfigPtr, obj_9);<br />
+obj_10 + p(fcName, "IDRICHBUTTON", PD_ASC);<br />
+obj_10 + i(fcDw, 600);<br />
+obj_10 + i(fcDh, 100);<br />
+obj_10 + i(fcState, 0);<br />
+obj_10 + i(fcUserParam, 100);<br />
+obj_10 + i(fcOnCtrlPush, 1);<br />
+obj_10 + i(fcOnCtrlRelease, 2);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_10.Pin(0, 50, 50, fcDrawRichButton);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

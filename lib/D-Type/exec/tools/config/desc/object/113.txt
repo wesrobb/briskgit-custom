@@ -1,0 +1,7 @@
+This object represents a circle or an ellipse. Circles and ellipses constructed in this way are not true mathematical circles/ellipses but close approximations consisting of four symmetrical Bezier curve segments.
+
+While constructing the circle/ellipse object, an optional shadow and/or outline may be specified.
+
+{strong}Designated Rendering Function:{/strong} pdDrawEllipse (5), pdDrawCircle (5)
+
+Note: Although pdBodyPtr is a key link, it is not mandatory. This means it is possible to construct a circle or an ellipse that has no body, only an outline and/or a shadow.

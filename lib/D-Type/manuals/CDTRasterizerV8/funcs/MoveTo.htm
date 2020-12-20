@@ -1,0 +1,112 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTRasterizerV8</h1>
+
+<h2>MoveTo, MoveToFrac</h2>
+
+<div class="box_prototype"><strong>void MoveTo(DT_FLOAT x1, DT_FLOAT y1, DT_UBYTE r = 0, DT_UBYTE g = 0, DT_UBYTE b = 0, DT_UBYTE t = 0)</strong></div><br />
+<div class="box_prototype"><strong>void MoveToFrac(DT_SFRAC x1, DT_SFRAC y1, DT_UBYTE r = 0, DT_UBYTE g = 0, DT_UBYTE b = 0, DT_UBYTE t = 0)</strong></div><br />
+
+<h2>MoveTo2, MoveToFrac2</h2>
+
+<div class="box_prototype"><strong>void MoveTo2(DT_FLOAT x1, DT_FLOAT y1, const DT_UBYTE color[] = DV_RGBT))</strong></div><br />
+<div class="box_prototype"><strong>void MoveToFrac2(DT_SFRAC x1, DT_SFRAC y1, const DT_UBYTE color[] = DV_RGBT)</strong></div><br />
+
+<p>The MoveTo, MoveToFrac, MoveTo2 and MoveToFrac2 methods instruct CDTRasterizerV8 to open a new contour. These methods automatically close any previously opened contour.</p>
+
+<p>MoveToFrac is identical to MoveTo except that its coordinates are 24.8 signed fractional values. For more details on fractional units, see the <a href="../../dc/manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<p>MoveTo is identical to MoveTo2 except that its colour and transparency are defined as 4 separate values. MoveToFrac is identical to MoveToFrac2 except that its colour and transparency are defined as 4 separate values.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>x1</em></p>
+</td><td>
+<p>X coordinate of the first point of the new contour, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y1</em></p>
+</td><td>
+<p>Y coordinate of the first point of the new contour, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>r</em></p>
+</td><td>
+<p>Color of the new contour &mdash; Red component (R). Must be between 0 and 255. Supported by all rasterizers except <a href="http://www.d-type.com/page/rasterizer_grayscale">D-Type Grayscale Rasterizer / D-Type B&amp;W Rasterizer</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>g</em></p>
+</td><td>
+<p>Color of the new contour &mdash; Green component (G). Must be between 0 and 255. Supported by all rasterizers except <a href="http://www.d-type.com/page/rasterizer_grayscale">D-Type Grayscale Rasterizer / D-Type B&amp;W Rasterizer</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>b</em></p>
+</td><td>
+<p>Color of the new contour &mdash; Blue component (B). Must be between 0 and 255. Supported by all rasterizers except <a href="http://www.d-type.com/page/rasterizer_grayscale">D-Type Grayscale Rasterizer / D-Type B&amp;W Rasterizer</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>t</em></p>
+</td><td>
+<p>Transparency of the new contour (T). Must be between 0 and 255. Supported by all rasterizers except <a href="http://www.d-type.com/page/rasterizer_grayscale">D-Type Grayscale Rasterizer / D-Type B&amp;W Rasterizer</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color</em></p>
+</td><td>
+<p>Same as <em>r</em>, <em>g</em>, <em>b</em> and <em>t</em> defined above, except that all 4 components are stored in an array.</p>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a></li>
+<li><a href="../../dc/manual/intro.htm">D-Type Direct Color Rasterizer</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,19 @@
+When applicable, line's start style.
+
+{strong}Supported values:{/strong}
+
+Standard Styles:
+
+ 0 = Flat
+ 1 = Round outside
+ 2 = Round inside
+ 3 = Peak outside
+ 4 = Peak inside
+ 5 = Square outside
+ 6 = Square inside
+
+Extended styles using special symbols (apply to straight lines only):
+
+ 100 = Arrowhead whose size is relative to the line's length
+ 101 = Arrowhead whose size is relative to the line's thickness
+ 110 = Dot whose size is relative to the line's thickness

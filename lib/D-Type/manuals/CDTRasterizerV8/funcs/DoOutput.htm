@@ -1,0 +1,246 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTRasterizerV8</h1>
+
+<h2>DoOutput</h2>
+
+<div class="box_prototype"><strong>void DoOutput(DT_ID_SWORD format, DT_ID_SWORD subformat = 0, DT_SWORD reserved = 0)</strong></div><br />
+
+<p>This method instructs CDTRasterizerV8 to render the current scene to the memory surface that was supplied to <a href="Init.htm">Init</a>. Before rendering, the method automatically closes any previously opened contour.</p>
+
+<p>In order for this method to generate any visible output, the scene must be first constructed by calling CDTRasterizerV8's scene construction methods (<a href="MoveTo.htm">MoveTo</a>, <a href="MoveTo.htm">MoveToFrac</a>, <a href="LineTo.htm">LineTo</a>, <a href="LineTo.htm">LineToFrac</a>, <a href="BSplineTo.htm">BSplineTo</a>, <a href="BSplineTo.htm">BSplineToFrac</a>, <a href="BezierTo.htm">BezierTo</a>, <a href="BezierTo.htm">BezierToFrac</a>, <a href="MultiSegment.htm">MultiSegment</a>, <a href="MultiSegment.htm">MultiSegmentFrac</a>).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>format</em></p>
+</td><td>
+<p>Specifies the format, or number of bits-per-pixel, of the surface. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subformat</em></p>
+</td><td>
+<p>Color configuration of the pixel. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+
+<p>The <em>format</em> parameter specifies the number of bits-per-pixel and is used to calculate the amount of memory needed for the surface; <em>subformat</em> defines the configuration of a single pixel.</p>
+
+<p>The following table illustrates the pixel configuration currently supported by CDTRasterizerV8.</p>
+
+
+
+
+
+<table class="table_data">
+
+<tr>
+<th>Format<br />(bits-per-pixel)</th><th>Subformat</th>
+
+
+<th>Description</th>
+</tr>
+
+
+
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>TTTTTTTT</tt></strong><br />
+8-bit alpha surface. Eight bits (1 byte) are used to represent transparency. 256 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;B.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">10</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">12</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">13</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">14</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">15</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;B.<br /></p>
+</td></tr>
+
+
+
+
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Standard 24-bit RGB surface. Eight bits (1 byte) are used for each color component. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR xxxxxxxx</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>xxxxxxxx BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+
+
+
+<tr><td colspan="3">
+
+<p><strong>Legend</strong>:<br />
+
+g = bits used to describe gray<br />
+R = bits used to describe red, G = bits used to describe green, B = bits used to describe blue<br />
+T = bits used to describe transparency (0=fully opaque, 255=fully transparent)<br />
+
+x = unused bits</p>
+
+<p><strong>Note 1:</strong> RGB and alpha values are stored only for pixels that are actually rendered by D-Type. Your application must ensure that the surface is cleared with appropriate values before rendering.
+
+</p>
+
+
+
+</td></tr>
+
+</table>
+
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a></li>
+<li><a href="../../dc/manual/intro.htm">D-Type Direct Color Rasterizer</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,79 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdPropSet</h2><div class="box_prototype"><strong>
+DT_SWORD pdPropSet(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG name, const DT_UBYTE* value, DT_SLONG len)</strong></div><br /><strong>Short Description:</strong> <em>Change existing property</em><br /><br />
+
+<p>The pdPropSet function changes the value of an existing PowerDoc property within the PowerDoc object referenced by <em>obj</em>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property to be changed. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="pdPropAdd.htm">pdPropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>value</em></p>
+</td><td>
+<p>The value of the property. It can be supplied as native binary data or a null-terminated C/C++ string that Power Engine will transparently convert to the native binary format.</p>
+<p>For more information, see Guidelines For Creating PowerDoc Objects.</p>
+</td></tr>
+
+<tr><td>
+<p><em>len</em> (or <em>Format Identifier</em>)</p>
+</td><td>
+<p>Same as in the pdPropAdd function. See <a href="pdPropAdd.htm">pdPropAdd</a> for details.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0 (bad input) or -1 (memory error).</p>
+
+
+<h3>Comments</h3>
+<p>To avoid unexpected rendering results, properties must be assigned to PowerDoc objects in accordance with D-Type's Guidelines For Creating PowerDoc Objects.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdPropGet.htm">pdPropGet</a><br />
+<a href="pdPropAdd.htm">pdPropAdd</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

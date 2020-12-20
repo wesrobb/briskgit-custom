@@ -1,0 +1,5 @@
+Link to a masking object, i.e. an object whose alpha-channel will be used to mask the group member. This link must point to {a href="../objects/122.htm"}Generic Object{/a}. If masking is not required, the link should be omitted.
+
+The pdMaskPtr link takes precedence over the pdMask property.
+
+One advantage of masking using the pdMaskPtr link, compared to the pdMask property, is that the masking object has the same origin as the group member. Thus, if the group member is moved,  the masking object moves with it.

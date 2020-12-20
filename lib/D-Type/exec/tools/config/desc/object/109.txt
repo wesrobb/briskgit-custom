@@ -1,0 +1,5 @@
+This object represents a single PowerGlyph. In Power Engine API, the term PowerGlyph means a reference to a specific PowerGlyph design which is stored inside a {a href="../objects/010.htm"}PowerFont{/a}. This reference is PowerFont dependent and is also called PowerGlyph index or PowerGlyph code.
+
+PowerGlyphs are like regular glyphs found in outline fonts, but are constructed using PowerDoc objects.
+
+{strong}Designated Rendering Function:{/strong} pdDrawPowerGlyph (23)

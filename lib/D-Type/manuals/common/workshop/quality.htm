@@ -1,0 +1,61 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>Step by Step: How to Configure D-Type for the Highest Text Quality</h1>
+
+<h2>Quick Introduction</h2>
+
+<p>D-Type Font Engine provides a rich set of parameters to fine tune the quality of text output. The most important ones are positioning, hinting and the quality level (which may optionally include different types of filtering). Less frequently used ones, but still important, are the minimum pixel size for narrow horizontal and vertical glyph features, subpixel precision and custom gray (alpha) values. Since all these parameters can be set independently, the resulting number of possible text output quality configurations is quite large. This may be overwhelming if you are new to D-Type. "Which configuration will give me the best possible text quality?" is a question you might ask.</p>
+
+<p>For start, let's say that there is no single answer to this question. Not only does the "best" quality depend on human perception (in other words text quality is subjective to a great extent), but also on things such as the intended use (e.g. screen reading or print), output device (e.g. LCD or CRT screen), text size, screen resolution, reading distance etc.</p>
+
+<p>However, some configurations will make your text look better than others. In fact, certain configurations will give you great text quality under almost any condition. This guide is specifically designed to help you find the most suitable text output quality configuration for your application. In addition, we will show you, step by step, how to actually configure D-Type Font Engine for the highest text quality and provide several screenshots of the resulting output.</p>
+
+<p>The first order of business, however, is to determine whether you will be using device dependent or device independent text output. This is explained in more detail in our <a href="text.htm">Rendering Great Looking Text With D-Type</a> document. If you have a choice, go for device dependent text. Device dependent text is particularly suitable and highly recommended for user interface and screen reading. But if you must ensure that your text on screen looks the same as in print or any other device (i.e. you need the WYSIWYG mode), then you will have to use device independent text.</p>
+
+
+<h2>A) Suggested Configurations For Device Dependent Text And Screenshots</h2>
+
+<ul>
+
+<li><p><a href="quality_dd_1.htm">Option A1</a> &mdash; horizontal and vertical hinting enabled.</p></li>
+
+<li><p><a href="quality_dd_2.htm">Option A2</a> &mdash; horizontal hinting disabled but vertical hinting enabled.</p></li>
+
+</ul>
+
+
+<h2>B) Suggested Configurations For Device Independent Text And Screenshots</h2>
+
+<ul>
+
+<li><p><a href="quality_di_1.htm">Option B1</a> &mdash; fractional positioning enabled, horizontal and vertical hinting enabled.</p></li>
+
+<li><p><a href="quality_di_2.htm">Option B2 (D-Type Power Engine Only)</a> &mdash; enhanced fractional positioning enabled, horizontal and vertical hinting enabled.</p></li>
+
+<li><p><a href="quality_di_3.htm">Option B3</a> &mdash; fractional positioning enabled, horizontal hinting disabled but vertical hinting enabled.</p></li>
+
+<li><p><a href="quality_di_4.htm">Option B4 (D-Type Power Engine Only)</a> &mdash; enhanced whole pixel positioning enabled, horizontal and vertical hinting enabled.</p></li>
+
+<li><p><a href="quality_di_5.htm">Option B5 (D-Type Power Engine Only)</a> &mdash; enhanced whole pixel positioning enabled, horizontal hinting disabled but vertical hinting enabled.</p></li>
+
+</ul>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

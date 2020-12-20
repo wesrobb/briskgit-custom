@@ -1,0 +1,9 @@
+Line Height Multiple, multiplied by 1024.
+
+{strong}Sample values:{/strong}
+
+512 = 0.5
+1024 = 1.0
+1536 = 1.5
+2048 = 2.0
+2560 = 2.5

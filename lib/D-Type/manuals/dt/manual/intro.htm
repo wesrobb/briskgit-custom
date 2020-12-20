@@ -1,0 +1,76 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Introduction</h1>
+
+
+<p>This document provides technical information about D-Type Standard Engine and describes its Application Programming Interface (API) on Windows 95/98/NT/2000, Unix and Mac OS platforms.</p>
+
+<p>D-Type Standard Engine consists of the following two sub-engines:</p>
+
+<ul>
+
+<li><p><strong><a href="fengine.htm">D-Type Font Engine</a></strong>, a high-performance resolution independent font engine for applications that require fast, sharp, high-quality and smooth (anti-aliased) text output.</p></li>
+
+<li><p><strong><a href="sengine.htm">D-Type Shape Engine</a></strong>, an ultra-fast rendering engine for smooth (anti-aliased), scalable vector-based graphics.</p></li>
+
+</ul>
+
+
+<p>Both D-Type Font Engine and D-Type Shape Engine rely on <strong><a href="rengine.htm">D-Type Grasycale Rasterizer</a></strong> (or simply D-Type Rasterizer) for rendering text, individual glyphs and custom shapes.</p>
+
+
+<h2>Main Features of D-Type Font Engine and D-Type Shape Engine</h2>
+
+<ul>
+
+<li><p>D-Type Font Engine supports <em>D-Type (.dtf)</em>, <em>TrueType (.ttf)</em>, <em>OpenType (.otf)</em>, <em>TrueType and OpenType Collections (.ttc, .otc)</em>, <em>Adobe Type 1 (.pfb or .pfa)</em>, <em>PostScript Type 3 (.ps)</em> and <em>Bare CFF (.cff)</em> font format.</p></li>
+
+<li><p>D-Type Font Engine supports the <em>Multiple-Master</em> font technology, a revolutionary breakthrough in font technologies that allows two or more outline fonts, or <em>base designs</em>, to be incorporated into a single font file. This feature allows applications to create hundreds or thousands of additional font instances (or <em>intermediate</em> designs) from a single font file by applying D-Type's real-time <em>interpolation</em> capabilities.</p></li>
+
+<li><p>D-Type text can be drawn at any size, stretched, mirrored, compressed, rotated, skewed, outlined or using any combination of these effects.</p></li>
+
+<li><p>D-Type Font Engine has advanced and sophisticated <em>anti-aliasing</em> and <em>hinting</em> algorithms for enhanced screen quality and maximum text legibility. In addition, D-Type's revolutionary <em>auto-hinting</em> algorithms virtually eliminate the need for manual font hinting.</p></li>
+
+<li><p>D-Type's excellent anti-aliasing capabilities provide support for up to 256 levels of gray (or other colors). Unlike some popular graphics packages that generate gray-levels simply by downsampling a larger black and white bitmap, D-Type generates gray-levels during the rasterization process itself. This is an extremely fast process, which results in superior quality and enhanced screen resolution.</p></li>
+
+<li><p>If required, D-Type's gray-scale levels can be customized in order to compensate for monitor gamma or reduce the number of colors used in the rasterization process. This feature is particularly useful when the total number of available colors is limited. For example, by utilizing only 8 or 16 different intensities of gray (or other colors), the 256-color display systems will use colors in a more effective way.</p></li>
+
+<li><p>D-Type Shape Engine can be used to generate anti-aliased shapes of absolutely amazing screen quality. D-Type Shape Engine comes with a library of the most common shapes, which includes lines, circles, ellipses, rectangles, rounded rectangles, polygons etc. In addition, applications can get direct access to D-Type Rasterizer and render any shape.</p></li>
+
+<li><p>Any of the shapes above can be drawn filled or stroked, with a custom line width.</p></li>
+
+<li><p>D-Type Rasterizer supports both the <em>Odd-Even</em> and <em>Nonzero Winding Number</em> rule.</p></li>
+
+<li><p>Both D-Type Font Engine and D-Type Shape Engine can draw to <em>memory (off-screen) surfaces</em> supplied by your application. This includes 8-bit grayscale and 16-bit, 24-bit or 32-bit RGB surfaces. This type of rendering is platform independent, extremely fast and very suitable for real-time animations. In addition, an application can access and manipulate surface's bytes directly.</p></li>
+
+<li><p>When drawing to memory surfaces, text and shapes can be drawn anti-aliased and <em>transparent</em> (with a custom transparency factor) against any background.</p></li>
+
+<li><p>Since D-Type Font Engine and D-Type Shape Engine do not make use of global variables, both libraries can be used in a <em>thread-safe</em> manner. This means an application can initialize multiple <em>instances</em> of D-Type engine and access D-Type functions <em>simultaneously</em>.</p></li>
+
+<li><p>Both D-Type Font Engine and D-Type Shape Engine support many advanced features such as fractional positioning, blurring, pattern fills, embossing, fast true color RGB rendering, alpha channels etc.</p></li>
+
+<li><p>On the Windows platform, D-Type Font Engine and D-Type Rasterizer can also draw to a Windows compatible <em>Device Context</em>. This includes screen, windows, printers, off-screen bitmaps etc.</p></li>
+
+</ul>
+
+<br />&nbsp;
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

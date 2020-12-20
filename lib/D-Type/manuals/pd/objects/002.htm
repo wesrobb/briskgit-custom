@@ -1,0 +1,97 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Shadow Definition</h2>
+<h3 id="overview">Overview</h3>
+This object represents a set of standard shadow properties. Any higher-level objects that have a shadow link to this object.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdStylePtr"><em><span class="field">pdStylePtr</span> (1002)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="003.htm#pdStylePtr">Line Definition (Full)</a>, <a href="012.htm#pdStylePtr">Outline Definition</a>, <a href="015.htm#pdStylePtr">Line Definition (Standard)</a>, <a href="017.htm#pdStylePtr">Line Definition (Minimal)</a>, <a href="120.htm#pdStylePtr">Gradient</a></small></p>
+<p>
+Link to the <a href="001.htm">Surface Definition</a> object.<br />
+<br />
+This link supplies style attributes. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdShadowDx"><em><span class="field">pdShadowDx</span> (1004)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Shadow or glow offset in horizontal direction, in document units. Can be positive or negative.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+10 = Offset of 10 document units in horizontal direction<br />
+-10 = Offset of -10 document units in horizontal direction<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowDy"><em><span class="field">pdShadowDy</span> (1005)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p>
+Shadow or glow offset in vertical direction, in document units. Can be positive or negative.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+5 = Offset of 5 document units in vertical direction<br />
+-5 = Offset of -5 document units in vertical direction<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[2];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "TextLine Shadow Style");<br />
+<strong>obj[1] = pdObjAdd(pd, 0, "TextLine Shadow");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "80808078", PD_HEX);<br />
+pdPropAdd(pd, obj[0], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+<strong>pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdShadowDy, "5", PD_WORD_SIGNED);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("TextLine Shadow Style");<br />
+local obj_1 = o("TextLine Shadow");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "80808078");<br />
+obj_0 + s(pdEP, "030A");<br />
+<br />
+obj_1 + l(pdStylePtr, obj_0);<br />
+obj_1 + i(pdShadowDx, 5);<br />
+obj_1 + i(pdShadowDy, 5);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

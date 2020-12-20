@@ -1,0 +1,13 @@
+This object represents a set of typographic parameters that apply to regular outline fonts. It is one of the elementary PowerDoc objects; many higher-level objects that contain glyphs, characters or text link to this object.
+
+While constructing the typography object, an optional shadow, outline and/or underline may be included.
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note 1: Although pdBodyPtr is a key link, it is not mandatory. This means that it is possible to construct a typography object that has no body, only an outline and/or a shadow and/or an underline.
+
+Note 2: When constructing the Typography (For Outline Fonts) object, pdFontIndex and pdFontUniqueID cannot be used at the same time. If both properties are present, pdFontIndex will be used. The assumption is that pdFontIndex is a valid font index. If it's not, the engine will use the first available font.
+
+When pdFontIndex is not present, the engine will try to find and use the font specified by the pdFontUniqueID property. If this font is not available, the engine will then attempt to load it, providing that the pdFontDataPtr link is present (which indicates that the font file is embedded in the document). If it's not or if this operation fails, the engine will use the first available font.
+
+Finally, if neither pdFontIndex nor pdFontUniqueID are present, the engine will use the first available font.

@@ -1,0 +1,200 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdImgAddPlus</h2><div class="box_prototype"><strong>
+DT_SLONG pdImgAddPlus(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG page, DT_SLONG x, DT_SLONG y, DT_UBYTE status, DT_UBYTE attribs, DT_SLONG mask, DT_ID_SWORD fn_draw, const DT_TM3X3 transform)</strong></div><br /><strong>Short Description:</strong> <em>Add new image with an optional 3X3 transformation matrix</em><br /><br />
+<h2>pdImgAdd</h2><div class="box_prototype"><strong>
+DT_SLONG pdImgAdd(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG page, DT_SLONG x, DT_SLONG y, DT_UBYTE status, DT_UBYTE attribs, DT_SLONG mask, DT_ID_SWORD fn_draw, const DT_TM2X2 transform)</strong></div><br /><strong>Short Description:</strong> <em>Add new image with an optional 2x2 transformation matrix</em><br /><br />
+
+<p>The pdImgAddPlus (or pdImgAdd) function adds a PowerDoc image of the PowerDoc object <em>obj</em> at the top of the specified PowerDoc page and sets its <em>X</em>, <em>Y</em> coordinates, transformation matrix, visibility and other applicable parameters.</p>
+<p>The return value of this function is the image's index in the Power Engine document. This index uniquely identifies the newly created PowerDoc image.</p>
+
+<p>The only difference between pdImgAddPlus and pdImgAdd is that pdImgAddPlus uses a 3x3 transformation matrix while pdImgAdd uses a 2x2 transformation matrix. Therefore, pdImgAdd is more limited (i.e. this function cannot be used to apply a perspective transform to a PowerDoc image).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Index of the PowerDoc object to be associated with the newly created PowerDoc image.</p>
+</td></tr>
+
+<tr><td>
+<p><em>page</em></p>
+</td><td>
+<p>The number of the page that will hold the PowerDoc image. Although not a requirement, it is recommended that this value be non-negative.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>X coordinate of the PowerDoc image (or more precisely its origin point) on the page, in document units.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>Y coordinate of the PowerDoc image (or more precisely its origin point) on the page, in document units.</p>
+</td></tr>
+
+<tr><td>
+<p><em>status</em></p>
+</td><td>
+<p>At present, this parameter can have one of the following values:</p>
+<p><em>status</em> = 0 indicates a regular (non-selected) PowerDoc image.<br />
+<em>status</em> = 1 indicates a selected PowerDoc image.</p>
+<p>The Power Engine API provides additional functions that operate on PowerDoc images depending on their <em>status</em>. For example, <a href="pdImgToTop.htm">pdImgToTop</a>, <a href="pdImgToBottom.htm">pdImgToBottom</a>, <a href="pdImgMoveToPage.htm">pdImgMoveToPage</a>, <a href="pdImgChangeAttribs.htm">pdImgChangeAttribs</a>, <a href="pdImgDelete.htm">pdImgDelete</a> and many other <em>pdx</em> functions use this value when selecting PowerDoc images.</p>
+<p>When rendering the page using the library's default settings, selected PowerDoc images are visually marked with a small black square located at their origin point.</p>
+</td></tr>
+
+<tr><td>
+<p><em>attribs</em></p>
+</td><td>
+<p>Represents additional image attributes. Currently, the following values are supported:</p>
+<p>
+Bit 0 unset &mdash; indicates a visible PowerDoc image.<br />
+Bit 0 set &mdash; indicates a hidden PowerDoc image. Hidden images are not rendered.
+</p>
+<p>
+Bit 2 unset &mdash; do not use fractional positioning for image origins.<br />
+Bit 2 set &mdash; use fractional positioning for image origins.
+</p>
+<p>All other bits are reserved for future use and must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>mask</em></p>
+</td><td>
+<p>The number of the masking page, i.e. the page whose alpha-channel will be used to mask the newly created PowerDoc image. For example, if the PowerDoc image represents a circle and the <em>mask</em> page contains many vertical stripes, then the resulting PowerDoc image will resemble a vertically striped circle.</p>
+<p>If masking is not required, <em>mask</em> should be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>fn_draw</em></p>
+</td><td>
+<p>A numerical value of the rendering function to be associated with the newly created PowerDoc image. This can be a user-defined value or one of the following pre-defined PowerDoc values:</p>
+
+<table class="table_data">
+<tr>
+<th width="50%">Basic PowerDoc Rendering Functions</th>
+<th width="50%">PowerDoc Rendering Functions To Render Form Controls</th>
+</tr>
+<tr valign="top">
+<td><ul>
+<li>pdDrawSysGuideDashed (-3)</li>
+<li>pdDrawSysGuide (-2)</li>
+<li>pdDrawError (-1)</li>
+<li>pdDrawNothing (0)</li>
+<li>pdDrawTextLine (1)</li>
+<li>pdDrawTextArc (2)</li>
+<li>pdDrawTextArea (3)</li>
+<li>pdDrawLine (4)</li>
+<li>pdDrawEllipse (5)</li>
+<li>pdDrawCircle (5)</li>
+<li>pdDrawRect (6)</li>
+<li>pdDrawTrueEllipse (7)</li>
+<li>pdDrawTrueCircle (7)</li>
+<li>pdDrawSlice (8)</li>
+<li>pdDrawArc (9)</li>
+<li>pdDrawRichTextArea (10)</li>
+<li>pdDrawPattern (11)</li>
+<li>pdDrawGrid (12)</li>
+<li>pdDrawPoly (13)</li>
+<li>pdDrawPolygon (13)</li>
+<li>pdDrawShape (13)</li>
+<li>pdDrawGradient (14)</li>
+<li>pdDrawInverter (14)</li>
+<li>pdDrawFastRect (14)</li>
+<li>pdDrawImage (15)</li>
+<li>pdDrawBitmap (15)</li>
+<li>pdDrawChar (16)</li>
+<li>pdDrawRichTextLine (17)</li>
+<li>pdDrawLibraryPoly (18)</li>
+<li>pdDrawLibraryPolygon (18)</li>
+<li>pdDrawLibraryShape (18)</li>
+<li>pdDrawRichTextArc (19)</li>
+<li>pdDrawGlyph (20)</li>
+<li>pdDrawGenericObject (21)</li>
+<li>pdDrawGroup (22)</li>
+<li>pdDrawDefault (22)</li>
+<li>pdDrawPowerGlyph (23)</li>
+<li>pdDrawPolyline (24)</li>
+<li>pdDrawLibraryPolyline (25)</li>
+<li>pdDrawTextDesign (26)</li>
+<li>pdDrawRichTextDesign (27)</li>
+<li>pdDrawTextPath (28)</li>
+<li>pdDrawRichTextPath (29)</li>
+<li>pdDrawLibraryImage (30)</li>
+<li>pdDrawLibraryBitmap (30)</li>
+<li>pdDrawBackground (31)</li>
+</ul>
+</td>
+<td><ul>
+<li>fcDrawButton (10000)</li>
+<li>fcDrawRadioButton (10001)</li>
+<li>fcDrawCheckBox (10002)</li>
+<li>fcDrawTextBox (10003)</li>
+<li>fcDrawListBox (10004)</li>
+<li>fcDrawHSlider (10005)</li>
+<li>fcDrawVSlider (10006)</li>
+<li>fcDrawRichTextBox (10007)</li>
+<li>fcDrawRichButton (10008)</li>
+<li>fcDrawRichListBox (10009)</li>
+</ul>
+</td>
+</tr>
+</table>
+</td></tr>
+
+<tr><td>
+<p><em>transform</em></p>
+</td><td>
+<p>For pdImgAddPlus, this is a 3x3 transformation matrix. This matrix represents the 2D perspective (or projective) transform to apply to the newly created PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> basic data type in this manual.</p>
+
+<p>For pdImgAdd, this is a 2x2 transformation matrix. This matrix represents the top two rows and columns of the 2D perspective transform to apply to the newly created PowerDoc image. For more information, see the description of the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> basic data type in this manual.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The return value is the images's index in the Power Engine document. This number uniquely identifies the newly created PowerDoc image. For this reason, we sometimes refer to this index as the <em>image's unique serial number</em>.</p>
+<p>If an error occurs, the return value will be a negative number.</p>
+
+
+<h3>Comments</h3>
+<p>To avoid unexpected results, rendering functions must be assigned to PowerDoc images in accordance with D-Type's Guidelines For Creating PowerDoc Objects.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdImgDel.htm">pdImgDel</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,8 @@
+Roundness of rectangle's corners in percentages in X direction if pdRoundY is positive, otherwise in both X and Y directions.
+
+This value of this property must be between 0 and 100. If zero, the corners will be flat.
+
+{strong}Sample values:{/strong}
+
+50 = 50% roundness
+35 = 35% roundness

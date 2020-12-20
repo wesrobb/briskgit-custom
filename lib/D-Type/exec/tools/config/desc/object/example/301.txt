@@ -1,0 +1,33 @@
+DT_ID_SLONG obj[2];
+
+obj[0] = pdObjAdd(pd, 0, "Form Configuration");
+{strong}obj[1] = pdObjAdd(pd, 0, "Form Button");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], fcCnfLib, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCtrlStyleOnFocus, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCharBox, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonNormal, "14", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonPushed, "13", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderNormal, "2", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderPushed, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonNormal, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonPushed, "7", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonSelected, "8", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxNormal, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxPushed, "4", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxSelected, "5", PD_BYTE_UNSIGNED);
+
+/* Properties for object 1 */
+{strong}pdLinkAdd(pd, obj[1], fcConfigPtr, obj[0]);
+pdPropAdd(pd, obj[1], fcName, "IDBUTTON", PD_ASC);
+pdPropAdd(pd, obj[1], fcValue_08, "Button", PD_ASC);
+pdPropAdd(pd, obj[1], fcDw, "400", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcDh, "100", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcState, "0", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], fcUserParam, "100", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcOnCtrlPush, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], fcOnCtrlRelease, "2", PD_BYTE_UNSIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[1], 0, 50, 50, 0, 0, 0, fcDrawButton, DV_NULL);{/strong}

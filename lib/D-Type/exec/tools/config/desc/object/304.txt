@@ -1,0 +1,5 @@
+The Text Box object is a visual and interactive form control that allows users to input text. This control can be used as a single-line input control or a multi-line input control.
+
+{strong}Designated Rendering Function:{/strong} fcDrawTextBox (10003)
+
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.

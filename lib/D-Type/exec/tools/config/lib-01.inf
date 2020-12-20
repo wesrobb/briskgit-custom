@@ -1,0 +1,22 @@
+!LIB_CATEGORY=Built-in Format Library
+
+{
+0|100000|Regular
+0|100001|Italic
+0|100002|Regular Underlined
+0|100003|Italic Underlined
+0|100008|Regular Strikethrough
+0|100009|Italic Strikethrough
+0|100004|Superscript
+0|100005|Subscript
+0|100006|Title
+0|100007|Subtitle
+0|100010|Title Outlined
+0|100011|Subtitle Outlined
+0|100012|Title Shadow
+0|100013|Subtitle Shadow
+0|100014|Title Blurred Horizontally
+0|100015|Subtitle Blurred Horizontally
+0|100016|Title Blurred Vertically
+0|100017|Subtitle Blurred Vertically
+}

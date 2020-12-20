@@ -1,0 +1,3 @@
+Start glyph position within the first text fragment, i.e. the index of the glyph in the first text fragment from which the text layout and display starts. This value cannot be negative and must be less than the length of the first text fragment.
+
+This property is useful when building text flows (i.e. when text fragments span more than one text area). In most other cases, this property should be omitted or its value should be set to 0.

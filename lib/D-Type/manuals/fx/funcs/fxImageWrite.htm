@@ -1,0 +1,117 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxImageWrite</h2><div class="box_prototype"><strong>
+DT_SLONG fxImageWrite(DT_AUX_INFO* info, const DT_UBYTE* bitmap_ptr, const DT_UBYTE* alpha_ptr, DT_SLONG bitmap_padding, DT_SLONG alpha_padding, DT_ID_SWORD bitmap_format, DT_SWORD bitmap_subformat, DT_SLONG width, DT_SLONG height, DT_UWORD flags, const DT_AUX_GRAPHICS_ATTRIBS* gattribs, DT_AUX_USER_STREAM* user_stream)</strong></div><br /><strong>Short Description:</strong> <em>Write bitmap image to user stream</em><br /><br />
+
+<p>This function takes a plain bitmap stored in a memory buffer and writes it to a compressed image in a user-defined stream. The image compression format is specified by the <em>FileFormat</em> member variable of the <em>info</em> structure.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_ptr</em></p>
+</td><td>
+<p>A valid pointer to a buffer that holds the bitmap. The format of the bitmap is specified using the <em>bitmap_format</em> parameter.</p>
+</td></tr>
+
+<tr><td>
+<p><em>alpha_ptr</em></p>
+</td><td>
+<p>A valid pointer to a buffer that holds the bitmap's alpha channel. This is always an 8-bpp bitmap. If no alpha channel should be used, <em>alpha_ptr</em> should be set to DV_NULL.</p>
+
+<p>The alpha channel is supported only when <em>bitmap_format</em> is 24 and the format of the compressed image is DV_AUX_FILEFORMAT_PNG. In all other cases, <em>alpha_ptr</em> is ignored and should be set to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_padding</em></p>
+</td><td>
+<p>Padding of the bitmap, in bytes. For contiguous pixel rows this value is 0. For non-contiguous pixel rows, this will be a positive value. The value indicates how many extra bytes at the end of each row need to be skipped before the next row of the bitmap starts.</p>
+</td></tr>
+
+<tr><td>
+<p><em>alpha_padding</em></p>
+</td><td>
+<p>Padding of the alpha channel, in bytes. For contiguous pixel rows this value is 0. For non-contiguous pixel rows, this will be a positive value. The value indicates how many extra bytes at the end of each row need to be skipped before the next row of the alpha channel starts.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_format</em></p>
+</td><td>
+<p>Specifies the format, or number of bits-per-pixel, of the bitmap. This value must be eiter 8 or 24 as these are the only values currently supported by this function. The value 8 should be used for 8-bpp grayscale bitmaps and 24 for 24-bit RGB bitmaps.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_subformat</em></p>
+</td><td>
+<p>Color configuration of the pixel. This value must be 0 as this is the only value currently supported by this function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>width</em></p>
+</td><td>
+<p>The width of the bitmap, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>height</em></p>
+</td><td>
+<p>The height of the bitmap, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask value.</p>
+<ul>
+<li>bit 0 (1) &mdash; Flip the bitmap vertically</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>gattribs</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_GRAPHICS_ATTRIBS">DT_AUX_GRAPHICS_ATTRIBS</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_stream</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_USER_STREAM">DT_AUX_USER_STREAM</a>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

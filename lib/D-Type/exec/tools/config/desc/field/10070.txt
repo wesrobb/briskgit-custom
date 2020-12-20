@@ -1,0 +1,1 @@
+Configuration ID to represent a normal (i.e. not pushed or selected) check box.

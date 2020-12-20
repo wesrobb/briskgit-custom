@@ -1,0 +1,3 @@
+Link to the {a href="../objects/003.htm"}Line Definition (Full){/a} or {a href="../objects/015.htm"}Line Definition (Standard){/a} object.
+
+This link supplies parameters necessary to render the body of a line. In the context of the Grid object, this link supplies the parameters necessary to render the grid lines.

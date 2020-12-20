@@ -1,0 +1,138 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Library Polyline</h2>
+<h3 id="overview">Overview</h3>
+This object describes a polyline defined in Power Engine's internal library of pre-defined polylines.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawLibraryPolyline (25)<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdLinePtr"><em><span class="field">pdLinePtr</span> (1015)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="020.htm#pdLinePtr">Baseline</a>, <a href="111.htm#pdLinePtr">Line</a>, <a href="116.htm#pdLinePtr">Arc</a>, <a href="118.htm#pdLinePtr">Grid</a>, <a href="124.htm#pdLinePtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="003.htm">Line Definition (Full)</a> or <a href="015.htm">Line Definition (Standard)</a> object.<br />
+<br />
+This link supplies parameters necessary to render the body of a line. In the context of the Grid object, this link supplies the parameters necessary to render the grid lines.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowPtr"><em><span class="field">pdShadowPtr</span> (1016)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdShadowPtr">Typography (For Outline Fonts)</a>, <a href="020.htm#pdShadowPtr">Baseline</a>, <a href="021.htm#pdShadowPtr">Row Boundary</a>, <a href="023.htm#pdShadowPtr">Typographic Frame</a>, <a href="110.htm#pdShadowPtr">Library Shape</a>, <a href="111.htm#pdShadowPtr">Line</a>, <a href="112.htm#pdShadowPtr">Rectangle</a>, <a href="113.htm#pdShadowPtr">Circle/Ellipse</a>, <a href="114.htm#pdShadowPtr">True Circle/Ellipse</a>, <a href="115.htm#pdShadowPtr">Slice</a>, <a href="116.htm#pdShadowPtr">Arc</a>, <a href="118.htm#pdShadowPtr">Grid</a>, <a href="119.htm#pdShadowPtr">Custom Shape or Polygon</a>, <a href="124.htm#pdShadowPtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="002.htm">Shadow Definition</a> object.<br />
+<br />
+Used to render the shadow of a line, shape or some other object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdID"><em><span class="field">pdID</span> (1017)</em> &nbsp; <small class="label">PD_LONG_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="107.htm#pdID">Glyph</a>, <a href="108.htm#pdID">Char</a>, <a href="109.htm#pdID">PowerGlyph</a>, <a href="110.htm#pdID">Library Shape</a>, <a href="132.htm#pdID">Library Bitmap Image</a></small></p>
+<p>
+A unique identifier that, depending on the context, represent one of the following:<br />
+<br />
+a) code of a character (or PowerChar);<br />
+b) index of a glyph (or PowerGlyph);<br />
+c) index of a library shape or library polyline (see the Library of Shapes and Polylines section in the manual for details)<br />
+d) index of a library bitmap image<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDw"><em><span class="field">pdDw</span> (1029)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="009.htm#pdDw">PowerFont Record</a>, <a href="010.htm#pdDw">PowerFont</a>, <a href="110.htm#pdDw">Library Shape</a>, <a href="111.htm#pdDw">Line</a>, <a href="112.htm#pdDw">Rectangle</a>, <a href="113.htm#pdDw">Circle/Ellipse</a>, <a href="117.htm#pdDw">Pattern</a>, <a href="118.htm#pdDw">Grid</a>, <a href="120.htm#pdDw">Gradient</a>, <a href="125.htm#pdDw">Gradient (As Fast Rectangle)</a>, <a href="126.htm#pdDw">Gradient (As Inverter)</a>, <a href="121.htm#pdDw">Bitmap Image</a>, <a href="132.htm#pdDw">Library Bitmap Image</a></small></p>
+<p>
+In general, this property represents the width of a line, shape or some other object in document units. Most objects assume a positive width. However, some objects (e.g. lines) can have either a positive or a negative width. In these cases, this property also indicates the direction.<br />
+<br />
+This property may also be used for some other more specific purposes. For example, in PowerFonts it refers to the font's base width (or horizontal units per em-square). Similarly, in PowerFont records this property serves as the advance width of a glyph.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+500 = Width of 500 document units<br />
+-200 = Width of -200 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdDh"><em><span class="field">pdDh</span> (1030)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="010.htm#pdDh">PowerFont</a>, <a href="110.htm#pdDh">Library Shape</a>, <a href="111.htm#pdDh">Line</a>, <a href="112.htm#pdDh">Rectangle</a>, <a href="113.htm#pdDh">Circle/Ellipse</a>, <a href="117.htm#pdDh">Pattern</a>, <a href="118.htm#pdDh">Grid</a>, <a href="120.htm#pdDh">Gradient</a>, <a href="125.htm#pdDh">Gradient (As Fast Rectangle)</a>, <a href="126.htm#pdDh">Gradient (As Inverter)</a>, <a href="121.htm#pdDh">Bitmap Image</a>, <a href="132.htm#pdDh">Library Bitmap Image</a></small></p>
+<p>
+In general, this property represents the height of a line, shape or other object in document units. Most objects assume a positive height. But some objects (e.g. lines) can have either a positive or a negative height. In these cases, the height property also indicates the direction.<br />
+<br />
+This property may also be used for some other more specific purposes. For example, in PowerFonts this property refers to the font's base height (or vertical units per em-square).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+400 = Height of 400 document units<br />
+-100 = Height of -100 document units<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[3];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "LibPolyline Line Style");<br />
+obj[1] = pdObjAdd(pd, 0, "LibPolyline Line");<br />
+<strong>obj[2] = pdObjAdd(pd, 0, "LibPolyline");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+<strong>pdLinkAdd(pd, obj[2], pdLinePtr, obj[1]);<br />
+pdPropAdd(pd, obj[2], pdDw, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdDh, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdID, "12", PD_WORD_UNSIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[2], 0, 100, 100, 0, 0, 0, pdDrawLibraryPolyline, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("LibPolyline Line Style");<br />
+local obj_1 = o("LibPolyline Line");<br />
+local obj_2 = o("LibPolyline");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + l(pdStylePtr, obj_0);<br />
+obj_1 + i(pdLineThickness, 240);<br />
+<br />
+obj_2 + l(pdLinePtr, obj_1);<br />
+obj_2 + i(pdDw, 300);<br />
+obj_2 + i(pdDh, 300);<br />
+obj_2 + i(pdID, 12);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_2.Pin(0, 100, 100, pdDrawLibraryPolyline);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

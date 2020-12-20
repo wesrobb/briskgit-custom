@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Font Map</h1>
+
+
+<h2>fontmap.inf</h2>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment"># Font and Attribute Mapping Table for Unicode Scripts (Fontmap)
+#
+# This font and attribute mapping table (aka Fontmap) is used when D-Type
+# Text Engine processes Unicode text. The purpose of this table is to
+# assign suitable fonts and layout attributes to various Unicode scripts
+# and/or characters defined within the Unicode Standard.
+#
+# The mapping table consists of three pipe separated columns:
+#
+# * 1st Column - Unicode script or character range
+# * 2nd Column - Associated attribute set
+# * 3rd Column - Associated font
+#
+# Each Unicode script or character range may have one or more associated
+# attribute sets and fonts. If a Unicode script or character range has more
+# than one associated attribute set and/or font, it will have multiple rows
+# in the mapping table. Only one attribute set and font combination per row
+# can be specified. Attribute sets and fonts are listed in the order of
+# importance or preference. When processing the Fontmap, D-Type Text Engine
+# reads one row at a time. As soon as the first matching row is found,
+# D-Type Text Engine stops processing any subsequent rows.
+#
+# First Column
+#
+# Within the first column, the CHARCODE, CHARSPAN or SCRIPTCODE instructions
+# specify a character range or Unicode script:
+#
+# * CHARCODE selects a single Unicode character expressed as an 8-digit
+#   hexadecimal codepoint.
+#
+#   Example: CHARCODE:00000041
+#
+# * CHARSPAN selects a range of Unicode character expressed as a range of
+#   8-digit hexadecimal codepoints.
+#
+#   Example: CHARSPAN:00000041-0000005A
+#
+# * SCRIPTCODE selects the Unicode script using a 4 character script code
+#   (e.g. latn, cyrl, arab, kana etc). See ISO 15924 Code Lists for a list
+#   of available codes. Script code 0000 is a special code which means any
+#   script. Fonts associated with this code are usually fallback fonts, i.e.
+#   fonts that are used in the absence of a more suitable alternative. For
+#   this reason, fonts associated with script code 0000 should be listed at
+#   the very end of the mapping table. Ideally, fallback fonts should be
+#   large Unicode fonts such as Arial Unicode MS or Code2000 so they can be
+#   used to represent as many Unicode characters and scrips as possible.
+#
+#   Example: SCRIPTCODE:arab
+#
+# Second Column
+#
+# Within the second column, the ATTRIBS instruction specifies the associated
+# set of layout attributes. This set is a comma separated list of
+# keyword/value pairs. Currently two attribute keywords are supported:
+#
+# * ro (relative orientation)
+#
+#   The ro attribute keyword corresponds to D-Type Power Engine's
+#   pdRelativeOrientation property and D-Type Text Engine's TX_ATTR_ORIENTATION
+#   attribute identifier. This attribute allows applications to set the most
+#   appropriate relative text orientation (portrait/landscape) and baseline
+#   (e.g. default, shifted) when the corresponding Unicode script (or character
+#   range) and font are used in horizontal and/or vertical layout.
+#
+# * ts (text shaping)
+#
+#   The ts attribute keyword corresponds to D-Type Power Engine's pdTextShaping
+#   property and D-Type Text Engine's TX_ATTR_SHAPING attribute identifier. When
+#   required, this attribute allows applications to explicitly set the text
+#   shaping method for the corresponding Unicode script (or character range) and
+#   font. If this attribute is not specified, the shaping method will be set
+#   automatically based on the Unicode script.
+#
+# Example: ATTRIBS:ro=8,ts=10025
+#
+# Third Column
+#
+# Within the third column, the associated font can be identified by its
+# name or Unique Font Identifier (font_uid). To do so, use one of the
+# following four instructions:
+#
+# * FONTFUID
+#
+#   To identify the font by its Unique Font Identifier (font_uid). This
+#   instruction also performs a basic validity check on the font file and
+#   attempts to activate it. As a result, non-accessible, invalid and/or
+#   corrupt fonts are skipped.
+#
+#   Example: FONTFUID:S001R_ARIAL_001A
+#
+# * FASTFUID
+#
+#   Same as FONTFUID but noticeably faster since it does not perform any
+#   validity check on the font file and does not attempt to activate it.
+#   As a result, non-accessible, invalid and/or corrupt fonts are not
+#   skipped.
+#
+#   Example: FASTFUID:S001R_ARIAL_001A
+#
+# * FONTNAME
+#
+#   To identify the font by name. This instruction also performs a basic
+#   validity check on the font file and attempts to activate it. As a
+#   result, non-accessible, invalid and/or corrupt fonts are skipped.
+#   This instruction is slower than FONTFUID and FASTFUID since it must
+#   access the font file and parse its header to extract the font name.
+#
+#   Example: FONTNAME:Times New Roman
+#
+# * FASTNAME
+#
+#   Same as FONTNAME but does not perform any validity check on the font
+#   and does not attempt to activate it. As a result, non-accessible,
+#   invalid and/or corrupt fonts are not skipped.
+#
+#   Example: FASTNAME:Times New Roman
+#
+# Additional notes:
+#
+# * It is your responsibility to ensure that the fonts listed in this
+#   mapping table have a sufficient number of glyphs to adequately
+#   represent all of the Unicode scripts and character ranges they are
+#   associated with. Only associate a font with a Unicode script or
+#   character range if you are sure it supports that particular script
+#   or character range. You can use D-Type Font Viewer to check your
+#   font's support for the intended Unicode script or character range.
+#
+# * For more information on the Unique Font Identifiers (font_uid),
+#   see the Configure Initial Font List document.
+#
+# * For more information on Unicode Scripts and script codes, relative
+#   orientation and text shaping, see the manual.
+#</span>
+
+{
+SCRIPTCODE:zzzz|ATTRIBS:ts=0|FASTFUID:F0010_CMSANS_SS0
+SCRIPTCODE:zyyy|ATTRIBS:ro=8|FONTFUID:F0010_CMSANS_SS0
+SCRIPTCODE:latn|ATTRIBS:ro=8|FONTFUID:F0010_CMSANS_SS0
+SCRIPTCODE:cyrl|ATTRIBS:ro=8|FONTFUID:F0010_CMSANS_SS0
+SCRIPTCODE:grek|ATTRIBS:ro=8|FONTFUID:F0010_CMSANS_SS0
+SCRIPTCODE:hani|ATTRIBS:ro=2|FONTNAME:Arial Unicode MS
+SCRIPTCODE:hani|ATTRIBS:ro=2|FONTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:hani|ATTRIBS:ro=2|FONTNAME:Code2000
+SCRIPTCODE:hira|ATTRIBS:ro=2|FONTNAME:Arial Unicode MS
+SCRIPTCODE:hira|ATTRIBS:ro=2|FONTNAME:Code2000
+SCRIPTCODE:hira|ATTRIBS:ro=2|FONTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:kana|ATTRIBS:ro=2|FONTNAME:Arial Unicode MS
+SCRIPTCODE:kana|ATTRIBS:ro=2|FONTNAME:Code2000
+SCRIPTCODE:kana|ATTRIBS:ro=2|FONTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:hang|ATTRIBS:ro=8|FONTNAME:Arial Unicode MS
+SCRIPTCODE:hang|ATTRIBS:ro=8|FONTNAME:Code2000
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FONTFUID:F0010_DEJAVU_NS0
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FONTNAME:Arial
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FONTNAME:Tahoma
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FONTNAME:Times New Roman
+SCRIPTCODE:arab|ATTRIBS:ro=8|FONTNAME:Arial
+SCRIPTCODE:arab|ATTRIBS:ro=8|FONTNAME:Tahoma
+SCRIPTCODE:arab|ATTRIBS:ro=8|FONTNAME:Times New Roman
+SCRIPTCODE:arab|ATTRIBS:ro=8|FONTNAME:KacstBook
+SCRIPTCODE:deva|ATTRIBS:ro=8|FONTNAME:Raghindi
+SCRIPTCODE:deva|ATTRIBS:ro=8|FONTNAME:Thyaka Rabison
+SCRIPTCODE:thai|ATTRIBS:ro=8|FONTNAME:Tahoma
+SCRIPTCODE:thai|ATTRIBS:ro=8|FONTNAME:Norasi
+SCRIPTCODE:thai|ATTRIBS:ro=8|FONTNAME:Loma
+SCRIPTCODE:thai|ATTRIBS:ro=8|FONTNAME:Thonburi
+SCRIPTCODE:thai|ATTRIBS:ro=8|FONTNAME:AngsanaDSE
+SCRIPTCODE:0000|ATTRIBS:ro=8|FONTNAME:Arial Unicode MS
+SCRIPTCODE:0000|ATTRIBS:ro=8|FONTNAME:Code2000
+SCRIPTCODE:0000|ATTRIBS:ro=8|FONTFUID:F0010_CMSANS_SS0
+}
+
+<span class="codecomment"># End</span>
+</pre>
+</div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

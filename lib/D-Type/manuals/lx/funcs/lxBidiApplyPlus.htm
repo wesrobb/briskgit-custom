@@ -1,0 +1,152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxBidiApplyPlus</h2><div class="box_prototype"><strong>
+DT_SWORD lxBidiApplyPlus(DT_SLONG nr_of_chars, const DT_UBYTE* chars, DT_ID_SWORD chars_format, DT_ID_UBYTE types[], DT_ID_UBYTE levels[], DT_ID_UBYTE start_level, DT_SWORD flags)</strong></div><br /><strong>Short Description:</strong> <em>Unicode Bidirectional (BiDi) algorithm</em><br /><br />
+
+<p>This function applies the Unicode Bidirectional Text Algorithm (BiDi) to a run of text (which is supplied as an array of Unicode characters).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>nr_of_chars</em></p>
+</td><td>
+<p>The number of characters in the input <em>chars</em> array and the size of the <em>types</em> and <em>levels</em> arrays.</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars</em></p>
+</td><td>
+<p>A pointer to a memory buffer that holds the Unicode characters (input array).</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars_format</em></p>
+</td><td>
+<p>Format of the characters in the memory buffer. Can be one of the following:</p>
+<ul>
+<li><p>1 (LX_FORMAT_UBYTE) = indicates that the size of each character in the buffer is 1 byte. All characters have codepoints in the 0 - 255 range.</p></li>
+<li><p>2 (LX_FORMAT_UWORD_LE) = indicates that the size of each character in the buffer is 2 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>-2 (LX_FORMAT_UWORD_BE) = indicates that the size of each character in the buffer is 2 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>3 (LX_FORMAT_UTRIO_LE) = indicates that the size of each character in the buffer is 3 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;16,777,216 range.</p></li>
+<li><p>-3 (LX_FORMAT_UTRIO_BE) = indicates that the size of each character in the buffer is 3 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;16,777,216 range.</p></li>
+<li><p>4 (LX_FORMAT_ULONG_LE) = indicates that the size of each character in the buffer is 4 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>-4 (LX_FORMAT_ULONG_BE) = indicates that the size of each character in the buffer is 4 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>102 (LX_FORMAT_UWORD) = indicates that the size of each character in the buffer is 2 bytes (CPU byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>104 (LX_FORMAT_ULONG) = indicates that the size of each character in the buffer is 4 bytes (CPU byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>124 (LX_FORMAT_UTF16) = indicates the buffer is in UTF-16 format. Each character is encoded with one or two <a href="../../dt/manual/types.htm#DT_ID_UWORD">DT_ID_UWORD</a> code units (using CPU specific byte ordering) as per UTF-16 encoding scheme. This variable-length encoding format is capable of encoding all 1,112,064 possible Unicode characters.</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>types</em></p>
+</td><td>
+<p>The resulting array of character types (output array). Each element of this array identifies the Unicode <a href="../manual/scripts.htm">Script</a> of the corresponding Unicode character in the <em>chars</em> array.</p>
+</td></tr>
+
+<tr><td>
+<p><em>levels</em></p>
+</td><td>
+<p>The resulting array of character directional levels (output array). Each element of this array describes the directional level of the corresponding Unicode character in the <em>chars</em> array.</p>
+</td></tr>
+
+<tr><td>
+<p><em>start_level</em></p>
+</td><td>
+<p>Start embedding level for the run of text supplied via the <em>chars</em> array. Set to an even value (0, 2, 4...60) for left-to-right. Set to an odd value (1, 3..61) for right-to-left. The value 255 is special: it means divide the supplied text into paragraphs and determine the each paragraph's embedding level by finding the first character in the paragraph with a strong bidirectional category. If the character is strongly left-to-right, the paragraph's embedding level will be 0, otherwise (i.e. if the character is strongly right-to-left), the paragraph's embedding level will be 1.</p>
+<p>Review the Comments section below for more information on Unicode's bidirectional types and embedding levels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>Flags to configure the behavior of the function.</p>
+
+<ul>
+<li>If <em>flags</em> = 0, the function does nothing. In this case, all elements of the <em>types</em> and <em>levels</em> arrays are set to 0.</li>
+
+<li>If <em>flags</em> = 1, the function applies BiDi. In this case, each element of the <em>levels</em> array is the directional level of the corresponding character in the <em>chars</em> array. All elements of the <em>types</em> array are set to 0.</li>
+
+<li>If <em>flags</em> = 2, the function applies Unicode Script analysis. In this case, each element of the <em>types</em> array identifies the Unicode <a href="../manual/scripts.htm">Script</a> of the corresponding character in the <em>chars</em> array. All elements of the <em>levels</em> array are set to 0.</li>
+
+<li>If <em>flags</em> = 3, the function applies BiDi and Unicode Script analysis. In this case,  each element of the <em>levels</em> array is the directional level of the corresponding character in the <em>chars</em> array and each element of the <em>types</em> array identifies the Unicode <a href="../manual/scripts.htm">Script</a> of the corresponding character in the <em>chars</em> array.</li>
+
+</ul>
+
+</td></tr>
+
+</table>
+
+<p>The <em>chars</em>, <em>types</em> and <em>levels</em> arrays are allocated and freed by the user. Their size must be <em>nr_of_chars</em>.</p>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns 1. If not successful (e.g. an error occurs or an invalid input parameter is supplied), the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>This function implements the following rules of the Unicode Bidirectional Text Algorithm:</p>
+
+<ul>
+<li>The Paragraph Level: P1, P2, P3</li>
+<li>Explicit Levels and Directions: X1, X2, X3, X4, X5, X6, X7, X8, X9, X10</li>
+<li>Resolving Weak Types: W1, W2, W3, W4, W5, W6, W7</li>
+<li>Resolving Neutral Types: N1, N2</li>
+<li>Resolving Implicit Levels: I1, I2</li>
+</ul>
+
+<p>The function does not implement the L1, L2, L3 and L4 rules (Reordering Resolved Levels) because these rules act on a per-line basis and are applied after any line wrapping is applied to the paragraph. More details on the Unicode Bidirectional Text Algorithm can be found in the Unicode Standard and/or on the Unicode website.</p>
+
+<h4>Bidirectional Types</h4>
+
+<p>Unicode characters have a "bidirectional type". There are many types, but they are divided into three categories: strong, weak, and neutral.</p>
+
+<ul>
+<li><p>Characters with a strong bidirectional type know their directionality. For example, the characters in most alphabets are strongly left-to-right, and the characters in the Hebrew and Arabic alphabets (and some others) are strongly right-to-left.</p></li>
+
+<li><p>Characters with a weak bidirectional type determine their directionality according to their proximity to other characters with strong directionality.</p></li>
+
+<li><p>Characters with a neutral bidirectional type determine their directionality from either the surrounding strong text or the embedding level.</p></li>
+
+</ul>
+
+<h4>Embedding Levels</h4>
+
+<p>The Unicode Bidirectional Algorithm works in terms of "levels" of right-to-left text embedded with left-to-right text, and vice versa.</p>
+
+<ul>
+<li>Even levels (0, 2, 4...60) are left-to-right.</li>
+<li>Odd levels (1, 3..61) are right-to-left.</li>
+</ul>
+
+<p>Text at an even level is rendered left-to-right. Text at an odd level is rendered right-to-left.</p>
+
+<p>The Unicode Bidirectional Algorithm works on paragraphs, so the first step is to divide text into paragraphs. The paragraph embedding level can be determined by finding the first character in the paragraph with a strong bidirectional category. If the character is strongly left-to-right, the paragraph embedding level is 0, otherwise (i.e. if the character is strongly right-to-left), the embedding level is 1.</p>
+
+<p>Embedding goes on from there: contained text with the opposite directionality is at the next embedding level, and text with the original directionality that is contained by the text with the opposite directionality is at the next lowest embedding level.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,75 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterSetSizeSubscale</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterSetSizeSubscale(DT_DTENGINE engine, DT_UBYTE transform_params_mul_h, DT_UBYTE transform_params_mul_v, DT_UBYTE reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set Typesetter's size subscale</em><br /><br />
+
+<p>The <a href="dtTypesetterSetSizeSubscale.htm">dtTypesetterSetSizeSubscale</a> function sets a subscale for the <em>size_h</em> and <em>size_v</em> members of the <a href="../manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure. This instructs the Typesetter to interpret the <em>size_h</em> and <em>size_v</em> values as premultiplied (i.e. as subpixel quantities rather than whole pixels) and utilize fractional font sizing when scaling glyphs in the horizontal and/or vertical direction. In other words, despite the fact that <em>size_h</em> and <em>size_v</em> themselves are always integers, this function makes it possible to use fractional font sizing.</p>
+
+<p>When D-Type Engine is initialized, fractional font sizing is disabled. This means that <em>size_h</em> and <em>size_v</em> values are interpreted as whole pixels. This is a recommended setup for most applications.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform_params_mul_h</em></p>
+</td><td>
+<p>Scale multiplier for the <em>size_h</em> member of the <a href="../manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure. For example, if <em>transform_params_mul_h</em> is set to 4, then <em>size_h</em> is interpreted as font width in 1/4 pixels. In that case, <em>size_h</em> = 42 represents a font width of 10.5 pixels (42/4), while <em>size_h</em> = 55 represents a font width of 13.75 pixels (55/4).</p>
+
+<p>This value must be positive. The value 1 will disable fractional font sizing in the horizontal direction. In this case, <em>size_h</em> values are interpreted as whole pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>transform_params_mul_v</em></p>
+</td><td>
+<p>Scale multiplier for the <em>size_v</em> member of the <a href="../manual/structs.htm#DT_TRANSFORM_PARAMS">DT_TRANSFORM_PARAMS</a> structure. For example, if <em>transform_params_mul_v</em> is set to 4, then <em>size_v</em> is interpreted as font height in 1/4 pixels. In that case, <em>size_v</em> = 42 represents a font height of 10.5 pixels (42/4), while <em>size_v</em> = 55 represents a font height of 13.75 pixels (55/4).</p>
+
+<p>This value must be positive. The value 1 will disable fractional font sizing in the vertical direction. In this case, <em>size_v</em> values are interpreted as whole pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>This function should be called only when fractional font sizing is truly needed. Even then, we do not recommend that you ever set <em>transform_params_mul_h</em> or <em>transform_params_mul_v</em> to a value larger than 8. Doing so will reduce the effectiveness of the bitmap cache. A value of 4 should be more than adequate for most needs. If the fractional font sizing is not needed, it is best to set both values to 1 (or not to call this function in the first place).</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

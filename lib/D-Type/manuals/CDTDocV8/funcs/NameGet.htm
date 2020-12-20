@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>NameGet</strong></div><br />
+
+<p>The NameGet function retrieves the type and numeric value (i.e. field name) of the field located at position <em>idx</em> in the PowerDoc object <em>obj</em>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>idx</em></p>
+</td><td>
+<p>The index of the field in the object.</p>
+</td></tr>
+
+<tr><td>
+<p><em>type</em></p>
+</td><td>
+<p>A pointer to a variable that will hold the field's type. Depending on the field, this will be one of the following:</p>
+
+<ul>
+<li>1 (PD_FT_PROPERTY) if the field at position <em>idx</em> is a PowerDoc property;</li>
+<li>2 (PD_FT_LINK) if the field at position <em>idx</em> is a PowerDoc link;</li>
+<li>3 (PD_FT_PROPERTYREFERENCE) if the field at position <em>idx</em> is a PowerDoc property reference;</li>
+<li>0 (PD_FT_UNKNOWN) if an error occurs.</li>
+</ul>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>The return value is the numeric value (field name) of the field located at position <em>idx</em>.</p>
+<p>If the field at position <em>idx</em> is a PowerDoc link, the return value will be one of the values used to identify links. See the <a href="LinkAdd.htm">LinkAdd</a> function for a list of numerical values that identify PowerDoc links.</p>
+<p>If the field at position <em>idx</em> is a PowerDoc property or property reference, the return value will be one of the values used to identify properties. See the <a href="PropAdd.htm">PropAdd</a> function for a list of numerical values that identify PowerDoc properties.</p>
+<p>If <em>idx</em> is larger than the index of the last field in the object, the return value will be 0 (pdNul). Therefore, it is possible to use the <em>idx</em> variable as a loop counter to iterate through all the fields in the objects. The return value 0 (pdNul) will indicate that <em>idx</em> has reached the last field in the object <em>obj</em>.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

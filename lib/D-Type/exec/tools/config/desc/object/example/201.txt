@@ -1,0 +1,18 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Form Configuration");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], fcCnfLib, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCtrlStyleOnFocus, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCharBox, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonNormal, "14", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonPushed, "13", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderNormal, "2", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderPushed, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonNormal, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonPushed, "7", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonSelected, "8", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxNormal, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxPushed, "4", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxSelected, "5", PD_BYTE_UNSIGNED);{/strong}

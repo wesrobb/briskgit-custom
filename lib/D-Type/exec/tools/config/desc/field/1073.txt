@@ -1,0 +1,36 @@
+Type of text area and control of empty text lines.
+
+The first 6 bits (Bit 0 - Bit 5) are interpreted as a single 6 bit value. This value specifies the type of the text area and can be one of the following:
+
+{strong}Supported values:{/strong}
+
+0 = Rectangular
+
+5 = Custom (use in conjunction with pdTextAreaEdgeLeft and/or pdTextAreaEdgeRight)
+6 = Custom With Extra Precision (use in conjunction with pdTextAreaEdgeLeft and/or pdTextAreaEdgeRight)
+
+10 = Quarter-Circular A
+11 = Quarter-Circular B
+12 = Quarter-Circular C
+13 = Quarter-Circular D
+14 = Half-Circular A
+15 = Half-Circular B
+16 = Half-Circular C
+17 = Half-Circular D
+18 = Circular
+
+20 = Quarter-Diamond A
+21 = Quarter-Diamond B
+22 = Quarter-Diamond C
+23 = Quarter-Diamond D
+24 = Half-Diamond A
+25 = Half-Diamond B
+26 = Half-Diamond C
+27 = Half-Diamond D
+28 = Diamond
+
+The seventh bit (Bit 6) is interpreted as a single bit value that specifies how the left (pdTextAreaEdgeLeft) and right edge (pdTextAreaEdgeRight) in non-rectangular text areas will be calculated. If this bit is set (1), the calculation will be more precise but slower; otherwise, if this bit is unset (0), the calculation will be less precise but faster. In rectangular text areas, this bit is ignored.
+
+The final bit (Bit 7) is interpreted as a single bit value that signifies whether the control of empty text lines is enabled. If this bit is set (1), the control of empty text lines is enabled; otherwise, if this bit is unset (0), the control of empty text lines is disabled.
+
+When the control of empty text lines is enabled, D-Type Engine will ignore any trailing empty text lines (i.e. text lines that only contain white characters such as spaces or carriage returns) when performing vertical alignment of text in this text area. This is useful in high-end text layout applications that require more professional vertical alignment of text.

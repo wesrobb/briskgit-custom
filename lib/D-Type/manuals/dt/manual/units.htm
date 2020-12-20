@@ -1,0 +1,81 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Standard Engine Units</h1>
+
+<h2>Pixels and Font Units</h2>
+
+<p>The D-Type API simplifies programming by utilizing a very simple set of units: pixels and font units.</p>
+
+<table class="table_data">
+<tr>
+<th>Unit</th>
+<th>Associated Data Type</th></tr>
+<tr>
+<td><p>Pixels</p>
+</td>
+<td><p><a href="types.htm#DT_SLONG">DT_SLONG</a>, <a href="types.htm#DT_SFRAC">DT_SFRAC</a> or <a href="types.htm#DT_FLOAT">DT_FLOAT</a></p>
+</td></tr>
+<tr>
+<td><p>Font units</p>
+</td>
+<td><p><a href="types.htm#DT_SWORD">DT_SWORD</a>, <a href="types.htm#DT_UWORD">DT_UWORD</a></p>
+</td></tr></table>
+
+<dl>
+<dt><strong>Pixels</strong></dt>
+<dd>
+<p>Pixels are used to specify font sizes<sup>[<a href="units.htm#note1" name="ref1">1</a>]</sup>, screen coordinates, clipping regions and bitmap dimensions. In most cases these are integers of the <a href="types.htm#DT_SLONG">DT_SLONG</a> type. However, since D-Type Rasterizer is a grayscale rasterizer designed to enhance screen resolution, a pixel value can also be represented as a real (floating point) value of the <a href="types.htm#DT_FLOAT">DT_FLOAT</a> type or, alternatively, as a 24.8 fractional value of the <a href="types.htm#DT_SFRAC">DT_SFRAC</a> type. For example, D-Type can render a rectangle that is 5.4 pixels wide and 3.2 pixels tall. Indeed, this rectangle will look slightly bigger than a rectangle that is 5 pixels wide and 3 pixels tall.</p>
+
+<p>The <a href="types.htm#DT_FLOAT">DT_FLOAT</a> type is recommended on machines that have a floating point math processor. Most modern CPUs (e.g. Intel, Motorola) include a floating point processor. However, if a floating point processor is not available (e.g. embedded systems and/or hand-held devices) or if simply the highest possible rendering speed is required, the <a href="types.htm#DT_SFRAC">DT_SFRAC</a> type can be used. This type describes a 24.8 signed fractional value expressed as a 32-bit signed integer. Computations that use <a href="types.htm#DT_SFRAC">DT_SFRAC</a> type are essentially computations with integers and are usually faster than the equivalent computations that use the <a href="types.htm#DT_FLOAT">DT_FLOAT</a> type. To express a floating point number in the 24.8 signed fractional format, simply multiply its value by 256. Mathematically:</p>
+
+<p class="center">
+<em>fractional_value_24dot8</em> = <em>floating_point_value</em> * 256<br />
+and<br />
+<em>floating_point_value</em> = <em>fractional_value_24dot8</em> / 256<br />
+</p>
+
+<p>For example, the above rectangle that is 5.4 pixels wide and 3.2 pixels tall would be approximately 1382 fractional units wide and 819 fractional units tall in the 24.8 signed fractional pixel space.</p>
+
+<p>It should be noted that D-Type API always provides support for both floating point and fractional values. When a floating point processor is not available, the floating point math is emulated. It is up to the developers to determine which type works best in their application(s).</p>
+
+<p>Finally, care should be taken when using extremely large pixel values. Although the <a href="types.htm#DT_SLONG">DT_SLONG</a> type is capable of storing 32-bit integers (i.e. integers in the [-2<sup>31</sup>&nbsp;..&nbsp;+2<sup>31</sup>&nbsp;-&nbsp;1] range) while <a href="types.htm#DT_FLOAT">DT_FLOAT</a> provides practically an unlimited floating point range, numerical overflows and unexpected rendering results may occur when pixel coordinates approach or exceed the limits imposed by 24-bit integers. This is because D-Type Standard Engine internally stores all pixel quantities as 24.8 signed fractional values in order to allow D-Type Rasterizer to render text and vectorial shapes using sub-pixel precision. In other words, it is important to remember that the final output coordinates (in whole pixels) are limited to the [-2<sup>23</sup>&nbsp;..&nbsp;+2<sup>23</sup>&nbsp;-&nbsp;1] range.</p>
+</dd>
+
+<dt><strong>Font units</strong></dt>
+<dd>
+<p>Font units are used to describe font and glyph/character dimensions, such as bounding boxes, width information, inter-character spacing, outline curve coordinates, kerning values etc.</p>
+
+<p>For a given font and font size in pixels, font units can be converted to pixels and vice versa using a simple scaling formula. When the <a href="../funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> function is called to set the font width and height in pixels, the font's base width and height (also called em-square) will be scaled to this desired pixel value. Then, when the <a href="../funcs/dtFontGetMetrics.htm">dtFontGetMetrics</a> function is subsequently called to obtain the base font width and height in font units, the horizontal scaling factor is simply a ratio of the font width set in pixels and the base font width retrieved in font units. Similarly, the vertical scaling factor is simply a ratio of the font height set in pixels and the base font height retrieved in font units</p>
+
+<p>For more information on font units, please see <em>D-Type FAQ: Q-2-5</em>.</p>
+</dd>
+</dl>
+
+<br />
+
+<small>
+________________<br /><br />
+
+[<a name="note1" href="units.htm#ref1">1</a>] In traditional typography, font size is measured in <em>points</em>.  To see how points can be converted to pixels, please see <em>D-Type FAQ: Q-2-2</em>.
+</small>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

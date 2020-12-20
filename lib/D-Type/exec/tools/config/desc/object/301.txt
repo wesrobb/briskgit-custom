@@ -1,0 +1,5 @@
+The Button object is a visual and interactive form control whose purpose is to trigger certain action(s) when an event occurs (e.g. the user presses the button, releases it, etc.).
+
+{strong}Designated Rendering Function:{/strong} fcDrawButton (10000)
+
+Note: fcValue_08, fcValue_16, fcValue_24 and fcValue_32 cannot be used at the same time. fcValue_32 takes precedence over fcValue_24. fcValue_24 takes precedence over fcValue_16. Finally, fcValue_16 takes precedence over fcValue_08.

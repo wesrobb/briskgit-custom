@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txEngineMakeCachedFontmap</h2><div class="box_prototype"><strong>
+DT_SLONG txEngineMakeCachedFontmap(DT_TXENGINE engine, const DT_STREAM_DESC* input_fontmap_sd, DT_STREAM_DESC* output_fontmap_sd, DT_SWORD reserved)</strong></div><br /><strong>Short Description:</strong> <em>Make cached Fontmap</em><br /><br />
+
+<p>The txEngineMakeCachedFontmap function creates a cached font map from the standard font map file (typically <em><a href="../manual/fontmap.htm">fontmap.inf</a></em>).</p>
+
+<p>The cached font map serves the same purpose as the standard font map file (i.e. it specifies what fonts to use for different Unicode scripts) but is optimized for performance. Thus, this font map can be passed to any other D-Type Text Engine functions that accept a font map stream descriptor (e.g. <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>, <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a>, <a href="txTextPasteViaBuffer.htm">txTextPasteViaBuffer</a>) and the results of the text layout process will be identical. However, the cached font map will make these functions run noticeably faster.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Text Engine instance. See the <a href="txEngineIniViaStream.htm">txEngineIniViaStream</a> function for details on how to initialize D-Type Text Engine.</p>
+</td></tr>
+
+<tr><td>
+<p><em>input_fontmap_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the input font map file.</p>
+<p>This must be a standard font map file, i.e. a plain text file (not binary). Typically, this is <em><a href="../manual/fontmap.htm">fontmap.inf</a></em>. When appropriate, your application can provide its own (i.e. altered) version of the fontmap.inf file.</p>
+</td></tr>
+
+<tr><td>
+<p><em>output_fontmap_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the output font map file. This will be the cached font map file i.e. an optimized binary file (not plain text).</p>
+<p>For best performance, the cached font map file should reside in memory. The <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure then describes a memory based stream. Memory based streams can be processed more quickly than file based streams. See the <a href="../../dt/manual/structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a> macro and the <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> section for more information on memory based streams. Also, see the examples at the bottom of this page.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the cached font map was created successfully, the return value is 1. Otherwise, the function returns -1.</p>
+
+
+<h3>Comments</h3>
+
+<p>As mentioned above, the cached font map serves the same purpose as the standard font map file (i.e. it specifies what fonts to use for different Unicode scripts). However, the cached font map is optimized for performance. When passed to <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a> or any other D-Type Text Engine functions that accept a font map stream descriptor, it will make them run noticeably faster. The results of the text layout process will be the same as if the standard font map file descriptor was used.</p>
+
+<p>The cached font map is particularly useful in applications that create many text document instances but use the same list of fonts. In these situations the cached font map should be created once and passed many times to <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>, <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a> or any other D-Type Text Engine functions that accept a font map stream descriptor. For best performance, the cached font map file should reside in memory.</p>
+
+<p>The cached font map is a binary file and its structure will not be discussed here. It should only be created by calling the txEngineMakeCachedFontmap function. Additionally, before calling the txEngineMakeCachedFontmap function, applications must ensure that all the fonts referenced in the standard font map file (<em><a href="../manual/fontmap.htm">fontmap.inf</a></em>) have been added to D-Type Font Engine's Font Catalog. For more information on the Font Catalog, see D-Type Standard Engine Manual.</p>
+
+
+<h3>Note 1</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+<h3>Note 2</h3>
+<p>See our <a href="../../dt/manual/fpaths.htm">notes regarding file based streams</a>.</p>
+
+<h3>Note 3</h3>
+<p>If creating a cached font map file in memory, remember to release the memory when the cached font map file is no longer needed (and after destroying all text document instances that use it).</p>
+
+
+<h3>Example 1</h3>
+
+<p>The following example shows how to create a cached font map (as a file on disk) using the txEngineMakeCachedFontmap function. This cached font map is then used to create a new text document 500 times. The execution time of this process is shown at the end.</p>
+
+<div class="box_field"><pre>
+DT_SLONG i;
+DT_TX_TEXTFLOW_AREA textflow_area = {10, 10, 800, 800, TX_RECT, TX_TYPOROW, 0, TX_DIR_ROW_LR_TB, TX_LAY_DEVICE_B, TX_TM_NULL, {DV_NULL}};
+
+DT_STREAM_FILE(sd_text, "sample_text.txt");              /* input file - plain text */
+DT_STREAM_FILE(sd_fontmap, "fontmap.inf");               /* input file - standard font map */
+DT_STREAM_FILE(sd_fontmap_cached, "fontmap-cached.inf"); /* output file - cached font map (will be stored on disk) */
+
+txEngineMakeCachedFontmap(TextEngine, &amp;sd_fontmap, &amp;sd_fontmap_cached, 0);
+
+clock_t clock_start = clock();
+
+for (i = 0; i &lt; 500; i++)
+{
+   /* create a new text document */
+   txTextIniViaStream(&amp;TextDoc, Engine, TX_AUTO, &amp;sd_text, TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT, &amp;textflow_area, DV_NULL, &amp;sd_fontmap_cached);
+   /* and destroy it */
+   txTextExt(TextDoc);
+}
+
+clock_t clock_end = clock();
+
+printf("time = %f seconds (%d ticks)\n", (clock_end - clock_start) / (DT_FLOAT)CLOCKS_PER_SEC, clock_end - clock_start);
+</pre></div>
+
+<p>Output:</p>
+<div class="box_field"><pre>
+time = 1.94 seconds (1940 ticks)
+</pre></div>
+
+
+<h3>Example 2</h3>
+
+<p>The following example is identical to the one above, except that the cached font map is stored in memory. Again, the execution time of this process is shown at the end.</p>
+
+<div class="box_field"><pre>
+DT_SLONG i;
+DT_TX_TEXTFLOW_AREA textflow_area = {10, 10, 800, 800, TX_RECT, TX_TYPOROW, 0, TX_DIR_ROW_LR_TB, TX_LAY_DEVICE_B, TX_TM_NULL, {DV_NULL}};
+
+DT_STREAM_FILE(sd_text, "sample_text.txt");              /* input file - plain text */
+DT_STREAM_FILE(sd_fontmap, "fontmap.inf");               /* input file - standard font map */
+DT_STREAM_MEMORY(sd_fontmap_cached, DV_NULL, 0);            /* output file - cached font map (will be stored in memory) */
+
+txEngineMakeCachedFontmap(TextEngine, &amp;sd_fontmap, &amp;sd_fontmap_cached, 0);
+
+clock_t clock_start = clock();
+
+for (i = 0; i &lt; 500; i++)
+{
+   /* create a new text document */
+   txTextIniViaStream(&amp;TextDoc, Engine, TX_AUTO, &amp;sd_text, TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT, &amp;textflow_area, DV_NULL, &amp;sd_fontmap_cached);
+   /* and destroy it */
+   txTextExt(TextDoc);
+}
+
+txFree(sd_fontmap_cached.stream_locator.mem_w.addr);    /* release memory that txEngineMakeCachedFontmap allocated for the cached font map */
+
+clock_t clock_end = clock();
+
+printf("time = %f seconds (%d ticks)\n", (clock_end - clock_start) / (DT_FLOAT)CLOCKS_PER_SEC, clock_end - clock_start);
+</pre></div>
+
+<p>Output:</p>
+<div class="box_field"><pre>
+time = 1.62 seconds (1620 ticks)
+</pre></div>
+
+
+<h3>Example 3</h3>
+
+<p>The final example is similar to the first two, except that this time no cached font map is used. As it can be seen, the execution time of this process is noticeably higher than in the first two examples.</p>
+
+<div class="box_field"><pre>
+DT_SLONG i;
+DT_TX_TEXTFLOW_AREA textflow_area = {10, 10, 800, 800, TX_RECT, TX_TYPOROW, 0, TX_DIR_ROW_LR_TB, TX_LAY_DEVICE_B, TX_TM_NULL, {DV_NULL}};
+
+DT_STREAM_FILE(sd_text, "sample_text.txt");              /* input file - plain text */
+DT_STREAM_FILE(sd_fontmap, "fontmap.inf");               /* input file - standard font map */
+
+clock_t clock_start = clock();
+
+for (i = 0; i &lt; 500; i++)
+{
+   /* create a new text document */
+   txTextIniViaStream(&amp;TextDoc, Engine, TX_AUTO, &amp;sd_text, TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT, &amp;textflow_area, DV_NULL, &amp;sd_fontmap);
+   /* and destroy it */
+   txTextExt(TextDoc);
+}
+
+clock_t clock_end = clock();
+
+printf("time = %f seconds (%d ticks)\n", (clock_end - clock_start) / (DT_FLOAT)CLOCKS_PER_SEC, clock_end - clock_start);
+</pre></div>
+
+<p>Output:</p>
+<div class="box_field"><pre>
+time = 4.16 seconds (4160 ticks)
+</pre></div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

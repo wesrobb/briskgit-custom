@@ -1,0 +1,8 @@
+0 (000) = Outline is over text body and does not cast shadow
+1 (001) = Outline is under text body and does not cast shadow
+2 (010) = Outline is over text body and casts filled shadow
+3 (011) = Outline is under text body and casts filled shadow
+4 (100) = Outline is over text body and casts outlined shadow
+5 (101) = Outline is under text body and casts outlined shadow
+6 (110) = Outline is over text body and casts shadow
+7 (111) = Outline is under text body and casts shadow

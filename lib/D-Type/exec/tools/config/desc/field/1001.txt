@@ -1,0 +1,15 @@
+Color and transparency (4 bytes)
+
+The first three bytes specify the intensity of red (R), green (G) and blue (B) while the last byte specifies the transparency level (T). All values are in the 0-255 range. The value 0 means minimum intensity, 255 means maximum intensity.
+
+The length of this field, when converted to the binary format, is precisely 4 bytes.
+
+{strong}Sample values:{/strong}
+
+"00 00 00 00" (0, 0, 0, 0) = Fully Black, Fully Opaque
+"00 00 00 7F" (0, 0, 0, 127) = Fully Black, 50% Transparent
+"FF 00 00 00" (255, 0, 0, 0) = Fully Red, Fully Opaque
+"00 FF 00 7F" (0, 255, 0, 127) = Fully Green, 50% Transparent
+"FF FF FF FF" (255, 255, 255, 255) = Fully White, Fully Transparent
+"00 7F 00 00" (0, 127, 0, 0) = 50% Green, Fully Transparent
+"7F 7F 7F 7F" (127, 127, 127, 127) = Gray, 50% Transparent

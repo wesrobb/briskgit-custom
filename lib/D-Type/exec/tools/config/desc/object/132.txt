@@ -1,0 +1,3 @@
+This object describes a bitmap image defined in Power Engine's internal library of pre-defined bitmap images.
+
+{strong}Designated Rendering Function:{/strong} pdDrawLibraryImage (30)

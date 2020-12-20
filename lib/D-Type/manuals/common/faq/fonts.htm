@@ -1,0 +1,168 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: Fonts</h1>
+
+
+<p><strong>Q-6-1. Do D-Type fonts offer any advantage over Windows .TTF fonts for smoother scaling to smaller sizes?</strong></p>
+
+<p>D-Type font engine handles TrueType, OpenType, Adobe Type 1, PostScript Type 3, Bare CFF and D-Type fonts equally well, and in most cases the results are identical in terms of quality and speed. Therefore, an application can use any of these formats, and the end-user will not notice any difference.</p>
+
+<p>D-Type's .dtf format, however, offers some technological advantages over other font formats. One of the main advantages is better compression (especially when the font has many complex characters) and sophisticated automatic hinting. Non-hinted TrueType, OpenType, Type 1, Type 3 or CFF fonts can be stored in or converted to D-Type's hinted format using D-Type Font Converter.</p>
+
+<p>Since D-Type fonts do not require manual hinting, any non-hinted TrueType, OpenType, Type 1, Type 3 and CFF fonts fonts will look better if they are converted to the .dtf format. This is very useful in production and delivery of custom made fonts, because tedious manual hinting can be omitted. These custom fonts can be designed using any popular font editing software (e.g. Fontographer), exported as TrueType and finally converted to D-Type. The resulting font will have the same quality as if the original TrueType font was hinted by an experienced typographer. This unique feature, however, must not be used to distribute already copyrightable TrueType, OpenType, Type 1, Type 3 or CFF fonts in D-Type format.</p>
+
+<p><em><strong>Note</strong>: For more information on converting fonts to D-Type format, please contact D-Type Solutions.</em></p>
+
+
+<p><strong>Q-6-2. When I add a new font to the Font Catalog, can I use it immediately?</strong></p>
+
+<p>Yes, once the font is successfully added to the Font Catalog, you can use it immediately. But if you are using Multiple-Master font instances, your may need to perform a few more steps:</p>
+
+<ol>
+
+<li><p>If you do not want to use Multiple-Master font capabilities, or if you only use TrueType fonts, proceed to step 4.</p></li>
+
+<li><p>Otherwise, obtain the number of design axes for this font by calling the <a href="../../dt/funcs/dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> function. If this number is 0, i.e. the font is a Single-Master font, proceed to step 4.</p></li>
+
+<li><p>Optionally, add additional interpolated font instances to the Font Catalog by calling the <a href="../../dt/funcs/dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a> function.</p></li>
+
+<li><p>Optionally, obtain other font information (e.g. font name, family name, font style etc.) by calling the <a href="../../dt/funcs/dtFontGetStringValue.htm">dtFontGetStringValue</a> function.</p></li>
+
+<li><p>If you wish to render glyphs or text, use the <a href="../../dt/manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a> structure to specify typographical attributes of the font or Multiple-Master font instance in question. Therefore, set type by calling <a href="../../dt/funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> and finally draw glyphs or text by calling <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a>, <a href="../../dt/funcsx/dtxGlyphsDoOutput.htm">dtxGlyphsDoOutput</a>, <a href="../../dt/funcsx/dtxGlyphsDoOutput.htm">dtxCharsDoOutput</a>.</p></li>
+
+</ol>
+
+
+
+<p><strong>Q-6-3. The vertical stem on the Times New Roman &quot;h&quot; out-rises the &quot;T&quot; and the &quot;l&quot; out-rises the &quot;F&quot;.</strong></p>
+
+<p>Some small letters (typically h, d, f, h, k, l or b) in Times New Roman are really a little bit higher than the capital letters. The difference in height can be clearly noticed when the font size exceeds 14 points.</p>
+
+<p><strong>Q-6-4. How do I use Muliple-Master fonts with D-Type?</strong></p>
+
+<p>Multiple-Master font technology is an innovative and unprecedented font technology that allows two or more outline fonts, or base designs, to be incorporated into a single font file. This feature allows applications to create hundreds or thousands of additional font instances (or intermediate designs) from the base designs by applying D-Type's real-time interpolation capabilities. For example, an application can create intermediate designs that range from light to black, condensed to extended, sans serif to serif, wedge-serif to slab-serif etc.</p>
+
+<p>In order to use this technology, you need Multiple-Master fonts. Multiple-Master fonts are available in Adobe Type 1, D-Type or Variable OpenType format.</p>
+
+<p>Your application can simply add a Multiple-Master font to the Font Catalog by calling the <a href="../../dt/funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a> function. To determine the number of design axes supported by the font, call the <a href="../../dt/funcs/dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> function. This function returns the number of design axes in the font, which for Multiple-Master fonts is always greater than 0. For Single-Master fonts, this number is 0.</p>
+
+<p>In addition, the <a href="../../dt/funcs/dtFontGetStringValue.htm">dtFontGetStringValue</a> function can provide the name of each design axis, which is useful for interactive programs that allow users to create new font instances via the appropriate user interface. More information on both functions can be found in D-Type Standard Engine Manual.</p>
+
+<p>Once this is done, applications can add additional font instances, or intermediate designs, to the Font Catalog using the <a href="../../dt/funcs/dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a> function. This function creates an interpolated font instance from the base designs in the font. To do this, your application must supply the contribution factor for each design axis, which is simply a percentage of its contribution in the final interpolated font. Naturally, the sum of all the base contributions must be 100%.</p>
+
+<p>The return value of the <a href="../../dt/funcs/dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a> function is a font index which uniquely identifies the newly added font instance in the Font Catalog.</p>
+
+
+<p><strong>Q-6-5. Does D-Type automatically recognize fonts that are installed on the operating system or do we have to detect them in our code and then add them to D-Type's Font Catalog?</strong></p>
+
+<p>D-Type does not in any way recognize fonts that are installed on the operating system. You have to detect them in your code and then add them to the Font Catalog.</p>
+
+
+<p><strong>Q-6-6. We would like to add support for font subsetting so that our documents become more portable. Are there any separate API's for creating font subsets?</strong></p>
+
+<p>Creating subsetted fonts in D-Type format is very easy. See the <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> function for details. However, there are no APIs for creating subsetted fonts in other formats (e.g. TrueType, Type 1 etc.).</p>
+
+
+
+<p><strong>Q-6-7. If we want to implement font subsetting do first have to convert each relevant font into a D-Type font or can we load a TrueType/OpenType/Type 1 font and just use <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> to convert it to a subsetted D-Type font?</strong></p>
+
+<p>Simply load a TrueType/OpenType/Type 1 font and just use <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> to convert it to a subsetted D-Type font. Thanks to D-Type's flexible stream system, you could also tell <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> to save this subsetted D-Type font to a memory buffer. This allows you to subsequently copy the contents of the memory buffer directly to your structure or file, and/or start using the subsetted font directly from memory.</p>
+
+
+
+<p><strong>Q-6-8. If we subset the font are there any known limitations (e.g. why a font would not subset) apart from the font specifying that it cannot be subset/embedded?</strong></p>
+
+<p>No, there are no limitations at all. It is entirely up to you to decide whether you wish to respect TrueType font embedding licensing rights (see the <a href="../../dt/funcs/dtFontGetNumericValue.htm">dtFontGetNumericValue</a> function in the manual for more info). Despite this flag, D-Type Font Engine will always let you subset any font.</p>
+
+
+
+<p><strong>Q-6-9. I understand that we can use <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> to convert a font to D-Type format (if we want to subset it) and that we can decide via a callback if the glyph should be used or not. However, for this to work we need a list of glyph indexes that we can compare against. Is there any way to determine which glyphs have been used for a specific text document or maybe a string?</strong></p>
+
+<p>This depends on how you render your text.</p>
+
+<p>a) If you use D-Type Standard Engine to render simple (i.e. non-complex) text:<br />
+You essentially render text using <a href="../../dt/funcs/dtGlyphDoOutput.htm">dtCharDoOutput</a> so you know what characters appear in your text. Use <a href="../../dt/funcs/dtFontGetGlyphIndex.htm">dtFontGetGlyphIndex</a> to convert these characters to glyph indexes. This is your list of glyphs that you want to keep in the subsetted font.</p>
+
+<p>b) If you use D-Type Standard Engine with D-Type Text Layout Extension to render simple and complex text:<br />
+The <a href="../../lx/funcs/lxLayoutApply.htm">lxLayoutApply</a> function returns the glyph indexes via the <a href="../../lx/manual/lxstructs.htm#DT_LX_GLYPH">DT_LX_GLYPH</a> structure.</p>
+
+<p>c) If you use D-Type Power Engine and/or D-Type Text Engine:<br />
+See the <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> function.</p>
+
+
+
+<p><strong>Q-6-10. When adding fonts to D-Type we need to determine the value to pass as the <em>font_format_id</em> parameter. Can you suggest any resources that will help us with this?</strong></p>
+
+<p>As explained in <a href="../../dt/manual/factories.htm">Appendix &mdash; Predefined Font Factories</a> and set up through <a href="../../dt/manual/inifiles.htm#inf">dtype.inf</a>, the values to pass as the <em>font_format_id</em> parameter are as follows:</p>
+
+<ul>
+<li>0 &mdash; for D-Type Fonts (.dtf)</li>
+<li>1 or 3 &mdash; for TrueType or OpenType fonts with TrueType outlines (.ttf) or TrueType Collections (.ttc) utilizing Apple Mac ASCII Encoding</li>
+<li>5 or 6 &mdash; for OpenType (.otf) fonts with Type 2/CFF outlines</li>
+<li>2 or 7 or 8 &mdash; for Adobe Type 1 (.pfb or .pfa) fonts</li>
+<li>11 or 12 &mdash; for Adobe Type 3 PostScript (.ps) fonts</li>
+<li>14 or 15 or 16 &mdash; for Bare CFF (.cff) fonts</li>
+</ul>
+
+<p>Thus, if you know the font file's extension, you know what <em>font_format_id</em> values can be used to open this particular font format. For example, if a font file extension is .ttf, you can use either 1 or 3 as <em>font_format_id</em>. You will use 1 if you want to open the font using Apple Mac ASCII Encoding and 3 if you want to open the font using Windows Unicode Encoding. In other words the choice 1 or 3 is your decision. Obviously 3 will be the most flexible <em>font_format_id</em> for TrueType and OpenType fonts with a .ttf extension.</p>
+
+
+
+<p><strong>Q-6-11. Based on Q-6-11 all we really need to do is determine the font-type and specify if we want Unicode or ASCII naming.</strong></p>
+
+<p>Yes, Unicode or ASCII character encoding. ASCII is rather limited (up to 255 characters) so in modern applications it really only makes sense to use Unicode. So your list of <em>font_format_id</em> choices can be cut down in half.</p>
+
+
+
+<p><strong>Q-6-12. The text editor we will be building will require the ability for the end-user to change the font. This means that we will have to scan the fonts folder(s) on the computer to find all available fonts. Before we include the font in our fonts list we will obviously have to validate it which means adding it to D-Type and checking for any errors. What is the impact of adding several hundred fonts into D-Type? Could this cause a performance/memory issue if we do this every time the application starts up? If so, we will probably have to build some sort of cache so that only new/updated fonts get re-validated. Also, should we only add fonts that the user selects into D-Type rather than all of the fonts used on the computer?</strong></p>
+
+<p>Yes, if you are scanning hundreds of fonts, the process might take a few seconds. Also, a full font validation is not feasible in this case. Font activation (to level 1 or level 2) is OK and will also do the basic validation. Rest assured that D-Type Font Engine will do this as fast as possible (we have designed our font drivers specifically with this in mind; i.e. only the file header and the critical tables/structures inside the file will be accessed).</p>
+
+<p>Anyway, maintaining some sort of cache so that only new/updated fonts get re-validated is a good idea. The other alternative, only adding fonts that the user selects into D-Type (rather than all of the fonts used on the computer), is also a good option. Allowing the user to manually add fonts is always going to be more flexible than relying on the computer code to auto-scan various font folder.</p>
+
+<p>Finally, you can also provide both options: 1) auto-scan the font folders by default and 2) allow the user to add any additional fonts manually.</p>
+
+
+
+<p><strong>Q-6-13. If a font has a Unicode filename what is the best way to load it? Does <a href="../../dt/funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a> accept UTF-8 filenames or should I do it another way?</strong></p>
+
+<p><a href="../../dt/funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a> (with a file based stream descriptor) uses the standard C/C++ fopen() function to open a file. So this function can open any file that fopen() can.</p>
+
+<p>It's also possible to open fonts using a memory based stream descriptor (i.e. you load the font to memory and then pass the pointer to this memory to D-Type).</p>
+
+
+
+<p><strong>Q-6-14. If we use <a href="../../dt/funcs/dtFontSaveToStream.htm">dtFontSaveToStream</a> to subset a font can we still apply styling such as drop shadows, outlining etc.</strong></p>
+
+<p>Of course.</p>
+
+
+
+<p><strong>Q-6-15: Does D-Type Font Engine impose any limit on the number of fonts that can be loaded into a single D-Type Engine instance?</strong></p>
+
+<p>No. The only restriction D-Type Font Engine imposes on the number of fonts is the size of the Font Catalog. The theoretical capacity of the Font Catalog is 32,000 fonts. There are no other restrictions within D-Type Font Engine itself on the number of open files/fonts your application can load into a single D-Type Engine instance.</p>
+
+<p>
+However, your operating system most likely imposes a limit on the maximum number of file handles your application (and thus D-Type Font Engine that is part of it) can have. Try increasing it. For example, on Windows the _setmaxstdio() function is typically used to increase this limit. On Unix and Mac OS X the getrlimit() and setrlimit() functions can be used to manage these limits. See <a href="http://www.gnu.org/s/libc/manual/html_node/Opening-and-Closing-Files.html">http://www.gnu.org/s/libc/manual/html_node/Opening-and-Closing-Files.html</a> for details.
+</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,3 @@
+Link to the {a href="../objects/012.htm"}Outline Definition{/a} object.
+
+This link supplies parameters necessary to render the outline of an object.

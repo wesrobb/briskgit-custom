@@ -1,0 +1,3 @@
+Mask page.
+
+The number of the masking page, i.e. a page whose alpha-channel will be used to mask the group member. If masking is not required, this value should be set to 0 or omitted.

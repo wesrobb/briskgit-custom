@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pdc</string>
+				<string>pdoc</string>
+				<string>powerdoc</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>powerdoc_doc_binary.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>PowerDoc Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>txt.pdc</string>
+				<string>txt.pdoc</string>
+				<string>txt.powerdoc</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>powerdoc_doc_text.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>PowerDoc Text Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>powerdoc_editor_osx</string>
+	<key>CFBundleIconFile</key>
+	<string>powerdoc_editor.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.dtype.dtpowerdoc</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>1.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>DtPD</string>
+	<key>CFBundleVersion</key>
+	<string>1.4.1</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+</dict>
+</plist>

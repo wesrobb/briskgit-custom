@@ -1,0 +1,6 @@
+Vertical skew in degrees. If positive, font glyphs will be slanted downwards. If negative, font glyphs will be slanted upwards.
+
+{strong}Sample values:{/strong}
+
+10 = Vertical skew of 10 degrees
+-10 = Vertical skew of -10 degrees

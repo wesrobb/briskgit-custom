@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>FontSetErrorCallback</strong></div><br />
+
+<p>This function passes to the Font Engine a pointer to your own callback function that will receive errors or warnings that are encountered in bad fonts. The Font Engine supplies this pointer to font drivers when new fonts are added to the Font Catalog. Font drivers then call your function whenever they encounter errors or warnings in bad fonts.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>font_error_func</em></p>
+</td><td>
+<p>A pointer to your own callback function that will receive errors that are encountered in fonts during execution. Your function must be declared as follows:</p>
+
+<p class="center"><em>void your_font_error_function(const <a href="../../dt/manual/types.htm#DT_CHAR">DT_CHAR</a>* error_message, void* user_param)</em></p>
+
+<p>where <em>your_font_error_function</em> is the name of your own C function, <em>error_message</em> a pointer to a  standard ANSI C/C++ string containing information about the error or warning that your function will receive and <em>user_param</em> a pointer to your own data type that you will receive during the callback.</p>
+
+<p>The ANSI C/C++ string containing information about the error or warning that your function will receive contains at least three fields (and possibly more in the future)  separated by a comma as illustrated below:</p>
+
+<p class="center"><em>font_driver_id, error_code, error_message</em></p>
+
+<p>The fields have the following meaning:</p>
+
+<p><em>font_driver_id</em> &mdash; Identifies the font driver that initiated the callback. For example, this can be PFB, TTF, DTF, CFF, OTF etc.</p>
+
+<p><em>error_code</em> &mdash; Identifies the error or warning. For example, this can be E1003, E1205, P2003, W1002 etc. The first letter identifies the severity of the problem: E indicates a serious error that will likely force the font driver to reject the font in question or some of its parts; P indicates a significant problem that the font driver will attempt to correct; W indicates a small problem or warning that the font driver will attempt to correct or ignore; M indicates an out-of-memory condition (that may or may not be caused by font instructions) and will likely force the font driver to reject the font in question or some of its parts; and U indicates an unknown or unspecified error type (that may or may not be caused by font instructions). The subsequent digits are the numeric error code and are specific to each font driver.</p>
+
+<p><em>error_message</em> &mdash; A human-readable description of the problem in the plain English language.</p>
+
+<p>Your function is called <u>only</u> when errors or warnings are encountered in bad fonts. In other words, only bad or non-compliant fonts can trigger the callback. <u>However, this can happen at various stages during font processing (e.g. when adding fonts to the Font Catalog, when requesting font information or rendering glyphs etc.). In other words, your function can be called at any time during the execution of your application. Therefore, do not make any assumptions about when your function will be called.</u></p>
+
+<p>Well designed compliant fonts should never trigger a callback. However, it is impossible to tell in advance whether or not a particular font or font instance will initiate a callback.</p>
+
+<p>If you wish to instruct Font Engine to stop supplying a pointer to <em>font_error_func
+</em> to font drivers when new fonts are added to the Font Catalog, set this parameter to DV_NULL. As a result, any new fonts (excluding Multiple-Master font instances that are derived from existing fonts) that are added to the Font Catalog will not initiate callbacks any more. However, any fonts that have previously obtained a pointer to <em>font_error_func</em> (or their instances) will still initiate the callback when they encounter errors or warnings. <u>Therefore, once you supply to the Font Engine a pointer to your callback function, that function must be able to accept callbacks at least until all the fonts that have obtained your pointer are permanently removed from the Font Catalog.</u></p>
+
+</td></tr>
+
+<tr><td>
+<p><em>user_param</em></p>
+</td><td>
+<p>A void pointer to your own data type that you will receive during the callback. This pointer is passed back to your function during the callback to help you track the state of execution, identify the font being monitored or provide other information useful to your application. This pointer is not accessed or modified by D-Type Engine in any way; it is simply sent back to your function as supplied. You can set this parameter to DV_NULL if you have no need for it.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>If your application is designed to access and utilize fonts from many different sources (either known or unknown), it is possible you will occasionally encounter bad fonts (i.e. fonts that will not open and/or render). Fonts are typically complex file structures (or more precisely programs) that require careful design and testing. In most cases the complexity is dictated by advanced architecture and versatility (as in TrueType or D-Type fonts) and in some cases is a consequence of a less than ideal design and/or architecture (as in Type 1 fonts). A font that works on one platform or in one program is not necessarily a good font. Each font format has specifications that (more or less) define how the font files should be designed and what rules and/or guidelines they are expected to follow. A font that respect all the rules and guidelines of its format specification is called a compliant font.</p>
+
+<p>For ordinary users, it is not quite easy to determine which fonts are compliant and which ones are not. Fortunately, there are font validation tools that can help in this process. For example, Microsoft's Font Validator is an excellent tool to test and validate TrueType fonts. Surprisingly, it appears that some font formats do not have any suitable font validation tools. For example, at the time of writing this document, it is unknown to us whether Adobe has ever released a font validation tool for their Type 1 font format. This is certainly the format that could benefit most from such a tool.</p>
+
+<p>Fortunately, D-Type Font Engine (or more precisely its font driver classes) can detect many errors in fonts and has a mechanism of reporting those errors back to the application and/or user. The <a href="FontSetErrorCallback.htm">FontSetErrorCallback</a> is such a mechanism. This function is not intended to replace a full font validation process because errors are reported only as they are encountered and only for those font features that are directly implemented or supported by D-Type Font Engine. Also, errors returned by this function may not be specific enough to precisely pinpoint the problem. Still, this mechanism can provide a useful feedback to the application and/or font developer when testing or using fonts.</p>
+
+<p>It should be noted that D-Type Font Engine is designed to accept all compliant fonts and, in addition, many non-compliant fonts. Our goal is to accept as many fonts as possible and not to reject them. Consequently, D-Type Font Engine will try very hard to open all fonts that it is presented with &mdash; even if they are non-compliant. When D-Type Font Engine finds a problem or inconsistency in a font, it will try to correct it or ignore it (as long as this is not dangerous). Only fonts that have serious problems will be rejected. Should you encounter a font that is being rejected or not rendered by D-Type Font Engine, there is a very good chance this is due to the font itself.</p>
+
+<p>Most font manufacturers carefully design and test their fonts before releasing them to production. Still, font manufacturers depend on their font creation tools which may or may not produce compliant fonts. If you wish to report problems that are encountered in bad fonts to the end user (or font manufacturer), you may consider using the <a href="FontSetErrorCallback.htm">FontSetErrorCallback</a> function.</p>
+
+
+<h3>Note</h3>
+<p><u>Important Note for MS Windows Users:</u> When passing D-Type a pointer to your own callback function, beware of the calling convention of your C/C++ environment. On MS Windows, all D-Type API functions that accept a pointer to your own callback function assume that your function uses the <strong>_cdecl</strong> convention. For example, in <em>dtype.h</em> on MS Windows the dtFontSetErrorCallback function is defined as follows:</p>
+
+<div class="box_field">
+<pre>
+DT_SWORD _stdcall dtFontSetErrorCallback(DT_DTENGINE engine, <strong>void (_cdecl *font_error_func)(const DT_CHAR* error_message, void* user_param)</strong>, void* user_param);
+</pre>
+</div>
+
+<p>Therefore, your own callback function must be defined as follows:</p>
+
+<div class="box_field">
+<pre>
+<strong>void _cdecl your_font_error_function(const DT_CHAR* error_message, void* your_param)</strong>
+</pre>
+</div>
+
+<p>This note applies to any D-Type functions that expect a pointer to your own callback function (e.g. <a href="../../dt/funcs/dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a>, <a href="../../pd/funcs/pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a>, <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a>, <a href="../../pd/funcs/pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a>, <a href="../../tx/funcs/txTextSetScriptCallback.htm">txTextSetScriptCallback</a> and possibly others in the future). Failing to add the _cdecl keyword may result in crashes and other undefined behaviour, or your code may simply fail to compile.</p>
+
+
+
+<h3>Example</h3>
+
+<div class="box_field">
+<pre>
+void my_font_error_func(const <a href="../../dt/manual/types.htm#DT_CHAR">DT_CHAR</a>* error_message, void* user_param)
+{
+    printf("Error message returned by D-Type Engine: %s\r\n", error_message);
+}
+
+dtFontSetErrorCallback(engine, my_font_error_func, DV_NULL);
+</pre>
+</div>
+
+<p><em>Output</em>:</p>
+
+<pre>
+Error message returned by D-Type Engine: PFB, E1027, Error parsing plain ASCII header
+Error message returned by D-Type Engine: PFB, U1044, An error was detected while processing CharStrings
+Error message returned by D-Type Engine: PFB, P1045, This is a bad font because NrOfGoodGlyphs&lt;&gt;NrOfDeclaredGlyphs
+Error message returned by D-Type Engine: PFB, E1019, Bad operand
+Error message returned by D-Type Engine: PFB, E1024, General charstring execution error
+Error message returned by D-Type Engine: PFB, U1046, Error(s) were detected
+</pre>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

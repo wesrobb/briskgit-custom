@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontAddViaStream</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontAddViaStream(DT_DTENGINE engine, DT_ID_SWORD font_format_id, const DT_CHAR* fuid, DT_SWORD fcnr, DT_ID_SWORD cmap_id, DT_ID_UBYTE caching, DT_ID_UBYTE hinting, const DT_STREAM_DESC* sd)</strong></div><br /><strong>Short Description:</strong> <em>Add new font to Font Catalog via a single stream and return its font index</em><br /><br />
+
+<p>This function adds a font from a font file (or font collection) to the Font Catalog of the specified Standard Engine instance. The function then returns a font index of the newly added font. This index uniquely identifies the font in the Font Catalog.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_format_id</em></p>
+</td><td>
+<p>An ID that uniquely identifies the font format (e.g. D-Type, TrueType, OpenType, Type 1, PostScript Type 3, bare CFF) optionally in conjunction with a desired character encoding. This ID depends on the active font factory configuration, which is a font factory configuration that was used during the initialization of D-Type Engine. If one of the predefined font factory configurations was used (e.g. Legacy Font Factory), see <a href="../manual/factories.htm">Appendix &mdash; Predefined Font Factories</a> for a list of supported values.</p>
+
+<p>Regardless of the active font factory configuration, this parameter must match the actual font format of the file/stream that is being added to the Font Catalog. If this is not the case, the newly added font will not be usable.</p>
+
+<p>As Unicode has become a globally adopted standard, it is no longer recommended that applications support non-Unicode based character encoding schemes (e.g. Mac ASCII or ISO Latin) when adding fonts to the Font Catalog. With this in mind, D-Type Font Engine's default font factory configuration includes the following 6 font format identifiers that assume Unicode as the standard character encoding scheme. These <em>font_format_id</em> values should be used by all modern applications:</p>
+
+<ul>
+<li>0 (DV_FONT_DTYPE) &mdash; for D-Type fonts (.dtf)</li>
+<li>3 (DV_FONT_OPENTYPE_TTF) &mdash; for TrueType/OpenType fonts (.ttf/.otf) and font collections (.ttc) with TrueType outlines</li>
+<li>5 (DV_FONT_OPENTYPE_CFF) &mdash; for OpenType (.otf) fonts and font collections (.ttc) with Type 2/CFF outlines</li>
+<li>8 (DV_FONT_TYPE1) &mdash; for Adobe Type 1 fonts (.pfb or .pfa)</li>
+<li>12 (DV_FONT_PSTYPE3) &mdash; for Adobe Type 3 PostScript fonts (.ps)</li>
+<li>16 (DV_FONT_BARECFF) &mdash; for Bare CFF fonts (.cff)</li>
+</ul>
+
+<p>In addition to an ID that specifies a font format (for example the 6 font format identifiers listed above), <em>font_format_id</em> can also be set to -1 (DV_FONT_FORMAT_AUTO1) or -2 (DV_FONT_FORMAT_AUTO2) when calling dtFontAddViaStream. These special values do not specify any particular font format but tell D-Type Font Engine to automatically detect the font's format by inspecting the corresponding file/stream supplied via the <em>sd</em> parameter. This can be very useful when the font's format is not known in advance or the application doesn't care what format the font is in. However, this way of adding the fonts to the Font Catalog is slower, since the corresponding file/stream first needs to be opened and then its contents must be inspected. More precisely, this contents inspection is internally done by repeatedly calling the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function for a number of font formats in a specific order. If for a tested font format the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> call succeeds, then it is assumed that this is the right font format for the supplied file/stream and the font is added to the Font Catalog using that format<sup>*</sup>. The only difference between the value -1 (DV_FONT_FORMAT_AUTO1) and -2 (DV_FONT_FORMAT_AUTO2) is that DV_FONT_FORMAT_AUTO1 tries to activate the font to level 1 (Basic Activation), while DV_FONT_FORMAT_AUTO2 tries to activate it to level 2 (Full Activation). Thus, DV_FONT_FORMAT_AUTO2 is more thorough (but slower) and its key advantage over DV_FONT_FORMAT_AUTO1 is that it can be used to perform a better validation of the font. Consequently, if the font has some major problems or defects, there is more chance that DV_FONT_FORMAT_AUTO2 will detect it at this early stage. In the other hand, DV_FONT_FORMAT_AUTO1 is quicker and less thorough so it will likely detect fewer font problems, which in turn can result in potentially more broken fonts being added to the Font Catalog.</p>
+
+<p>Keep in mind that even with the Full Activation, there is still some chance that the supplied font could have problems or defects that can only be discovered at later stages. Therefore, for most applications the choice of whether to use DV_FONT_FORMAT_AUTO1 or DV_FONT_FORMAT_AUTO2 will depend on the trade-off between the font processing speed and the thoroughness of early font validation. Either way, a font that cannot be activated to the specified activation level will not be added to the Font Catalog. At the same time, having a defective font in the Font Catalog is not some alarming or unusual situation by itself. Also, remember that when the <em>font_format_id</em> specifies a particular font format, the font is added to the Font Catalog without making an attempt to activate/validate it.</p>
+
+<p><sup>*</sup><strong>Note:</strong> If the application wants to know what font format was chosen when the font was added to the Font Catalog using the DV_FONT_FORMAT_AUTO1 or DV_FONT_FORMAT_AUTO2 identifiers, it can later call the <a href="dtFontGetSysStatus.htm">dtFontGetSysStatus</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>fuid</em></p>
+</td><td>
+<p>Any 16-byte string selected by your application that will, in addition to the returned font index, uniquely identify the newly added font. This value is optional. If your application will not make use of this string (e.g. it will only be using the returned font index), set <em>fuid</em> to DV_NULL. Otherwise, <em>fuid</em> must be a valid pointer to a buffer containing a binary string that is <strong>exactly</strong> 16 bytes long. Note this is a fixed-width binary string and there is no need to null terminate it (as any bytes at position 16 or higher are ignored). However, if your string value is shorter than 16 bytes, you must pad it with zeros, spaces or some other characters of your choice so that the resulting string is exactly 16 bytes long. Of course, your application should ensure that this string value is unique for each font in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>fcnr</em></p>
+</td><td>
+<p>Font collection number which identifies a font in the font collection. Set the font collection number to 0 to open the first font in the collection. For more information on font collections, see <em>dtype.fls</em> in the <em>Initialization Files</em> section of this manual and review the Comments section at the bottom of this page.</p>
+<p>If <em>fcnr</em> exceeds the total number of fonts in the collection, the newly added font will not be usable.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cmap_id</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+<tr><td>
+<p><em>caching</em></p>
+</td><td>
+<p>Tells the engine how to access and cache the font. This parameter will be described more thoroughly in the future. For now, only values 0 and 128 are documented.</p>
+<ul>
+<li><p><em>caching</em> = 0 &mdash; identifies the legacy access/caching method. This method ensures good performance with all supported font formats. However it may somewhat slow down applications that have inaccessible fonts in the Font Catalog. See below for details.</p></li>
+<li><p><em>caching</em> = 128 &mdash; Same as <em>caching</em> = 0 but any font that cannot be opened on first attempt will be marked as "dead" and D-Type Engine will not attempt to open it again. See below for details.</p></li>
+</ul>
+<p>When an application makes an attempt to access a font, D-Type Engine obtains its file location from the Font Catalog and attempts to open the corresponding file/stream. If this file/stream is inaccessible (due to an invalid file name/file path, lack of adequate read permissions, invalid font format, corrupt file or any other reason), the actual attempt to open this font will cause a small performance penalty. This is usually not noticeable, if done only once. However, when many attempts to access such fonts are made in a short period of time, the performance penalty may become noticeable.</p>
+<p>When <em>caching</em> = 128, any font that cannot be opened on first attempt will be marked as "dead" and D-Type Engine will not make further attempts to open it later, even though it is theoretically possible that the corresponding file/stream could become valid at some point. When <em>caching</em> = 0, D-Type Engine will attempt to open the requested font each time such a request is made; in other words the font is not considered "dead" just because the first attempt to open it failed.</p>
+<p>Application developers need to choose which of the above access/caching methods works best in their specific application.</p>
+</td></tr>
+
+<tr><td>
+<p><em>hinting</em></p>
+</td><td>
+<p>Tells the engine whether to apply hinting to the font. Hinted fonts usually produce better looking and crisper output (especially at smaller font sizes), however they are somewhat slower to process than non-hinted fonts (especially if they contain many complex glyphs such as in Chinese/Japanese/Korean fonts).</p>
+<p>Currently, this parameter can have one of the following values:</p>
+<ul>
+<li><em>hinting</em> = 0 &mdash; add the font as non-hinted</li>
+<li><em>hinting</em> = 1 &mdash; add the font as hinted; use native hinting when available and auto-hinting otherwise.</li>
+<li><em>hinting</em> = 2 &mdash; add the font as hinted; use auto-hinting exclusively.</li>
+<li><em>hinting</em> = 3 &mdash; add the font as hinted; use native hinting when available and compact auto-hinting otherwise.</li>
+<li><em>hinting</em> = 4 &mdash; add the font as hinted; use compact auto-hinting exclusively.</li>
+</ul>
+
+<p>The first option, <em>hinting</em> = 0, should be used when crisp font output is not needed or desired (an example would be applications that render on TV). However, if crisp font output is imperative, the second option, <em>hinting</em> = 1, is typically the best choice. The third option, <em>hinting</em> = 2, can be used when the corresponding font is poorly hinted or is not hinted at all (an example would be the Moto.pfb Type 1 font that comes with D-Type Engine). In that case, D-Type's auto-hinting will produce better looking output then the font's native hinting.</p>
+
+<p>The last two options, <em>hinting</em> = 3 and <em>hinting</em> = 4, are identical to the previous two, <em>hinting</em> = 1 and <em>hinting</em> = 2, but employ a compact auto-hinting scheme. This new auto-hinting scheme was introduced in D-Type Engine 4.0.4.3. Fonts that use compact auto-hinting look and behave the same as fonts that use regular auto-hinting but have somewhat reduced storage requirements.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the font file (or font collection). This file (called the <em>main input file</em>) supplies vital font data and is defined in the <a href="../manual/fclasses.htm">D-Type Font Driver Classes</a> section of this document.</p>
+
+<p><strong>The location supplied by <em>sd</em> must remain valid at least until the corresponding font is permanently removed from the Font Catalog. Remember that D-Type Font Engine will attempt to access your font at various stages during the execution of your application. If the location supplied by <em>sd</em> is a relative file path and your applications changes the current working directory during its execution, you will likely make that font inaccessible to D-Type Font Engine. As a result, your font or some of its glyphs may not render, you may not be able to retrieve various font information etc.</strong></p>
+
+<p><strong>Once again, please note that relative paths are relative. They are relative to your current working directory. Therefore, if the current working directory changes at some point during the execution of your application, your paths may become invalid. Also, see <a href="../manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> and our <a href="../manual/fpaths.htm">notes regarding file based streams</a>.</strong></p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is the index of the created font in the Font Catalog. This value uniquely identifies the font or font instance in the catalog and is referred to as <em>font index</em>. Font index is always a non-negative integer. If not successful, the function will return -1.</p>
+
+<p><strong>
+A successful return value (a non-negative integer) does not necessarily mean that the location supplied by <em>sd</em> is valid and/or that the font file specified by this location is valid. A successful return value simply means that the location you supplied via <em>sd</em> was successfully added to the Font Catalog. Therefore, even if your <em>sd</em> location is an invalid font path, the function will likely return a successful value. Once again, your font location is simply added to the Font Catalog as you specify it. It is not the responsibility of this function to check whether <em>sd</em> supplies a valid font location at the time of its registration with the Font Catalog. But obviously if you have an invalid font location in the Font Catalog, you will have problems rendering or accessing the corresponding font later during the execution of your application.
+</strong></p>
+
+<p>If you wish to perform a basic validation of the newly added font file, please use the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function. This function will access global font information stored in the font header and, if no major problems are discovered, activate the font. However, if an error in the font header is found, the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function will return 0, indicating that there was a problem activating the font. This can be then used by application to quickly check whether a font file is invalid. See an example at the bottom of this page for details. However, keep in mind that <a href="dtFontMakeActive.htm">dtFontMakeActive</a> does not perform an extensive validation of the font, even if the font is activated to the highest possible level. In order to perform a full font validation, the entire font must be processed (i.e. accessed). Although this task can be time consuming (e.g. when the font file is large) and is usually not necessary, it can be accomplished by calling <a href="dtFontSetErrorCallback.htm">dtFontSetErrorCallback</a> and then accessing all supported font features (e.g. global metrics, string values, glyph outlines, glyph metrics, kerning pairs etc.) using the corresponding D-Type Font Engine API functions.</p>
+
+<p><em>Note:</em> Full font validation can also be achieved by converting the font to D-Type font format using the <a href="dtFontSaveToStream.htm">dtFontSaveToStream</a> function. If the input font (i.e. font to be converted) is invalid or corrupt, <a href="dtFontSaveToStream.htm">dtFontSaveToStream</a> will return 0 and no output font (i.e. font in D-Type format) will be created.</p>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a> function is used to add D-Type, TrueType, OpenType, Adobe Type 1, PostScript Type 3 or Bare CFF fonts to the Font Catalog of the specified Standard Engine instance. These fonts are commonly called <em>outline</em> fonts since outline curves are used to define their glyph shapes. In the future, support for additional outline font formats may be added.</p>
+
+<p>Outline fonts can be easily scaled, stretched, rotated, skewed or transformed using a 2D transform matrix while preserving uniform output quality. For more information on font transformations, see the <a href="dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a> function.</p>
+
+<p>Some font formats may exist as font collections (e.g. D-Type or TrueType Collections) which contain multiple fonts in the same file. The <em>fcnr</em> identifies a font in the font collection and is therefore called a <em>font collection number</em>. Set the font collection number to 0 to add the first font in the collection to the Font Catalog. If <em>fcnr</em> exceeds the total number of fonts in the collection, the newly added font will not be usable. You can determine how many fonts a given font collection contains by adding its first font (<em>fcnr</em> = 0) to the Font Catalog and then calling the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function. This function will return the font number of the last font in the collection based on the supplied font index.</p>
+
+<p>In addition, some D-Type, Adobe Type 1 and Variable OpenType fonts may also come as <em>Multiple-Master</em> fonts. This means that more than one outline font (or <em>base design</em>) can be incorporated into a single font file. These fonts offer additional flexibility, since hundreds of additional font instances (also called <em>intermediate</em> or <em>interpolated</em> designs) can be created from the base designs by applying D-Type's real-time <em>interpolation</em> capabilities. Examples include font variations ranging from Ultra-Light to Ultra-Bold or Ultra-Condensed to Ultra-Expanded. For more information on how to create new font instances, see <a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> and <a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a>.</p>
+
+<p>If the <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a> function is used to add a Multiple-Master font to the catalog, only one interpolated instance will be stored in the catalog. Typically, this is the <em>standard</em> (also called <em>representative</em> or <em>default</em>) instance for this font. Additional font instances can be added to the font catalog using the <a href="dtFontAddAsMMInstancePlus.htm">dtFontAddAsMMInstance</a> function.</p>
+
+
+<h3>Example</h3>
+
+<p>This example shows how to add a new font to the Font Catalog using the <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a> function and then perform a basic validation of the newly added font using the <a href="dtFontMakeActive.htm">dtFontMakeActive</a> function.</p>
+
+<div class="box_field">
+<pre>
+<a href="../manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_format_id = DV_FONT_OPENTYPE_TTF;
+<a href="../manual/types.htm#DT_CHAR">DT_CHAR</a>* fuid = DV_NULL;
+<a href="../manual/types.htm#DT_SWORD">DT_SWORD</a> fcnr = 0;
+<a href="../manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> cmap_id = -1;
+<a href="../manual/types.htm#DT_ID_UBYTE">DT_ID_UBYTE</a> caching = 0;
+<a href="../manual/types.htm#DT_ID_UBYTE">DT_ID_UBYTE</a> hinting = 1;
+
+DT_STREAM_FILE(sd, "chopsie.ttf");
+
+<a href="../manual/types.htm#DT_ID_SWORD">DT_ID_SWORD</a> font_index = dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id,
+caching, hinting, &amp;sd);
+
+if (font_index &gt;= 0)
+{
+  if (dtFontMakeActive(engine, font_index, 2, &amp;last_fcnr) == 1)
+  {
+    sprintf(s, "The selected font has been successfully added to the font catalog and
+    assigned a unique font index %d. Use the \"Select Font\" option from the \"View\"
+    menu to see it.", font_index);
+  }
+  else
+  {
+    sprintf(s, "The selected font has been added to the font catalog and assigned a unique
+    font index %d. However, D-Type Font Engine could not activate it. Most likely this font
+    is corrupt or is in a wrong format. You may try the \"Select Font\" option from the
+    \"View\" menu, however be aware that this font may not render correctly.", font_index);
+  }
+}
+else
+{
+  sprintf(s, "The selected font could not be added to the font catalog. Most likely the
+  specified font format is not supported or an internal error has occurred.");
+}
+
+printf(s);
+</pre>
+</div>
+
+<p><em>Output &mdash; Scenario 1</em>:</p>
+
+<pre>
+The selected font has been successfully added to the font catalog and
+assigned a unique font index 24. Use the "Select Font" option from the "View"
+menu to see it.
+</pre>
+
+<p><em>Output &mdash; Scenario 2</em>:</p>
+
+<pre>
+The selected font has been added to the font catalog and assigned a unique font
+index 24. However, D-Type Font Engine could not activate it. Most likely this
+font is corrupt or is in a wrong format. You may try the "Select Font" option
+from the "View" menu, however be aware that this font may not render correctly.
+</pre>
+
+<p><em>Output &mdash; Scenario 3</em>:</p>
+
+<pre>
+The selected font could not be added to the font catalog. Most likely the
+specified font format is not supported or an internal error has occurred.
+</pre>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

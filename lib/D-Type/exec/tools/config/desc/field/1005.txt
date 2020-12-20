@@ -1,0 +1,6 @@
+Shadow or glow offset in vertical direction, in document units. Can be positive or negative.
+
+{strong}Sample values:{/strong}
+
+5 = Offset of 5 document units in vertical direction
+-5 = Offset of -5 document units in vertical direction

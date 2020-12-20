@@ -1,0 +1,7 @@
+This objects holds parameters that provide precise control over manual text layout. As such, the Text Layout (Manual) object can be used to build the {a href="../objects/127.htm"}Text Design{/a} and {a href="../objects/128.htm"}Rich Text Design{/a} object.
+
+{strong}Designated Rendering Function:{/strong} NONE
+
+Note 1: pdPosArrX_08, pdPosArrX_16, pdPosArrX_24 and pdPosArrX_32 cannot be used at the same time. pdPosArrX_32 takes precedence over pdPosArrX_24. pdPosArrX_24 takes precedence over pdPosArrX_16. Finally, pdPosArrX_16 takes precedence over pdPosArrX_08.
+
+Note 2: pdPosArrY_08, pdPosArrY_16, pdPosArrY_24 and pdPosArrY_32 cannot be used at the same time. pdPosArrY_32 takes precedence over pdPosArrY_24. pdPosArrY_24 takes precedence over pdPosArrY_16. Finally, pdPosArrY_16 takes precedence over pdPosArrY_08.

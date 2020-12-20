@@ -1,0 +1,103 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dcRasterizerIni</h2><div class="box_prototype"><strong>
+DT_SWORD dcRasterizerIni(DT_DCRASTER* dcr, const DT_MDC* memory_surface, DT_SLONG raster_intersect, DT_ID_SLONG raster_id)</strong></div><br /><strong>Short Description:</strong> <em>Create and initialize D-Type Direct Color Rasterizer</em><br /><br />
+
+<p>This function creates and initializes a new instance of D-Type Direct Color Rasterizer. The dcRasterizerIni function must be called before any other D-Type Direct Color Rasterizer function can be used.</p>
+
+<p>If the initialization was successful, applications can subsequently call D-Type Direct Color Rasterizer's scene construction functions (<a href="dcRasterizerMoveTo.htm">dcRasterizerMoveTo</a>, <a href="dcRasterizerMoveTo.htm">dcRasterizerMoveToFrac</a>, <a href="dcRasterizerLineTo.htm">dcRasterizerLineTo</a>, <a href="dcRasterizerLineTo.htm">dcRasterizerLineToFrac</a>, <a href="dcRasterizerBSplineTo.htm">dcRasterizerBSplineTo</a>, <a href="dcRasterizerBSplineTo.htm">dcRasterizerBSplineToFrac</a>, <a href="dcRasterizerBezierTo.htm">dcRasterizerBezierTo</a>, <a href="dcRasterizerBezierTo.htm">dcRasterizerBezierToFrac</a>, <a href="dcRasterizerMultiSegment.htm">dcRasterizerMultiSegment</a>, <a href="dcRasterizerMultiSegment.htm">dcRasterizerMultiSegmentFrac</a>) to add output to the current scene. Once the entire scene has been constructed, applications can render it by calling <a href="dcRasterizerDoOutput.htm">dcRasterizerDoOutput</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>dcr</em></p>
+</td><td>
+<p>Pointer to the handle of the newly created D-Type Direct Color Rasterizer instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_surface</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> structure that describes the memory surface to which the scene will be rendered.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_intersect</em></p>
+</td><td>
+<p>Initial value for maximum number of intersections in a single scan line. Set to 0 to use the default value.</p>
+</td></tr>
+
+<tr><td>
+<p><em>raster_id</em></p>
+</td><td>
+<p>
+Version of D-Type Direct Color Rasterizer to initialize:
+</p>
+<p><a href="http://www.d-type.com/page/rasterizer_direct">Standard</a></p>
+<ul>
+<li>0 = Ultra-Fast RGBA Rasterizer</li>
+<li>1 = No-Overlap RGBA Rasterizer</li>
+<li>2 = Reference RGBA Rasterizer</li>
+<li>3 = Alpha-Blend RGBA Rasterizer</li>
+<li>4 = CDTRasterizerAlphaTrueRGBA_V1_SC</li>
+<li>5 = CDTRasterizerAlphaXtraRGBA_V1_SC</li>
+</ul>
+
+<p><a href="http://www.d-type.com/page/rasterizer_shading">Shading</a></p>
+<ul>
+<li>10 = CDTRasterizerAlphaTrueCREF_T1 0</li>
+<li>11 = CDTRasterizerAlphaTrueCREF_T1 1</li>
+<li>12 = CDTRasterizerAlphaTrueCREF_T1 2</li>
+<li>13 = CDTRasterizerAlphaTrueRGBA_Gouraud 1</li>
+<li>14 = CDTRasterizerAlphaTrueRGBA_Gouraud 2</li>
+<li>15 = CDTRasterizerAlphaEasyRGBA_Gouraud</li>
+<li>16 = CDTRasterizerAlphaTrueCREF_T1 3</li>
+<li>17 = CDTRasterizerAlphaTrueCREF_T1 4</li>
+</ul>
+
+<p><a href="http://www.d-type.com/page/rasterizer_grayscale">Grayscale / B&amp;W</a></p>
+<ul>
+<li>50 = Ultra-Fast Grayscale Rasterizer</li>
+<li>51 = Perfect Grayscale Rasterizer</li>
+<li>52 = Universal Rasterizer &mdash; Grayscale</li>
+<li>53 = Universal Rasterizer &mdash; Black &amp; White</li>
+<li>54 = Extreme Grayscale Rasterizer</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the initialization was successful, the return value is 1 and <em>dcr</em> holds a handle of the newly created D-Type Direct Color Rasterizer instance. Otherwise, the function returns 0 and <em>dcr</em> holds DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>An application can create multiple instances of D-Type Direct Color Rasterizer by calling the <a href="dcRasterizerIni.htm">dcRasterizerIni</a> function more than once. Each instance is created dynamically and must be destroyed by calling the <a href="dcRasterizerExt.htm">dcRasterizerExt</a> function before the application terminates. In multi-threaded applications, each thread could initialize its own D-Type Direct Color Rasterizer instance. This approach allows multiple threads to call the library's functions simultaneously (without using mutexes or other synchronization or blocking code).</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,15 @@
+!LIB_CATEGORY=Bullets (Non-Editable)
+!LIB_CATEGORY=Bullets (Editable)
+!LIB_CATEGORY=Other
+
+{
+0|992001-a-01|Black Square Bullet
+0|992001-a-02|White Square Bullet
+1|992001-b-01|Black Round Bullet
+1|992001-b-02|White Round Bullet
+1|992001-b-03|Hyphen Bullet
+1|992001-b-04|Number Bullet
+1|992001-b-05|Letter Bullet
+2|999000|Raised
+2|999001|Lowered
+}

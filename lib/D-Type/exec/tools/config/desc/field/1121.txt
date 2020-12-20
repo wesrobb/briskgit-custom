@@ -1,0 +1,15 @@
+Underline/Strike-Through Line Positioning Mode. Respected when font underline and/or strike-through effect is enabled.
+
+{strong}Supported values:{/strong}
+
+0 = Automatic. In this mode the offset of the underline/strike-through line from the baseline is automatically calculated by the rendering engine. This mode is suitable for most purposes. However, because the calculated offset is dependent on the font height, the underline/strike-through line does not remain at the same position (i.e. it jumps) when the text contains glyphs/characters in different font sizes.
+
+1 = Same as 0.
+
+2 = Manual (% of font height). In this mode the offset of the underline/strike-through line from the baseline is manually specified and represents a percentage of the font height. Consequently, the underline/strike-through line does not remain at the same position (i.e. it jumps) when the text contains glyphs/characters in different font sizes.
+
+3 = Same as 2.
+
+4 = Manual (document units). In this mode the offset of the underline/strike-through line from the baseline is manually specified and represents an absolute distance in document units. Consequently, the underline/strike-through line remains at the same position (i.e. it does not jump) as it follows the text, even when the text contains glyphs/characters in different font sizes (assuming that all glyphs/characters are set using the standard portrait orientation).
+
+5 = Same as 4.

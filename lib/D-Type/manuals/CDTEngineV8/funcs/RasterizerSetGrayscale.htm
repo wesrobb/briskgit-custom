@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>RasterizerSetGrayscale</strong></div><br />
+
+<p>This function allows applications to supply their own alpha-levels (more commonly called gray values or grayscale) to be utilized by the Rasterizer when rasterizing output primitives (shapes, glyphs, characters).</p>
+
+<p>When D-Type Engine is initialized, the default grayscale is supplied to the Rasterizer via one of the external <em>.gsl</em> files (see the <a href="../manual/inifiles.htm">Initialization Files</a> section of this manual for details). If, however, the <em>.gsl</em> file is not available or not utilized, the Rasterizer will use a trivial (or ideal) grayscale (see below for details). In a typical scenario, there is no need for applications to call this function directly. However, this function may be suitable to applications that whish to change the active grayscale during run-time (e.g. in interactive programs that allow end-users to customize the grayscale).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>gsv</em></p>
+</td><td>
+<p>An array of custom gray values. This array must satisfy the following conditions:</p>
+<ul>
+<li><p>It must contain exactly 256 elements.</p></li>
+<li><p>Each element in the array represents the output alpha (gray) value for the corresponding pixel coverage and must be in the 0 - 255 range.</p></li>
+<li><p>The first element in the array (element whose index is 0) must be set to 0 and means "fully opaque" or "black". This value is reserved for pixels that are completely inside the interior region of an output primitive.</p></li>
+<li><p>The last element in the array (element whose index is 255) must be set to 255 and means "fully transparent" or "white". This value is reserved for pixels that are completely outside the interior region of an output primitive.</p></li>
+<li><p>The array must be non-descending. In other words, the alpha (gray) values in the array must not decrease as the element index increases. The actual distribution of gray values in this array to the remaining pixel coverages is up to your application.</p></li>
+</ul>
+
+<p>For sample implementations of this array, refer to the <em>gs002.gsl</em>, <em>gs004.gsl</em>, <em>gs006.gsl</em>, <em>gs016.gsl</em>, <em>gs256.gsl</em> and <em>gssqrt.gsl</em> files that ship with D-Type Engine.</p>
+
+<p>The array in which the gray value of each element equals its index is called the trivial (or ideal) grayscale. The <em>gs256.gsl</em> file is a sample implementation of this array.</p>
+
+<p>All elements in the <em>gsv</em> array are copied to the Rasterizer's internal memory. Thus, this array can be discarded once the function returns.</p>
+
+</td></tr>
+
+</table>
+
+<p><em>Note:</em> Certain types of output primitives (e.g. glyphs) may be cached by the higher level API components (e.g. Typesetter) in their bitmap cache. This function does not have any impact on already cached output primitives. You may want to clear the respective cache when calling this function to ensure that all output primitives are affected in the same way.</p>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The grayscale defines the output intensity (alpha or gray value) of a rendered pixel depending on how much of its area is covered by an output primitive. Pixels that are completely inside the interior region of an output primitive are called "fully opaque" or "black" pixels, while pixels that are completely outside the interior region of an output primitive are called "fully transparent" or "white" pixels. Pixels that are partially covered by the interior region of an output primitive will have an alpha (gray) value that is defined by the current grayscale. D-Type Rasterizer distinguishes 256 different pixel coverages and, therefore, can support up to 256 alpha (gray) intensities.</p>
+
+<p>Note that the commonly used terms "grayscale", "gray value", "black" or "white" are somewhat misleading. Rather than to indicate any specific color (i.e. shade of gray), they are meant to describe the transparency or opacity of a pixel (i.e. its alpha intensity). Thus, this function will have an impact on all rendered pixels regardless of their color (and not just black, white or gray pixels). With this understanding in mind, the above terms describe the intensity of a color rather than a mere shade of gray.</p>
+
+<p>The actual color of an output primitive is specified by calling the <a href="OutputSetStyleAttribs.htm">OutputSetStyleAttribs</a> function. On a pixel level, this translates into a whole range of color intensities (up to 256) which D-Type Rasterizer utilizes depending on how much of the pixel area is covered by the interior region of the output primitive. This is what gives pixels their anti-aliased appearance and/or the alpha blending effect when they are rendered by the Rasterizer.</p>
+
+<p>The <a href="RasterizerSetGrayscale.htm">RasterizerSetGrayscale</a> function can be used to reduce the total number of resulting color intensities or to compensate for the monitor gamma factor. For example, by utilizing only 8 or 16 different alpha intensities, the 256-color display systems will use colors in a more effective way. Or, by shifting alpha intensities towards "white", display systems with a high gamma factor will display colors and shades of gray more accurately. The full discussion of this topic, however, is far beyond the scope of this manual.</p>
+
+
+<h3>Example</h3>
+
+<div class="box_field">
+<pre>
+<a href="../../dt/manual/types.htm#DT_SLONG">DT_SLONG</a> i;
+<a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a> gsv[256]
+
+for (i = 0; i &lt; 256; i++)
+{
+    gsv[i] = (<a href="../../dt/manual/types.htm#DT_UBYTE">DT_UBYTE</a>)(16 * sqrt(i));
+}
+
+dtRasterizerSetGrayscale(engine, gsv);
+</pre>
+</div>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

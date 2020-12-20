@@ -1,0 +1,112 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Text Layout Extension Overview</h1>
+
+<p>There are two ways to use the Text Layout Extension: without the built-in caching subsystem and with the built-in caching subsystem.</p>
+
+
+<h2>Life Cycle Without Caching Subsystem</h2>
+
+<p>A typical life cycle of an application that uses D-Type Layout Extension without its built-in caching subsystem is briefly summarized in the following table:</p>
+
+
+<table class="table_data">
+
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td>1. For a given script and font, initialize text layout instance</td>
+<td><a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIni</a> or <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIniPlus</a></td>
+</tr>
+
+<tr>
+<td>2. Apply text layout instance to a run of text (array of Unicode characters)</td>
+<td><a href="../funcs/lxLayoutApply.htm">lxLayoutApply</a> or <a href="../funcs/lxLayoutApplyPlus.htm">lxLayoutApplyPlus</a></td>
+</tr>
+
+<tr>
+<td>3. For each positioned glyph in the returned output glyph array, scale its font dependent (x,&nbsp;y) coordinates to the screen coordinates (pixels) and render glyphs using D-Type Font Engine</td>
+<td>dtGlyphDoOutput</td>
+</tr>
+
+<tr>
+<td>4. Deinitialize (destroy) layout instance</td>
+<td><a href="../funcs/lxLayoutExt.htm">lxLayoutExt</a></td>
+</tr>
+
+</table>
+
+<p>This approach is suitable if you don't require services of the built-in caching subsystem or whish to implement your own caching system. For a given script and font, your application calls <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIni</a> or <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIniPlus</a> to get the corresponding text layout instance. You can call lxLayoutIni or lxLayoutIniPlus to create as many text layout instances as needed (optionally, those instances can be cached by your application). To apply a text layout instance to a run of text, simply call <a href="../funcs/lxLayoutApply.htm">lxLayoutApply</a> or <a href="../funcs/lxLayoutApplyPlus.htm">lxLayoutApplyPlus</a>. All created text layout instances must be destroyed by calling <a href="../funcs/lxLayoutExt.htm">lxLayoutExt</a> either when they are no longer needed or before your application terminates.</p>
+
+<p>Please remember that each call to <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIni</a> or <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIniPlus</a> takes some time because the corresponding font must be accessed to obtain any required font layout tables. Therefore, avoid calling <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIni</a> or <a href="../funcs/lxLayoutIniPlus.htm">lxLayoutIniPlus</a> repeatedly for the same script and font. Alternatively, use the built-in caching subsystem to speed up the text layout process.</p>
+
+
+<h2>Life Cycle With Caching Subsystem</h2>
+
+<p>A typical life cycle of an application that uses D-Type Layout Extension with its built-in caching subsystem is briefly summarized in the following table:</p>
+
+
+<table class="table_data">
+
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td>1. Initialize the layout cache</td>
+<td><a href="../funcs/lxCacheIni.htm">lxCacheIni</a></td>
+</tr>
+
+<tr>
+<td>2. For a given script and font, obtain text layout instance from the layout cache</td>
+<td><a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> or <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a></td>
+</tr>
+
+<tr>
+<td>3. Apply text layout instance to a run of text (array of Unicode characters)</td>
+<td><a href="../funcs/lxLayoutApply.htm">lxLayoutApply</a> or <a href="../funcs/lxLayoutApplyPlus.htm">lxLayoutApplyPlus</a></td>
+</tr>
+
+<tr>
+<td>4. For each positioned glyph in the returned output glyph array, scale its font dependent (x,&nbsp;y) coordinates to the screen coordinates (pixels) and render glyphs using D-Type Font Engine</td>
+<td>dtGlyphDoOutput</td>
+</tr>
+
+<tr>
+<td>4. Deinitialize (destroy) the layout cache</td>
+<td><a href="../funcs/lxCacheExt.htm">lxCacheExt</a></td>
+</tr>
+
+</table>
+
+<p>This approach is similar to the one described above, but takes advantage of the built-in caching system. This system caches created text layout instance so they can be quickly re-applied to multiple runs of text.</p>
+
+<p>With this approach clients first call <a href="../funcs/lxCacheIni.htm">lxCacheIni</a> to create the layout cache object. Your application will typically create one layout cache object. Your application is then responsible for destroying this object by calling <a href="../funcs/lxCacheExt.htm">lxCacheExt</a> before its termination.</p>
+
+<p>Next, for a given script and font, your application calls <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> or <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a> to get the corresponding text layout instance. This call is usually quick, because if the requested text layout instance is already in the layout cache, the corresponding font will not be accessed. Keep in mind that the returned text layout instance is under exclusive control of the caching subsystem; your application does not own the returned text layout instance and must not attempt to destroy it. Also, you must remember that this instance is valid only until the next call to <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> / <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a> (or <a href="../funcs/lxCacheClearPlus.htm">lxCacheClear</a> / <a href="../funcs/lxCacheClearPlus.htm">lxCacheClearPlus</a>). This is because subsequent requests for additional text layout instances might empty the layout cache and invalidate your text layout instance. Therefore, use the <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayout</a> or <a href="../funcs/lxCacheObtainLayoutPlus.htm">lxCacheObtainLayoutPlus</a> functions just before laying out a run of text.</p>
+
+<p>Please note that the above table only identifies the most important steps and functions. Your application might need additional steps and/or functions.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

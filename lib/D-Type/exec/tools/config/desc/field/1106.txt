@@ -1,0 +1,5 @@
+The amount of left indent, in the 0 - 65,535 range. This amount should be understood as a percentage of the width of the current text area (or the length of the current text path); therefore 0 means 0% of the text area width (or text path length) while 65,535 means 100% of the text area width (or text path length).
+
+{strong}Sample values:{/strong}
+
+"13107" = 20% of the width of the current text area (or the length of the current text path)

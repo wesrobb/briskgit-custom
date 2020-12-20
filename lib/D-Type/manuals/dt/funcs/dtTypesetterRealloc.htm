@@ -1,0 +1,73 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterRealloc</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterRealloc(DT_DTENGINE engine, DT_SLONG cache_bitmap_bytes, DT_SLONG cache_bitmap_items, DT_SLONG cache_transform_items, DT_SWORD reserved)</strong></div><br /><strong>Short Description:</strong> <em>Reallocate Typesetter</em><br /><br />
+
+<p>This function clears and, optionally, reallocates memory that the Typesetter uses for its bitmap and transformation cache.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cache_bitmap_bytes</em></p>
+</td><td>
+<p>New size of the bitmap cache in RAM, in bytes. A negative value indicates that this cache setting should remain the same.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cache_bitmap_items</em></p>
+</td><td>
+<p>New value for the maximum number of bitmaps to store in the bitmap cache at the same time. A negative value indicates that this cache setting should remain the same.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cache_transform_items</em></p>
+</td><td>
+<p>If positive, new value for the maximum number of transformations to store in the transformation cache at the same time. A negative value indicates that this cache setting should remain the same.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>The bitmap cache holds grayscale bitmap images of glyphs and characters that are rasterized using D-Type Rasterizer. Its limits are defined by the total amount of memory for the bitmap images and the maximum number of bitmap images to hold in memory at the same time.</p>
+
+<p>The transformation cache holds frequently used font transformations and works in conjunction with the bitmap cache. Each transformation has its own sub-cache in the bitmap cache.</p>
+
+<p>The process of reading, storing and clearing bitmaps and transformations from/to the cache is a fully automated operation which is under exclusive control of the Typesetter. In a typical scenario there is no need for applications to use this function. However, this function may be useful to those applications that wish to change/reconfigure their cache settings during run-time.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

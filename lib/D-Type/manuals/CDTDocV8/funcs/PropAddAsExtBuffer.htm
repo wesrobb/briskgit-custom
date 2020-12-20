@@ -1,0 +1,114 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>PropAddAsExtBuffer</strong></div><br />
+
+<p>The PropAddAsExtBuffer function adds a PowerDoc property to the PowerDoc object <em>obj</em>. This function is very similar to and compatible with PropAdd, which means that properties created by this function can be used in much the same capacity as if they were created by <a href="PropAdd.htm">PropAdd</a>. However, unlike PropAdd which copies the property value to a buffer that is managed by D-Type Power Engine, this function does not, meaning that the value remains in an external buffer that is under exclusive control of the application. Since the property value resides in this external buffer (i.e. outside the associated Power Engine document), the newly added property occupies a very small amount of storage space in the object <em>obj</em> (only the amount it takes to store the pointer and length of the external buffer).</p>
+
+<p>PropAddAsExtBuffer is a specialized and advanced function that should be used only by applications that wish to store very large property values (e.g. large arrays or bitmap images) outside the associated Power Engine document and perform their own run-time memory management of large blocks of data. In all other cases <a href="PropAdd.htm">PropAdd</a> should be used instead.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property to be added. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="PropAdd.htm">PropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>extbuffer</em></p>
+</td><td>
+<p>Pointer to an external buffer that holds the value of the property. Within the buffer, the value must be stored as native binary data (i.e. in the same format as if it was created by calling <a href="MakeBinary.htm">MakeBinary</a>). Once this pointer is passed to PropAddAsExtBuffer, the location of the buffer cannot change. The buffer can be destroyed or reallocated only after the property has been removed from the object. Your application is responsible for managing and destroying the buffer. If this is not done properly, you could experience crashes, memory leaks and other similar problems.</p>
+</td></tr>
+
+<tr><td>
+<p><em>extlen</em></p>
+</td><td>
+<p>Length of the binary data within the buffer, in bytes. Must not be negative. Although your application is allowed to change the value of the property (i.e. contents of the external buffer) at any time, its length must always remain precisely <em>extlen</em> bytes. Otherwise, you could experience crashes, memory access violations and other unexpected problems.</p>
+</td></tr>
+
+</table>
+
+
+
+
+<h3>Return Value</h3>
+<p>See <a href="PropAdd.htm">PropAdd</a>.</p>
+
+
+<h3>Note</h3>
+<p>PowerDoc documents that contain properties created by this function should not be saved to disk by calling <a href="SaveToStream.htm">SaveToStream</a> and later opened by calling <a href="AppendFromStream.htm">AppendFromStream</a> unless you are certain that the location of the buffer <em>extbuffer</em> will never change. If <em>extbuffer</em> changes after the document is saved and before it is opened again, you could experience crashes, memory access violations and similar problems.</p>
+
+
+<h3>Comments</h3>
+<p>See <a href="PropAdd.htm">PropAdd</a>.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

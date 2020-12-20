@@ -1,0 +1,4 @@
+This object represents a definition of an object's outline. Any higher-level objects containing outlines link to this object.
+
+{strong}Designated Rendering Function:{/strong} NONE
+

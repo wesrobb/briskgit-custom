@@ -1,0 +1,1 @@
+﻿This line consists of text in the following languages: English, Русский, 日本語, العربية, Ελληνικά, हिन्दी, ไทย.

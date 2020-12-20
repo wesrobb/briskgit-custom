@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Direct Color Rasterizer Units</h1>
+
+
+<p>All D-Type Direct Color Rasterizer coordinates are expressed in pixels. A pixel value can be represented as a real (floating point) value of the <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> type or, alternatively, as a 24.8 fractional value of the <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> type.</p>
+
+<p>The <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> type is recommended on machines that have a floating point math processor. Most modern CPUs (e.g. Intel, Motorola) include a floating point processor. However, if a floating point processor is not available (e.g. embedded systems and/or hand-held devices) or if simply the highest possible rendering speed is required, the <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> type can be used. This type describes a 24.8 signed fractional value expressed as a 32-bit signed integer. Computations that use <a href="../../dt/manual/types.htm#DT_SFRAC">DT_SFRAC</a> type are essentially computations with integers and are usually faster than the equivalent computations that use the <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> type. To express a floating point number in the 24.8 signed fractional format, simply multiply its value by 256. Mathematically:</p>
+
+<p class="center">
+<em>fractional_value_24dot8</em> = <em>floating_point_value</em> * 256<br />
+and<br />
+<em>floating_point_value</em> = <em>fractional_value_24dot8</em> / 256<br />
+</p>
+
+<p>For example, a rectangle that is 5.4 pixels wide and 3.2 pixels tall would be approximately 1382 fractional units wide and 819 fractional units tall in the 24.8 signed fractional pixel space.</p>
+
+<p>It should be noted that D-Type API always provides support for both floating point and fractional values. When a floating point processor is not available, the floating point math is emulated. It is up to the developers to determine which type works best in their application(s).</p>
+
+<p>Finally, care should be taken when using extremely large pixel values. Although the <a href="../../dt/manual/types.htm#DT_FLOAT">DT_FLOAT</a> type provides practically an unlimited floating point range, numerical overflows and unexpected rendering results may occur when pixel coordinates approach or exceed the limits imposed by 24-bit integers. This is because D-Type Direct Color Rasterizer internally stores all pixel quantities as 24.8 signed fractional values in order to make it possible to render text and vectorial shapes using sub-pixel precision. In other words, it is important to remember that the final output coordinates (in whole pixels) are limited to the [-2<sup>23</sup>&nbsp;..&nbsp;+2<sup>23</sup>&nbsp;-&nbsp;1] range.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

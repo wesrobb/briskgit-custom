@@ -1,0 +1,6 @@
+Horizontal skew in degrees. If positive, font glyphs will be slanted to the left. If negative, font glyphs will be slanted to the right.
+
+{strong}Sample values:{/strong}
+
+10 = Horizontal skew of 10 degrees
+-10 = Horizontal skew of -10 degrees

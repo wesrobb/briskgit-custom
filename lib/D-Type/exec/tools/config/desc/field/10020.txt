@@ -1,0 +1,6 @@
+Control's style when the focus is received.
+
+{strong}Supported values:{/strong}
+
+0 = Display a focus box
+1 = Do not display a focus box

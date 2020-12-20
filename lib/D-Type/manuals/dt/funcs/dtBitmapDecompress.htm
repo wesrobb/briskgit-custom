@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtBitmapDecompress</h2><div class="box_prototype"><strong>
+DT_UBYTE* dtBitmapDecompress(DT_DTENGINE engine, const DT_UBYTE* bitmap_addr, DT_SLONG bitmap_len)</strong></div><br /><strong>Short Description:</strong> <em>Decompress grayscale bitmap data</em><br /><br />
+
+<p>This function decompresses compressed grayscale bitmap data.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_addr</em></p>
+</td><td>
+<p>A valid pointer to the memory buffer at which the compressed grayscale bitmap data begins.</p>
+
+<p><em>Note:</em> If decompressing grayscale bitmap data of glyph images in the bitmap cache obtained by <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="dtGlyphDoOutput.htm">dtGlyphDoOutputFrac</a>, <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> or <a href="dtGlyphDoOutput.htm">dtCharDoOutputFrac</a>, simply set this parameter to <em>memory_bitmap.m</em></p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_len</em></p>
+</td><td>
+<p>Length of the corresponding <strong>non-compressed</strong> bitmap data (actual length), in bytes. <u>It is imperative that applications supply this parameter correctly since this is the only way for the decompression algorithm to determine when the decompression cycle is over.</u></p>
+
+<p><em>Note:</em> If decompressing grayscale bitmap data of glyph images in the bitmap cache obtained by <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="dtGlyphDoOutput.htm">dtGlyphDoOutputFrac</a>, <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> or <a href="dtGlyphDoOutput.htm">dtCharDoOutputFrac</a>, simply set this parameter to <em>memory_bitmap.l</em></p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is a pointer to a memory buffer at which the plain 8-bpp grayscale bitmap data (non-compressed) begins. This buffer is dynamically allocated and must be released later by calling the <a href="dtBitmapFree.htm">dtBitmapFree</a> function. If not successful (e.g. an out of memory condition occurs), the return value will be DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="dtBitmapDecompress.htm">dtBitmapDecompress</a> function can be used to decompress compressed grayscale bitmap data of glyph images in the bitmap cache. This data can be obtained by calling <a href="dtGlyphDoOutput.htm">dtGlyphDoOutput</a>, <a href="dtGlyphDoOutput.htm">dtGlyphDoOutputFrac</a>, <a href="dtGlyphDoOutput.htm">dtCharDoOutput</a> and <a href="dtGlyphDoOutput.htm">dtCharDoOutputFrac</a> when the bitmap cache compression is enabled.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

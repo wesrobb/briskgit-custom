@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetNumericValue</h2><div class="box_prototype"><strong>
+DT_SLONG dtFontGetNumericValue(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_SWORD numeric_id)</strong></div><br /><strong>Short Description:</strong> <em>Get a numeric value from font</em><br /><br />
+
+<p>This function retrieves various (mostly format dependent) numeric values that may be defined in the referenced font.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>numeric_id</em></p>
+</td><td>
+<p>Identifies the value to retrieve.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value depends on <em>numeric_id</em>. At present, the following IDs are supported:</p>
+
+<ul>
+
+<li>
+<p>If <em>numeric_id</em> = 2001 (DV_NVAL_PLATFORM_TYPE), the function returns a platform specific font type. At present, this can be one of the following:</p>
+
+<ul>
+<li>0 = Unknown</li>
+<li>100 = Apple Standard Font</li>
+<li>200 = Microsoft Symbol Font</li>
+<li>300 = Microsoft Unicode Font</li>
+</ul>
+
+<p><em>Note</em>: Microsoft Symbol fonts are one of Microsoft's extensions of the TrueType specification that exists primarily for historical reasons. A Symbol font does not have any characters in the ASCII range 0x00-0xFF (or 0-255 decimal). All of its characters (also called "symbol" characters) are located at private Unicode locations 0xF000-0xF0FF (or 61440-61695 decimal). However, when encountering a Symbol font, Microsoft Windows operating system applies a special rule: it maps all character codes in its private Unicode range 0xF000-0xF0FF to the standard ASCII range 0x00-0xFF. This is most likely done in order to make these characters accessible to Unicode-unaware applications.</p>
+
+<p>Although this behavior is in violation of the Unicode standard, fonts utilizing this so-called encoding sometimes appear. Examples do not only include known symbol fonts such as <strong>wingdings.ttf</strong>, <strong>webdings.ttf</strong> and <strong>marlet.ttf</strong> but also some freeware Roman fonts created using popular font editing tools (e.g. Fontographer). Unaware of what the term "symbol" really means, some font authors choose to save their fonts as Microsoft Symbol Fonts.</p>
+<p>If you wish to handle symbol fonts in the same way Microsoft Windows operating system does, please see <em>D-Type FAQs: Q-3-2</em> for more information.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2101 (DV_NVAL_EMBED), the function returns TrueType font embedding licensing rights. See <a href="../manual/ttembed.htm">Appendix &mdash; TrueType Font Embedding Licensing Rights</a> for more information.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2102 (DV_NVAL_CPAGE_A) or <em>numeric_id</em> = 2103 (DV_NVAL_CPAGE_B), the return value identifies the code pages encompassed by the font, provided this information is available in the font file. See <a href="../manual/cpages.htm">Appendix &mdash; Code Pages</a>.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2104 (DV_NVAL_SELECTION_FLAGS), the function returns the font selection flags, as defined by the <em>fsSelection</em> field of the OS/2 OpenType table. See the OpenType specification at https://www.microsoft.com/typography/otspec/os2.htm#fss for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2105 (DV_NVAL_WEIGHT_CLASS), the function returns the weight class, as defined by the <em>usWeightClass</em> field of the OS/2 OpenType table. See the OpenType specification at https://www.microsoft.com/typography/otspec/os2.htm#wtc for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2106 (DV_NVAL_WIDTH_CLASS), the function returns the width class, as defined by the <em>usWidthClass</em> field of the OS/2 OpenType table. See the OpenType specification at https://www.microsoft.com/typography/otspec/os2.htm#wdc for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2107 (DV_NVAL_FAMILY_CLASS), the function returns the font-family class and subclass, as defined by the <em>sFamilyClass</em> field of the OS/2 OpenType table. See the OpenType specification at https://www.microsoft.com/typography/otspec/os2.htm#fc for details. This value may only be defined in D-Type, TrueType and OpenType fonts.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2201 (DV_NVAL_ASCENDER), the function returns the typographic ascender for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the sTypoAscender field of the OS/2 table; in Type 1 and Type 3 fonts, this information is the value of the Ascender key stored in the font's Font Metrics (AFM) file. The suggested usage for the typographic ascender is that it be used to compute a typographically correct default line spacing, in a portable fashion. More specifically, this value can be used to determine the optimum offset from the top of a text frame to the first baseline.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2202 (DV_NVAL_DESCENDER), the function returns the typographic descender for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the sTypoDescender field of the OS/2 table; in Type 1 and Type 3 fonts, this information is the value of the Descender key stored in the font's Font Metrics (AFM) file. The suggested usage for the typographic descender is that it be used to compute a typographically correct default line spacing, in a portable fashion. More specifically, this value can be used to determine the optimum offset from the last baseline to the bottom of a text frame.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2203 (DV_NVAL_LINEGAP), the function returns the typographic line gap for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the sTypoLineGap field of the OS/2 table; in Type 1 and Type 3 fonts, this information is most likely not available. The suggested usage for the typographic line gap is that it be used to compute a typographically correct default line spacing, in a portable fashion. This value is usually set by font developers such that the typographic ascender - typographic descender +  typographic line gap = 120% of the em.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2301 (DV_NVAL_WIN_ASCENT), the function returns the Windows-specific ascender for the font in font units, provided this information is available in the font file. This value is typically computed as the yMax for all the characters in the Windows ANSI character set. It is best not to use this value in portable applications. For more details, developers should review the description of the usWinAscent field of the OS/2 table in the OpenType Font Format Specification.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2302 (DV_NVAL_WIN_DESCENT), the function returns the Windows-specific descender for the font in font units, provided this information is available in the font file. This value is typically computed as the -yMin for all the characters in the Windows ANSI character set. It is best not to use this value in portable applications. For more details, developers should review the description of the usWinDescent field of the OS/2 table in the OpenType Font Format Specification.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2401 (DV_NVAL_VER_ASCENDER), the function returns the vertical typographic ascender for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the vertTypoAscender field of the vhea table; in Type 1 and Type 3 fonts, this information is most likely not available. See the description of the DV_VER_ASCENDER identifier for the corresponding horizontal typographic value. For more details, developers should review the description of the vertTypoAscender field of the vhea table in the OpenType Font Format Specification.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2402 (DV_NVAL_VER_DESCENDER), the function returns the vertical typographic descender for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the vertTypoDescender field of the vhea table; in Type 1 and Type 3 fonts, this information is most likely not available. See the description of the DV_NVAL_DESCENDER identifier for the corresponding horizontal typographic value. For more details, developers should review the description of the vertTypoDescender field of the vhea table in the OpenType Font Format Specification.</p>
+</li>
+
+<li>
+<p>If <em>numeric_id</em> = 2403 (DV_NVAL_VER_LINEGAP), the function returns the vertical typographic line gap for the font in font units, provided this information is available in the font file. In TrueType and OpenType fonts, this information is stored in the vertTypoLineGap field of the vhea table; in Type 1 and Type 3 fonts, this information is most likely not available. See the description of the DV_NVAL_LINEGAP identifier for the corresponding horizontal typographic value. For more details, developers should review the description of the vertTypoLineGap field of the vhea table in the OpenType Font Format Specification.</p>
+</li>
+
+<li>
+<p>If <em>string_id</em> is in the range [3000..3499] ([DV_NVAL_MMAXIS_TAG_000..3499]), [3500..3999] ([DV_NVAL_MMAXIS_DEF_000..3999]), [4000..4499] ([DV_NVAL_MMAXIS_MIN_000..4499]) or [4500..4999] ([DV_NVAL_MMAXIS_MAX_000..4999]), the function returns default, min and max values for each font axis in a variable font. See the following example.</p>
+
+<div class="box_field">
+<pre>
+/*
+
+Globals used in this example:
+
+* DTypeEngInst - A valid D-Type Font Engine Instance Handle
+* FontIndex - A valid D-Type index of the MM or variable font in question
+
+Note that in a real program these would not be globals.
+
+*/
+
+// A helper function (GetStringId )
+
+inline DT_ID_SWORD GetStringId(DT_SWORD start_mm_id, DT_SLONG mm_axis) const
+{
+    return static_cast&lt;DT_ID_SWORD&gt;(start_mm_id + mm_axis);
+}
+
+// Get font axis names
+
+const DT_FLOAT one_over_65536 = 0.0000152587890625;
+DT_SLONG i;
+DT_SLONG inst_count = 0;
+DT_SWORD font_dim /*unused*/, font_axes = dtFontGetMMAxisInfo(DTypeEngInst, FontIndex, &font_dim, &inst_count);
+DT_CHAR font_buffer[1024];
+
+for (i = 0; i &lt; font_axes; i++)
+{
+   DT_SLONG val_tag = dtFontGetNumericValue(DTypeEngInst, FontIndex, GetStringId(DV_NVAL_MMAXIS_TAG_000, i));
+   DT_SLONG val_def = dtFontGetNumericValue(DTypeEngInst, FontIndex, GetStringId(DV_NVAL_MMAXIS_DEF_000, i));
+   DT_SLONG val_min = dtFontGetNumericValue(DTypeEngInst, FontIndex, GetStringId(DV_NVAL_MMAXIS_MIN_000, i));
+   DT_SLONG val_max = dtFontGetNumericValue(DTypeEngInst, FontIndex, GetStringId(DV_NVAL_MMAXIS_MAX_000, i));
+
+   if (val_tag == 0 &amp;&amp; val_def == 0 &amp;&amp; val_min == 0 &amp;&amp; val_max == 0) break; /* unexpected (bad font?) */
+
+   DT_UBYTE c[32] = {0, 0, 0, 0}; memcpy(c, &amp;val_tag, sizeof(DT_SLONG));
+
+   printf("Axis %ld: OpenType Tag = %c%c%c%c, Default = %.2f, Min = %.2f, Max = %.2f\r", i, c[3], c[2], c[1], c[0],
+   val_def * one_over_65536, val_min * one_over_65536, val_max * one_over_65536);
+}
+</pre>
+</div>
+</li>
+
+</ul>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

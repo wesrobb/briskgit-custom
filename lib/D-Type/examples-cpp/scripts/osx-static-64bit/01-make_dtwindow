@@ -1,0 +1,20 @@
+##!/bin/csh
+
+cd "$(dirname "$0")"
+
+echo -------------------------------------------------------------------------------
+echo Build dtwindow.a
+echo -------------------------------------------------------------------------------
+
+export MACOSX_DEPLOYMENT_TARGET=10.8
+c++ -force_cpusubtype_ALL -arch x86_64 -stdlib=libc++ -c -std=c++0x -nostdlib -fno-exceptions -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -Wcomma -Wdouble-promotion -Wformat=2 -ffunction-sections -fdata-sections -fno-common -pedantic -I ../../../includes/core-cpp/ -O3 ../../../includes/utils/dtwindow/osx/DTWindow.cpp ../../../includes/utils/dtwindow/osx/DTWindowPlatform.mm
+ar -q dtwindow.a DTWindow.o DTWindowPlatform.o
+ranlib dtwindow.a
+
+echo -------------------------------------------------------------------------------
+echo Copy dtwindow.a to the libs directory
+echo -------------------------------------------------------------------------------
+
+cp dtwindow.a ../../../other/libs/x86_64-osx_64-static/clang/
+
+echo -------------------------------------------------------------------------------

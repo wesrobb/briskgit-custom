@@ -1,0 +1,130 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxLayoutApplyPlus</h2><div class="box_prototype"><strong>
+DT_SLONG lxLayoutApplyPlus(DT_LXLAYOUT layout, DT_SLONG offset, DT_SLONG count, DT_SLONG nr_of_chars, const DT_UBYTE* chars, DT_ID_SWORD chars_format, DT_ID_UBYTE direction, LX_GLYPH glyph_arr[], DT_SLONG max_glyphs)</strong></div><br /><strong>Short Description:</strong> <em>Apply text layout instance to a run of text</em><br /><br />
+
+<p>This function applies text layout to a run of text (which is specified as an array of Unicode characters) and returns an array of positioned glyphs in the correct visual order. Each positioned glyph in the array is represented by one <a href="../manual/lxstructs.htm#DT_LX_GLYPH">DT_LX_GLYPH</a> structure. This structure provides the glyph's font dependent index, its (x,&nbsp;y) position (in font units) and a character index to map that glyph back to the input text array.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>layout</em></p>
+</td><td>
+<p>Handle of the previously created layout instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>offset</em></p>
+</td><td>
+<p>The index of the first character to process.</p>
+</td></tr>
+
+<tr><td>
+<p><em>count</em></p>
+</td><td>
+<p>The number of characters to process.</p>
+</td></tr>
+
+<tr><td>
+<p><em>nr_of_chars</em></p>
+</td><td>
+<p>The number of characters in the input array.</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars</em></p>
+</td><td>
+<p>A pointer to a memory buffer that holds the Unicode characters (input array).</p>
+</td></tr>
+
+<tr><td>
+<p><em>chars_format</em></p>
+</td><td>
+<p>Format of the characters in the memory buffer. Can be one of the following:</p>
+<ul>
+<li><p>1 (LX_FORMAT_UBYTE) = indicates that the size of each character in the buffer is 1 byte. All characters have codepoints in the 0 - 255 range.</p></li>
+<li><p>2 (LX_FORMAT_UWORD_LE) = indicates that the size of each character in the buffer is 2 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>-2 (LX_FORMAT_UWORD_BE) = indicates that the size of each character in the buffer is 2 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>3 (LX_FORMAT_UTRIO_LE) = indicates that the size of each character in the buffer is 3 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;16,777,216 range.</p></li>
+<li><p>-3 (LX_FORMAT_UTRIO_BE) = indicates that the size of each character in the buffer is 3 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;16,777,216 range.</p></li>
+<li><p>4 (LX_FORMAT_ULONG_LE) = indicates that the size of each character in the buffer is 4 bytes (little endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>-4 (LX_FORMAT_ULONG_BE) = indicates that the size of each character in the buffer is 4 bytes (big endian byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>102 (LX_FORMAT_UWORD) = indicates that the size of each character in the buffer is 2 bytes (CPU byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;65,535 range.</p></li>
+<li><p>104 (LX_FORMAT_ULONG) = indicates that the size of each character in the buffer is 4 bytes (CPU byte ordering). All characters have codepoints in the 0&nbsp;-&nbsp;4,294,967,296 range.</p></li>
+<li><p>124 (LX_FORMAT_UTF16) = indicates the buffer is in UTF-16 format. Each character is encoded with one or two <a href="../../dt/manual/types.htm#DT_ID_UWORD">DT_ID_UWORD</a> code units (using CPU specific byte ordering) as per UTF-16 encoding scheme. This variable-length encoding format is capable of encoding all 1,112,064 possible Unicode characters.</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>direction</em></p>
+</td><td>
+<p>Specifies the direction of the text run. Must be set to one of the following values:</p>
+<ul>
+<li>0 (LX_DIRECTION_LTR) = left to right text</li>
+<li>1 (LX_DIRECTION_RTL) = right to left text</li>
+<li>2 (LX_DIRECTION_TTB) = top to bottom text (added in D-Type 7.5.1.2; works only with HarfBuzz-based D-Type Text Layout Extension)</li>
+<li>3 (LX_DIRECTION_BTT) = bottom to top text (added in D-Type 7.5.1.2; works only with HarfBuzz-based D-Type Text Layout Extension)</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_arr</em></p>
+</td><td>
+<p>The resulting array of positioned glyphs (output array). This is a user-supplied array into which the function copies positioned glyphs. All the elements in this array are of the <a href="../manual/lxstructs.htm#DT_LX_GLYPH">DT_LX_GLYPH</a> type. Each element contains information necessary to position and display the corresponding glyph and a character index to map that glyph back to the input text array. See the definition of the <a href="../manual/lxstructs.htm#DT_LX_GLYPH">DT_LX_GLYPH</a> structure for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>max_glyphs</em></p>
+</td><td>
+<p>Specifies the size of the array into which the function copies positioned glyphs.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns the actual number of positioned glyphs needed to lay out the input array of Unicode characters. If not successful (e.g. an error occurs or an invalid input parameter is supplied), the function returns -1.</p>
+
+<p>If the user-supplied output glyph array is not large enough to accept all the positioned glyphs (i.e. <em>max_glyphs</em> is less than the return value, the function copies only the first <em>max_glyphs</em> positioned glyphs into the output array (i.e. the array will be truncated). In this case, your application can increase the size of the output array and call this function again with the updated value for <em>max_glyphs</em>.</p>
+
+<p>Provided that the user-supplied output glyph array is large enough, the function also appends an additional phantom glyph (glyph with the glyph_index&nbsp;=&nbsp;0 and char_index&nbsp;=&nbsp;0) immediately after the last output glyph to indicate the (x,&nbsp;y) position of the end of the text run. However, the number of glyphs returned by this function does not include this phantom glyph.</p>
+
+
+<h3>Note 1</h3>
+<p>Recommended value for <em>max_glyphs</em> is 1.5 times the total number of characters in the input array of Unicode characters.</p>
+
+
+<h3>Comments</h3>
+
+<ul>
+<li><p>This function is designed to process a sequence of Unicode characters which is in a single font, script and direction. You can use the Unicode bidirectional algorithm to determine the direction of the text or give the user direct control over bidirectional text layout.</p></li>
+<li><p>The sequence of input characters must be passed in reading or logical order.</p></li>
+<li><p>Do not assume a simple one-to-one mapping between input characters and output glyphs. In other words, the size of the resulting glyph array can be (and with complex scripts usually is) different than the size of the input Unicode character array.</p></li>
+<li><p>When it is necessary to map output glyphs back to the initial sequence of input characters (e.g. for cursor movement and text selection), use the returned array of character indices.</p></li>
+</ul>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

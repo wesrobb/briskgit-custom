@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Text Extras</h2>
+<h3 id="overview">Overview</h3>
+This object represents extra text elements. This includes the baseline and row boundary.<br />
+<br />
+<strong>Designated Rendering Function:</strong> NONE<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdBaselinePtr"><em><span class="field">pdBaselinePtr</span> (1113)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#pdBaselinePtr">Text Line</a>, <a href="102.htm#pdBaselinePtr">Text Arc</a>, <a href="103.htm#pdBaselinePtr">Text Area</a>, <a href="104.htm#pdBaselinePtr">Rich Text Line</a>, <a href="105.htm#pdBaselinePtr">Rich Text Arc</a>, <a href="106.htm#pdBaselinePtr">Rich Text Area</a>, <a href="130.htm#pdBaselinePtr">Text Path</a>, <a href="131.htm#pdBaselinePtr">Rich Text Path</a></small></p>
+<p>
+Link to the <a href="020.htm">Baseline</a> object.<br />
+<br />
+This link supplies parameters necessary to render the baselines of text rows.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdRowBoundPtr"><em><span class="field">pdRowBoundPtr</span> (1173)</em></h4>
+<p>
+Link to the <a href="021.htm">Row Boundary</a> object.<br />
+<br />
+This link supplies parameters necessary to render the boundaries of text rows.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<p>None</p>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[10];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Line Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Line Definition");<br />
+obj[2] = pdObjAdd(pd, 0, "Baseline");<br />
+obj[3] = pdObjAdd(pd, 0, "Row Boundary Outline Style");<br />
+obj[4] = pdObjAdd(pd, 0, "Row Boundary Body Style");<br />
+obj[5] = pdObjAdd(pd, 0, "Row Boundary Shadow Style");<br />
+obj[6] = pdObjAdd(pd, 0, "Row Boundary Outline");<br />
+obj[7] = pdObjAdd(pd, 0, "Row Boundary Shadow");<br />
+obj[8] = pdObjAdd(pd, 0, "Row Boundary");<br />
+<strong>obj[9] = pdObjAdd(pd, 0, "Text Extras");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdLineThickness, "1500", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineSegment, "10", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineStart, "100", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[1], pdLineEnd, "100", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdLinkAdd(pd, obj[2], pdLinePtr, obj[1]);<br />
+pdPropAdd(pd, obj[2], pdMarginLeft, "200", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdMarginRight, "50", PD_LONG_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdPropAdd(pd, obj[3], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdPropAdd(pd, obj[4], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdPropAdd(pd, obj[5], pdRGBT, "80808078", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+pdLinkAdd(pd, obj[6], pdStylePtr, obj[3]);<br />
+pdPropAdd(pd, obj[6], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 7 */</span><br />
+pdLinkAdd(pd, obj[7], pdStylePtr, obj[5]);<br />
+pdPropAdd(pd, obj[7], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[7], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 8 */</span><br />
+pdLinkAdd(pd, obj[8], pdBodyPtr, obj[4]);<br />
+pdLinkAdd(pd, obj[8], pdOutlinePtr, obj[6]);<br />
+pdLinkAdd(pd, obj[8], pdShadowPtr, obj[7]);<br />
+pdPropAdd(pd, obj[8], pdMarginLeft, "-200", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[8], pdMarginRight, "-200", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[8], pdMarginTop, "-100", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[8], pdMarginBottom, "-100", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[8], pdRound, "50", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[8], pdMerge, "1", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 9 */</span><br />
+<strong>pdLinkAdd(pd, obj[9], pdBaselinePtr, obj[2]);<br />
+pdLinkAdd(pd, obj[9], pdRowBoundPtr, obj[8]);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Line Style");<br />
+local obj_1 = o("Line Definition");<br />
+local obj_2 = o("Baseline");<br />
+local obj_3 = o("Row Boundary Outline Style");<br />
+local obj_4 = o("Row Boundary Body Style");<br />
+local obj_5 = o("Row Boundary Shadow Style");<br />
+local obj_6 = o("Row Boundary Outline");<br />
+local obj_7 = o("Row Boundary Shadow");<br />
+local obj_8 = o("Row Boundary");<br />
+local obj_9 = o("Text Extras");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + l(pdStylePtr, obj_0);<br />
+obj_1 + i(pdLineThickness, 1500);<br />
+obj_1 + i(pdLineSegment, 10);<br />
+obj_1 + i(pdLineStart, 100);<br />
+obj_1 + i(pdLineEnd, 100);<br />
+<br />
+obj_2 + l(pdLinePtr, obj_1);<br />
+obj_2 + i(pdMarginLeft, 200);<br />
+obj_2 + i(pdMarginRight, 50);<br />
+<br />
+obj_3 + s(pdRGBT, "50641400");<br />
+<br />
+obj_4 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_5 + s(pdRGBT, "80808078");<br />
+<br />
+obj_6 + l(pdStylePtr, obj_3);<br />
+obj_6 + i(pdLineThickness, 240);<br />
+<br />
+obj_7 + l(pdStylePtr, obj_5);<br />
+obj_7 + i(pdShadowDx, 5);<br />
+obj_7 + i(pdShadowDy, 5);<br />
+<br />
+obj_8 + l(pdBodyPtr, obj_4);<br />
+obj_8 + l(pdOutlinePtr, obj_6);<br />
+obj_8 + l(pdShadowPtr, obj_7);<br />
+obj_8 + i(pdMarginLeft, -200);<br />
+obj_8 + i(pdMarginRight, -200);<br />
+obj_8 + i(pdMarginTop, -100);<br />
+obj_8 + i(pdMarginBottom, -100);<br />
+obj_8 + i(pdRound, 50);<br />
+obj_8 + i(pdMerge, 1);<br />
+<br />
+obj_9 + l(pdBaselinePtr, obj_2);<br />
+obj_9 + l(pdRowBoundPtr, obj_8);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

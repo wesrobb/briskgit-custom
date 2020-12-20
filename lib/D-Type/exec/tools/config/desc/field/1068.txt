@@ -1,0 +1,9 @@
+Unique Font Identifier. This is a 16-byte string that uniquely identifies the font. Contact D-Type for naming conventions.
+
+{strong}Sample values:{/strong}
+
+'F0010_ARIAL__NS0' = Arial, Regular
+'F0011_TIMES__NS0' = Times New Roman, Regular
+'F0013_COUR___NS0' = Courier New, Medium
+'F0010_DENMRK_SS0' = Denmark Regular, Regular
+'F0010_GENTI__NS0' = Gentium, Regular

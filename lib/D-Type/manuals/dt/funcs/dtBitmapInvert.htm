@@ -1,0 +1,52 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtBitmapInvert</h2><div class="box_prototype"><strong>
+void dtBitmapInvert(DT_DTENGINE engine, DT_BMP* memory_bitmap)</strong></div><br /><strong>Short Description:</strong> <em>Invert grayscale bitmap</em><br /><br />
+
+<p>This function inverts the 8-bit grayscale memory bitmap data, so that black (fully opaque) pixels become white (fully transparent) and vice versa.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_bitmap</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../manual/structs.htm#DT_BMP">DT_BMP</a> structure that contains information about the plain 8-bit grayscale memory bitmap. This must be a non-compressed bitmap. Compressed bitmaps are not supported by this function.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+
+<p>The <a href="dtBitmapInvert.htm">dtBitmapInvert</a> function can be used to invert 8-bit grayscale memory data produced by <a href="dtShapeDoOutput.htm">dtShapeDoOutput</a>. You can also use this function to invert any other 8-bit grayscale memory data, as long as the bitmap data is not compressed.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,7 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Text Ruler");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdTabStopPositions, "12240, 20400, 38250, 56100", PD_ARR_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdTabStopFlags, "1, 0, 0, 2", PD_ARR_BYTE_UNSIGNED);{/strong}

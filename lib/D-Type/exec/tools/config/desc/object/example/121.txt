@@ -1,0 +1,22 @@
+DT_ID_SLONG obj[2];
+
+obj[0] = pdObjAdd(pd, 0, "Grayscale Image Data");
+{strong}obj[1] = pdObjAdd(pd, 0, "Grayscale Image");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdNw, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdNh, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdImageDataGray, "88880000 88880000 00008888 00008888", PD_HEX);
+
+/* Properties for object 1 */
+{strong}pdLinkAdd(pd, obj[1], pdImageDataPtr, obj[0]);
+pdPropAdd(pd, obj[1], pdRangeRR, "77FF", PD_HEX);
+pdPropAdd(pd, obj[1], pdRangeGG, "44FF", PD_HEX);
+pdPropAdd(pd, obj[1], pdRangeBB, "66AA", PD_HEX);
+pdPropAdd(pd, obj[1], pdQuality, "0", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdDw, "312", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], pdDh, "120", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], pdT, "80", PD_BYTE_UNSIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[1], 0, 50, 50, 0, 0, 0, pdDrawImage, DV_NULL);{/strong}

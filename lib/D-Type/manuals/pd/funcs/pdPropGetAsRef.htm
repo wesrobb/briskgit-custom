@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdPropGetAsRef</h2><div class="box_prototype"><strong>
+DT_ID_SLONG pdPropGetAsRef(DT_PDDOC power_doc, DT_ID_SLONG obj, DT_SLONG name, DT_SLONG* ref_name)</strong></div><br /><strong>Short Description:</strong> <em>Get property by reference</em><br /><br />
+
+<p>This function retrieves the target property to which the property referenced by the <em>name</em> identifier points to. The target property is normally set by the <a href="pdPropAddAsRef.htm">pdPropAddAsRef</a> or <a href="pdPropSetAsRef.htm">pdPropSetAsRef</a> function.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>obj</em></p>
+</td><td>
+<p>Object's index in the Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>name</em></p>
+</td><td>
+<p>A numerical value that identifies the property. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="pdPropAdd.htm">pdPropAdd</a> function.</p>
+</td></tr>
+
+<tr><td>
+<p><em>ref_name</em></p>
+</td><td>
+<p>A pointer to a variable that will hold the numerical value that identifies the target property. Can be a user-defined value or one of the predefined PowerDoc values. For a list of predefined <em>name</em> values, see the <a href="pdPropAdd.htm">pdPropAdd</a> function.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>Index of the PowerDoc object that holds the referenced (target) property.</p>
+
+
+<h3>Related Functions</h3>
+<p><a href="pdPropSetAsRef.htm">pdPropSetAsRef</a><br />
+<a href="pdPropAddAsRef.htm">pdPropAddAsRef</a></p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

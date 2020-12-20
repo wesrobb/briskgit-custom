@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Slice</h2>
+<h3 id="overview">Overview</h3>
+This object represents a slice. In Power Engine API, a slice is a piece of a circle or an ellipse. Slices are frequently used to draw pie charts in financial charts and presentations.<br />
+<br />
+While constructing the Slice object, an optional shadow and/or outline may be specified.<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawSlice (8)<br />
+<br />
+Note: Although pdBodyPtr is a key link, it is not mandatory. This means it is possible to construct a slice that has no body, only an outline and/or a shadow.<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdBodyPtr"><em><span class="field">pdBodyPtr</span> (1013)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdBodyPtr">Typography (For Outline Fonts)</a>, <a href="021.htm#pdBodyPtr">Row Boundary</a>, <a href="023.htm#pdBodyPtr">Typographic Frame</a>, <a href="110.htm#pdBodyPtr">Library Shape</a>, <a href="112.htm#pdBodyPtr">Rectangle</a>, <a href="113.htm#pdBodyPtr">Circle/Ellipse</a>, <a href="114.htm#pdBodyPtr">True Circle/Ellipse</a>, <a href="117.htm#pdBodyPtr">Pattern</a>, <a href="118.htm#pdBodyPtr">Grid</a>, <a href="119.htm#pdBodyPtr">Custom Shape or Polygon</a>, <a href="120.htm#pdBodyPtr">Gradient</a>, <a href="125.htm#pdBodyPtr">Gradient (As Fast Rectangle)</a></small></p>
+<p>
+Link to the <a href="001.htm">Surface Definition</a> object.<br />
+<br />
+This link supplies style attributes for the body of an object. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdOutlinePtr"><em><span class="field">pdOutlinePtr</span> (1014)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdOutlinePtr">Typography (For Outline Fonts)</a>, <a href="021.htm#pdOutlinePtr">Row Boundary</a>, <a href="023.htm#pdOutlinePtr">Typographic Frame</a>, <a href="110.htm#pdOutlinePtr">Library Shape</a>, <a href="112.htm#pdOutlinePtr">Rectangle</a>, <a href="113.htm#pdOutlinePtr">Circle/Ellipse</a>, <a href="114.htm#pdOutlinePtr">True Circle/Ellipse</a>, <a href="118.htm#pdOutlinePtr">Grid</a>, <a href="119.htm#pdOutlinePtr">Custom Shape or Polygon</a></small></p>
+<p>
+Link to the <a href="012.htm">Outline Definition</a> object.<br />
+<br />
+This link supplies parameters necessary to render the outline of an object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowPtr"><em><span class="field">pdShadowPtr</span> (1016)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdShadowPtr">Typography (For Outline Fonts)</a>, <a href="020.htm#pdShadowPtr">Baseline</a>, <a href="021.htm#pdShadowPtr">Row Boundary</a>, <a href="023.htm#pdShadowPtr">Typographic Frame</a>, <a href="129.htm#pdShadowPtr">Library Polyline</a>, <a href="110.htm#pdShadowPtr">Library Shape</a>, <a href="111.htm#pdShadowPtr">Line</a>, <a href="112.htm#pdShadowPtr">Rectangle</a>, <a href="113.htm#pdShadowPtr">Circle/Ellipse</a>, <a href="114.htm#pdShadowPtr">True Circle/Ellipse</a>, <a href="116.htm#pdShadowPtr">Arc</a>, <a href="118.htm#pdShadowPtr">Grid</a>, <a href="119.htm#pdShadowPtr">Custom Shape or Polygon</a>, <a href="124.htm#pdShadowPtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="002.htm">Shadow Definition</a> object.<br />
+<br />
+Used to render the shadow of a line, shape or some other object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdRadiusHor"><em><span class="field">pdRadiusHor</span> (1035)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="114.htm#pdRadiusHor">True Circle/Ellipse</a>, <a href="116.htm#pdRadiusHor">Arc</a></small></p>
+<p>
+Horizontal radius in document units. Must be positive.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+500 = Horizontal radius of 500 document units<br />
+800 = Horizontal radius of 800 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdRadiusVer"><em><span class="field">pdRadiusVer</span> (1036)</em> &nbsp; <small class="label">PD_LONG_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="114.htm#pdRadiusVer">True Circle/Ellipse</a>, <a href="116.htm#pdRadiusVer">Arc</a></small></p>
+<p>
+Vertical radius in document units. Must be positive.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+500 = Vertical radius of 500 document units<br />
+800 = Vertical radius of 800 document units<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAngleAlpha"><em><span class="field">pdAngleAlpha</span> (1032)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="102.htm#pdAngleAlpha">Text Arc</a>, <a href="105.htm#pdAngleAlpha">Rich Text Arc</a>, <a href="116.htm#pdAngleAlpha">Arc</a></small></p>
+<p>
+Initial (start) angle in degrees. Must be between 0 and 360.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+0 = Angle of 0 degrees<br />
+90 = Angle of 90 degrees<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAngleTheta"><em><span class="field">pdAngleTheta</span> (1037)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="116.htm#pdAngleTheta">Arc</a></small></p>
+<p>
+Length of an arc in degrees. Must be between 0 and 360.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+180 = Length of 180 degrees<br />
+240 = Length of 240 degrees<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[6];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Slice Outline Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Slice Body Style");<br />
+obj[2] = pdObjAdd(pd, 0, "Slice Shadow Style");<br />
+obj[3] = pdObjAdd(pd, 0, "Slice Outline");<br />
+obj[4] = pdObjAdd(pd, 0, "Slice Shadow");<br />
+<strong>obj[5] = pdObjAdd(pd, 0, "Slice");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);<br />
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+<strong>pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);<br />
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);<br />
+pdPropAdd(pd, obj[5], pdRadiusHor, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdRadiusVer, "125", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdAngleAlpha, "210", PD_WORD_UNSIGNED);<br />
+pdPropAdd(pd, obj[5], pdAngleTheta, "120", PD_WORD_SIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[5], 0, 350, 150, 0, 0, 0, pdDrawSlice, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Slice Outline Style");<br />
+local obj_1 = o("Slice Body Style");<br />
+local obj_2 = o("Slice Shadow Style");<br />
+local obj_3 = o("Slice Outline");<br />
+local obj_4 = o("Slice Shadow");<br />
+local obj_5 = o("Slice");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_2 + s(pdRGBT, "80808078");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_0);<br />
+obj_3 + i(pdLineThickness, 240);<br />
+<br />
+obj_4 + l(pdStylePtr, obj_2);<br />
+obj_4 + i(pdShadowDx, 5);<br />
+obj_4 + i(pdShadowDy, 5);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_1);<br />
+obj_5 + l(pdOutlinePtr, obj_3);<br />
+obj_5 + l(pdShadowPtr, obj_4);<br />
+obj_5 + i(pdRadiusHor, 300);<br />
+obj_5 + i(pdRadiusVer, 125);<br />
+obj_5 + i(pdAngleAlpha, 210);<br />
+obj_5 + i(pdAngleTheta, 120);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_5.Pin(0, 350, 150, pdDrawSlice);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

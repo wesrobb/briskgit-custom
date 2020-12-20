@@ -1,0 +1,100 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextSetNumericValue</h2><div class="box_prototype"><strong>
+void txTextSetNumericValue(DT_TXDOC text_doc, DT_ID_SWORD numeric_id, DT_SLONG numeric_value)</strong></div><br /><strong>Short Description:</strong> <em>Set text document's numeric value</em><br /><br />
+
+<p>This function sets the value of various numeric parameters defined in a text document. This can be used to configure certain text document features.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>numeric_id</em></p>
+</td><td>
+<p>Identifies the numeric parameter. Can be one of the following:</p>
+<ul>
+<li><p>0 (TX_NVAL_THICKNESS_TEXTFLOW_TOP) &mdash; Line thickness of top-level textflow bounding boxes, in pixels.</p></li>
+<li><p>1 (TX_NVAL_THICKNESS_TEXTFLOW_NESTED) &mdash; Line thickness of nested textflow bounding boxes, in pixels.</p></li>
+<li><p>2 (TX_NVAL_DEFAULT_FONT_WIDTH) &mdash; Default font width (when creating a new text document), in document units. This default applies even to empty textflow areas.</p></li>
+<li><p>3 (TX_NVAL_DEFAULT_FONT_HEIGHT) &mdash; Default font height (when creating a new text document), in document units. This default applies even to empty textflow areas.</p></li>
+<li><p>4 (TX_NVAL_DEFAULT_SPACING_ROW) &mdash; Default row spacing (when creating a new text document), in document units. This default applies even to empty textflow areas.</p></li>
+
+
+<li><p>5 (TX_NVAL_ENABLE_BITS) &mdash; A set of bit values to enable or disable various text document features. The default value is 9 (i.e. bits 0 and 3 are set).</p>
+
+<ul>
+<li><p>Bit 0: If unset (0), disables singe text selections. If set (1), enables single text selections.</p></li>
+<li><p>Bit 1: If unset (0), disables multiple (non-contiguous) text selections. If set (1), enables multiple (non-contiguous) text selections. For this to work, bit 0 must also be set. A new non-contiguous text selection is initiated when the <em>hit_type</em> parameter passed to the <a href="txTextHit.htm">txTextHit</a> function is set to TX_HIT_CTRL (mouse button click with the Ctrl key) and updated as the mouse moves, which requires one or more subsequent TX_HIT_MOVE (mouse move) actions.</p></li>
+<li><p>Bit 2: If unset (0), disables block (rectangular) text selections. If set (1), enables block (rectangular) text selections. For this to work, bit 0 must also be set. A new block text selection is initiated when the <em>hit_type</em> parameter passed to the <a href="txTextHit.htm">txTextHit</a> function is set to TX_HIT_ALT (mouse button click with the Alt key) and updated as the mouse moves, which requires one or more subsequent TX_HIT_MOVE (mouse move) actions.</p></li>
+<li><p>Bit 3: If unset (0), TX_HIT_MOVE will be able to update the active text selection(s) only when the mouse moves over characters (i.e. a hit is valid only if the mouse (x,&nbsp;y) coordinates fall inside the character's bounding box). If set (1), TX_HIT_MOVE will be able to update the active text selection(s) even if the mouse (x,&nbsp;y) coordinates fall outside the character's bounding box. In this case the result of the hit test is the same as if the mouse was within the bounding box of the closest character.</p></li>
+<li><p>Bit 4: Internal use only. <!-- If set (1), slower legacy clipboard copy algorithm #1 will be enabled. --> Must be set to 0.</p></li>
+<li><p>Bit 5: Internal use only. <!-- If set (1), slower legacy clipboard copy algorithm #2 will be enabled. --> Must be set to 0.</p></li>
+<li><p>Bit 6: Internal use only. <!-- If set (1), formatting test for embedded text is ignored. --> Must be set to 0.</p></li>
+<li><p>Bit 7: If set (1), an alternative (and faster) frames proximity algorithm will be enabled.</p></li>
+<li><p>All remaining bits are reserved for future use and must be set to 0.</p></li>
+</ul>
+</li>
+
+<li><p>6 (TX_NVAL_CONFIG_BITS) &mdash; Various configuration bits. The default value is 0 (i.e. none of the bits are set).</p>
+
+<ul>
+<li><p>Bit 0: Specifies how the styling/formatting attributes (created using the <a href="txTextSetAttribs.htm">txTextSetAttribs</a> function) will affect text that is inserted (e.g. by calling the <a href="txTextPasteViaStream.htm">txTextPasteViaStream</a> or <a href="txTextPasteViaBuffer.htm">txTextPasteViaBuffer</a> function) at the boundary between two adjacent but differently styled/formatted text fragments &mdash; i.e. the position in text where one style/format ends and another style/format begins. If unset (0), the inserted text will inherit the styling/formatting attributes of the next text fragment. If set (1), the inserted text will inherit the styling/formatting attributes of the previous text fragment.</p></li>
+<li><p>Bit 1: If unset (0), moving the cursor left or up is relative to the first character of the active text selection; moving the cursor right or down is relative to the last character of the active text selection. If set (1), moving the cursor in any direction is always relative to the current anchor point in the active text selection.</p></li>
+<li><p>Bit 2: If unset (0), an attempt to move the cursor/selection down (or up) when the cursor/selection is on the last (or first) line of text will not result in any changes to the cursor/selection. If set (1), an attempt to move the cursor/selection down when the cursor/selection is on the last line of text will move the cursor/selection to the end of the line; an attempt to move the cursor/selection up when the cursor/selection is on the first line of text will move the cursor/selection to the start of the line.</p></li>
+<li><p>Bit 3: If unset (0), rectangular and non-rectangular frames are drawn together. If set (1), non-rectangular frames are drawn together and rectangular frames are drawn one at a time.</p></li>
+<li><p>Bit 4: If unset (0), split BiDi cursor support is disabled. If set (1), split BiDi cursor support is enabled. When enabling split BiDi cursor support, please note that this feature is still in beta stage. If split BiDi cursor support is enabled, the cursor will be split when placed between two consecutive glyphs that are not positioned next to each other or have opposite writing directions. This can typically happen in bidirectional context (the context in which left-to-right and right-to-left text runs coexist) such as mixed Latin and Arabic or sometimes in contexts that involve reordered glyphs (e.g. Indic scripts). In these situations the cursor may be split &mdash; meaning that its first half will be located at the "ending" side of the preceding glyph, while its second half will be located at the "commencing" side of the following glyph. This gives end users a good visual indication that there are two possible locations at which the character they are about to insert may appear. If split BiDi cursor support is disabled, the cursor will never be split and will always appear at the "commencing" side of the following glyph.</p></li>
+<li><p>Bit 5: Internal use only. <!-- Text Engine: Split BiDi cursor V2. --> Must be set to 0.</p></li>
+<li><p>Bit 6: Internal use only. <!-- Text Engine: Cmd_SelectText_WordOrParagraph Method 2. --> Must be set to 0.</p></li>
+<li><p>Bit 7: Internal use only. <!-- Text Engine: Protect PowerObjects --> Must be set to 0.</p></li>
+<li><p>Bit 8: Internal use only. <!-- Text Engine: Show empty box. --> Must be set to 0.</p></li>
+<li><p>Bit 9: Internal use only. <!-- Text Engine: Discard object descriptions (for speed). --> Must be set to 0.</p></li>
+<li><p>All remaining bits are reserved for future use and must be set to 0.</p></li>
+</ul>
+</li>
+
+
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>numeric_value</em></p>
+</td><td>
+<p>The value of the numeric parameter.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Related Functions</h3>
+<p><a href="txTextGetNumericValue.htm">txTextGetNumericValue</a></p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

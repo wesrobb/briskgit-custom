@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtTypesetterSetQuality</h2><div class="box_prototype"><strong>
+DT_SWORD dtTypesetterSetQuality(DT_DTENGINE engine, DT_ID_UBYTE quality, DT_UBYTE flag)</strong></div><br /><strong>Short Description:</strong> <em>Set Typesetter's quality</em><br /><br />
+
+<p>This function tells the Typesetter which of the available quality levels to use when processing glyphs and characters. At present, there are over twenty predefined quality levels that application developers can choose from.</p>
+
+<p>The default quality level is 0 (DV_QUALITY_MEDIUM) unless D-Type Engine is initialized via an initialization file (i.e. dtype.inf) and the default quality level specified explicitly in this file. Regardless of this, developers can use the <a href="dtTypesetterSetQuality.htm">dtTypesetterSetQuality</a> function to change the active quality level at any time during the execution of their application.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>quality</em></p>
+</td><td>
+
+<p>The value of this parameter identifies the quality level. The following are the basic quality levels:</p>
+
+<ul>
+
+<li><p>0 (DV_QUALITY_MEDIUM) &mdash; Medium quality; fast processing. Suitable for animations.</p></li>
+
+<li><p>1 (DV_QUALITY_HIGH) &mdash; High quality but somewhat slower processing. Suitable for applications that require high quality text output.</p></li>
+
+<li><p>2 (DV_QUALITY_VERYHIGH) &mdash; Very high quality but somewhat slower processing. Suitable for applications that require very high quality text output.</p></li>
+
+</ul>
+
+<p><strong>Note:</strong> If D-Type Font Engine is initialized with the <em>Perfect Rasterizer</em> or the <em>Universal Rasterizer &mdash; Black &amp; White</em> (for more details see <a href="../manual/rengine.htm">D-Type Rasterizer Overview</a> and the structure of the <a href="../manual/inifiles.htm#inf">dtype.inf</a> file in the <a href="../manual/inifiles.htm">Initialization Files</a> section of this document), then DV_QUALITY_MEDIUM and DV_QUALITY_HIGH will have the same effect as DV_QUALITY_VERYHIGH. In other words, the quality of these two rasterizers cannot be less than DV_QUALITY_VERYHIGH. This is because both of these rasterizers use an exact formula to calculate the coverage of the outline on each pixel. Only the <em>Ultra-Fast Rasterizer</em> and the <em>Universal Rasterizer &mdash; Grayscale</em> allows the applications to change its quality level.</p>
+
+<p>The remaining quality levels use advanced filtering techniques for enhanced text quality and are independent of the active rasterizer:</p>
+
+<p><strong>Note:</strong> If you are using the <em>Black &amp; White Rasterizer</em> and wish to ensure that only two levels of gray (black and white) appear in the final output, do not use any of these quality levels.</p>
+
+<ul>
+
+<li><p>3 (DV_QUALITY_DISPERSION_FILTER_1) &mdash; Enhanced quality with dispersion filter #1. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours. This results in a more balanced color contrast and accurate inter-character positioning but the font hinting effect is diminished. This mode is suitable on display systems where pixels are not very close to each other and/or have limited color dispersion capabilities (such as non-CRT monitors).</p></li>
+
+<li><p>4 (DV_QUALITY_DISPERSION_FILTER_2) &mdash; Enhanced quality with dispersion filter #2. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours. This results in a more balanced color contrast and very accurate inter-character positioning but the font hinting effect is diminished. This mode is suitable on display systems where pixels are not very close to each other and/or have limited color dispersion capabilities (such as non-CRT monitors). <strong>This is one of the highly recommended quality levels.</strong></p></li>
+
+<li><p>5 (DV_QUALITY_HINT_FILTER_1) &mdash; Enhanced quality with hint filter #1. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours but also preserves the font hinting effect. However, the inter-character positioning is not as accurate as with DV_QUALITY_DISPERSION_FILTER_1 or DV_QUALITY_DISPERSION_FILTER_2.</p></li>
+
+<li><p>6 (DV_QUALITY_HINT_FILTER_2) &mdash; Enhanced quality with hint filter #2. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours but also preserves the font hinting effect. However, the inter-character positioning is not as accurate as with DV_QUALITY_DISPERSION_FILTER_1 or DV_QUALITY_DISPERSION_FILTER_2. <strong>This is one of the highly recommended quality levels.</strong></p></li>
+
+<li><p>7 (DV_QUALITY_HINT_FILTER_3) &mdash; Enhanced quality with hint filter #3. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours but also preserves the font hinting effect. However, the inter-character positioning is not as accurate as with DV_QUALITY_DISPERSION_FILTER_1 or DV_QUALITY_DISPERSION_FILTER_2.</p></li>
+
+<li><p>8 (DV_QUALITY_HINT_FILTER_4) &mdash; Enhanced quality with hint filter #4. This filter somewhat disperses the energy (i.e. color intensity) of a single pixel to its neighbours but also preserves the font hinting effect. However, the inter-character positioning is not as accurate as with DV_QUALITY_DISPERSION_FILTER_1 or DV_QUALITY_DISPERSION_FILTER_2.</p></li>
+
+</ul>
+
+<p>Although the following quality levels are specifically designed for LCD screens with RGB or BGR subpixel order, they also work very well on standard CRT monitors. In order for these quality levels to function as intended, you must render to D-Type's 24-bpp RGB memory surfaces (identified by <em>format</em> = 24 and <em>subformat</em> = 0 in a call to <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>) or 32-bpp RGB memory surfaces (identified by <em>format</em> = 32 and <em>subformat</em> = 0 or <em>format</em> = 32 and <em>subformat</em> = 1 in a call to <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>). Note that these are new quality levels; they are only available in D-Type Engine 4.0.4.7 and higher.</p>
+
+<ul>
+
+<li><p>9 (DV_QUALITY_LCD_RGB_SUB_1) &mdash; High quality LCD filter LCD-RGB-SUB-1. Optimized for LCD screens with RGB subpixel order. When this filter is enabled, hinting is performed in the subpixel space. <!--This new filter will be described more thoroughly in the near future.--> <strong>This is one of the highly recommended quality levels on LCD screens with RGB subpixel order.</strong></p></li>
+
+<li><p>10 (DV_QUALITY_LCD_RGB_INT_1) &mdash; High quality LCD filter LCD-RGB-INT-1. Optimized for LCD screens with RGB subpixel order. When this filter is enabled, hinting is performed in the whole pixel space. <!--This new filter will be described more thoroughly in the near future.--> <strong>This is one of the highly recommended quality levels on LCD screens with RGB subpixel order.</strong></p></li>
+
+<li><p>11 (DV_QUALITY_LCD_BGR_SUB_1) &mdash; High quality LCD filter LCD-BGR-SUB-1. Same as quality level 9 (DV_QUALITY_LCD_RGB_SUB_1) but optimized for LCD screens with BGR subpixel order. <strong>This is one of the highly recommended quality levels on LCD screens with BGR subpixel order.</strong></p></li>
+
+<li><p>12 (DV_QUALITY_LCD_BGR_INT_1) &mdash; High quality LCD filter LCD-BGR-INT-1. Same as quality level 10 (DV_QUALITY_LCD_RGB_INT_1) but optimized for LCD screens with BGR subpixel order. <strong>This is one of the highly recommended quality levels on LCD screens with BGR subpixel order.</strong></p></li>
+
+<li><p>13 (DV_QUALITY_LCD_RGB_SUB_2) &mdash; High quality LCD filter LCD-RGB-SUB-2. Same as quality level 9 (DV_QUALITY_LCD_RGB_SUB_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>14 (DV_QUALITY_LCD_RGB_INT_2) &mdash; High quality LCD filter LCD-RGB-INT-2. Same as quality level 10 (DV_QUALITY_LCD_RGB_INT_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>15 (DV_QUALITY_LCD_BGR_SUB_2) &mdash; High quality LCD filter LCD-BGR-SUB-2. Same as quality level 11 (DV_QUALITY_LCD_BGR_SUB_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>16 (DV_QUALITY_LCD_BGR_INT_2) &mdash; High quality LCD filter LCD-BGR-INT-2. Same as quality level 12 (DV_QUALITY_LCD_BGR_INT_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>17 (DV_QUALITY_LCD_RGB_SUB_3) &mdash; High quality LCD filter LCD-RGB-SUB-3. Same as quality level 9 (DV_QUALITY_LCD_RGB_SUB_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>18 (DV_QUALITY_LCD_RGB_INT_3) &mdash; High quality LCD filter LCD-RGB-INT-3. Same as quality level 10 (DV_QUALITY_LCD_RGB_INT_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>19 (DV_QUALITY_LCD_BGR_SUB_3) &mdash; High quality LCD filter LCD-BGR-SUB-3. Same as quality level 11 (DV_QUALITY_LCD_BGR_SUB_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+<li><p>20 (DV_QUALITY_LCD_BGR_INT_3) &mdash; High quality LCD filter LCD-BGR-INT-3. Same as quality level 12 (DV_QUALITY_LCD_BGR_INT_1) but uses a slightly different filtering approach. Still experimental.</p></li>
+
+</ul>
+
+<p>The remaining quality levels have been introduced in D-Type Engine 4.3.0.1. They are designed for high performance, memory efficient rendering on LCD screens with RGB or BGR subpixel order, but also work very well on standard CRT monitors. In order for these quality levels to function as intended, you must render to D-Type's 24-bpp RGB memory surfaces (identified by <em>format</em> = 24 and <em>subformat</em> = 0 in a call to <a href="dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>).</p>
+
+<ul>
+
+<li><p>21 (DV_QUALITY_LCD2_RGB_SUB_1) &mdash; High quality LCD filter LCD2-RGB-SUB-1. Optimized for LCD screens with RGB subpixel order. When this filter is enabled, hinting is performed in the subpixel space. <strong>This is one of the highly recommended quality levels on LCD screens with RGB subpixel order.</strong></p></li>
+
+<li><p>22 (DV_QUALITY_LCD2_RGB_INT_1) &mdash; High quality LCD filter LCD2-RGB-INT-1. Optimized for LCD screens with RGB subpixel order. When this filter is enabled, hinting is performed in the whole pixel space. <strong>This is one of the highly recommended quality levels on LCD screens with RGB subpixel order.</strong></p></li>
+
+<li><p>23 (DV_QUALITY_LCD2_BGR_SUB_1) &mdash; High quality LCD filter LCD2-BGR-SUB-1. Same as quality level 21 (DV_QUALITY_LCD2_RGB_SUB_1) but optimized for LCD screens with BGR subpixel order. <strong>This is one of the highly recommended quality levels on LCD screens with BGR subpixel order.</strong></p></li>
+
+<li><p>24 (DV_QUALITY_LCD2_BGR_INT_1) &mdash; High quality LCD filter LCD2-BGR-INT-1. Same as quality level 22 (DV_QUALITY_LCD2_RGB_INT_1) but optimized for LCD screens with BGR subpixel order. <strong>This is one of the highly recommended quality levels on LCD screens with BGR subpixel order.</strong></p></li>
+
+<li><p>25 (DV_QUALITY_LCD2_RGB_SUB_2) &mdash; High quality LCD filter LCD2-RGB-SUB-2. Same as quality level 21 (DV_QUALITY_LCD2_RGB_SUB_1) but uses a slightly different filtering approach.</p></li>
+
+<li><p>26 (DV_QUALITY_LCD2_RGB_INT_2) &mdash; High quality LCD filter LCD2-RGB-INT-2. Same as quality level 22 (DV_QUALITY_LCD2_RGB_INT_1) but uses a slightly different filtering approach.</p></li>
+
+<li><p>27 (DV_QUALITY_LCD2_BGR_SUB_2) &mdash; High quality LCD filter LCD2-BGR-SUB-2. Same as quality level 23 (DV_QUALITY_LCD2_BGR_SUB_1) but uses a slightly different filtering approach.</p></li>
+
+<li><p>28 (DV_QUALITY_LCD2_BGR_INT_2) &mdash; High quality LCD filter LCD2-BGR-INT-2. Same as quality level 24 (DV_QUALITY_LCD2_BGR_INT_1) but uses a slightly different filtering approach.</p></li>
+
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>flag</em></p>
+</td><td>
+<p>Specifies action with respect to the Typesetter's bitmap cache. Currently supported values are:</p>
+<ul>
+<li><em>flag</em> = 0 &mdash; Default behavior for this function (bitmap cache will be cleared only if deemed necessary)</li>
+<li><em>flag</em> = 1 &mdash; Do not clear the bitmap cache</li>
+<li><em>flag</em> = 2 &mdash; Force clear the bitmap cache</li>
+</ul>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+
+<p>D-Type Solutions reserves the right to add more quality levels in the future and/or change the ones that are marked as experimental.</p>
+
+
+<h3>Example</h3>
+
+<p>The following examples show the effect of various quality levels on the same sample text string. The resulting illustrations are magnified 3 times so that subtle sub-pixel differences can be viewed more easily.</p>
+
+<p><strong><em>quality</em> = 0 (DV_QUALITY_MEDIUM)</strong><br />
+<img src="../images/q0.gif" width="662" height="74" vspace="3" alt="quality = 0 (DV_QUALITY_MEDIUM)" border="1" /><br />
+This illustration shows D-Type's lowest quality setting. This setting results in very fast rendering but not so smooth anti-aliasing. Note for example how curved segments in letters 's', 'a', 'p' and 'e' look a little bit jagged.</p>
+
+<p><strong><em>quality</em> = 1 (DV_QUALITY_HIGH)</strong><br />
+<img src="../images/q1.gif" width="662" height="74" vspace="3" alt="quality = 1 (DV_QUALITY_HIGH)" border="1" /><br />
+This quality level is similar the previous one except that anti-aliasing is smoother and more accurate. Look at the curved segments in letters 's', 'a', 'p' and 'e' again. Also, note the improved appearance of the letter 'x'.</p>
+
+<p><strong><em>quality</em> = 2 (DV_QUALITY_VERYHIGH)</strong><br />
+<img src="../images/q2.gif" width="662" height="74" vspace="3" alt="quality = 2 (DV_QUALITY_VERYHIGH)" border="1" /><br />
+This illustration is very similar the previous one except that anti-aliasing is set to the highest possible level. Most users will not notice a significant improvement in quality however. This is because the difference in quality between DV_QUALITY_HIGH and DV_QUALITY_VERYHIGH is usually very subtle and limited to minute sub-pixel color variations.</p>
+
+<p><strong><em>quality</em> = 3 (DV_QUALITY_DISPERSION_FILTER_1)</strong><br />
+<img src="../images/q3.gif" width="662" height="74" vspace="3" alt="quality = 3 (DV_QUALITY_DISPERSION_FILTER_1)" border="1" /><br />
+This illustration shows the effect of the dispersion filter #1. This dispersion filter spreads the energy (i.e. color intensity) of a single pixel to its neighbours. As a consequence, the hinting effect (if enabled by dtTypesetterSetHinting) is partially lost (i.e. the resulting edges in letters are not as sharp as in previous examples) but the overall color balance of the text as well as the inter-character positioning is improved. On some monitors this filter produces more naturally looking text (when viewed from some distance).</p>
+
+<p><strong><em>quality</em> = 4 (DV_QUALITY_DISPERSION_FILTER_2)</strong><br />
+<img src="../images/q4.gif" width="662" height="74" vspace="3" alt="quality = 4 (DV_QUALITY_DISPERSION_FILTER_2)" border="1" /><br />
+This illustration shows the effect of the dispersion filter #2. This filter is similar to the previous one, but produces even better looking color balance and inter-character positioning. Note for example the improved appearance of the letter 'm' when compared to the previous example. On most monitors this filter produces very naturally looking text, especially when viewed from some distance.</p>
+
+<p><strong><em>quality</em> = 5 (DV_QUALITY_HINT_FILTER_1)</strong><br />
+<img src="../images/q5.gif" width="662" height="74" vspace="3" alt="quality = 5 (DV_QUALITY_HINT_FILTER_1)" border="1" /><br />
+This illustration shows the effect of filter #3. This filter utilizes two techniques: 1) it partially disperses the energy (color intensity) of a single pixel to its neighbours (which then results in a more color balanced output) and 2) preserves the font hinting (grid-fitting) effect. Note that in this example the vertical edges of letters look sharper and have more consistent appearance than in the previous example (e.g. letters 'm', 'l', 't').</p>
+
+<p><strong><em>quality</em> = 6 (DV_QUALITY_HINT_FILTER_2)</strong><br />
+<img src="../images/q6.gif" width="662" height="74" vspace="3" alt="quality = 6 (DV_QUALITY_HINT_FILTER_2)" border="1" /><br />
+This filter is very similar to the previous one, but the dispersion factor is reduced by some 8%-10%. This puts more emphasis on the hinting effect. Note, for example, how gray pixels between the vertical edges in letters 'm' and 'p' look slightly softer and lighter.</p>
+
+<p><strong><em>quality</em> = 7 (DV_QUALITY_HINT_FILTER_3)</strong><br />
+<img src="../images/q7.gif" width="662" height="74" vspace="3" alt="quality = 7 (DV_QUALITY_HINT_FILTER_3)" border="1" /><br />
+This filter is very similar to the previous one, but the dispersion effect is reduced by another 8%-10% when compared to the previous example. Again, this puts more emphasis on the hinting effect.</p>
+
+<p><strong><em>quality</em> = 8 (DV_QUALITY_HINT_FILTER_4)</strong><br />
+<img src="../images/q8.gif" width="662" height="74" vspace="3" alt="quality = 8 (DV_QUALITY_HINT_FILTER_4)" border="1" /><br />
+This filter is very similar to the previous one, but the dispersion effect is reduced by another 8%-10% when compared to the previous example. This puts even more emphasis on the hinting effect. In fact, the resulting image now looks very similar to the one shown under DV_QUALITY_VERYHIGH.</p>
+
+<p><strong><em>quality</em> = 9 (DV_QUALITY_LCD_RGB_SUB_1)</strong><br />
+<img src="../images/q9.gif" width="662" height="74" vspace="3" alt="quality = 9 (DV_QUALITY_LCD_RGB_SUB_1)" border="1" /><br />
+This filter is optimized for LCD display systems with RGB supbixel order. It is somewhat similar to the DV_QUALITY_DISPERSION_FILTER_... family of filters, but note how the left and right edges of letters are colored a little bit (red on the left and blue on the right). This coloring effect improves the perceived accuracy of subpixel positioning on LCD screens with RGB supbixel order, which in turn produces very sharp and legible text on those screens.</p>
+
+<p><strong><em>quality</em> = 10 (DV_QUALITY_LCD_RGB_INT_1)</strong><br />
+<img src="../images/q10.gif" width="662" height="74" vspace="3" alt="quality = 10 (DV_QUALITY_LCD_RGB_INT_1)" border="1" /><br />
+This filter is optimized for LCD display systems with RGB supbixel order. It is somewhat similar to the DV_QUALITY_HINT_FILTER_... family of filters, but note how the left and right edges of letters are colored a little bit (red on the left and blue on the right). This coloring effect improves the perceived accuracy of subpixel positioning on LCD screens with RGB supbixel order, which in turn produces very sharp and legible text on those screens.</p>
+
+<p><strong><em>quality</em> = 11 (DV_QUALITY_LCD_BGR_SUB_1)</strong><br />
+<img src="../images/q11.gif" width="662" height="74" vspace="3" alt="quality = 11 (DV_QUALITY_LCD_BGR_SUB_1)" border="1" /><br />
+This filter is optimized for LCD display systems with BGR supbixel order. It is somewhat similar to the DV_QUALITY_DISPERSION_FILTER_... family of filters, but note how the left and right edges of letters are colored a little bit (blue on the left and red on the right). This coloring effect improves the perceived accuracy of subpixel positioning on LCD screens with BGR supbixel order, which in turn produces very sharp and legible text on those screens.</p>
+
+<p><strong><em>quality</em> = 12 (DV_QUALITY_LCD_BGR_INT_1)</strong><br />
+<img src="../images/q12.gif" width="662" height="74" vspace="3" alt="quality = 12 (DV_QUALITY_LCD_BGR_INT_1)" border="1" /><br />
+This filter is optimized for LCD display systems with BGR supbixel order. It is somewhat similar to the DV_QUALITY_HINT_FILTER_... family of filters, but note how the left and right edges of letters are colored a little bit (blue on the left and red on the right). This coloring effect improves the perceived accuracy of subpixel positioning on LCD screens with BGR supbixel order, which in turn produces very sharp and legible text on those screens.</p>
+
+<!--
+
+<p><strong><em>quality</em> = 13 (DV_QUALITY_LCD_RGB_SUB_2)</strong><br />
+<img src="../images/q13.gif" width="662" height="74" vspace="3" alt="quality = 13 (DV_QUALITY_LCD_RGB_SUB_2)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 14 (DV_QUALITY_LCD_RGB_INT_2)</strong><br />
+<img src="../images/q14.gif" width="662" height="74" vspace="3" alt="quality = 14 (DV_QUALITY_LCD_RGB_INT_2)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 15 (DV_QUALITY_LCD_BGR_SUB_2)</strong><br />
+<img src="../images/q15.gif" width="662" height="74" vspace="3" alt="quality = 15 (DV_QUALITY_LCD_BGR_SUB_2)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 16 (DV_QUALITY_LCD_BGR_INT_2)</strong><br />
+<img src="../images/q16.gif" width="662" height="74" vspace="3" alt="quality = 16 (DV_QUALITY_LCD_BGR_INT_2)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 17 (DV_QUALITY_LCD_RGB_SUB_3)</strong><br />
+<img src="../images/q17.gif" width="662" height="74" vspace="3" alt="quality = 17 (DV_QUALITY_LCD_RGB_SUB_3)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 18 (DV_QUALITY_LCD_RGB_INT_3)</strong><br />
+<img src="../images/q18.gif" width="662" height="74" vspace="3" alt="quality = 18 (DV_QUALITY_LCD_RGB_INT_3)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 19 (DV_QUALITY_LCD_BGR_SUB_3)</strong><br />
+<img src="../images/q19.gif" width="662" height="74" vspace="3" alt="quality = 19 (DV_QUALITY_LCD_BGR_SUB_3)" border="1" /><br /></p>
+
+<p><strong><em>quality</em> = 20 (DV_QUALITY_LCD_BGR_INT_3)</strong><br />
+<img src="../images/q20.gif" width="662" height="74" vspace="3" alt="quality = 20 (DV_QUALITY_LCD_BGR_INT_3)" border="1" /><br /></p>
+
+-->
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

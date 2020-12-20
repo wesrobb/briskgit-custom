@@ -1,0 +1,76 @@
+000|000|0|All Objects
+001|134|0|All PowerDoc Objects
+001|023|1|Non-visual PowerDoc Objects
+018|018|2|Pattern Fill Definition
+001|001|2|Surface Definition
+002|002|2|Shadow Definition
+003|003|2|Line Definition (Full)
+015|015|2|Line Definition (Standard)
+017|017|2|Line Definition (Minimal)
+012|012|2|Outline Definition
+020|020|2|Baseline
+021|021|2|Row Boundary
+023|023|2|Typographic Frame
+004|004|2|Typography (For Outline Fonts)
+014|014|2|Typography (For PowerFonts)
+005|005|2|Text Layout (Automatic)
+016|016|2|Text Layout (Manual)
+006|006|2|Text Ruler (Horizontal)
+007|007|2|Text Fragment
+022|022|2|Text Extras
+008|008|2|Bitmap Image Data
+009|009|2|PowerFont Record
+010|010|2|PowerFont
+011|011|2|Font Data
+013|013|2|Group Member
+019|019|2|Program
+101|134|1|Visual PowerDoc Objects
+107|107|2|Glyph
+108|108|2|Char
+109|109|2|PowerGlyph
+101|101|2|Text Line
+102|102|2|Text Arc
+130|130|2|Text Path
+103|103|2|Text Area
+127|127|2|Text Design
+104|104|2|Rich Text Line
+105|105|2|Rich Text Arc
+131|131|2|Rich Text Path
+106|106|2|Rich Text Area
+128|128|2|Rich Text Design
+111|111|2|Line
+116|116|2|Arc
+124|124|2|Polyline (also Bezier and B-Spline curve)
+129|129|2|Library Polyline
+112|112|2|Rectangle
+113|113|2|Circle/Ellipse
+114|114|2|True Circle/Ellipse
+115|115|2|Slice
+119|119|2|Custom Shape or Polygon
+110|110|2|Library Shape
+118|118|2|Grid
+117|117|2|Pattern
+120|120|2|Gradient
+125|125|2|Gradient (As Fast Rectangle)
+126|126|2|Gradient (As Inverter)
+121|121|2|Bitmap Image
+132|132|2|Library Bitmap Image
+123|123|2|Group
+122|122|2|Generic Object
+133|133|2|Background Surface
+134|134|2|System Guide
+201|310|0|Form Controls
+201|202|1|Non-visual Form Controls
+201|201|2|Control Configuration
+202|202|2|Listbox Column
+301|310|1|Visual Form Controls
+301|301|2|Button
+309|309|2|Rich Button
+302|302|2|Radio Button
+303|303|2|Check Box
+304|304|2|Text Box
+308|308|2|Rich Text Box
+305|305|2|List Box
+310|310|2|Rich List Box
+306|306|2|Horizontal Slider
+307|307|2|Vertical Slider

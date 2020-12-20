@@ -1,0 +1,535 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>FAQs: Text API</h1>
+
+
+<p><strong>Q-8-1. How is font fallback handled when displaying text (for example, CJK glyphs missing in a Roman font)?</strong></p>
+
+<p>For each Unicode script you can specify one or more fonts that are associated with it (in the order of importance/preference). See the <a href="../../tx/manual/fontmap.htm">fontmap.inf</a> file for details. D-Type will then use only those fonts when rendering characters of that script. The assumption is that the specified fonts have all the characters needed to properly render the associated Unicode script.</p>
+
+
+<p><strong>Q-8-2. Our application draws text within a text box which is measured in inches. How can we get D-Type Text Engine to use inches? My understanding is that we would have to determine our document units scale (e.g. 1 document unit = 1/72 inch), create a text flow area with the relevant document units and use <a href="../../tx/funcs/txTextSetFlow.htm">txTextSetFlow</a> to set the flow. We would then also scale the text font sizes by the document unit scale when styling or text. Is this correct?</strong></p>
+
+<p>Yes, this is one option. The other option is to use inches (perhaps multiplied by 100 or 1,000) as your internal document units and just apply the appropriate transform matrix (via <a href="../../tx/funcs/txTextSetTransformPlus.htm">txTextSetScale</a>) when drawing your text document to the memory surface. In other words, you are free to chose any unit you want as your base document unit. Then, when drawing, simply apply the right scale factor to display your text document on the screen.</p>
+
+
+<p><strong>Q-8-3. To scale the text to the required output size do we just pass the required pixel dimensions in our <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> when calling <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> or do we also have to call <a href="../../tx/funcs/txTextSetTransformPlus.htm">txTextSetScale</a>?</strong></p>
+
+<p>Setting the pixel dimensions in your <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> when calling <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> only sets the size of your memory surface in pixels. This does not scale the text. If your text is too big to fit within the memory surface, it will be clipped. If it's too small, you will have some empty space around it.</p>
+
+<p>To scale the text to the required output size you just call <a href="../../tx/funcs/txTextSetTransformPlus.htm">txTextSetScale</a>.</p>
+
+
+<p><strong>Q-8-4. If we want to draw text on top of an existing image we first need to have the image within the memory pointed to by <a href="../../dt/manual/structs.htm#DT_MDC">DT_MDC</a> and then pass 0 in the <em>Background</em> parameter of the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure. Is this correct?</strong></p>
+
+<p>Yes.</p>
+
+
+
+<p><strong>Q-8-5. Is it possible to detect if the text overflows the <a href="../../tx/funcs/txTextSetFlow.htm">txTextSetFlow</a> bounds?</strong></p>
+
+<p>Yes, this can be done in two different ways:</p>
+
+<p>a) Call the <a href="../../tx/funcs/txTextInfo.htm">txTextInfo</a> function. Make sure the <em>info_type</em> parameter is set to TX_INFO_TEXTAREA.</p>
+
+<p>b) Process the Frames, one by one. See the <a href="../workshop/pd_frames.htm">Text Flows and Frames</a> document for more information.</p>
+
+
+
+<p><strong>Q-8-10. We will be providing a PDF output option from our software. Is it possible to determine where each soft break occurs in the text?</strong></p>
+
+<p>Yes, this can be accomplished using the Frames concept mentioned above. This works the same as with Power Engine. See the <a href="../workshop/pd_frames.htm">Text Flows and Frames</a> document for more information.</p>
+
+
+
+<p><strong>Q-8-11. We need to make sure that the text in the PDF wraps at the same point as the text on-screen. Could we get the index of where characters wrap or maybe each line as it is wrapped so that we can replicate the exact same layout?</strong></p>
+
+<p>As mentioned above, if a transformation matrix is applied to a text document or a Text Area, the flow of text and how the text is wrapped within the Text Area itself will not change. Therefore your PDF output will match precisely the output that you see on the screen. However, this is assuming that you are using device-independent text layout. For more info, please see <a href="../workshop/text.htm#toc_01_01">Rendering Great Looking Text With D-Type &mdash; Device Dependent or Device Independent?</a>. Also, please review the description of the TargetDeviceID parameter under <a href="../../tx/manual/txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> on the D-Type Text Engine Core Structures page in the manual. Please note that this parameter is equivalent to the <a href="../../pd/index/pd_props.htm#pdDeviceMode">pdDeviceMode</a> property in Power Engine API (see e.g. the <a href="../../pd/objects/103.htm">Text Area</a> object in D-Type Power Engine Manual).</p>
+
+<p>In PDF you need to store each text line separately. To accomplish this, you can use the Frames to find out where each text line ends within a D-Type textarea. We suggest reviewing the <a href="../workshop/pd_frames.htm">Text Flows and Frames</a> document in the manual for more details. Additionally, The Row member of the <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> and <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> structure gives you the row index of each glyph rendered by D-Type Power Engine or D-Type Text Engine and, this way, allows you to figure out where your text lines end.</p>
+
+
+
+<p><strong>Q-8-12. If a transformation matrix is applied (for example to skew the text) does the <a href="../../pd/objects/103.htm">Text Area</a> dimensions change (i.e. bounding box) or does it just effect how the text is wrapped?</strong></p>
+
+<p>If a transformation matrix is applied to a text document or an entire Text Area, the bounding box of the Text Area will change, however, the flow of text and/or how the text is wrapped within the Text Area itself will not.</p>
+
+<p>It's pretty easy to compute the new bounding box: you simply have to transform all four corner points of the Text Area (you can use the formula presented in the Basic Data Types section of the manual, see the <a href="../../dt/manual/types.htm#DT_TM2X2">DT_TM2X2</a> or <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> data type) and then calculate the global X and Y minimum and maximum extent for the four transformed corner points.</p>
+
+
+
+<p><strong>Q-8-13. I understand that we can pass parameters to draw the selection when the text is rendered. However, is it possible to pass the color of the selection so that it matches with the operating system default?</strong></p>
+
+<p>Yes. See the <a href="../../tx/funcs/txTextSetHighlighter.htm">txTextSetHighlighter</a> function.</p>
+
+
+<!--
+<p><strong>Q-8-14. We would like to draw a flashing cursor at the text insert position. However, to do this we need to know the position and dimensions based on the selection point and text orientation. Are there any functions that would return this information for us?</strong></p>
+
+<p>This is again done using Frames. You are simply going to draw one edge (either left or right) of the Frame. If the writing direction is left-to-right you will draw the left edge; if it's right-to-left you will draw the right edge. The value of the <em>Misc</em> member of the <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> or <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT1">DT_PD_FRAME_FORMAT1</a> structure signals the direction: 0 means left-to-right and 1 means right-to-left.</p>
+-->
+
+<p><strong>Q-8-15. For our text editor to work we obviously need to know the cursor position. Luckily, the function <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> returns this for us. However, are the positions 0 are 1 based?</strong></p>
+
+<p>Yes, the positions are 0 based.</p>
+
+
+
+<p><strong>Q-8-16. If the cursor position has been set but no selection has been made does <em>first_char</em> and <em>last_char</em> contain the same value?</strong></p>
+
+<p>Correct, if the cursor position has been set but no selection has been made, the <em>first_char</em> and <em>last_char</em> contain the same value.</p>
+
+
+
+<p><strong>Q-8-17. Can you give me an example when <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> would return more than one entry?</strong></p>
+
+<p>This can happen when the user makes a rectangular (also called block) text selection or makes several non-contiguous selections. However, this multi-selection capability must be explicitly enabled by calling the <a href="../../tx/funcs/txTextSetParams.htm">txTextSetParams</a> function. If it is not enabled, <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> will never return a value larger than 1.</p>
+
+
+
+<p><strong>Q-8-23. Are we correct in thinking that we can create and format a text document and then call <a href="../../tx/funcs/txTextGetPowerDoc.htm">txTextGetPowerDoc</a> to create a PowerDoc from the text document?</strong></p>
+
+<p>Yes. Actually, you are not really creating a PowerDoc, you are simply obtaining your text document's internal reference to the PowerDoc that it already created (when you called <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a>). So <a href="../../tx/funcs/txTextGetPowerDoc.htm">txTextGetPowerDoc</a> is a simple "getter" function; it will return almost immediately.</p>
+
+
+
+<p><strong>Q-8-24. If so, will the PowerDoc have all of the styling/textflows/transformations that the text document has so that we can then call <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a> and <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> to get all of the positioning data we require or do we have to re-apply all of this once we have our PowerDoc?</strong></p>
+
+<p>Yes, the PowerDoc will have all of the styling/textflows/transformations that the text document has. You can subsequently call <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> and/or <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a>. You don't need to re-apply any styling/textflows/transformations once you have your PowerDoc. Also, if you call <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> to set your glyph callback function, you don't need to render your text document via <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a>; you can also render it via <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> and your glyph callback function will still be called correctly.</p>
+
+
+
+<p><strong>Q-8-25. If we are correct do we have to create a new PowerDoc if we modify the text document contents (i.e. after pasting new text in) or are the text document and PowerDoc linked?</strong></p>
+
+<p>Yes, the text document and PowerDoc are linked. There is no need to call <a href="../../tx/funcs/txTextGetPowerDoc.htm">txTextGetPowerDoc</a> after you modify the contents of the text document. But even if you did, this is not wrong &mdash; you will simply get the same pointer to the linked PowerDoc. And, again, <a href="../../tx/funcs/txTextGetPowerDoc.htm">txTextGetPowerDoc</a> will return almost immediately. For more information see Q-8-24 above.</p>
+
+
+
+<p><strong>Q-8-26. In our label printing software, we need a text editor that will shrink the size of text when the user runs out of room to type any more text. In a normal text editor, text would just scroll off the screen or wrap, but that is not the behavior we want. The main issue is that a label is a fixed size, so text needs to automatically shrink to fit the size of the label. And we want to do this in real time as the user types so they can get a sense of how small their text would look on the label. Is it possible to create a real time shrink-to-fit editor using D-Type Text Engine?</strong></p>
+
+<p>Yes, it is quite easy to create a real time shrink-to-fit editor with D-Type Text Engine. Here is one way this can be done:</p>
+
+<ul>
+<li><p>Step 1. Initialize D-Type Text Engine (<a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>)</p></li>
+
+<li><p>Step 2. Create a new text document (<a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a>)</p>
+
+	<ul>
+	<li>The textflow area (<a href="../../tx/manual/txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a>) should be very wide (e.g. 10000 units or more) so that your text never wraps</li>
+	<li>You MUST use device independent mode (TargetDeviceID = TX_LAY_FRAC or TX_LAY_WHOLE). Using device dependent modes (TX_LAY_DEVICE_A, TX_LAY_DEVICE_B, TX_LAY_MIXED_A or TX_LAY_MIXED_B) will not produce the right results.</li>
+	<li>See the document <a href="../workshop/text.htm">Rendering Great Looking Text With D-Type</a> for the difference between device dependent and device independent modes.</li>
+	</ul>
+</li>
+
+<li><p>Step 3. Set the text scale to 1.0 (<a href="../../tx/funcs/txTextSetTransformPlus.htm">txTextSetScale</a>)</p></li>
+
+<li><p>Step 4. Render text to a "DV_NULL" surface (<a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a>), asking the function to return the flows and frames that it generated during its text layout process. After that, process all the frames to get the global bounding box of your text</p>
+
+	<ul>
+	<li>See the document <a href="../workshop/pd_frames.htm">Text Flows and Frames</a> for information on how to do this. Although this document describes how to process frames returned by the pdDocDraw function, the approach is essentially the same for txTextDraw.</li>
+	</ul>
+</li>
+
+<li><p>Step 5. Now that you have the global bounding box of the text and its width (max_width), the horizontal stretch factor (stretch_factor) can be computed as:</p>
+
+<div class="box_field"><pre>
+stretch_factor = desired_width / max_width;
+</pre></div>
+
+<p>where desired_width is the width of your label to which your text must fit.</p>
+
+<p>Alternatively, you can compute this factor as:</p>
+
+<div class="box_field"><pre>
+stretch_factor = ((max_width &gt; desired_width) ? (desired_width / max_width) : 1.0);
+</pre></div>
+
+</li>
+
+<li><p>Step 6. Set the scale to use the stretch_factor computed in the previous step:</p>
+
+<div class="box_field"><pre>
+DT_TM2X2 stretch_scale = {stretch_factor, 0.0, 0.0, 1.0};
+txTextSetTransform(text_doc, stretch_scale);
+</pre></div>
+
+</li>
+
+<li><p>Step 7. Render text again (<a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a>), but this time to a real memory surface. Copy the memory surface to the screen or window.</p></li>
+
+<li><p>Step 8. Process events (i.e. mouse hits and keystrokes as the user types) and change your text accordingly.</p></li>
+
+<li><p>Step 9. Go to Step 3.</p></li>
+
+</ul>
+
+
+
+<p><strong>Q-8-27. Is it possible to have a blinking cursor in the editor using D-Type Text Engine? If so, what is the best approach to create the blinking cursor?</strong></p>
+
+<p>It's quite easy to create a blinking cursor with D-Type Text Engine. To turn the cursor off, call the <a href="../../tx/funcs/txTextSetHighlighter.htm">txTextSetHighlighter</a> function and change the color of the cursor to the same color as your background (or, better, make it transparent). Then call <a href="../../tx/funcs/txTextCommand.htm">txTextCommand</a> with the TX_CMD_CURRCHAR command and repaint the portion of the text area as indicated by the returned Extent parameter. To turn the cursor back on, call <a href="../../tx/funcs/txTextSetHighlighter.htm">txTextSetHighlighter</a> again and restore the original color of your cursor. Then call <a href="../../tx/funcs/txTextCommand.htm">txTextCommand</a> with the TX_CMD_CURRCHAR command and repaint the portion of the text area as indicated by the returned Extent parameter.</p>
+
+<p>Note: The TX_CMD_CURRCHAR command "moves" the cursor to the same position where it currently is.</p>
+
+<p><strong>Q-8-28. Is there a way to retrieve text rendered by D-Type Power Engine's pdDocDraw function or D-Type Text Engine's txTextDraw function in the form of outlines (polygons) that can be later rasterized using a general purpose polygon rasterizing function? If so, I would like to make sure that all the transformations (e.g. perspective, rotation etc.), text orientation, direction and other relevant text layout parameters are preserved, so that the bitmap generated using the rasterized polygons looks more or less the same as the bitmap generated using the pdDocDraw or txTextDraw functions.</strong></p>
+
+<p>Yes. First call the <a href="../../pd/funcs/pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> function to set up your own glyph callback function. Then, render the text using the <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a> or <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> function. Render to a null-surface i.e. instruct the engine to perform text layout operations only. To do this, set the <em>Flags</em> member of the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure to 1 and <em>Flows</em> member of the same structure to 10 or 20 (or, alternatively, 1 or 2). See the <a href="../workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../workshop/index.htm">Workshop</a> section for more details on this technique. Also, see the description of the <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a> and <a href="../../tx/funcs/txTextDraw.htm">txTextDraw</a> functions and the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure for more information.</p>
+
+<p>During rendering, for every glyph generated, your callback function will be called. You will receive the glyph index (the <em>glyph_index</em> parameter) and a pointer to the <a href="../../pd/manual/pdstructs.htm#DT_PD_ORIGIN">DT_PD_ORIGIN</a> structure (the <em>glyph_info</em> parameter). This structure looks as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Origin point */</span>&nbsp;
+typedef struct
+{
+    DT_SFRAC XA, YA; <span class="codecomment">/* Accurate origin point */</span>&nbsp;
+    DT_SFRAC XS, YS; <span class="codecomment">/* Snapped origin point */</span>&nbsp;
+    const <a href="../../pd/manual/pdstructs.htm#DT_PD_ORIGIN_EXTRA">DT_PD_ORIGIN_EXTRA</a>* Extra; <span class="codecomment">/* Optional extra info */</span>&nbsp;
+
+} DT_PD_ORIGIN;
+</pre>
+</div>
+
+
+<p>The additional pointer to the <a href="../../pd/manual/pdstructs.htm#DT_PD_ORIGIN_EXTRA">DT_PD_ORIGIN_EXTRA</a> structure (the <em>Extra</em> parameter) provides the information necessary to convert text to outlines (polygons). This structure looks as follows:</p>
+
+<div class="box_field">
+<pre>
+<span class="codecomment">/* Extra information */</span>&nbsp;
+typedef struct
+{
+    DT_UBYTE GlyphFlag;          <span class="codecomment">/* Flag to identify the type of glyph */</span>&nbsp;
+    DT_UBYTE GlyphMisc;          <span class="codecomment">/* Reserved for future use and presently set to 0 */</span>&nbsp;
+    DT_UWORD Reserved;           <span class="codecomment">/* Reserved for future use and presently set to 0 */</span>&nbsp;
+    const <a href="../../dt/manual/structs.htm#DT_TYPE_ATTRIBS">DT_TYPE_ATTRIBS</a>* Type; <span class="codecomment">/* Typographical attributes of a glyph or character (will be DV_NULL for PowerFonts) */</span>&nbsp;
+    <a href="../../dt/manual/types.htm#DT_TM3X3">DT_TM3X3</a> Transform;          <span class="codecomment">/* A 2D perspective (or projective) transformation matrix */</span>&nbsp;
+    DT_SLONG XOff, YOff;         <span class="codecomment">/* Offset in whole pixels */</span>&nbsp;
+
+} DT_PD_ORIGIN_EXTRA;
+
+</pre>
+</div>
+
+
+<p>With all this information, within your callback function, proceed as following:</p>
+
+<p>1) Retrieve the position of the glyph in pixels (returned in 24.8 signed fractional format) and immediately convert to floating point coordinates, <em>x_float</em> and <em>y_float</em>:</p>
+
+<div class="box_field"><pre>
+DT_FLOAT x_float = GlyphInfo-&gt;XS * 0.00390625;
+DT_FLOAT y_float = GlyphInfo-&gt;YS * 0.00390625;
+</pre></div>
+
+<p>2) Get glyph's typographical attributes (<em>type</em>), 2D perspective (or projective) transformation matrix (<em>transform</em>) and additional offset in whole pixels (<em>xoff</em> and <em>yoff</em>):</p>
+
+<div class="box_field"><pre>
+const DT_TYPE_ATTRIBS* type = GlyphInfo-&gt;Extra-&gt;Type;
+DT_TM3X3 transform = GlyphInfo-&gt;Extra-&gt;Transform;
+DT_SLONG xoff = GlyphInfo-&gt;Extra-&gt;XOff;
+DT_SLONG yoff = GlyphInfo-&gt;Extra-&gt;YOff;
+</pre></div>
+
+<p>3) Obtain D-Type Standard Engine instance, <em>dtype_engine</em>. If using D-Type Power Engine, this can be done as follows:</p>
+
+<div class="box_field"><pre>
+<a href="../../pd/funcs/pdEngineGetDTypeEngInst.htm">pdEngineGetDTypeEngInst</a>(power_engine, &amp;dtype_engine);
+</pre></div>
+
+<p>If using D-Type Text Engine, the same can be done as follows:</p>
+
+<div class="box_field"><pre>
+<a href="../../tx/funcs/txEngineGetDTypeEngInst.htm">txEngineGetDTypeEngInst</a>(text_engine, &amp;dtype_engine);
+</pre></div>
+
+
+<p>4) Set glyph's typographical attributes to D-Type Standard Engine's Typesetter:</p>
+
+<div class="box_field"><pre>
+if (type==DV_NULL) return 1; /* this is not an outline font, so exit the glyph callback function */
+
+<a href="../../dt/funcs/dtTypesetterSetTypeAttribs.htm">dtTypesetterSetTypeAttribs</a>(dtype_engine, type, 0);
+</pre></div>
+
+<p>At the same time disable hinting and use fractional positioning for maximum precision:</p>
+
+<div class="box_field"><pre>
+<a href="../../dt/funcs/dtTypesetterSetHinting.htm">dtTypesetterSetHinting</a>(dtype_engine, DV_HINTING_XOFF_YOFF, 0);
+<a href="../../dt/funcs/dtTypesetterSetPositioning.htm">dtTypesetterSetPositioning</a>(dtype_engine, DV_POSITIONING_FRACX_FRACY, 0);
+</pre></div>
+
+<p>5) Retrieve glyph's scaled outline description using D-Type Standard Engine's <a href="../../dt/funcs/dtGlyphDoTransform.htm">dtGlyphDoTransform</a> function:</p>
+
+<div class="box_field"><pre>
+#define MAXPOINTS 2048
+DT_UBYTE ct[MAXPOINTS];
+DT_FLOAT cx_float[MAXPOINTS];
+DT_FLOAT cy_float[MAXPOINTS];
+DT_BMP bmp;
+
+DT_SLONG n = <a href="../../dt/funcs/dtGlyphDoTransform.htm">dtGlyphDoTransform</a>(dtype_engine, glyph_index, 0, 0, 1, MAXPOINTS, ct, cx_float, cy_float, &amp;bmp);
+
+if (n &lt; 0 || n &gt; MAXPOINTS) return 1; /* some error (e.g. MAXPOINTS too small), so exit the glyph callback function */
+</pre></div>
+
+<p>6) Perform final calculations. Transform the glyph's scaled outline using the 2D perspective (or projective) transformation matrix to the final screen floating point coordinates:</p>
+
+<div class="box_field"><pre>
+DT_FLOAT bmp_x_float = bmp.x + x_float;
+DT_FLOAT bmp_y_float = bmp.y - y_float;
+
+for (DT_SLONG i = 0; i &lt; n; i++)
+{
+	cx_float[i] += bmp_x_float;
+	cy_float[i] -= bmp_y_float;
+	<a href="text.htm#TransformPoint">TransformPoint</a>(transform, cx[i]_float, cy[i]_float, &amp;cx_float[i], &amp;cy_float[i]);
+}
+</pre></div>
+
+<p>where <a href="text.htm#TransformPoint">TransformPoint</a> is your own function, defined as follows:</p>
+
+<div class="box_field" id="TransformPoint"><pre>
+void TransformPoint(DT_TM3X3 tm, DT_FLOAT x, DT_FLOAT y, DT_FLOAT* xt, DT_FLOAT* yt)
+{
+	DT_FLOAT wi = 1 / (tm[2][0] * x + tm[2][1] * y + tm[2][2]);
+	*xt = (x * tm[0][0] + y * tm[0][1] + tm[0][2]) * wi;
+	*yt = (x * tm[1][0] + y * tm[1][1] + tm[1][2]) * wi;
+}
+</pre></div>
+
+<p>7) Finally, set the style (color) and render the glyph as a polygon using the <a href="../../dt/manual/shapes.htm">dtsPolyFilled</a> (or <a href="../../dt/manual/shapes.htm">dtsPolyDashed</a>) function from dtshapes.cpp:</p>
+
+<div class="box_field"><pre>
+DT_STYLE_ATTRIBS style = {{0, 0}, {90, 40, 180, 0}, 0, DV_NULL};
+
+<a href="../../dt/funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a>(dtype_engine, &amp;style, 0);
+<a href="../../dt/manual/shapes.htm">dtsPolyFilled</a>(dtype_engine, xoff, yoff, ct, cx_float, cy_float, n, DV_NULL, DV_NULL);
+</pre></div>
+
+<p>Note: The <a href="../../dt/manual/shapes.htm">dtsPolyFilled</a> function is declared in <a href="../../dt/manual/shapes.htm">dtshapes.h</a> as follows:</p>
+
+<div class="box_field"><pre>
+DT_SWORD <a href="../../dt/manual/shapes.htm">dtsPolyFilled</a>(DT_DTENGINE engine, DT_SLONG refx, DT_SLONG refy, const DT_UBYTE ct[], const DT_FLOAT cx[], const DT_FLOAT cy[], DT_SLONG n, const DT_RECT_SLONG* bound_box, const DT_TM2X2 TM);
+</pre></div>
+
+
+
+<p><strong>Q-8-29. What is the significance of the fontmap.inf file? How is this file used? Is it possible to provide this file from memory (as with dtype.inf)? And what should the content of this file be? Where can I find documentation about this file?</strong></p>
+
+<p>The fontmap.inf file assigns suitable fonts to various Unicode scripts defined within the Unicode Standard. This is necessary as there are very few fonts on the market that support all the characters for all the Unicode scripts. The documentation on this file is within the file itself and the description of the <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a> function.</p>
+
+<div class="box_field"><pre>
+# D-Type Font and Attribute Mapping Table for Unicode Scripts
+#
+# This font and attribute mapping table is used when D-Type Text Engine
+# reads and processes plain Unicode text. The purpose of this table is
+# to assign suitable fonts and appropriate attributes to various Unicode
+# scripts defined within the Unicode Standard.
+#
+# The mapping table consists of three pipe separated columns:
+#
+# * 1st column - Unicode script
+# * 2nd column - Associated attribute set
+# * 3rd column - Associated font
+#
+# Each Unicode script may have one or more associated attribute sets
+# and fonts. If a Unicode script has more than one associated attribute
+# set and/or font, it will have multiple rows in the mapping table.
+# Only one attribute set and font combination per row can be specified.
+# Attribute sets and fonts are listed in the order of preference.
+#
+# Within the first column, the SCRIPTCODE: instruction specifies a
+# Unicode script using a 4 character script code (e.g. latn, cyrl,
+# arab, kana etc). See ISO 15924 Code Lists for a list of available
+# codes. Script code '0000' is a special code which means any script.
+# Fonts associated with this code are usually fallback fonts, i.e.
+# fonts that are used in the absence of a more suitable alternative.
+# For this reason, fonts associated with script code '0000' should be
+# listed at the very end of the mapping table. Ideally, fallback fonts
+# should be large Unicode fonts such as Arial Unicode MS or Code2000
+# so they can be used to represent as many Unicode characters and
+# scrips as possible.
+#
+# Within the second column, the ATTRIBS: instruction is used to specify
+# the associated attribute set. This set is a comma separated list of
+# attribute keyword/value pairs. Currently two attribute keywords are
+# supported: ro (relative orientation) and ts (text shaping). The ro
+# attribute keyword corresponds to the TX_ATTR_ORIENTATION attribute
+# identifier in D-Type Text Engine and pdRelativeAttribute property in
+# D-Type Power Engine. This attribute allows applications to set the
+# most appropriate relative text orientation (portrait/landscape) and
+# baseline (e.g. default, shifted) when the corresponding script and
+# font are used in horizontal and/or vertical layout. The ts attribute
+# keyword corresponds to the TX_ATTR_SHAPING attribute identifier in
+# D-Type Text Engine and pdTextShaping property in D-Type Power Engine.
+# When required, this attribute allows applications to explicitly set
+# the text shaping method for the corresponding script and font. If
+# this attribute is not specified, the shaping method will be set
+# automatically based on the Unicode script.
+#
+# Example:
+#
+#   ATTRIBS:ro=8,ts=10025
+#
+# Within the third column, the associated font can be identified by name
+# (DV_SVAL_ASC_FONTNAME) or D-Type's Unique Font Identifier (fuid).
+# To do so, use one of the following four instructions:
+#
+# * FONTFUID: - To identify the font by D-Type's Unique Font Identifier
+#               (fuid). This instruction also performs a basic validity
+#               check on the font file and attempts to activate it.
+#               As a result, non-accessible, invalid and/or corrupt
+#               fonts are skipped.
+#
+# * FASTFUID: - Same as FONTFUID but noticeably faster since it does not
+#               perform any validity check on the font file and does not
+#               attempt to activate it. As a result, non-accessible,
+#               invalid and/or corrupt fonts are not skipped.
+#
+# * FONTNAME: - To identify the font by name. This instruction also
+#               performs a basic validity check on the font file and
+#               attempts to activate it. As a result, non-accessible,
+#               invalid and/or corrupt fonts are skipped.
+#               This instruction is slower than FONTFUID and FASTFUID
+#               since it must access the font file and parse its header
+#               to extract the font name.
+#
+# * FASTNAME: - Same as FONTNAME but does not perform any validity check
+#               on the font and does not attempt to activate it. As a
+#               result, non-accessible, invalid and/or corrupt fonts are
+#               not skipped.
+#
+# Additional notes:
+#
+# * It is your responsibility to ensure that the fonts listed in this
+#   mapping table have a sufficient number of glyphs to adequately
+#   represent all of the Unicode scripts they are associated with.
+#   Do not associate fonts with the Unicode scripts they are not
+#   designed to support.
+#
+# * For more information on Unicode Scripts and script codes, see
+#   D-Type Text Layout Extension Manual.
+#
+# * For more information on D-Type's Unique Font Identifiers (fuid),
+#   font names and other font topics, see D-Type Standard Engine Manual.
+#
+# * For more information on relative orientation and text shaping,
+#   see D-Type Power Engine Manual and D-Type Text Engine Manual.
+#
+</pre></div>
+
+<p>This file is already configured to support some of the frequently used Unicode scripts, however developers can alter it to better fit their needs.</p>
+
+<p>As with all D-Type files (streams), this file can be loaded from memory. In fact, the manual recommends this. Here is what the description of the <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a> function says about loading the font map file from memory:</p>
+
+<p><em>For best performance, the font map file should reside in memory. The <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure then describes a memory based stream. Memory based streams can be processed more quickly than file based streams. See the <a href="../../dt/manual/structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a> macro and the <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> section for more information on memory based streams.</em></p>
+
+<p>Loading this file from memory is no different than loading plain text from memory when calling <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a>. For an example, please see one of D-Type sample programs (e.g. the example_text_animation example; see /examples/example_text_animation/classes/engine.cpp).</p>
+
+
+
+<p><strong>Q-8-30. If I start my application without a fontmap.inf file nothing is rendered when I call txTextDraw(). Why is that the case? Can you tell me more about the fontmap.inf file.</strong></p>
+
+<p>The font map file is simply a list (or database) of known and available (or likely available) fonts that can be used as the default fonts when D-Type Engine renders various Unicode scripts. The term "default" in this context means that the user did not specify any font, just provided plain text. In that case, D-Type Text Engine chooses the most suitable font for the user based on the fontmap.inf file. This happens when the <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a> is called (and only then). The intention is to choose the font that has the characters needed to properly display the script in question.</p>
+
+<p>If the end-user chooses a specific font, then this is a different situation that is not related to the fontmap.inf file. In that case, the chosen font is applied to the selected text by calling <a href="../../tx/funcs/txTextSetAttribs.htm">txTextSetAttribs</a>. This font will override any font that the engine previously selected as the default font. When <a href="../../tx/funcs/txTextSetAttribs.htm">txTextSetAttribs</a> is called, D-Type Text Engine does not read the fontmap.inf file in any way. The intention here is to allow the end-user to choose a font that better visually represents his/her final design (but still has the characters needed to properly display his/her script), in other words, override the default font. The assumption is that the end-user knows that the chosen font is the right one for his/her particular script. If not, the text may not display or may appear as a series of boxes, depending on the engine parameters. Your application may optionally check for this and warn the user if the chosen font does not contain some of the glyphs needed to display the selected text. This can be accomplished by calling the <a href="../../dt/funcs/dtFontGetGlyphIndex.htm">dtFontGetGlyphIndex</a>, but again, this is merely an optional step.</p>
+
+<p>In conclusion, applications should never start with an empty fontmap.inf file (otherwise <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a> will not be able to get any fonts needed to later display the text). At minimum, the 33 entries provided in the fontmap.inf file that ships with D-Type Engine are needed (in the future additional ones might be added). When shipping the final application, it is also a good idea to provide some or all of the fonts referenced in that file, if possible. This way application developers can be sure that the Unicode scripts that they intend to support will always be displayed properly on the end-user's system. If it's not possible to ship the fonts, then the fontmap.inf file should at least have the entries for the fonts that are likely going to be installed on the end-user's system (e.g. Arial, Arial Unicode, Times, Code 2000 etc.).</p>
+
+
+
+<p><strong>Q-8-31. How should I find the first and last character position of all paragraphs that are intersecting a given selection? To be more precise I would like to get indexes of starting and ending position of each intersected paragraph since I would like to use <a href="../../tx/funcs/txTextSetAttribs.htm">txTextSetAttribs</a> for each paragraph and there I need <em>first_char</em> and <em>last_char</em>.</strong></p>
+
+<p>There are several ways to get this information. Below are presented two possible and quite different solutions.</p>
+
+<p>Please note that D-Type Text Engine can be configured to support multiple text selections. In the manual, please see the <a href="../../tx/funcs/txTextSetParams.htm">txTextSetParams</a> function, the <a href="../../tx/manual/txstructs1.htm#DT_TX_DOC_PARAMS">DT_TX_DOC_PARAMS</a> structure, the <em>EnableBits</em> member, Bit 1. This should be kept in mind when implementing one of the solutions below.</p>
+
+<p><u>Solution A:</u></p>
+
+<p>This solution is based on using the <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> function.</p>
+
+<ol>
+
+<li><p>Use the <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> function to get the list of first and last character positions of your active text selection(s). If the engine is configured to disable multiple text sections, then you will only get one first and one last character position (<em>first_char</em> and <em>last_char</em>), so the problem is simpler.</p></li>
+
+<li><p>So now you know the boundaries of your text selection. The second piece of information comes from the fact that D-Type Text Engine makes paragraph breaks when it encounters the carriage return character (LF or 10 decimal or CR or 13 decimal), just like any other text layout application.</p></li>
+
+<li><p>Parse your text to find the position of all your paragraphs (LF/CR character) in it. Store these positions in a temporary array (e.g. <em>temp_paragraph_array</em>).</p></li>
+
+<li><p>Intersect the results obtained in step 1 with the results obtained in step 3:</p>
+<p>
+ a) The largest value in your <em>temp_paragraph_array</em> array that is before <em>first_char</em> is your first paragraph position<br />
+ b) The smallest value in your <em>temp_paragraph_array</em> array that is after <em>last_char</em> is your last paragraph position<br />
+ c) Any other values in your <em>temp_paragraph_array</em> array between the values obtained in a) and b) are your remaining paragraph positions<br />
+</p></li>
+
+</ol>
+
+<p><u>Solution B:</u></p>
+
+<p>This solution is based on using the <a href="../../tx/funcs/txTextCommand.htm">txTextCommand</a> and <a href="../../tx/funcs/txTextInfo.htm">txTextInfo</a> function.</p>
+
+<ol>
+
+<li><p>Use the <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> function to get the list of first and last character positions of your active text selection(s). If the engine is configured to disable multiple text sections, then you will only get one first and one last character position (<em>first_char</em> and <em>last_char</em>), so the problem is simpler.</p></li>
+
+<li><p>Place the cursor at position <em>first_char</em> obtained in step 1. To do so, call <a href="../../tx/funcs/txTextSetSelect.htm">txTextSetSelect</a> and set a single text selection that has its first and last character position both equal <em>first_char</em> from step 1. Note: In D-Type Text Engine API, the cursor is a single text selection with equal start and end position (i.e. the length of the selected character range is zero).</p>
+
+<p>So now you have a cursor at the beginning of what used to be your text selection.</p></li>
+
+<li><p>Call <a href="../../tx/funcs/txTextCommand.htm">txTextCommand</a> and set <em>command</em> to TX_CMD_PREVPARAGRAPH. This will position the cursor right after the end of the previous paragraph, i.e. the start of the current paragraph. Call the <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> function or, better, <a href="../../tx/funcs/txTextInfo.htm">txTextInfo</a> (with <em>info_type</em> set to TX_INFO_CURSOR) to get this cursor position. This is the position of your first paragraph.</p></li>
+
+<li><p>Call <a href="../../tx/funcs/txTextCommand.htm">txTextCommand</a> again, but this time set <em>command</em> to TX_CMD_NEXTPARAGRAPH. This will position the cursor right before the start of the next paragraph, i.e. the end of the current paragraph. Call the <a href="../../tx/funcs/txTextGetSelect.htm">txTextGetSelect</a> function or, better, <a href="../../tx/funcs/txTextInfo.htm">txTextInfo</a> (with <em>info_type</em> set to TX_INFO_CURSOR) to get the cursor position. This is the position of your next paragraph.</p></li>
+
+<li><p>Keep performing step 4 until the cursor position returned by <a href="../../tx/funcs/txTextInfo.htm">txTextInfo</a> exceeds <em>last_char</em> obtained in step 1. When this process is over, you have all the relevant paragraph positions.</p></li>
+
+</ol>
+
+
+
+<p><strong>Q-8-31. How can we make a full copy of the text document?</strong></p>
+
+<p>The process is much like using a text processing application to copy the contents of one document to another. Let's assume that <em>text_doc_source</em> is your source text document, i.e. the document you are copying from.</p>
+
+<p>Then follow these steps:</p>
+
+<ol>
+
+<li><p>Make a new empty text document using  <a href="../../tx/funcs/txTextIniViaStream.htm">txTextIniViaStream</a> or <a href="../../tx/funcs/txTextIniViaBuffer.htm">txTextIniViaBuffer</a>. Let's call this document <em>text_doc_copy</em>:</p>
+
+<div class="box_field"><pre>
+txTextIniViaStream(&amp;text_doc_copy, ...
+</pre></div></li>
+
+
+<li><p>Then use the <a href="../../tx/funcs/txTextPasteViaDoc.htm">txTextPasteViaDoc</a> function to paste the entire contents of the <em>text_doc_source</em> document to the newly created <em>text_doc_copy</em> document:</p>
+
+<div class="box_field"><pre>
+txTextPasteViaDoc(text_doc_copy,  text_doc_source, 0);
+</pre></div>
+
+<p>Note: Prior to doing this, you may need to ensure that the cursor is located at position 0 in the destination <em>text_doc_copy</em> document. You could call txTextCommand(text_doc_copy, TX_CMD_SELECTTEXT, DV_NULL, 0) to accomplish this.</p></li>
+
+<li><p>Use the <em>text_doc_copy</em> document as any other text document. When you no longer need it, destroy it using txTextExt(text_doc_copy). After this, your original <em>text_doc_source</em> document is still available.</p></li>
+
+</ol>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../manual/index.htm"><img src="../images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

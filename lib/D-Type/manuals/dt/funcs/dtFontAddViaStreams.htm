@@ -1,0 +1,123 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontAddViaStreams</h2><div class="box_prototype"><strong>
+DT_ID_SWORD dtFontAddViaStreams(DT_DTENGINE engine, DT_ID_SWORD font_format_id, const DT_CHAR* fuid, DT_SWORD fcnr, DT_ID_SWORD cmap_id, DT_ID_UBYTE caching, DT_ID_UBYTE hinting, DT_UBYTE arr_size, const DT_STREAM_DESC* sd[])</strong></div><br /><strong>Short Description:</strong> <em>Add new font to Font Catalog via a set of streams and return its font index</em><br /><br />
+
+<p>This function adds a font from a set of font files to the Font Catalog of the specified Standard Engine instance. The function then returns a font index of the newly added font. This index uniquely identifies the font in the Font Catalog.</p>
+
+<p>This function is very similar to <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>. However, this function is more versatile because it allows multiple input files to serve as the data source for the font that is being added to the Font Catalog. Thus, this function is particularly suitable for font formats that supply additional (and usually optional) font data via additional file(s). A typical example of such a format is Type 1. This format, in addition to the main font file, may include an optional font metrics file that contains additional font information (such as global and individual character metrics, kerning, information about writing direction etc). Currently, Type 1 is the only supported font format that consists of multiple input files. In the future, however, this function may be used for other font formats that consist of multiple input files.</p>
+
+<p>The order in which input files are specified when calling this function is extremely important. The first input file is always the font file that supplies vital font data and is called the <em>main input file</em>. The main input file for each font format is defined in the <a href="../manual/fclasses.htm">D-Type Font Driver Classes</a> section of this document. This file is mandatory and cannot be omitted. Any additional font files (if applicable) must follow. Their order and purpose is format specific and is also described in the <a href="../manual/fclasses.htm">D-Type Font Driver Classes</a> section of this document. This section also explains how D-Type Font Engine (or more precisely its font driver classes) utilize various supported input files.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_format_id</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>fuid</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a></p>
+</td></tr>
+
+<tr><td>
+<p><em>fcnr</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>cmap_id</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>caching</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>hinting</em></p>
+</td><td>
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>arr_size</em></p>
+</td><td>
+<p>The size of the <em>file_name</em> array. This parameters tells how many input files will serve as the data source for the font that is being added to the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>An array of valid pointers to the <a href="../manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure. Each structure supplies the location of the corresponding input file. The first input file supplies vital font data and is called the <em>main input file</em>; any additional input files (if applicable) are format specific and must follow in a predetermined order. See <a href="../manual/fclasses.htm">D-Type Font Driver Classes</a> for details.</p>
+
+<p><strong>The <em>sd</em> array must supply font locations that are valid at least until the corresponding font is permanently removed from the Font Catalog. Remember that D-Type Font Engine will attempt to access your font at various stages during the execution of your application. If some of the <em>sd</em> structures supply a relative file path and your applications changes the current working directory during its execution, you will likely make that font inaccessible to D-Type Font Engine. As a result, your font or some of its glyphs may not render, you may not be able to retrieve various font information etc.</strong></p>
+
+<p><strong>Once again, please note that relative paths are relative. They are relative to your current working directory. Therefore, if the current working directory changes at some point during the execution of your application, your paths may become invalid. Also, see <a href="../manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> and our <a href="../manual/fpaths.htm">notes regarding file based streams</a>.</strong></p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+
+
+<h3>Comments</h3>
+
+<p>See <a href="dtFontAddViaStream.htm">dtFontAddViaStream</a>.</p>
+
+
+<h3>Example</h3>
+
+<p>This example shows how to add a new font to the Font Catalog using the <a href="dtFontAddViaStreams.htm">dtFontAddViaStreams</a> function.</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_FILE(sd0, "../../fonts/pfb/HSansMM.pfb");
+DT_STREAM_FILE(sd1, "../../fonts/pfb/HSansMM.pfa");
+
+const DT_STREAM_DESC* sd[2] = {&amp;sd0, &amp;sd1};
+font_index = dtFontAddViaStreams(engine, DV_FONT_TYPE1_ADOBE, DV_NULL, 0, -1, 0, 1, 2, sd);
+</pre>
+</div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

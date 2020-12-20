@@ -1,0 +1,10 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Inverter");{/strong}
+
+/* Properties for object 1 */
+{strong}pdPropAdd(pd, obj[0], pdDh, "400", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[0], pdDw, "400", PD_LONG_SIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[0], 0, 50, 50, 0, 0, 0, pdDrawGradient, DV_NULL);{/strong}

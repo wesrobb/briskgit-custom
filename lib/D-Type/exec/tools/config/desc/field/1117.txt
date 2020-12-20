@@ -1,0 +1,15 @@
+Index of the hyphenation dictionary (1 byte) followed by one reserved byte (must be zero) followed by an array of hyphen bits (variable length, one bit for each glyph or character).
+
+This property makes it possible to apply language specific hyphenation rules to arbitrary text selections. This typically results in improved text wrapping behaviour, especially when text is laid out in narrow columns. This is useful in high-end text layout applications that require more professional justification of text lines.
+
+Hyphenation dictionaries are set up via dtype.inf. Each hyphenation dictionary is a file (steam) that contains specific hyphenation instructions and hyphenation patterns for the supported target language. The index of the hyphenation dictionary (first byte) simply references one of these files (streams). For example, index 1 references the first hyphenation dictionary set up via dtype.inf (which is the English hyphenation dictionary), index 2 references the second one (which is the French hyphenation dictionary) and so on. Consequently, a positive index enables automatic hyphenation while the index 0 disables the hyphenation (in which case no additional bytes are needed).
+
+D-Type Power Engine by itself does not use the index of the hyphenation dictionary as parsing the hyphenation instructions and patterns in real time can be slow. The purpose of this index is to allow text processing clients to re-hyphenate text as the user makes changes to it and store processed hyphenation results in the array of hyphen bits. D-Type Power Engine then reads the array of hyphen bits to extract these processed hyphenation results. The array of hyphen bits tells D-Type Power Engine whether a hyphen is allowed after the glyph or character in the corresponding text fragment. If a bit in the array of hyphen bits is set (1), a hyphen is allowed after the corresponding glyph/character; if unset (0) then the hyphen is not allowed after the corresponding glyph/character. Any trailing unset bits can be omitted. This means that the number of bits in the array of hyphen bits can be less than the number of glyphs/characters in the corresponding text fragment.
+
+{strong}Sample values:{/strong}
+
+0 = Disable hyphenation
+
+1, 0, 12, 10, 128, 136 = Enable automatic hyphenation; use the English hyphenation dictionary to hyphenate text. The array 12, 10, 128, 136 (00001100, 00001010, 10000000, 10001000) means that a hyphen can be inserted after the 5th, 6th, 13th, 15th, 17th, 25th and 29th character in the corresponding text fragment.
+
+2, 0, 33, 112, 128 = Enable automatic hyphenation; use the French hyphenation dictionary to hyphenate text. The array 33, 112, 128 (00100001, 01110000, 10000000) means that a hyphen can be inserted after the 3rd, 8th, 10th, 11th, 12th and 17th character in the corresponding text fragment.

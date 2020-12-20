@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>Function Prototypes</h2>
+
+
+<h3>Power Engine</h3>
+
+<p><strong>Engine Construction and Destruction</strong></p>
+	<ul>
+	<li><a href="pdEngineIniViaStream.htm">pdEngineIniViaStream</a> &mdash; Create and initialize D-Type Power Engine - via stream</li>
+	<li><a href="pdEngineExt.htm">pdEngineExt</a> &mdash; Deinitialize and destroy D-Type Power Engine</li>
+	</ul>
+
+<p><strong>Engine Info</strong></p>
+	<ul>
+	<li><a href="pdEngineGetVersion.htm">pdEngineGetVersion</a> &mdash; Get D-Type Power Engine version</li>
+	<li><a href="pdEngineGetDTypeEngInst.htm">pdEngineGetDTypeEngInst</a> &mdash; Get associated D-Type Standard Engine Instance</li>
+	<li><a href="pdEngineGetParams.htm">pdEngineGetParams</a> &mdash; Get Engine parameters</li>
+	<li><a href="pdEngineSetParams.htm">pdEngineSetParams</a> &mdash; Set Engine parameters</li>
+	</ul>
+
+<h3>PowerDoc Document</h3>
+
+<p><strong>Document Construction, Manipulation and Destruction</strong></p>
+	<ul>
+	<li><a href="pdDocIni.htm">pdDocIni</a> &mdash; Create and initialize document</li>
+	<li><a href="pdDocAppend.htm">pdDocAppend</a> &mdash; Append another document</li>
+	<li><a href="pdDocAppendFromStream.htm">pdDocAppendFromStream</a> &mdash; Append document from stream</li>
+	<li><a href="pdDocSaveToStream.htm">pdDocSaveToStream</a> &mdash; Save document to stream</li>
+	<li><a href="pdDocErase.htm">pdDocErase</a> &mdash; Erase document</li>
+	<li><a href="pdDocExt.htm">pdDocExt</a> &mdash; Deinitialize and destroy document</li>
+	</ul>
+
+<p><strong>Setting Up Document Parameters</strong></p>
+	<ul>
+	<li><a href="pdDocSetParams.htm">pdDocSetParams</a> &mdash; Set document parameters</li>
+	<li><a href="pdDocSetFilter.htm">pdDocSetFilter</a> &mdash; Set visibility filter</li>
+	<li><a href="pdDocSetInvert.htm">pdDocSetInvert</a> &mdash; Set the parameters of the inversion effect</li>
+	<li><a href="pdDocSetTransformPlus.htm">pdDocSetTransformPlus</a> &mdash; Set document's transform - 3X3 transformation matrix</li>
+	<li><a href="pdDocSetTransformPlus.htm">pdDocSetTransform</a> &mdash; Set document's transform - 2X2 transformation matrix</li>
+	<li><a href="pdDocSetNumericValue.htm">pdDocSetNumericValue</a> &mdash; Set document's numeric value</li>
+	<li><a href="pdDocSetTransformPlus.htm">pdDocSetScale</a> &mdash; Set document's transform - simple scale</li>
+	<li><a href="pdDocSetPropCallback.htm">pdDocSetPropCallback</a> &mdash; Set document's property callback function</li>
+	<li><a href="pdDocSetDrawCallback.htm">pdDocSetDrawCallback</a> &mdash; Set document's draw callback function</li>
+	<li><a href="pdDocSetGlyphCallback.htm">pdDocSetGlyphCallback</a> &mdash; Set document's glyph callback function - L</li>
+	<li><a href="pdDocSetVectorCallback.htm">pdDocSetVectorCallback</a> &mdash; Set document's vector callback function - L</li>
+	<li><a href="pdDocSetErrorCallback.htm">pdDocSetErrorCallback</a> &mdash; Set document's callback function to be called if critical errors occur while rendering objects</li>
+	</ul>
+
+<p><strong>Getting Document Parameters</strong></p>
+	<ul>
+	<li><a href="pdDocGetPowerEngInst.htm">pdDocGetPowerEngInst</a> &mdash; Get associated Power Engine Instance</li>
+	<li><a href="pdDocGetSize.htm">pdDocGetSize</a> &mdash; Get document size in bytes</li>
+	<li><a href="pdDocGetParams.htm">pdDocGetParams</a> &mdash; Get document parameters</li>
+	<li><a href="pdDocGetFilter.htm">pdDocGetFilter</a> &mdash; Get visibility filter</li>
+	<li><a href="pdDocGetInvert.htm">pdDocGetInvert</a> &mdash; Get the parameters of the inversion effect</li>
+	<li><a href="pdDocGetTransformPlus.htm">pdDocGetTransformPlus</a> &mdash; Get document's transform - 3X3 transformation matrix</li>
+	<li><a href="pdDocGetTransformPlus.htm">pdDocGetTransform</a> &mdash; Get document's transform - 2X2 transformation matrix</li>
+	<li><a href="pdDocGetNumericValue.htm">pdDocGetNumericValue</a> &mdash; Get document's numeric value</li>
+	</ul>
+
+<p><strong>Document Drawing</strong></p>
+	<ul>
+	<li><a href="pdDocDraw.htm">pdDocDraw</a> &mdash; Draw document area</li>
+	<li><a href="pdDocInvertLine.htm">pdDocInvertLine</a> &mdash; Invert document area (line)</li>
+	<li><a href="pdDocInvertBox.htm">pdDocInvertBox</a> &mdash; Invert document area (rectangle)</li>
+	<li><a href="pdDocInvertQuad.htm">pdDocInvertQuad</a> &mdash; Invert document area (quad)</li>
+	<li><a href="pdDocInvertFrames.htm">pdDocInvertFrames</a> &mdash; Invert document area (frames)</li>
+	</ul>
+
+<h3>PowerDoc Objects and Fields</h3>
+
+<p><strong>Object Construction, Manipulation and Destruction</strong></p>
+	<ul>
+	<li><a href="pdObjGetLast.htm">pdObjGetLast</a> &mdash; Get last PowerDoc object in document</li>
+	<li><a href="pdObjAdd.htm">pdObjAdd</a> &mdash; Add new object to document</li>
+	<li><a href="pdObjDup.htm">pdObjDup</a> &mdash; Duplicate existing object</li>
+	<li><a href="pdObjGet.htm">pdObjGet</a> &mdash; Get object info</li>
+	<li><a href="pdObjSet.htm">pdObjSet</a> &mdash; Change existing object info</li>
+	<li><a href="pdObjDel.htm">pdObjDel</a> &mdash; Delete existing object</li>
+	<li><a href="pdObjDelAll.htm">pdObjDelAll</a> &mdash; Delete all objects in document</li>
+	</ul>
+
+<p><strong>PowerDoc Fields</strong></p>
+	<ul>
+	<li>
+	<a href="pdNameGet.htm">pdNameGet</a> &mdash; Get property or link
+
+	<p><strong>PowerDoc Properties and Property References</strong></p>
+		<ul>
+		<li><a href="pdPropAdd.htm">pdPropAdd</a> &mdash; Add property</li>
+		<li><a href="pdPropAddAsRef.htm">pdPropAddAsRef</a> &mdash; Add property by reference</li>
+		<li><a href="pdPropAddAsExtBuffer.htm">pdPropAddAsExtBuffer</a> &mdash; Add property - external buffer</li>
+		<li><a href="pdPropAddAsExtCallback.htm">pdPropAddAsExtCallback</a> &mdash; Add property - external callback</li>
+		<li><a href="pdPropGet.htm">pdPropGet</a> &mdash; Get property</li>
+		<li><a href="pdPropGetAsRef.htm">pdPropGetAsRef</a> &mdash; Get property by reference</li>
+		<li><a href="pdPropSet.htm">pdPropSet</a> &mdash; Change existing property</li>
+		<li><a href="pdPropSetAsRef.htm">pdPropSetAsRef</a> &mdash; Change existing property by reference</li>
+		<li><a href="pdPropSetAsExtBuffer.htm">pdPropSetAsExtBuffer</a> &mdash; Change existing property - external buffer</li>
+		<li><a href="pdPropSetAsExtCallback.htm">pdPropSetAsExtCallback</a> &mdash; Change existing property - external callback</li>
+		<li><a href="pdPropDel.htm">pdPropDel</a> &mdash; Delete existing property</li>
+		</ul>
+
+	<p><strong>PowerDoc Links</strong></p>
+		<ul>
+		<li><a href="pdLinkAdd.htm">pdLinkAdd</a> &mdash; Add link</li>
+		<li><a href="pdLinkGet.htm">pdLinkGet</a> &mdash; Get link</li>
+		<li><a href="pdLinkSet.htm">pdLinkSet</a> &mdash; Change existing link</li>
+		<li><a href="pdLinkDel.htm">pdLinkDel</a> &mdash; Delete existing link</li>
+		</ul>
+
+	</li>
+	</ul>
+
+<h3>PowerDoc Images</h3>
+
+<p><strong>PowerDoc Images &mdash; Basic Operations</strong></p>
+	<ul>
+	<li><a href="pdImgGetLast.htm">pdImgGetLast</a> &mdash; Get last image in document</li>
+	<li><a href="pdImgAddPlus.htm">pdImgAddPlus</a> &mdash; Add new image with an optional 3X3 transformation matrix</li>
+	<li><a href="pdImgAddPlus.htm">pdImgAdd</a> &mdash; Add new image with an optional 2x2 transformation matrix</li>
+	<li><a href="pdImgDup.htm">pdImgDup</a> &mdash; Duplicate existing image</li>
+	<li><a href="pdImgGetObj.htm">pdImgGetObj</a> &mdash; Get image's object</li>
+	<li><a href="pdImgSetObj.htm">pdImgSetObj</a> &mdash; Change image's object</li>
+	<li><a href="pdImgGetFnDraw.htm">pdImgGetFnDraw</a> &mdash; Get image's rendering function</li>
+	<li><a href="pdImgSetFnDraw.htm">pdImgSetFnDraw</a> &mdash; Change image's rendering function</li>
+	<li><a href="pdImgGetPage.htm">pdImgGetPage</a> &mdash; Get image's page</li>
+	<li><a href="pdImgSetPage.htm">pdImgSetPage</a> &mdash; Change image's page</li>
+	<li><a href="pdImgGetMask.htm">pdImgGetMask</a> &mdash; Get image's masking page</li>
+	<li><a href="pdImgSetMask.htm">pdImgSetMask</a> &mdash; Change image's masking page</li>
+	<li><a href="pdImgGetXY.htm">pdImgGetXY</a> &mdash; Get image's object origin point</li>
+	<li><a href="pdImgSetXY.htm">pdImgSetXY</a> &mdash; Change image's object origin point</li>
+	<li><a href="pdImgGetTransformPlus.htm">pdImgGetTransformPlus</a> &mdash; Get image's 3X3 transformation matrix</li>
+	<li><a href="pdImgGetTransformPlus.htm">pdImgGetTransform</a> &mdash; Get image's 2x2 transformation matrix</li>
+	<li><a href="pdImgSetTransformPlus.htm">pdImgSetTransformPlus</a> &mdash; Change image's 3X3 transformation matrix</li>
+	<li><a href="pdImgSetTransformPlus.htm">pdImgSetTransform</a> &mdash; Change image's 2x2 transformation matrix</li>
+	<li><a href="pdImgGetStatus.htm">pdImgGetStatus</a> &mdash; Get image's status</li>
+	<li><a href="pdImgSetStatus.htm">pdImgSetStatus</a> &mdash; Change image's status</li>
+	<li><a href="pdImgGetAttribs.htm">pdImgGetAttribs</a> &mdash; Get image's attributes</li>
+	<li><a href="pdImgSetAttribs.htm">pdImgSetAttribs</a> &mdash; Change image's attributes</li>
+	<li><a href="pdImgDel.htm">pdImgDel</a> &mdash; Delete existing image</li>
+	<li><a href="pdImgDelAll.htm">pdImgDelAll</a> &mdash; Delete all images in document</li>
+	</ul>
+
+<p><strong>PowerDoc Images &mdash; Operations Based On Status</strong></p>
+	<ul>
+	<li><a href="pdImgChangeAttribs.htm">pdImgChangeAttribs</a> &mdash; Change image's attributes depending on its status</li>
+	<li><a href="pdImgToTop.htm">pdImgToTop</a> &mdash; Send image to top of page</li>
+	<li><a href="pdImgToBottom.htm">pdImgToBottom</a> &mdash; Send image to bottom of page</li>
+	<li><a href="pdImgMoveToPage.htm">pdImgMoveToPage</a> &mdash; Move image to another page</li>
+	<li><a href="pdImgDelete.htm">pdImgDelete</a> &mdash; Delete image depending on its status</li>
+	</ul>
+
+<h3>Special Functions</h3>
+
+<p><strong>Canvas Functions</strong></p>
+	<ul>
+	<li>pdCanvasAdjust &mdash; Adjust canvas</li>
+	<li>pdCanvasObjDrawPlus &mdash; Draw in canvas using 3x3 transformation matrix</li>
+	<li>pdCanvasObjDraw &mdash; Draw in canvas using 2x2 transformation matrix</li>
+	<li><a href="pdCanvasAddFrames.htm">pdCanvasAddFrames</a> &mdash; Add frames to canvas</li>
+	</ul>
+
+<p><strong>Utility Functions</strong></p>
+	<ul>
+	<li><a href="pdMakeBinary.htm">pdMakeBinary</a> &mdash; Make binary buffer</li>
+	<li><a href="pdTransformBoxPlus.htm">pdTransformBoxPlus</a> &mdash; Apply 3X3 transformation matrix to a rectangle</li>
+	<li><a href="pdTransformBoxPlus.htm">pdTransformBox</a> &mdash; Apply 2x2 transformation matrix to a rectangle and return its bounding box</li>
+	<li><a href="pdFree.htm">pdFree</a> &mdash; Free memory allocated by the engine</li>
+	</ul>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

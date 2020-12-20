@@ -1,0 +1,406 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextDraw</h2><div class="box_prototype"><strong>
+DT_SLONG txTextDraw(DT_TXDOC text_doc, DT_SLONG page, DT_SRAST_L x_off, DT_SRAST_L y_off, DT_ID_SWORD format, DT_ID_SWORD subformat, DT_MDC* memory_surface, DT_PD_DOCDRAW_PARAMS* params, DT_ID_SWORD flags)</strong></div><br /><strong>Short Description:</strong> <em>Draw textflow areas on the specified page of the text document</em><br /><br />
+
+<p>This function draws a single page in the text document (which may contain one or more textflow areas) to a memory surface specified by <em>format</em>, <em>subformat</em> and <em>memory_surface</em>. While drawing the page, the function respects the transform matrix set by <a href="txTextSetTransformPlus.htm">txTextSetTransformPlus</a>, <a href="txTextSetTransformPlus.htm">txTextSetTransform</a> or <a href="txTextSetTransformPlus.htm">txTextSetScale</a>.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>page</em></p>
+</td><td>
+<p>The index of the page in the text document to draw.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x_off</em></p>
+</td><td>
+<p>Horizontal offset to apply when drawing the textflow area, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y_off</em></p>
+</td><td>
+<p>Vertical offset to apply when drawing the textflow area, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>format</em></p>
+</td><td>
+<p>Specifies the format, or number of bits-per-pixel, of the memory surface to which the textflow area is drawn. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>subformat</em></p>
+</td><td>
+<p>Color configuration of the pixel. See below for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>memory_surface</em></p>
+</td><td>
+<p>A pointer to the <a href="../manual/txstructs1.htm#DT_MDC">DT_MDC</a> structure that describes the surface. See D-Type Standard Engine Manual for details.</p>
+<p>When calling txTextDraw, it is allowed to set the <em>m</em> member of the <a href="../manual/txstructs1.htm#DT_MDC">DT_MDC</a> structure to DV_NULL. This means that D-Type Text Engine should allocate memory for the surface. In this case, the surface's memory must later be released by calling <a href="txFree.htm">txFree</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>params</em></p>
+</td><td>
+<p>Additional parameters. See the description of the <a href="../manual/txstructs1.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure for details. Set to DV_NULL if no additional parameters are needed (i.e. to use default parameters).</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+
+
+<p>Flags to control the way D-Type Text Engine draws the page and generates its <a href="../../common/workshop/pd_frames.htm">text flows and frames</a>. The following values are supported:</p>
+
+<ul>
+
+<li><p>0 (TX_DRAW_DEFAULT_A) = Same as 8</p></li>
+<li><p>1 (TX_DRAW_DEFAULT_B) = Same as 17</p></li>
+<li><p>4 (TX_DRAW_NONE) = Do not draw anything; do not generate text flows and frames (the function does nothing in this case)</p></li>
+<li><p>6 (TX_DRAW_NONE_ALLFRAMES) = Do not draw anything; generate text flows and frames for all glyphs on the page</p></li>
+<li><p>8 (TX_DRAW_TEXT) = Draw text only; do not generate text flows and frames</p></li>
+<li><p>9 (TX_DRAW_TEXT_VISIBLEFRAMES) = Draw text only; generate text flows and frames only for glyphs that are within the visible portion of the page</p></li>
+<li><p>10 (TX_DRAW_TEXT_ALLFRAMES) = Draw text only; generate text flows and frames for all glyphs on the page</p></li>
+<li><p>14 (TX_DRAW_MARKERS_ALLFRAMES) = Draw the cursor and any highlighted text selections only; generate text flows and frames for all glyphs on the page</p></li>
+<li><p>17 (TX_DRAW_TEXT_MARKERS_VISIBLEFRAMES) = First draw text, then draw the cursor and any highlighted text selections; generate text flows and frames only for glyphs that are within the visible portion of the page</p></li>
+<li><p>18 (TX_DRAW_TEXT_MARKERS_ALLFRAMES) = First draw text, then draw the cursor and any highlighted text selections; generate text flows and frames for all glyphs on the page</p></li>
+<li><p>22 (TX_DRAW_MARKERS_TEXT_ALLFRAMES) = First draw the cursor and any highlighted text selections, then draw text; generate text flows and frames for all glyphs on the page</p></li>
+
+</ul>
+
+<p>Any values not listed above are reserved for future use and must not be used.</p>
+
+<p>Note that when the generation of text flows and frames is disabled (values 0, 4, 8), D-Type Text Engine will not be able to provide any text edit, cursor movement and selection highlighting functionality (e.g. using the <a href="txTextHit.htm">txTextHit</a>, <a href="txTextCommand.htm">txTextCommand</a> or <a href="txTextSetSelect.htm">txTextSetSelect</a> functions). When the generation of text flows and frames is enabled only for glyphs that are within the visible portion of the page (values 1, 9, 17), D-Type Text Engine will be able to provide limited text edit, cursor movement and selection highlighting functionality (i.e. only within the visible portion of the page). Finally, when the generation of text flows and frames is enabled for all glyphs on the page (values 6, 10, 14, 18, 22), D-Type Text Engine will be able to provide full text edit, cursor movement and selection highlighting functionality on that page.</p>
+
+<p>Any text flows and frames generated by this function are available to your application, if you wish to process them using your own code (see Note 1 below). However, if you do so, remember  that your application does not own the text flows and frames generated by this function and should not attempt to modify them or free their memory.</p>
+
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If successful, the function will return 1. If the function is not successful, the return value is 0. This can happen if the input values are invalid or out-of-memory conditions occur (e.g. if D-Type Text Engine is requested to allocate memory for the surface by setting the <em>m</em> member of the <a href="../manual/txstructs1.htm#DT_MDC">DT_MDC</a> structure to DV_NULL and the allocation fails). Additionally, when the processing of critical object-specific errors is enabled via the Flags member of the <a href="../../pd/manual/pdstructs.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure, the function can also return one of the following error codes:</p>
+
+<div class="box_field"><pre>
+PD_RET_OBJ_ERR_MDC        -8 <span class="codecomment">/* memory surface not supported by object */</span>&nbsp;
+PD_RET_OBJ_ERR_PATTERN    -7 <span class="codecomment">/* pattern file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_BITMAP     -6 <span class="codecomment">/* bitmap file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_VECTOR     -5 <span class="codecomment">/* vector file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_FONT       -4 <span class="codecomment">/* font file access error */</span>&nbsp;
+PD_RET_OBJ_ERR_MEMORY     -3 <span class="codecomment">/* not enough memory to process the object */</span>&nbsp;
+PD_RET_OBJ_ERR_DEFINITION -2 <span class="codecomment">/* object not properly defined */</span>&nbsp;
+</pre></div>
+
+<p>If something goes wrong while rendering one of the PowerDoc objects in the text document, these error codes provide more information about the cause of the error. Note that in this situation only the error code of the first encountered object-specific error is returned and only if it is classified as critical (meaning that it has a severe impact on the rendering outcome). It is your application's responsibility to decide how to handle a critical object-specific error (e.g. ignore it, retry rendering, report to the user etc). If the function returns one of these error codes, you should assume that the document has not been rendered completely and/or correctly.</p>
+
+<p>However, if a critical object-specific error is encountered but the processing of critical object-specific errors is disabled, the function will assume that the object in question was rendered successfully and will not return its object-specific error code. In this case, the function might return 1 indicating that overall the rendering was successful, even though some objects in the document did not render completely and/or correctly.</p>
+
+
+<h3>Comments</h3>
+<p>The <em>format</em> parameter specifies the number of bits-per-pixel and is used to calculate the amount of memory required to store the surface; <em>subformat</em> defines the configuration of a single pixel and is used to calculate the maximum number of colors in the surface. See the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function in D-Type Standard Engine Manual for a list of all the surface formats supported by D-Type Standard Engine.</p>
+
+<p>Although the txTextDraw function will accept any memory surface format that is supported by D-Type Standard Engine, the following four <strong>key memory surface formats</strong> are recommended:</p>
+
+<ul>
+<li><em>format</em> = 8
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	<li><em>subformat</em> = 2</li>
+	<li><em>subformat</em> = 3</li>
+	<li><em>subformat</em> = 4</li>
+	<li><em>subformat</em> = 5</li>
+	<li><em>subformat</em> = 10</li>
+	<li><em>subformat</em> = 12</li>
+	<li><em>subformat</em> = 13</li>
+	<li><em>subformat</em> = 14</li>
+	<li><em>subformat</em> = 15</li>
+	</ul>
+</li>
+<li><em>format</em> = 16
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	<li><em>subformat</em> = 2</li>
+	<li><em>subformat</em> = 3</li>
+	<li><em>subformat</em> = 4</li>
+	<li><em>subformat</em> = 5</li>
+	<li><em>subformat</em> = 6</li>
+	</ul>
+</li>
+<li><em>format</em> = 24
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	</ul>
+</li>
+<li><em>format</em> = 32
+	<ul>
+	<li><em>subformat</em> = 0</li>
+	<li><em>subformat</em> = 1</li>
+	</ul>
+</li>
+</ul>
+
+<p>These surface formats represent a subset of the full spectrum of D-Type Standard Engine surface formats. The combination <em>format</em> = 8, <em>subformat</em> = 1 represents an alpha-surface and is useful for alpha-making. The combination <em>format</em> = 24, <em>subformat</em> = 0 is a popular and frequently used 24-bpp RGB color surface format. Finally, the combinations <em>format</em> = 32, <em>subformat</em> = 0 and <em>format</em> = 32, <em>subformat</em> = 1 are both commonly used 32-bpp RGB color surface formats.</p>
+
+<p>The following table illustrates the pixel configuration of the key memory surface formats. Please note that this table is merely a striped down version of the table included in D-Type Standard Engine Manual (see the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function).</p>
+
+
+
+
+
+<table class="table_data">
+
+<tr>
+<th>Format<br />(bits-per-pixel)</th><th>Subformat</th>
+
+
+<th>Description</th>
+</tr>
+
+
+
+
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>TTTTTTTT</tt></strong><br />
+8-bit alpha surface. Eight bits (1 byte) are used to represent transparency. 256 alpha values.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;B.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">10</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB averaging mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.33333*R&nbsp;+&nbsp;0.33333*G&nbsp;+&nbsp;0.33333*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">12</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted RGB normalized mode). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;(0.21268*R&nbsp;+&nbsp;0.7151*G&nbsp;+&nbsp;0.07217*B).<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">13</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted R channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;R.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">14</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted G channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;G.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">8</p>
+
+</td><td><p align="center">15</p>
+</td><td>
+<p><strong><tt>gggggggg</tt></strong><br />
+8-bit grayscale surface (inverted B channel). Eight bits (1 byte) are used to represent the relative intensities of gray. 256 intensities calculated as g&nbsp;=&nbsp;255&nbsp;-&nbsp;B.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>xBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (1-5-5-5). Five bits are used for each color component. The first bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>BBBBBBGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (6-5-5). Six bits are used for red; five bits are used for green and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">2</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-6-5). Six bits are used for green; five bits are used for red and blue. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">3</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-6). Six bits are used for blue; five bits are used for red and green. 65,536 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">4</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGRRRRRx</tt></strong><br />
+16-bit RGB surface (5-5-5-1). Five bits are used for each color component. The last bit is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">5</p>
+</td><td>
+<p><strong><tt>BBBBBxGG GGGRRRRR</tt></strong><br />
+16-bit RGB surface (5-1-5-5). Five bits are used for each color component. The bit between red and green component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">6</p>
+</td><td>
+<p><strong><tt>BBBBBGGG GGxRRRRR</tt></strong><br />
+16-bit RGB surface (5-5-1-5). Five bits are used for each color component. The bit between green and blue component is not used. 32768 colors.<br /></p>
+</td></tr>
+
+
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+Standard 24-bit RGB surface. Eight bits (1 byte) are used for each color component. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">0</p>
+</td><td>
+<p><strong><tt>BBBBBBBB GGGGGGGG RRRRRRRR xxxxxxxx</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The last byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+<tr><td><p align="center">32</p>
+
+</td><td><p align="center">1</p>
+</td><td>
+<p><strong><tt>xxxxxxxx BBBBBBBB GGGGGGGG RRRRRRRR</tt></strong><br />
+32-bit RGB surface. Eight bits (1 byte) are used for each color component. The first byte is not used. 16,777,216 colors.<br /></p>
+</td></tr>
+
+
+
+
+
+<tr><td colspan="3">
+
+<p><strong>Legend</strong>:<br />
+
+g = bits used to describe gray<br />
+R = bits used to describe red, G = bits used to describe green, B = bits used to describe blue<br />
+T = bits used to describe transparency (0=fully opaque, 255=fully transparent)<br />
+
+x = unused bits</p>
+
+<p><strong>Note 1:</strong> RGB and alpha values are stored only for pixels that are actually rendered by D-Type. Your application must ensure that the surface is cleared with appropriate values before rendering.
+
+</p>
+
+
+
+</td></tr>
+
+</table>
+
+
+<p>For more information on why these four key memory surface formats are recommended, see the <a href="../../pd/funcs/pdDocDraw.htm">pdDocDraw</a> function in D-Type Power Engine Manual.</p>
+
+
+<h3>Note 1</h3>
+<p>This is only a brief description of the txTextDraw function. Additional functionality is possible. Please refer to the <a href="../manual/txstructs1.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure and the <a href="../../common/workshop/pd_frames.htm">Text Flows and Frames</a> document in the <a href="../../common/workshop/index.htm">D-Type Workshop</a> section.</p>
+
+<h3>Note 2</h3>
+<p>When <em>flags</em> is set to instruct D-Type Text Engine to generate text flows and frames and <em>params</em> is not DV_NULL but points to a <a href="../manual/txstructs1.htm#DT_PD_DOCDRAW_PARAMS">DT_PD_DOCDRAW_PARAMS</a> structure, the txTextDraw function will internally set the <em>Flows</em> member of that structure to 2 and take complete control over the memory management of its text flows and frames. In this case, as mentioned above, you application may still read the text flows and frames after the function returns (which will be available in <a href="../../pd/manual/pdstructs.htm#DT_PD_FRAME_FORMAT2">DT_PD_FRAME_FORMAT2</a> format) but must not attempt to free their memory.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

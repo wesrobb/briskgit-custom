@@ -1,0 +1,8 @@
+Vertical alignment of cells in a table row.
+
+{strong}Supported values:{/strong}
+
+0 = Default - Middle
+1 = Top
+2 = Middle
+3 = Bottom

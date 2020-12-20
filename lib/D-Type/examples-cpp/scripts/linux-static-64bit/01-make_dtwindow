@@ -1,0 +1,17 @@
+##!/bin/csh
+
+echo -------------------------------------------------------------------------------
+echo Build dtwindow.a
+echo -------------------------------------------------------------------------------
+
+c++ -c -fPIC -std=c++0x -nostdlib -fno-exceptions -Wfloat-equal -Wshadow -Wall -Wextra -Wstrict-aliasing=2 -Wcast-align -Wcast-qual -Wdouble-promotion -Wformat=2 -ffunction-sections -fdata-sections -fno-common -pedantic -I ../../../includes/core-cpp/ -O3 ../../../includes/utils/dtwindow/unix/DTWindow.cpp
+ar -q dtwindow.a DTWindow.o
+ranlib dtwindow.a
+
+echo -------------------------------------------------------------------------------
+echo Copy dtwindow.a to the libs directory
+echo -------------------------------------------------------------------------------
+
+cp dtwindow.a ../../../other/libs/x64-linux_64-static/gcc/
+
+echo -------------------------------------------------------------------------------

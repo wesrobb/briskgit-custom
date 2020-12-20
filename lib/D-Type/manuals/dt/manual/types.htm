@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Engine Data Types</h1>
+
+
+<p>All D-Type Engines utilize the following basic data types:</p>
+
+<h2>Numbers and Value Identifiers</h2>
+
+
+<table class="table_data">
+<tr>
+<th width="25%">Type</th>
+<th>Description</th></tr>
+<tr>
+<td><strong id="DT_UBYTE">DT_UBYTE</strong> and <strong id="DT_ID_UBYTE">DT_ID_UBYTE</strong></td>
+<td><p>8-bit unsigned integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SBYTE">DT_SBYTE</strong> and <strong id="DT_ID_SBYTE">DT_ID_SBYTE</strong></td>
+<td><p>8-bit signed integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_UWORD">DT_UWORD</strong> and <strong id="DT_ID_UWORD">DT_ID_UWORD</strong></td>
+<td><p>16-bit unsigned integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SWORD">DT_SWORD</strong> and <strong id="DT_ID_SWORD">DT_ID_SWORD</strong></td>
+<td><p>16-bit signed integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_ULONG">DT_ULONG</strong> and <strong id="DT_ID_ULONG">DT_ID_ULONG</strong></td>
+<td><p>32-bit unsigned integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SLONG">DT_SLONG</strong> and <strong id="DT_ID_SLONG">DT_ID_SLONG</strong></td>
+<td><p>32-bit signed integer</p></td>
+</tr>
+<tr>
+<td><strong id="DT_UHUGE">DT_UHUGE</strong></td>
+<td><p>64-bit unsigned integer, if supported by target platform and enabled by D-Type Engine; otherwise the same as DT_ULONG</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SHUGE">DT_SHUGE</strong></td>
+<td><p>64-bit signed integer, if supported by target platform and enabled by D-Type Engine; otherwise the same as DT_SLONG</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SRAST_L">DT_SRAST_L</strong> or <strong id="DT_SRAST">DT_SRAST</strong></td>
+<td><p>32-bit signed integer representing a whole pixel value. Technically DT_SRAST_L and DT_SRAST are simply aliases for the DT_SLONG type.</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SFRAC_L">DT_SFRAC_L</strong> or <strong id="DT_SFRAC">DT_SFRAC</strong></td>
+<td><p>32-bit signed integer representing a 24.8 signed fractional pixel value. Technically DT_SFRAC_L and DT_SFRAC are simply aliases for the DT_SLONG type.</p></td>
+</tr>
+<!--
+<tr>
+<td><strong id="DT_SRAST_XL">DT_SRAST_XL</strong></td>
+<td><p>64-bit signed integer representing a whole pixel value, if supported by target platform and enabled by D-Type Engine; otherwise the same as DT_SRAST_L. Technically DT_SRAST_XL is simply an alias for the DT_SHUGE type.</p></td>
+</tr>
+<tr>
+<td><strong id="DT_SFRAC_XL">DT_SFRAC_XL</strong></td>
+<td><p>64-bit signed integer representing a 56.8 signed fractional pixel value, if supported by target platform and enabled by D-Type Engine; otherwise the same as DT_SFRAC_L. Technically DT_SFRAC_XL is simply an alias for the DT_SHUGE type.</p></td>
+</tr>
+-->
+<tr>
+<td><strong id="DT_FLOAT">DT_FLOAT</strong></td>
+<td><p>floating point number &mdash; typically double (64-bit) precision</p></td>
+</tr>
+</table>
+
+
+<h2>C/C++ Characters</h2>
+
+<table class="table_data">
+<tr>
+<th width="25%">Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong id="DT_CHAR">DT_CHAR</strong></td>
+<td><p>8-bit ANSI C/C++ character</p></td>
+</tr>
+</table>
+
+
+<h2>Matrices</h2>
+
+<table class="table_data">
+<tr>
+<th width="25%">Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong id="DT_TM2X2">DT_TM2X2</strong></td>
+<td>DT_FLOAT m[2][2] a 2x2 transformation matrix.
+<p>This matrix describes a <span class="nobreak">two dimensional</span> transformation. The transformation can be expressed in the following form:</p>
+
+<p class="center">
+<em>tx</em> = m[0][0] * <em>x</em> + m[0][1] * <em>y</em><br />
+<em>ty</em> = m[1][0] * <em>x</em> + m[1][1] * <em>y</em>
+</p>
+
+<p>In these equations <em>x</em> and <em>y</em> represent the original (source) coordinates, <span class="nobreak">m[i][j]</span> represent floating-point transformation parameters, and <em>tx</em> and <em>ty</em> represent the final (output) coordinates. This type of transformation represent a special case of a two-dimensional affine transformation.</p>
+</td>
+</tr>
+</table>
+
+<br />
+
+<table class="table_data">
+<tr>
+<th width="25%">Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong id="DT_TM3X3">DT_TM3X3</strong></td>
+<td>DT_FLOAT m[3][3] a 3x3 transformation matrix.
+<p>This matrix describes a <span class="nobreak">2D perspective (or projective)</span> transformation. The transformation can be expressed in the following form:</p>
+
+<p class="center">
+<em>tx</em> = (m[0][0] * <em>x</em> + m[0][1] * <em>y</em> + m[0][2]) / <em>w</em><br />
+<em>ty</em> = (m[1][0] * <em>x</em> + m[1][1] * <em>y</em> + m[1][2]) / <em>w</em><br /><br />
+
+where <em>w</em> = (m[2][0] * <em>x</em> + m[2][1] * <em>y</em> + m[2][2])<br />
+</p>
+
+<p>In these equations <em>x</em> and <em>y</em> represent the original (source) coordinates, <span class="nobreak">m[i][j]</span> represent floating-point transformation parameters, and <em>tx</em> and <em>ty</em> represent the final (output) coordinates.</p>
+
+<p>A 2D perspective transformation is capable of mapping an arbitrary quadrilateral into another arbitrary quadrilateral, while preserving the straightness of lines. However, unlike an affine transformation, the parallelism of lines in the source quadrilateral is not necessarily preserved in the output quadrilateral.</p>
+
+<p>Finally, it should be noted that any two-dimensional affine transformation is merely a special case of the 2D perspective transformation (i.e. the case when <em>w</em>&nbsp;=&nbsp;1.0 which is true when m[2][0]&nbsp;=&nbsp;0.0, m[2][1]&nbsp;=&nbsp;0.0 and m[2][2]&nbsp;=&nbsp;1.0).</p>
+
+
+</td>
+</tr>
+</table>
+
+
+<h2>Device Context (Windows Only)</h2>
+
+<table class="table_data">
+<tr>
+<th width="25%">Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong id="DT_HDC">DT_HDC</strong></td>
+<td><p>Windows Compatible Device Context (HDC)</p>
+<p><strong>Note: Support for Windows Device Context is limited and only available on Windows. Cross platform applications should not make use of this type. Starting with D-Type version 5, this data type is deprecated and included only for backward compatibility reasons.</strong></p>
+</td>
+</tr></table>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

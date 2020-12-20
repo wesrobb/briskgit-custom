@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>Index of PowerDoc Building Blocks</h1>
+
+<h2>Basic PowerDoc Links</h2>
+
+<ul>
+<li><a href="pd_links.htm#pdBodyPtr">pdBodyPtr</a></li>
+<li><a href="pd_links.htm#pdBaselinePtr">pdBaselinePtr</a></li>
+<li><a href="pd_links.htm#pdFnDrawObjectPtr">pdFnDrawObjectPtr</a></li>
+<li><a href="pd_links.htm#pdFontDataPtr">pdFontDataPtr</a></li>
+<li><a href="pd_links.htm#pdGroupMemberPtr">pdGroupMemberPtr</a></li>
+<li><a href="pd_links.htm#pdImageDataPtr">pdImageDataPtr</a></li>
+<li><a href="pd_links.htm#pdLinePtr">pdLinePtr</a></li>
+<li><a href="pd_links.htm#pdMaskPtr">pdMaskPtr</a></li>
+<li><a href="pd_links.htm#pdOutlinePtr">pdOutlinePtr</a></li>
+<li><a href="pd_links.htm#pdPatternFillPtr">pdPatternFillPtr</a></li>
+<li><a href="pd_links.htm#pdPowerFontPtr">pdPowerFontPtr</a></li>
+<li><a href="pd_links.htm#pdPowerFontRecordPtr">pdPowerFontRecordPtr</a></li>
+<li><a href="pd_links.htm#pdRowBoundPtr">pdRowBoundPtr</a></li>
+<li><a href="pd_links.htm#pdShadowPtr">pdShadowPtr</a></li>
+<li><a href="pd_links.htm#pdStylePtr">pdStylePtr</a></li>
+<li><a href="pd_links.htm#pdTextExtrasPtr">pdTextExtrasPtr</a></li>
+<li><a href="pd_links.htm#pdTextFragmentPtr">pdTextFragmentPtr</a></li>
+<li><a href="pd_links.htm#pdTextLayoutPtr">pdTextLayoutPtr</a></li>
+<li><a href="pd_links.htm#pdTextRulerHorPtr">pdTextRulerHorPtr</a></li>
+<li><a href="pd_links.htm#pdTypoFramePtr">pdTypoFramePtr</a></li>
+<li><a href="pd_links.htm#pdTypographyPtr">pdTypographyPtr</a></li>
+<li><a href="pd_links.htm#pdUnderlinePtr">pdUnderlinePtr</a></li>
+<li><a href="pd_links.htm#pdxMediaDataPtr">pdxMediaDataPtr</a></li>
+</ul>
+<div class="pdoc_obj_descr"><h4 id="pdBodyPtr"><em><span class="field">pdBodyPtr</span> (1013)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/004.htm#pdBodyPtr">Typography (For Outline Fonts)</a>, <a href="../objects/021.htm#pdBodyPtr">Row Boundary</a>, <a href="../objects/023.htm#pdBodyPtr">Typographic Frame</a>, <a href="../objects/110.htm#pdBodyPtr">Library Shape</a>, <a href="../objects/112.htm#pdBodyPtr">Rectangle</a>, <a href="../objects/113.htm#pdBodyPtr">Circle/Ellipse</a>, <a href="../objects/114.htm#pdBodyPtr">True Circle/Ellipse</a>, <a href="../objects/115.htm#pdBodyPtr">Slice</a>, <a href="../objects/117.htm#pdBodyPtr">Pattern</a>, <a href="../objects/118.htm#pdBodyPtr">Grid</a>, <a href="../objects/119.htm#pdBodyPtr">Custom Shape or Polygon</a>, <a href="../objects/120.htm#pdBodyPtr">Gradient</a>, <a href="../objects/125.htm#pdBodyPtr">Gradient (As Fast Rectangle)</a></small></p>
+<p>
+Link to the <a href="../objects/001.htm">Surface Definition</a> object.<br />
+<br />
+This link supplies style attributes for the body of an object. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdBaselinePtr"><em><span class="field">pdBaselinePtr</span> (1113)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/022.htm#pdBaselinePtr">Text Extras</a>, <a href="../objects/101.htm#pdBaselinePtr">Text Line</a>, <a href="../objects/102.htm#pdBaselinePtr">Text Arc</a>, <a href="../objects/103.htm#pdBaselinePtr">Text Area</a>, <a href="../objects/104.htm#pdBaselinePtr">Rich Text Line</a>, <a href="../objects/105.htm#pdBaselinePtr">Rich Text Arc</a>, <a href="../objects/106.htm#pdBaselinePtr">Rich Text Area</a>, <a href="../objects/130.htm#pdBaselinePtr">Text Path</a>, <a href="../objects/131.htm#pdBaselinePtr">Rich Text Path</a></small></p>
+<p>
+Link to the <a href="../objects/020.htm">Baseline</a> object.<br />
+<br />
+This link supplies parameters necessary to render the baselines of text rows.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFnDrawObjectPtr"><em><span class="field">pdFnDrawObjectPtr</span> (1085)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/009.htm#pdFnDrawObjectPtr">PowerFont Record</a>, <a href="../objects/013.htm#pdFnDrawObjectPtr">Group Member</a>, <a href="../objects/122.htm#pdFnDrawObjectPtr">Generic Object</a></small></p>
+<p>
+Link to any visual PowerDoc object (i.e. any object with a designated FnDraw rendering function).<br />
+<br />
+The pdFnDraw property describes the visual object pointed by the pdFnDrawObjectPtr link. If pdFnDraw is missing, it is assumed pdFnDrawObjectPtr points to the <a href="../objects/123.htm">Group</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdFontDataPtr"><em><span class="field">pdFontDataPtr</span> (1069)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/004.htm#pdFontDataPtr">Typography (For Outline Fonts)</a></small></p>
+<p>
+Link to the <a href="../objects/011.htm">Font Data</a> object.<br />
+<br />
+This is an optional link. It indicates that the font data (file) is embedded in the document. This link should only be used when the font is specified by the pdFontUniqueID property. If the font is specified by the pdFontIndex property, this link is ignored and, therefore, should be omitted.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdGroupMemberPtr"><em><span class="field">pdGroupMemberPtr</span> (1087)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/013.htm#pdGroupMemberPtr">Group Member</a>, <a href="../objects/123.htm#pdGroupMemberPtr">Group</a></small></p>
+<p>
+Link to the <a href="../objects/013.htm">Group Member</a> object.<br />
+<br />
+This link in used to establish a link to the next group member.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdImageDataPtr"><em><span class="field">pdImageDataPtr</span> (1048)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/121.htm#pdImageDataPtr">Bitmap Image</a></small></p>
+<p>
+Link to the <a href="../objects/008.htm">Bitmap Image Data</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdLinePtr"><em><span class="field">pdLinePtr</span> (1015)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/020.htm#pdLinePtr">Baseline</a>, <a href="../objects/129.htm#pdLinePtr">Library Polyline</a>, <a href="../objects/111.htm#pdLinePtr">Line</a>, <a href="../objects/116.htm#pdLinePtr">Arc</a>, <a href="../objects/118.htm#pdLinePtr">Grid</a>, <a href="../objects/124.htm#pdLinePtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="../objects/003.htm">Line Definition (Full)</a> or <a href="../objects/015.htm">Line Definition (Standard)</a> object.<br />
+<br />
+This link supplies parameters necessary to render the body of a line. In the context of the Grid object, this link supplies the parameters necessary to render the grid lines.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdMaskPtr"><em><span class="field">pdMaskPtr</span> (1181)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/013.htm#pdMaskPtr">Group Member</a></small></p>
+<p>
+Link to a masking object, i.e. an object whose alpha-channel will be used to mask the group member. This link must point to <a href="../objects/122.htm">Generic Object</a>. If masking is not required, the link should be omitted.<br />
+<br />
+The pdMaskPtr link takes precedence over the pdMask property.<br />
+<br />
+One advantage of masking using the pdMaskPtr link, compared to the pdMask property, is that the masking object has the same origin as the group member. Thus, if the group member is moved,  the masking object moves with it.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdOutlinePtr"><em><span class="field">pdOutlinePtr</span> (1014)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/004.htm#pdOutlinePtr">Typography (For Outline Fonts)</a>, <a href="../objects/021.htm#pdOutlinePtr">Row Boundary</a>, <a href="../objects/023.htm#pdOutlinePtr">Typographic Frame</a>, <a href="../objects/110.htm#pdOutlinePtr">Library Shape</a>, <a href="../objects/112.htm#pdOutlinePtr">Rectangle</a>, <a href="../objects/113.htm#pdOutlinePtr">Circle/Ellipse</a>, <a href="../objects/114.htm#pdOutlinePtr">True Circle/Ellipse</a>, <a href="../objects/115.htm#pdOutlinePtr">Slice</a>, <a href="../objects/118.htm#pdOutlinePtr">Grid</a>, <a href="../objects/119.htm#pdOutlinePtr">Custom Shape or Polygon</a></small></p>
+<p>
+Link to the <a href="../objects/012.htm">Outline Definition</a> object.<br />
+<br />
+This link supplies parameters necessary to render the outline of an object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPatternFillPtr"><em><span class="field">pdPatternFillPtr</span> (1130)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/001.htm#pdPatternFillPtr">Surface Definition</a>, <a href="../objects/018.htm#pdPatternFillPtr">Pattern Fill Definition</a></small></p>
+<p>
+Link to the <a href="../objects/018.htm">Pattern Fill Definition</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPowerFontPtr"><em><span class="field">pdPowerFontPtr</span> (1091)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/014.htm#pdPowerFontPtr">Typography (For PowerFonts)</a></small></p>
+<p>
+Link to the <a href="../objects/010.htm">PowerFont</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPowerFontRecordPtr"><em><span class="field">pdPowerFontRecordPtr</span> (1092)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/009.htm#pdPowerFontRecordPtr">PowerFont Record</a>, <a href="../objects/010.htm#pdPowerFontRecordPtr">PowerFont</a></small></p>
+<p>
+Link to the <a href="../objects/009.htm">PowerFontRecord</a> object.<br />
+<br />
+This link in used to establish a link to the next PowerFont record.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdRowBoundPtr"><em><span class="field">pdRowBoundPtr</span> (1173)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/022.htm#pdRowBoundPtr">Text Extras</a></small></p>
+<p>
+Link to the <a href="../objects/021.htm">Row Boundary</a> object.<br />
+<br />
+This link supplies parameters necessary to render the boundaries of text rows.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowPtr"><em><span class="field">pdShadowPtr</span> (1016)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/004.htm#pdShadowPtr">Typography (For Outline Fonts)</a>, <a href="../objects/020.htm#pdShadowPtr">Baseline</a>, <a href="../objects/021.htm#pdShadowPtr">Row Boundary</a>, <a href="../objects/023.htm#pdShadowPtr">Typographic Frame</a>, <a href="../objects/129.htm#pdShadowPtr">Library Polyline</a>, <a href="../objects/110.htm#pdShadowPtr">Library Shape</a>, <a href="../objects/111.htm#pdShadowPtr">Line</a>, <a href="../objects/112.htm#pdShadowPtr">Rectangle</a>, <a href="../objects/113.htm#pdShadowPtr">Circle/Ellipse</a>, <a href="../objects/114.htm#pdShadowPtr">True Circle/Ellipse</a>, <a href="../objects/115.htm#pdShadowPtr">Slice</a>, <a href="../objects/116.htm#pdShadowPtr">Arc</a>, <a href="../objects/118.htm#pdShadowPtr">Grid</a>, <a href="../objects/119.htm#pdShadowPtr">Custom Shape or Polygon</a>, <a href="../objects/124.htm#pdShadowPtr">Polyline (also Bezier and B-Spline curve)</a></small></p>
+<p>
+Link to the <a href="../objects/002.htm">Shadow Definition</a> object.<br />
+<br />
+Used to render the shadow of a line, shape or some other object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdStylePtr"><em><span class="field">pdStylePtr</span> (1002)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/002.htm#pdStylePtr">Shadow Definition</a>, <a href="../objects/003.htm#pdStylePtr">Line Definition (Full)</a>, <a href="../objects/012.htm#pdStylePtr">Outline Definition</a>, <a href="../objects/015.htm#pdStylePtr">Line Definition (Standard)</a>, <a href="../objects/017.htm#pdStylePtr">Line Definition (Minimal)</a>, <a href="../objects/120.htm#pdStylePtr">Gradient</a></small></p>
+<p>
+Link to the <a href="../objects/001.htm">Surface Definition</a> object.<br />
+<br />
+This link supplies style attributes. Style attributes include color, transparency, pattern fills, special effects (e.g. blur, emboss, pattern fill) etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextExtrasPtr"><em><span class="field">pdTextExtrasPtr</span> (1172)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTextExtrasPtr">Text Fragment</a>, <a href="../objects/101.htm#pdTextExtrasPtr">Text Line</a>, <a href="../objects/102.htm#pdTextExtrasPtr">Text Arc</a>, <a href="../objects/103.htm#pdTextExtrasPtr">Text Area</a>, <a href="../objects/130.htm#pdTextExtrasPtr">Text Path</a></small></p>
+<p>
+Link to the <a href="../objects/022.htm">Text Extras</a> object.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextFragmentPtr"><em><span class="field">pdTextFragmentPtr</span> (1038)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTextFragmentPtr">Text Fragment</a>, <a href="../objects/104.htm#pdTextFragmentPtr">Rich Text Line</a>, <a href="../objects/105.htm#pdTextFragmentPtr">Rich Text Arc</a>, <a href="../objects/106.htm#pdTextFragmentPtr">Rich Text Area</a>, <a href="../objects/128.htm#pdTextFragmentPtr">Rich Text Design</a>, <a href="../objects/131.htm#pdTextFragmentPtr">Rich Text Path</a>, <a href="../objects/308.htm#pdTextFragmentPtr">Rich Text Box</a>, <a href="../objects/309.htm#pdTextFragmentPtr">Rich Button</a>, <a href="../objects/310.htm#pdTextFragmentPtr">Rich List Box</a></small></p>
+<p>
+Link to the <a href="../objects/007.htm">Text Fragment</a> object.<br />
+<br />
+This link in used to establish a link to the next text fragment. This can be the first text fragment or the fragment that follows the current one.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextLayoutPtr"><em><span class="field">pdTextLayoutPtr</span> (1084)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTextLayoutPtr">Text Fragment</a>, <a href="../objects/101.htm#pdTextLayoutPtr">Text Line</a>, <a href="../objects/102.htm#pdTextLayoutPtr">Text Arc</a>, <a href="../objects/103.htm#pdTextLayoutPtr">Text Area</a>, <a href="../objects/127.htm#pdTextLayoutPtr">Text Design</a>, <a href="../objects/130.htm#pdTextLayoutPtr">Text Path</a></small></p>
+<p>
+This link supplies text layout attributes. When building the Text Design or Rich Text Design object, this is a link to the <a href="../objects/016.htm">Text Layout (Manual)</a> object. When building any other text object, this is a link to the <a href="../objects/005.htm">Text Layout (Automatic)</a> object.<br />
+<br />
+Text Design and Rich Text Design utilize a manual text layout algorithm which means that the (x, y) position of each glyph/character must be supplied explicitly by the user. All other text objects utilize an automatic text layout algorithm which means that the position of their glyphs/characters is calculated automatically by the text layout engine while the user only supplies higher-level layout attributes such as direction, alignment, kerning, letter/row spacing etc.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextRulerHorPtr"><em><span class="field">pdTextRulerHorPtr</span> (1111)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTextRulerHorPtr">Text Fragment</a>, <a href="../objects/103.htm#pdTextRulerHorPtr">Text Area</a>, <a href="../objects/130.htm#pdTextRulerHorPtr">Text Path</a></small></p>
+<p>
+Link to the <a href="../objects/006.htm">Text Ruler (Horizontal)</a> object.<br />
+<br />
+This links associates a text ruler with the current text fragment. The Text Ruler (Horizontal) object supplies indents and tab stop positions to be respected during the text layout process.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTypoFramePtr"><em><span class="field">pdTypoFramePtr</span> (1177)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTypoFramePtr">Text Fragment</a>, <a href="../objects/101.htm#pdTypoFramePtr">Text Line</a>, <a href="../objects/102.htm#pdTypoFramePtr">Text Arc</a>, <a href="../objects/103.htm#pdTypoFramePtr">Text Area</a>, <a href="../objects/130.htm#pdTypoFramePtr">Text Path</a></small></p>
+<p>
+Link to the <a href="../objects/023.htm">Typographic Frame</a> object.<br />
+<br />
+This link supplies parameters necessary to render frames of glyphs and characters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTypographyPtr"><em><span class="field">pdTypographyPtr</span> (1018)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/007.htm#pdTypographyPtr">Text Fragment</a>, <a href="../objects/101.htm#pdTypographyPtr">Text Line</a>, <a href="../objects/102.htm#pdTypographyPtr">Text Arc</a>, <a href="../objects/103.htm#pdTypographyPtr">Text Area</a>, <a href="../objects/127.htm#pdTypographyPtr">Text Design</a>, <a href="../objects/107.htm#pdTypographyPtr">Glyph</a>, <a href="../objects/108.htm#pdTypographyPtr">Char</a>, <a href="../objects/109.htm#pdTypographyPtr">PowerGlyph</a>, <a href="../objects/130.htm#pdTypographyPtr">Text Path</a></small></p>
+<p>
+Link to the Typography object. When standard glyphs or characters are used, this should be a link to the <a href="../objects/004.htm">Typography (For Outline Fonts)</a> object. When PowerGlyphs (or PowerChars in the future) are used, this should be a link to the <a href="../objects/014.htm">Typography (For PowerFonts)</a> object.<br />
+<br />
+In either case, this link supplies typographic parameters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdUnderlinePtr"><em><span class="field">pdUnderlinePtr</span> (1114)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p class="also_appears_in"><small>Appears in: <a href="../objects/004.htm#pdUnderlinePtr">Typography (For Outline Fonts)</a>, <a href="../objects/014.htm#pdUnderlinePtr">Typography (For PowerFonts)</a></small></p>
+<p>
+Link to the <a href="../objects/017.htm">Line Definition (Minimal)</a> object.<br />
+<br />
+This link supplies attributes necessary to render the text underline and strike-through effects.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdxMediaDataPtr"><em><span class="field">pdxMediaDataPtr</span> (2115)</em> &nbsp; <small class="label">PD_LINK</small></h4>
+<p>
+pdxMediaDataPtr - Description of this property is not available at this time.</p>
+</div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,73 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetMMAxisInfo</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontGetMMAxisInfo(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_SWORD* dim, DT_SLONG* inst_count)</strong></div><br /><strong>Short Description:</strong> <em>Get number of axes, base designs and instances in font</em><br /><br />
+
+<p>This function returns the number of Multiple-Master design axes, base designs and design instances in the specified font.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>dim</em></p>
+</td><td>
+<p>Pointer to a variable that will hold the number of Multiple-Master base designs in the font referenced by <em>font_index</em>. If you do not wish to receive this value, you may set <em>dim</em> to DV_NULL.</p>
+</td></tr>
+
+<tr><td>
+<p><em>inst_count</em></p>
+</td><td>
+<p>Pointer to a variable that will hold the number of Multiple-Master design instances in the font referenced by <em>font_index</em>. If you do not wish to receive this value, you may set <em>inst_count</em> to DV_NULL. This parameter will be described in the future.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>The return value represents the number of Multiple-Master design axes in the font referenced by <em>font_index</em>. If the referenced font is a Single-Master font, the return value is always 0. If the referenced font, however, is a Multiple-Master font (in D-Type, Adobe Type 1 or Variable OpenType format) the return value is a positive number.</p>
+
+
+<h3>Comments</h3>
+
+<p>Modern Multiple-Master fonts (that come in Variable OpenType and D-Type format) have a positive number of design axes but do not have a fixed number of base designs that can be interpreted by end-user applications. For those fonts, the number of design axes will be returned as a positive number but the number of base designs will be returned as 1.</p>
+
+<p>Legacy Multiple-Master fonts (that come in Adobe Type 1 and D-Type format) have a positive number of design axes and a fixed number of base designs that is usually 2, 4, 8 or 16 (i.e. a multiple of 2). This is because their base designs are typically organized in groups of 2, where each group represents one <em>design axis</em> such as weight, width, optical size etc. In those fonts each base design represents one <em>extreme</em> in the dynamic range of possible instances along the design axis. For example, if one of the design axes is width, the base designs typically represent the narrowest possible and widest possible design for this font. Virtually all Multiple-Master Adobe Type 1 fonts and some D-Type fonts are organized in this way.</p>
+
+<p>For Single-Master fonts (in any format), the number of design axes will be returned as 0 while the number of base designs will be returned as 1.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

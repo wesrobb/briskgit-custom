@@ -1,0 +1,6 @@
+Text string, i.e. an array of character or glyph codes (variable length, 4 bytes per code).
+
+{strong}Sample values:{/strong}
+
+"54 00 00 00 65 00 00 00 73 00 00 00 74 00 00 00" ('T', 'e', 's', 't')
+"44 00 00 00 2D 00 00 00 54 00 00 00 79 00 00 00 70 00 00 00 65 00 00 00" ('D', '-', 'T', 'y', 'p', 'e')

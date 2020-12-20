@@ -1,0 +1,6 @@
+Horizontal radius in document units. Must be positive.
+
+{strong}Sample values:{/strong}
+
+500 = Horizontal radius of 500 document units
+800 = Horizontal radius of 800 document units

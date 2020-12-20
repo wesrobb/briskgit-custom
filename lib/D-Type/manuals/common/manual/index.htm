@@ -1,0 +1,238 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../include/style_001.css" />
+</head>
+
+<body>
+
+
+<h1>D-Type Manual</h1>
+
+<p align="right"><img src="../images/logo.gif" alt="D-Type" /></p>
+
+<div class="toc">
+
+<h2>Table of Contents</h2>
+
+
+<ol class="toc_head">
+
+<li class="toc_head"><a href="copy.htm">Copyright</a></li>
+
+<li class="toc_head">Core Engines
+<ol>
+<li class="toc_subhead"><a href="../../dt/manual/intro.htm">D-Type Standard Engine</a>
+<ol>
+<li>Overview: <a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a>, <a href="../../dt/manual/sengine.htm">D-Type Shape Engine</a> and <a href="../../dt/manual/fengine.htm">D-Type Font Engine</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+<li><a href="../../dt/funcs/index.htm">Functions</a> (dtype.h)</li>
+<li><a href="../../dt/funcsx/index.htm">Extra Functions For Simple Text</a> (dtextras.h)</li>
+<li><a href="../../dt/manual/shapes.htm">Functions For Common 2D Shapes</a> (dtshapes.h)</li>
+<li>Examples
+<ul>
+<li><a href="../../dt/manual/examples.htm#E1">Example 1: Hello World</a></li>
+<li><a href="../../dt/manual/examples.htm#E2">Example 2: Simple Shape Via Buffer &mdash; Line</a></li>
+<li><a href="../../dt/manual/examples.htm#E3">Example 3: Simple Shape Via Buffer &mdash; Ellipse</a></li>
+<li><a href="../../dt/manual/examples.htm#E4">Example 4: Custom Shapes Via Array</a></li>
+<li><a href="../../dt/manual/examples.htm#E5">Example 5: Memory Based Font</a></li>
+</ul>
+</li>
+<li>Sample Programs
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</li>
+<li>Appendix
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</li>
+<li>Frequently Asked Questions (FAQs)
+<ul>
+<li><a href="../faq/raster.htm">Rasterization</a></li>
+<li><a href="../faq/shapes.htm">Shapes</a></li>
+<li><a href="../faq/fonts.htm">Fonts</a></li>
+<li><a href="../faq/textm.htm">Text Metrics</a></li>
+<li><a href="../faq/charenc.htm">Character Encoding</a></li>
+</ul>
+</li>
+</ol>
+</li>
+
+<li class="toc_subhead"><a href="../../dc/manual/intro.htm">D-Type Direct Color RGBA Rasterizer</a>
+<ol>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+<li><a href="../../dc/funcs/index.htm">Functions</a> (dtype.h)</li>
+<li>Sample Programs
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</li>
+</ol>
+</li>
+
+<li class="toc_subhead"><a href="../../pd/manual/intro.htm">D-Type Power Engine</a>
+<ol>
+<li><a href="../../pd/manual/overview.htm">Overview</a> and <a href="../../pd/manual/components.htm">Components</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a>
+<ul>
+<li><a href="../../pd/objects/index.htm">Guidelines For Creating PowerDoc Objects</a></li>
+<li><a href="../../pd/objects/format.htm">Format Identifiers &mdash; Standard</a></li>
+<li><a href="../../pd/objects/format_c.htm">Format Identifiers &mdash; For Compression</a></li>
+</ul>
+</li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+<li><a href="../../pd/funcs/index.htm">Functions</a> (dtype.h)</li>
+<!--<li>Extra Functions (pdextras.h)</li>-->
+<li>Examples
+<ul>
+<li><a href="../../pd/manual/examples.htm#E1">Example 1: From Design To Code</a></li>
+</ul>
+</li>
+<li>Sample Programs
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</li>
+<li>Appendix
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</li>
+</ol>
+</li>
+<li class="toc_subhead"><a href="../../tx/manual/intro.htm">D-Type Text Engine</a>
+<ol>
+<!--<li>Overview</li>-->
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../tx/manual/txstructs1.htm">Core Structure Types</a> and <a href="../../tx/manual/txstructs2.htm">Special Structure Types</a></li>
+<li><a href="../../tx/manual/units.htm">Units</a></li>
+<li><a href="../../tx/funcs/index.htm">Functions</a> (dtype.h)</li>
+<li>Sample Programs
+<ul>
+<li><a href="../../..//examples-cpp/example_text_animation">example_text_animation</a></li>
+<li><a href="../../..//examples-cpp/example_text_output">example_text_output</a></li>
+<li><a href="../../..//examples-cpp/example_text_application">example_text_application</a></li>
+<li><a href="../../..//examples-cpp/example_textpro_builder1">example_textpro_builder1</a></li>
+<li><a href="../../..//examples-cpp/example_textpro_builder2">example_textpro_builder2</a></li>
+</ul>
+</li>
+<li>Appendix
+<ul>
+<li><a href="../../tx/manual/fontmap.htm">Font and Attribute Mapping Table for Unicode Scripts (fontmap.inf)</a></li>
+<li><a href="../../tx/manual/txattrids.htm">Attribute Identifiers</a></li>
+<li><a href="../../tx/manual/txattribs.htm">Predefined Styles/Formats</a></li>
+</ul>
+</li>
+<li>Frequently Asked Questions (FAQs)
+<ul>
+<li><a href="../faq/text.htm">Text Engine API</a></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+
+<li class="toc_head">Miscellaneous
+<ol>
+
+
+<li class="toc_subhead">Common Infrastructure
+<ol>
+<li><a href="../../dt/manual/inifiles.htm">Initialization Files</a></li>
+<li><a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a></li>
+<li><a href="../../dt/manual/fpaths.htm">File Based Streams</a></li>
+<li><a href="../../dt/manual/patterns.htm">Pattern Fills</a></li>
+<li><a href="../../dt/manual/styles.htm">Style Effects</a></li>
+<li><a href="../workshop/index.htm">Workshop</a>
+<ul>
+<li><a href="../workshop/quality.htm">Step by Step: How to Configure D-Type for the Highest Text Quality</a></li>
+<li><a href="../workshop/text.htm">Rendering Great Looking Text With D-Type</a></li>
+<li><a href="../workshop/pd_frames.htm">Text Flows and Frames</a></li>
+</ul>
+</li>
+<li>Frequently Asked Questions (FAQs)
+<ul>
+<li><a href="../faq/api.htm">Application Programming Interface (API)</a></li>
+<li><a href="../faq/general.htm">General</a></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+
+<li class="toc_head">Extensions, Plugins &amp; Helpers
+<ol>
+
+<li class="toc_subhead"><a href="../../lx/manual/intro.htm">D-Type Text Layout Extension</a>
+<ol>
+<li><a href="../../lx/manual/license1.htm">License</a></li>
+<li><a href="../../lx/manual/overview.htm">Overview</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../lx/manual/lxstructs.htm">Structure Types</a></li>
+<li><a href="../../lx/manual/scripts.htm">Scripts</a></li>
+<li><a href="../../lx/funcs/index.htm">Functions</a> (dtype.h)</li>
+<li>Examples
+<ul>
+<li><a href="../../lx/manual/examples.htm#E1">Example 1: Layout Without Caching Subsystem</a></li>
+<li><a href="../../lx/manual/examples.htm#E2">Example 2: Layout With Caching Subsystem</a></li>
+</ul>
+</li>
+</ol>
+</li>
+
+<li class="toc_subhead"><a href="../../fx/manual/fxformats.htm">D-Type External Format Plugin</a>
+<ol>
+<li><a href="../../fx/manual/fxformats.htm">Supported File Formats</a></li>
+<li><a href="../../fx/manual/fxstructs.htm">Structure Types</a></li>
+<li><a href="../../fx/funcs/index.htm">Functions</a> (dtype.h)</li>
+</ol>
+</li>
+
+<li class="toc_subhead"><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a>
+<ol>
+<li><a href="../../CDTDisplay/funcs/index.htm">CDTDisplay Functions</a> (dtwindow.h)</li>
+<li><a href="../../CDTWindow/funcs/index.htm">CDTWindow Functions</a> (dtwindow.h)</li>
+</ol>
+</li>
+
+</li>
+</ol>
+
+</div>
+
+
+
+&nbsp;
+<br />
+<br />
+&nbsp;
+</body>
+</html>

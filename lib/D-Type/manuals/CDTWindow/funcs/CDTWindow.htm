@@ -1,0 +1,95 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTWindow</h1>
+
+<h2>CDTWindow</h2>
+
+<div class="box_prototype"><strong><sup><small>1</small></sup> CDTWindow(CDTDisplay* display, const DT_STREAM_DESC* sd_menu = DV_NULL)</strong></div><br />
+<div class="box_prototype"><strong><sup><small>2</small></sup> CDTWindow(CDTDisplay* display, const DT_CHAR* title, DT_SLONG w, DT_SLONG h, DT_ULONG flags, const DT_STREAM_DESC* sd_menu = DV_NULL)</strong></div><br />
+<div class="box_prototype"><strong><sup><small>3</small></sup> CDTWindow(CDTDisplay* display, const DT_CHAR* title, DT_SLONG x, DT_SLONG y, DT_SLONG w, DT_SLONG h, DT_ULONG flags, const DT_STREAM_DESC* sd_menu = DV_NULL)</strong></div><br />
+
+<p>Creates the CDTWindow object.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>display</em></p>
+</td><td>
+<p>A valid pointer to the CDTDisplay object to be associated with the newly created window.</p>
+<p>In a typical application, all windows will be associated with the same CDTDisplay object.</p>
+</td></tr>
+
+<tr><td>
+<p><em>title</em></p>
+</td><td>
+<p>A valid pointer to the standard ANSI C/C++ string which represents the title of the window.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x</em></p>
+</td><td>
+<p>The x coordinate of the window, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y</em></p>
+</td><td>
+<p>The y coordinate of the window, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>w</em></p>
+</td><td>
+<p>The width of the window, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>h</em></p>
+</td><td>
+<p>The height of the window, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask of special flags. The following bit values are currently supported:</p>
+<ul>
+<li>DV_WINDOW_HINT_RESIZE &mdash; Indicates that the window should be resizable.</li>
+<li>DV_WINDOW_HINT_CENTER &mdash; When opening the window, attempts to center it on the display. This may not work on all platforms.</li>
+</ul>
+<p>Note that <em>flags</em> is a bitmask. Use the OR ("|") operation to combine several bit values. For example, to open a centered and resizable window, set <em>flags</em> to DV_WINDOW_HINT_RESIZE|DV_WINDOW_HINT_CENTER.</p>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../CDTDisplay/manual/intro.htm">D-Type Helper Library For Platform Independent Window Display</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

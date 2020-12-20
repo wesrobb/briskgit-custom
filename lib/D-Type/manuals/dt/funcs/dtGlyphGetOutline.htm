@@ -1,0 +1,180 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtGlyphGetOutline</h2><div class="box_prototype"><strong>
+DT_SLONG dtGlyphGetOutline(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_ULONG glyph_index, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_SLONG x_arr[], DT_SLONG y_arr[], DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Get glyph outline</em><br /><br />
+
+<h2>dtCharGetOutline</h2><div class="box_prototype"><strong>
+DT_SLONG dtCharGetOutline(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_ID_ULONG char_code, DT_SLONG max_points, DT_ID_UBYTE i_arr[], DT_SLONG x_arr[], DT_SLONG y_arr[], DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Get character outline</em><br /><br />
+
+<p>This function retrieves the outline description of a single glyph represented by a Unicode character code (or font dependent glyph index). The glyph's outline curve points are retrieved in font units.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of the font or font instance in the Font Catalog.</p>
+</td></tr>
+
+<tr><td>
+<p><em>char_code</em></p>
+</td><td>
+<p>Unicode character code of the glyph for which the outline curve will be retrieved.</p>
+</td></tr>
+
+<tr><td>
+<p><em>glyph_index</em></p>
+</td><td>
+<p>Font dependent index of the glyph for which the outline curve will be retrieved.</p>
+</td></tr>
+
+<tr><td>
+<p><em>max_points</em></p>
+</td><td>
+<p>Specifies the size of the 3-dimensional array into which the function copies the glyph's outline description.</p>
+</td></tr>
+
+<tr><td>
+<p><em>i_arr, x_arr, y_arr</em></p>
+</td><td>
+<p>A 3-dimensional array into which the function copies the glyph's outline description.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If successful, the function returns the actual number of points needed for the outline description. Otherwise, the return value is -1.</p>
+
+<p>If the 3-dimensional array is not large enough to accept all the outline points (i.e. <em>max_points</em> is less than the return value, the function copies only the first <em>max_points</em> elements into the 3-dimensional array (i.e. the array will be truncated). In this case, your application can increase the size of the 3-dimensional array and call this function again with the updated value for <em>max_points</em>.</p>
+
+<p><em>Note:</em> Recommended value for <em>max_points</em> is 500.</p>
+
+
+<h3>Comments</h3>
+
+<p><em>The i_arr</em> array contains instructions that describe the corresponding pair of coordinates in the <em>x_arr</em> and <em>y_arr</em> arrays. Possible values for <em>i_arr</em> are:</p>
+
+<ul>
+<li>New contour: <strong>16</strong></li>
+<li>Line: <strong>20</strong></li>
+<li>Quadratic B-Spline curve: <strong>25</strong></li>
+<li>B&eacute;zier curve: <strong>24</strong></li>
+</ul>
+
+<p>The following table describes how the 3-dimensional array should be interpreted. Please note that Quadratic B-Spline curves require two consecutive rows in the 3-dimensional array while B&eacute;zier curves require three consecutive rows.</p>
+
+<table class="table_data">
+
+<tr>
+<th width="33%">i_arr</th>
+<th width="33%">x_arr</th>
+<th width="33%">y_arr</th>
+</tr>
+
+<tr>
+<th colspan="3" align="left">New Contour</th>
+</tr>
+
+<tr><td><p align="center">16</p>
+
+</td><td><p align="center">X1 in font units</p>
+
+</td><td><p align="center">Y1 in font units</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Line</th>
+</tr>
+
+<tr><td><p align="center">20</p>
+
+</td><td><p align="center">X1 in font units</p>
+
+</td><td><p align="center">Y1 in font units</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">Quadratic B-Spline Curve</th>
+</tr>
+
+<tr><td><p align="center">25</p>
+
+</td><td><p align="center">X1 in font units</p>
+
+</td><td><p align="center">Y1 in font units</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in font units</p>
+
+</td><td><p align="center">Y2 in font units</p>
+</td></tr>
+
+<tr>
+<th colspan="3" align="left">B&eacute;zier Curve</th>
+</tr>
+
+<tr><td><p align="center">24</p>
+
+</td><td><p align="center">X1 in font units</p>
+
+</td><td><p align="center">Y1 in font units</p>
+</td></tr>
+
+<tr><td><p align="center">n</p>
+
+</td><td><p align="center">X2 in font units</p>
+
+</td><td><p align="center">Y2 in font units</p>
+</td></tr>
+
+<tr><td><p align="center">0</p>
+
+</td><td><p align="center">X3 in font units</p>
+
+</td><td><p align="center">Y3 in font units</p>
+</td></tr>
+
+</table>
+
+<p><em>Note:</em> n = recommended number of curve segments</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

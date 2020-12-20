@@ -1,0 +1,74 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Power Engine Components</h1>
+
+<p>D-Type Power Engine consists of the following main components:</p>
+
+
+<h3>Core Power Engine (dtypepwr.dll)</h3>
+
+<p>The core engine contains a set of functions to create, read, write, modify and render Power Engine documents. These functions can be easily identified by their &quot;<em>pd</em>&quot; prefix. These functions are called <em>Core Power Engine functions</em> and, on Windows, are located in the <strong>dtypepwr.dll</strong> dynamic link library. The library's function prototypes can be found in the <strong>dtype.h</strong> header file.</p>
+
+<p>Core Power Engine's functions are described in detail in the <a href="../funcs/index.htm">Core C/C++ Functions</a> section of this manual.</p>
+
+
+<h3>D-Type Font Engine and Rasterizer (dtypestd.dll)</h3>
+
+<p>As part of the Core Power Engine, this engine is responsible for rendering text and vector based shapes. Its functions can be easily recognized by their &quot;<em>dt</em>&quot; prefix. The D-Type Standard Engine library is described in detail in D-Type Standard Engine Manual. On Windows, its functions are physically located in the <strong>dtypestd.dll</strong> dynamic link library while the function prototypes can be found in the <strong>dtype.h</strong> header file.</p>
+
+<p>However, most Power Engine applications will not need to call D-Type Font Engine and Rasterizer's functions directly. These functions are available primarily for application developers who wish to implement and render their own custom PowerDoc objects or perform specialized font related operations.</p>
+
+<p>It should be noted that it is also possible to use D-Type Standard Engine and
+Rasterizer library independently of the Core Power Engine. For example, in an application consisting of two modules, one module could use D-Type Font Engine and Rasterizer to render user interface,
+while the other module could use the Core Power Engine to render Power Engine documents.</p>
+
+
+<h3>D-Type Text Layout Extension (dtypelay.dll)</h3>
+
+<p>As part of the Core Power Engine, this extension is responsible for shaping many complex Unicode scripts such as Arabic, Hebrew, Indic, Thai etc. On Windows, its functions are physically located in the <strong>dtypelay.dll</strong> dynamic link library while the function prototypes can be found in the <strong>dtype.h</strong> header file.</p>
+
+<p>Most Power Engine applications will not need to call D-Type Text Layout Extension functions directly. This is because all text layout operations that require services of the Text Layout Extension are done automatically inside the Core Power Engine.</p>
+
+<p>D-Type Text Layout Extension is described in detail in D-Type Text Layout Extension Manual.</p>
+
+<h3>Auxiliary Power Engine Library (pdextras.cpp)</h3>
+
+<p>The Auxiliary library represents a collection of functions that extend the basic functionality of the Core Power Engine. This includes functions to select, cut, copy and paste PowerDoc objects and images, edit text, export Power Engine documents in C/C++ or VBScript format, and a number of other functions designed to help applications manage and manipulate PowerDoc objects, images, pages and documents.</p>
+
+<p>The Auxiliary library's functions can be easily identified by their &quot;<em>pdx</em>&quot; and are located in the <strong>pdextras.cpp</strong> file. The library's function prototypes are located in the <strong>pdextras.h</strong> header file.</p>
+
+
+<h3>PowerDoc Editor</h3>
+
+<p>PowerDoc Editor is a simple yet useful application that allows developers to construct complex Power Engine documents or document templates using a straightforward visual interface. Documents created using this tool can be saved in D-Type Power Engine format or exported to C/C++, VB, VB Script, JScript/JavaScript, ASP or ASP.NET so their structure and content can be further manipulated through code.</p>
+
+<p>PowerDoc Editor is available for Windows, Linux and Mac OS X. For more details, see the <a href="editor.htm">PowerDoc Editor</a> section of this document.</p>
+
+
+<h3>PowerDoc For Active Server Pages and ASP.NET (PDOC.dll)<br /><small>Available only for Windows</small></h3>
+
+<p>This is a server-side rendering component for Active Server Pages (ASP) and ASP.NET. This components
+allows application developers to create and publish in real time their Power Engine documents on the Internet. Its functions are physically located in the <strong>PDOC.dll</strong> library.</p>
+
+<p>For more details, see D-Type PowerDoc For ASP/ASP.NET Manual.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,52 @@
+!LIB_CATEGORY=Form Controls: Button / Rich Button
+!LIB_CATEGORY=Form Controls: Radio Button
+!LIB_CATEGORY=Form Controls: Check Box
+!LIB_CATEGORY=Form Controls: Text Box / Rich Text Box
+!LIB_CATEGORY=Form Controls: List Box
+!LIB_CATEGORY=Form Controls: Horizontal Slider
+!LIB_CATEGORY=Form Controls: Vertical Slider
+!LIB_CATEGORY=Form Controls: Arrow Sets
+
+{
+0|991000-a|Plain, Round
+0|991000-b|Plain, Rectangular
+0|991800-a|Rich, Round
+0|991800-b|Rich, Rectangular
+1|991101|Selected
+1|991100|Deselected
+2|991201|Checked
+2|991200|Unchecked
+3|991300-a|Plain, Short
+3|991300-b|Plain, Regular
+3|991300-c|Plain, Long
+3|991700-a|Rich, Short
+3|991700-b|Rich, Regular
+3|991700-c|Rich, Long
+4|991500|Standard
+5|991600-01|Option 1
+5|991600-02|Option 2
+5|991600-03|Option 3
+5|991600-04|Option 4
+5|991600-05|Option 5
+6|991700-01|Option 1
+6|991700-02|Option 2
+6|991700-03|Option 3
+6|991700-04|Option 4
+6|991700-05|Option 5
+7|991411|Up
+7|991410|Down
+7|991409|Left
+7|991408|Right
+7|991407|Up
+7|991406|Down
+7|991405|Left
+7|991404|Right
+7|991403|Up
+7|991402|Down
+7|991401|Left
+7|991400|Right
+7|991415|Up
+7|991414|Down
+7|991413|Left
+7|991412|Right
+}

@@ -1,0 +1,147 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Generic Object</h2>
+<h3 id="overview">Overview</h3>
+The Generic Object is a special object that can be used to represent any other visual PowerDoc object (i.e. an object with a designated FnDraw rendering function).<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawGenericObject (21)<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdFnDrawObjectPtr"><em><span class="field">pdFnDrawObjectPtr</span> (1085)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="009.htm#pdFnDrawObjectPtr">PowerFont Record</a>, <a href="013.htm#pdFnDrawObjectPtr">Group Member</a></small></p>
+<p>
+Link to any visual PowerDoc object (i.e. any object with a designated FnDraw rendering function).<br />
+<br />
+The pdFnDraw property describes the visual object pointed by the pdFnDrawObjectPtr link. If pdFnDraw is missing, it is assumed pdFnDrawObjectPtr points to the <a href="123.htm">Group</a> object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdFnDraw"><em><span class="field">pdFnDraw</span> (1086)</em> &nbsp; <small class="label">PD_WORD_SIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="009.htm#pdFnDraw">PowerFont Record</a>, <a href="013.htm#pdFnDraw">Group Member</a></small></p>
+<p>
+Rendering function that describes the visual object pointed to by the pdFnDrawObjectPtr link.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Nothing<br />
+1 = <a href="101.htm">Text Line</a><br />
+2 = <a href="102.htm">Text Arc</a><br />
+3 = <a href="103.htm">Text Area</a><br />
+4 = <a href="111.htm">Line</a><br />
+5 = <a href="113.htm">Circle/Ellipse</a><br />
+6 = <a href="112.htm">Rectangle</a><br />
+7 = <a href="114.htm">True Circle/Ellipse</a><br />
+8 = <a href="115.htm">Slice</a><br />
+9 = <a href="116.htm">Arc</a><br />
+10 = <a href="106.htm">Rich Text Area</a><br />
+11 = <a href="117.htm">Pattern</a><br />
+12 = <a href="118.htm">Grid</a><br />
+13 = <a href="119.htm">Custom Shape or Polygon</a><br />
+14 = <a href="120.htm">Gradient</a>, <a href="125.htm">Gradient (As Fast Rectangle)</a>, <a href="126.htm">Gradient (As Inverter)</a><br />
+15 = <a href="121.htm">Bitmap Image</a><br />
+16 = <a href="108.htm">Char</a><br />
+17 = <a href="104.htm">Rich Text Line</a><br />
+18 = <a href="110.htm">Library Shape</a><br />
+19 = <a href="105.htm">Rich Text Arc</a><br />
+20 = <a href="107.htm">Glyph</a><br />
+21 = <a href="122.htm">Generic Object</a><br />
+22 = <a href="123.htm">Group</a><br />
+23 = <a href="109.htm">PowerGlyph</a><br />
+24 = <a href="124.htm">Polyline (also Bezier and B-Spline curves)</a><br />
+25 = <a href="129.htm">Library Polyline</a><br />
+26 = <a href="127.htm">Text Design</a><br />
+27 = <a href="128.htm">Rich Text Design</a><br />
+28 = <a href="130.htm">Text Path</a><br />
+29 = <a href="131.htm">Rich Text Path</a><br />
+30 = <a href="132.htm">Library Bitmap Image</a><br />
+31 = <a href="133.htm">Background Surface</a><br />
+10000 = <a href="301.htm">Button</a><br />
+10001 = <a href="302.htm">Radio Button</a><br />
+10002 = <a href="303.htm">Check Box</a><br />
+10003 = <a href="304.htm">Text Box</a><br />
+10004 = <a href="305.htm">List Box</a><br />
+10005 = <a href="306.htm">Horizontal Slider</a><br />
+10006 = <a href="307.htm">Vertical Slider</a><br />
+10007 = <a href="308.htm">Rich Text Box</a><br />
+10008 = <a href="309.htm">Rich Button</a><br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* This example illustrates how Generic Object can be used to represent a Library Shape object */</span><br />
+<br />
+DT_ID_SLONG obj[3];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "LibShape Style");<br />
+obj[1] = pdObjAdd(pd, 0, "LibShape");<br />
+<strong>obj[2] = pdObjAdd(pd, 0, "Generic Object");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdBodyPtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdDw, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdDh, "300", PD_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdID, "8", PD_WORD_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+<strong>pdLinkAdd(pd, obj[2], pdFnDrawObjectPtr, obj[1]);<br />
+pdPropAdd(pd, obj[2], pdFnDraw, "18", PD_WORD_SIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[2], 0, 50, 50, 0, 0, 0, pdDrawGenericObject, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+<span class="codecomment">/* This example illustrates how Generic Object can be used to represent a Library Shape object */</span><br />
+<br />
+local obj_0 = o("LibShape Style");<br />
+local obj_1 = o("LibShape");<br />
+local obj_2 = o("Generic Object");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_1 + l(pdBodyPtr, obj_0);<br />
+obj_1 + i(pdDw, 300);<br />
+obj_1 + i(pdDh, 300);<br />
+obj_1 + i(pdID, 8);<br />
+<br />
+obj_2 + l(pdFnDrawObjectPtr, obj_1);<br />
+obj_2 + i(pdFnDraw, 18);<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_2.Pin(0, 50, 50, pdDrawGenericObject);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

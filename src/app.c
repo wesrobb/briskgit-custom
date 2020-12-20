@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <dtype.h>
 #include "eva/eva.h"
 
 #include "color.h"
@@ -221,6 +222,83 @@ void app_window_resized(uint32_t width, uint32_t height)
     _ctx.branch_pane_rect.h = (int32_t)eva_get_window_height();
 }
 
+void test_dtype(const eva_framebuffer *fb)
+{
+    DT_DTENGINE engine;
+
+    DT_MDC dc_mem;
+
+    DT_STYLE_ATTRIBS style = {{0, 0}, {255, 0, 0, 0}, 0, DV_NULL};
+    /*
+        Same as
+        style.ep[0] = 0;
+        style.ep[1] = 0;
+        style.rgbt[0] = 255;
+        style.rgbt[1] = 0;
+        style.rgbt[2] = 0;
+        style.rgbt[3] = 0;
+        style.reserved = 0;
+        style.palette = DV_NULL;
+    */ 
+
+    DT_TYPE_ATTRIBS type = {0, 0, 0, 0, 0, {{100, 100, 0, 0, 0}}};
+    /*
+        Same as
+        type.font_index = 0;
+        type.thickness = 0;
+        type.segment = 0;
+        type.reserved = 0;
+        type.descriptor = 0;
+        type.transform.params.size_h = 100;
+        type.transform.params.size_v = 100;
+        type.transform.params.skew_h = 0;
+        type.transform.params.skew_v = 0;
+        type.transform.params.rotation = 0;
+    */ 
+
+
+    /* Initialize D-Type Font Engine. Exit if an error occurs. */ 
+    DT_STREAM_FILE(sd_ini, "dtype.inf");
+    if (dtEngineIniViaStream(&engine, &sd_ini, DV_NULL) == 0) exit(0);
+
+    /* Add new Adobe Type 1 font to the Font Catalog */ 
+    DT_STREAM_FILE(sd_font, "fonts/pfb/helvetica.pfb");
+    type.font_index = dtFontAddViaStream(engine, DV_FONT_TYPE1_ADOBE, DV_NULL, 0, -1, 0, 1, &sd_font);
+
+    /* Exit if an error occurs */ 
+    if (type.font_index < 0) exit(0);
+
+
+    /* Create a 640x480-pixel 24-bpp memory surface */ 
+    dc_mem.w = 640;
+    dc_mem.h = 480,
+    dc_mem.l = 4 * dc_mem.w * dc_mem.h;
+    if ((dc_mem.m = (DT_UBYTE*)malloc((uint64_t)dc_mem.l)) == DV_NULL) exit(0);
+    memset(dc_mem.m, 255, dc_mem.l);
+
+    /* Redirect all D-Type output to that surface and define clipping rect */ 
+    dtOutputSetAsMDC(engine, DV_FORMAT_32, 0, &dc_mem, 0, 0, 640, 480);
+
+    /* Select color */ 
+    dtOutputSetStyleAttribs(engine, &style, 0);
+
+    /* Select type */ 
+    dtTypesetterSetTypeAttribs(engine, &type, 0);
+
+
+    /* Draw Hello World at coordinates (200, 200) */ 
+    //dtxTextDoOutput_ANSI(engine, 200, 200, 0, DV_TEXTMODE_KERN_ROUND_ADD, DV_NULL, "Hello World");
+
+    /* Copy surface to screen or save as image */ 
+
+
+    /* Free memory surface */ 
+    free(dc_mem.m);
+
+    /* And destroy D-Type Engine */ 
+    dtEngineExt(engine);
+}
+
 void app_draw(const eva_framebuffer *fb)
 {
     profiler_begin;
@@ -272,6 +350,8 @@ void app_draw(const eva_framebuffer *fb)
     textfield_draw(_ctx.tf, &tf_pos);
 
     console_draw(fb);
+
+    test_dtype(fb);
 
     profiler_end;
 }

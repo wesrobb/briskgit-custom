@@ -1,0 +1,3 @@
+This object describes a polyline defined in Power Engine's internal library of pre-defined polylines.
+
+{strong}Designated Rendering Function:{/strong} pdDrawLibraryPolyline (25)

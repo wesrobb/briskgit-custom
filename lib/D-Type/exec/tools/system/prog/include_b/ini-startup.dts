@@ -1,0 +1,1326 @@
+function DTFunc(f, n = 0, r = 0.0, s = "") { return dtgcall_cust01_p(f, n, r, s); }
+function DTFunc_Rn(f, n = 0, r = 0.0, s = "") { return dtgcall_cust01_n(f, n, r, s); }
+function DTFunc2_Rn(f, n = 0, r = 0.0, s1 = "", s2 = "", s3 = "", s4 = "", s5 = "", s6 = "", s7 = "", s8 = "", s9 = "", s10 = "", s11 = "", s12 = "") { return dtgcall_cust02_n(f, n, r, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12); }
+//function DTFunc_Rr(f, n = 0, r = 0.0, s = "") { return dtgcall_cust01_r(f, n, r, s); }
+function DTFunc_Rs(f, n = 0, r = 0.0, s = "") { return dtgcall_cust01_s(f, n, r, s); }
+function DTFunc2_Rs(f, n = 0, r = 0.0, s1 = "", s2 = "", s3 = "", s4 = "", s5 = "", s6 = "", s7 = "", s8 = "", s9 = "", s10 = "", s11 = "", s12 = "") { return dtgcall_cust02_s(f, n, r, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12); }
+function DTFunc3_Rs(f, n1 = 0, n2 = 0, s1 = "", s2 = "", s3 = "") { return dtgcall_cust03_s(f, n1, n2, s1, s2, s3); }
+
+function DTMethod(p, f, n = 0, r = 0.0, s = "") { return dtmcall_cust01_n(p, f, n, r, s); }
+function DTMethod_Rp(p, f, n = 0, r = 0.0, s = "") { return dtmcall_cust01_p(p, f, n, r, s); }
+//function DTMethod_Rp(p, f, n = 0, r = 0.0, s = "") { return dtgcall_cust01_p(f, n, r, s); }
+
+function DTMethodN01(p, f, n1 = 0) { return dtmcall_n01____n(p, f, n1); }
+
+function DTMethodN04B(p1, p2, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0) { return dtmcall_n04b___n(p1, p2, f, n1, n2, n3, n4); }
+
+function DTMethodN04(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0) { return dtmcall_n04____n(p, f, n1, n2, n3, n4); }
+function DTMethodN03(p, f, n1 = 0, n2 = 0, n3 = 0)         { return dtmcall_n04____n(p, f, n1, n2, n3,  0); }
+function DTMethodN02(p, f, n1 = 0, n2 = 0)                 { return dtmcall_n04____n(p, f, n1, n2,  0,  0); }
+function DTMethodN02_Rs(p, f, n1 = 0, n2 = 0)              { return dtmcall_n04____s(p, f, n1, n2,  0,  0); }
+
+function DTMethodN06(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0) { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6, 0, 0, 0, 0, "", ""); }
+function DTMethodN05(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0)         { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5,  0, 0, 0, 0, 0, "", ""); }
+
+function DTMethodN09S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, s1 = "") { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, 0, s1, ""); }
+function DTMethodN08S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, s1 = "")         { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8,  0, 0, s1, ""); }
+function DTMethodN07S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, s1 = "")                 { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6, n7,  0,  0, 0, s1, ""); }
+function DTMethodN06S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, s1 = "")                         { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6,  0,  0,  0, 0, s1, ""); }
+function DTMethodN05S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, s1 = "")                                 { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5,  0,  0,  0,  0, 0, s1, ""); }
+function DTMethodN04S01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, s1 = "")                                         { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4,  0,  0,  0,  0,  0, 0, s1, ""); }
+function DTMethodN03S01(p, f, n1 = 0, n2 = 0, n3 = 0, s1 = "")                                                 { return dtmcall_n10s02_n(p, f, n1, n2, n3,  0,  0,  0,  0,  0,  0, 0, s1, ""); }
+function DTMethodN02S01(p, f, n1 = 0, n2 = 0, s1 = "")                                                         { return dtmcall_n10s02_n(p, f, n1, n2,  0,  0,  0,  0,  0,  0,  0, 0, s1, ""); }
+
+function DTMethodN06S02(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, s1 = "", s2 = "") { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5, n6, 0, 0, 0, 0, s1, s2); }
+function DTMethodN05S02(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, s1 = "", s2 = "")         { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4, n5,  0, 0, 0, 0, 0, s1, s2); }
+function DTMethodN04S02(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, s1 = "", s2 = "")                 { return dtmcall_n10s02_n(p, f, n1, n2, n3, n4,  0,  0, 0, 0, 0, 0, s1, s2); }
+function DTMethodN03S02(p, f, n1 = 0, n2 = 0, n3 = 0, s1 = "", s2 = "")                         { return dtmcall_n10s02_n(p, f, n1, n2, n3,  0,  0,  0, 0, 0, 0, 0, s1, s2); }
+function DTMethodN02S02(p, f, n1 = 0, n2 = 0, s1 = "", s2 = "")                                 { return dtmcall_n10s02_n(p, f, n1, n2,  0,  0,  0,  0, 0, 0, 0, 0, s1, s2); }
+
+function DTMethodN01R10(p, f, n1 = 0, r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0, r5 = 0.0, r6 = 0.0, r7 = 0.0, r8 = 0.0, r9 = 0.0, r10 = 0.0) { return dtmcall_n01r10_n(p, f, n1, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10); }
+function DTMethodN01R09(p, f, n1 = 0, r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0, r5 = 0.0, r6 = 0.0, r7 = 0.0, r8 = 0.0, r9 = 0.0) { return dtmcall_n01r10_n(p, f, n1, r1, r2, r3, r4, r5, r6, r7, r8, r9, 0.0); }
+function DTMethodN10R01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, n10 = 0, r1 = 0.0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, r1); }
+function DTMethodN09R01(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, r1 = 0.0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, 0, r1); }
+function DTMethodN09R09(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0, r5 = 0.0, r6 = 0.0, r7 = 0.0, r8 = 0.0, r9 = 0.0) { return dtmcall_n10r10_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, 0, r1, r2, r3, r4, r5, r6, r7, r8, r9, 0.0); }
+
+function DTMethodN10(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, n10 = 0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, 0.0); }
+function DTMethodN09(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, 0, 0.0); }
+function DTMethodN08(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, 0, 0, 0.0); }
+function DTMethodN07(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0) { return dtmcall_n10r01_n(p, f, n1, n2, n3, n4, n5, n6, n7, 0, 0, 0, 0.0); }
+
+function DTMethodN12R09_N03(p, f, n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0, n7 = 0, n8 = 0, n9 = 0, n10 = 0, n11 = 0, n12 = 0, r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0, r5 = 0.0, r6 = 0.0, r7 = 0.0, r8 = 0.0, r9 = 0.0) { local a1 = [1, 2, 3]; local a2 = [10, 20, 30]; local a3 = [101, 202, 303]; return dtmcall_n12r10_n03____n(p, f, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, r1, r2, r3, r4, r5, r6, r7, r8, r9, 0.0, a1, a2, a3); }
+
+function DTMethod2(p1, p2, f, n = 0, r = 0.0, s0 = "", s1 = "") { return dtmcall_cust02_p(p1, p2, f, n, r, s0, s1); }
+function DTMethod3(p1, p2, p3, f, n = 0, r = 0.0, s0 = "", s1 = "") { return dtmcall_cust03_p(p1, p2, p3, f, n, r, s0, s1); }
+function DTMethod4(p1, p2, p3, p4, f, n = 0, r = 0.0, s0 = "", s1 = "") { return dtmcall_cust04_p(p1, p2, p3, p4, f, n, r, s0, s1); }
+function DTMethod5(p1, p2, p3, p4, p5, f, n = 0, r = 0.0, s0 = "", s1 = "", s2 = "") { return dtmcall_cust05_p(p1, p2, p3, p4, p5, f, n, r, s0, s1, s2); }
+
+function Cmd_Crash() { return DTFunc_Rn(10); }
+function Cmd_Version() { return DTFunc_Rn(99); }
+function Cmd_Return(n, s) { return DTFunc(1001, n, 0.0, s); }
+function Cmd_Redirect(s) { return Cmd_Return(DV_CMD_RETURN_REDIRECT, s); }
+function Cmd_NoDraw() { return Cmd_Return(DV_CMD_RETURN_NOREDRAW, ""); }
+function Cmd_GetProcessId() { return DTFunc_Rn(93); }
+function Cmd_GetWorkingDir() { return DTFunc_Rs(1500); }
+function Cmd_GetStdOut(flags) { return DTFunc_Rs(1505, flags); }
+
+GlobalWorkingDir <- Cmd_GetWorkingDir();
+
+function Cmd_GetFileInfo(filename, reserved = 0) { return DTFunc_Rs(1600, 0, 0.0, GlobalWorkingDir + filename); }
+
+function Cmd_Include(filename, exec = true)
+{
+	if (filename == "") return 0;
+	if (exec) return dofile(GlobalWorkingDir + filename);
+	return loadfile(GlobalWorkingDir + filename);
+}
+
+function Cmd_Execute(subdir, filename = "", flags = 0, permanent = true)
+{
+	local new_working_dir = ((flags & 1) ? (subdir) : (GlobalWorkingDir + subdir));
+	if (permanent) GlobalWorkingDir = new_working_dir;
+	if (filename == "") return 1;
+	return dofile(new_working_dir + filename);
+}
+
+
+function Round(x) { return floor(x + 0.5); }
+
+function StrReplace(s, original, replacement)
+{
+	local result = "";
+	local position = 0;
+	local expression = regexp(original); // make a regexp that will match the substring to be replaced
+	local captures = expression.capture(s); // find the first match
+
+	while (captures != null) /* should always be one result */
+	{
+		//foreach (i, capture in captures)
+		if (captures.len() == 1)
+		{
+			local capture = captures[0];
+			result += s.slice(position, capture.begin); // copy from the current position to the start of the match
+			result += replacement; // add the replacement substring instead of the original
+			position = capture.end;
+		}
+
+		captures = expression.capture(s, position); // find the next match
+	}
+
+	result += s.slice(position); // add any remaining part of the string after the last match
+	return result;
+}
+
+function ToHTML(s, flags = 0)
+{
+	s = StrReplace(s, "&", "&amp;");
+	s = StrReplace(s, "<", "&lt;");
+	s = StrReplace(s, ">", "&gt;");
+	s = StrReplace(s, "\"", "&quot;");
+	if (flags & 1) s = StrReplace(s, "\\n", "<br />");
+	if (flags & 2) s = StrReplace(s, "'", "&apos;");
+	return s;
+}
+
+function ToUTF8(n)
+{
+	local b1, b2, b3, b4;
+
+	if (n < 0x80)
+	{
+		b1 = n & 0x7F | 0x00;
+		return b1.tochar();
+	}
+	else if (n < 0x0800)
+	{
+		b1 = n >> 6 & 0x1F | 0xC0; b2 = n & 0x3F | 0x80;
+		return b1.tochar() + b2.tochar();
+	}
+	else if (n < 0x010000)
+	{
+		b1 = n >> 12 & 0x0F | 0xE0; b2 = n >> 6 & 0x3F | 0x80; b3 = n & 0x3F | 0x80;
+		return b1.tochar() + b2.tochar() + b3.tochar();
+	}
+	else if (n < 0x110000)
+	{
+		b1 = n >> 18 & 0x07 | 0xF0; b2 = n >> 12 & 0x3F | 0x80; b3 = n >> 6 & 0x3F | 0x80; b4 = n & 0x3F | 0x80;
+		return b1.tochar() + b2.tochar() + b3.tochar() + b4.tochar();
+	}
+
+	return "(?)";
+}
+
+/* ----------------------------------- */
+
+GlobalExportExt <- {};
+GlobalExportExt[DX_FORMAT_SVG_LARGE] <- ".svg";
+GlobalExportExt[DX_FORMAT_SVG_SMALL] <- ".svg";
+GlobalExportExt[DX_FORMAT_SVG_LARGE_MODERN] <- ".svg";
+GlobalExportExt[DX_FORMAT_SVG_SMALL_MODERN] <- ".svg";
+GlobalExportExt[DX_FORMAT_PDF_WFRAME] <- ".pdf";
+GlobalExportExt[DX_FORMAT_PDF_NORMAL] <- ".pdf";
+GlobalExportExt[DX_FORMAT_PDF_VECTOR] <- ".pdf";
+GlobalExportExt[DX_FORMAT_PDF_BITMAP] <- ".pdf";
+GlobalExportExt[DX_FORMAT_JPG] <- ".jpg";
+GlobalExportExt[DX_FORMAT_PNG] <- ".png";
+GlobalExportExt[DX_FORMAT_BMP] <- ".bmp";
+GlobalExportExt[DX_FORMAT_RAW] <- ".raw";
+
+
+class CDTDispatcher
+{
+	Obj = null;
+	constructor() { Obj = DTFunc(100); }
+	function Cmd(n, extra = 0) { return DTMethodN02(Obj, 1101, n, extra); }
+
+	function Cmd_MenuCall(n) { return DTMethodN01(Obj, 1101, n); } /* deprecate */
+	function MenuCall(n) { return DTMethodN01(Obj, 1101, n); }
+}
+
+
+class CDTDriverDB
+{
+	Obj = null;
+	constructor(db_type = DB_DRIVER_POSTGRESQL) { Obj = DTFunc(105, db_type); }
+
+	function Connect(conn_str, flags = 0) { return DTMethodN02S01(Obj, 1700, flags, 0, conn_str); }
+	function Disconnect() { return DTMethodN01(Obj, 1701); }
+	function Exec(exec_str, type = DB_EXEC_COMMAND) { return DTMethodN02S01(Obj, 1702, type, 0, exec_str); }
+	function Data(exec_str) { return Exec(exec_str, DB_EXEC_DATASET); }
+	function Clear() { return DTMethodN01(Obj, 1703); }
+	function GetData(row = 0, col = 0) { return DTMethodN02_Rs(Obj, 1704, row, col); }
+	function GetRowCount() { return DTMethodN01(Obj, 1705); }
+	function GetColCount() { return DTMethodN01(Obj, 1706); }
+	function GetLastError(flags = 0) { return DTMethodN02_Rs(Obj, 1707, flags); }
+}
+
+
+class CDTEditor
+{
+	Obj = null;
+	constructor() { Obj = DTFunc(101); }
+
+	function Cmd_ReZoom(r) { return DTMethod(Obj, 1201, 0, r); } /* deprecate */
+	function Cmd_RePage(n) { return DTMethodN01(Obj, 1202, n); } /* deprecate */
+	function Cmd_ReDraw() { return DTMethodN01(Obj, 1203); } /* deprecate */
+
+	function ReZoom(r) { return DTMethod(Obj, 1201, 0, r); }
+	function RePage(n) { return DTMethodN01(Obj, 1202, n); }
+	function ReDraw() { return DTMethodN01(Obj, 1203); }
+
+	function ExportPlus(disposition, add_extension, filename, filetype, w, h, n = 0, p = -1, transp = 0, quality = 75, anim_delay = 50, anim_loops = 0)
+	{
+		if (add_extension && (filetype in GlobalExportExt)) filename += GlobalExportExt[filetype];
+
+		     if (disposition == null) return DTMethodN09S01(Obj, 1206, filetype, w, h, n, p, transp, quality, anim_delay, anim_loops, ::GlobalWorkingDir + filename);
+		else if (disposition != "") SetHeaders("Content-Disposition: " + disposition + "; filename=\"" + filename + "\"\r\n");
+
+		return DTMethodN09(Obj, 1204, filetype, w, h, n, p, transp, quality, anim_delay, anim_loops);
+	}
+
+	function Export(filetype, w, h, n = 0, p = -1, transp = 0, quality = 75, anim_delay = 50, anim_loops = 0) { return ExportPlus("inline", true, "export", filetype, w, h, n, p, transp, quality, anim_delay, anim_loops); }
+	function ExportToFile(filename, filetype, w, h, n = 0, p = -1, transp = 0, quality = 75, anim_delay = 50, anim_loops = 0) { return ExportPlus(null, false, filename, filetype, w, h, n, p, transp, quality, anim_delay, anim_loops); }
+
+	function Embed(filetype, w, h, n = 0, p = -1, transp = 0, quality = 75, anim_delay = 50, anim_loops = 0) { return DTMethodN09(Obj, 1208, filetype, w, h, n, p, transp, quality, anim_delay, anim_loops); }
+
+	function Interpret(str, restrict_flags = 2 | 4 | 8) { if (str == "") return; return DTMethod(Obj, 1205, restrict_flags, 0.0, str); }
+	function InterpretViaFile(filename, restrict_flags = 2 | 4 | 8) { if (filename == "") return; return DTMethod(Obj, 1207, restrict_flags, 0.0, ::GlobalWorkingDir + filename); }
+	function GetWorkingDir() { return ::GlobalWorkingDir; }
+	//function DoFile(filename) { return dofile(GetWorkingDir() + filename); }
+}
+
+
+class CDTApp extends CDTEditor
+{
+	//function SetErrorReporting(n) { return DTFunc(95, n); }
+	function SetCacheExpiry_Output(n) { return DTFunc(96, n); }
+	function SetCacheExpiry_Bytecode(n) { return DTFunc(97, n); }
+
+	function Print(s) { return DTFunc_Rn(98, 0, 0.0, s.tostring()); }
+
+	function AuthTokenGenerate(auth_class = 1) { return DTFunc_Rs(1601, auth_class); }
+
+	function AuthTokenVerify(auth, invalidate = false)
+	{
+		if (auth == "") return 0;
+		return DTFunc_Rn(92, (invalidate ? 1 : 0), 0.0, auth);
+
+		//if (auth == "") return false;
+		//if (DTFunc_Rn(92, (invalidate ? 1 : 0), 0.0, auth) != 1) return false;
+		//return true;
+	}
+
+	function GetQueryVar(str, default_val = "", filename = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1501, 0, 0.0, str); /* without cache */
+		if (!(str in QueryVars)) QueryVars[str] <- DTFunc3_Rs(1501, 0, 0, str, filename);
+		if (QueryVars[str] == "") return default_val;
+		return QueryVars[str];
+	}
+
+	function GetOtherVar(str, default_val = "", filename = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1502, 0, 0.0, str); /* without cache */
+		if (!(str in OtherVars)) OtherVars[str] <- DTFunc3_Rs(1502, 0, 0, str, filename);
+		if (OtherVars[str] == "") return default_val;
+		return OtherVars[str];
+	}
+
+	function GetPostVar(str, default_val = "", filename = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1503, 0, 0.0, str); /* without cache */
+		if (!(str in PostVars)) PostVars[str] <- DTFunc3_Rs(1503, 0, 0, str, filename);
+		if (PostVars[str] == "") return default_val;
+		return PostVars[str];
+	}
+
+	function GetPostVar_AsBase64(str, default_val = "", filename = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1504, 0, 0.0, str); /* without cache */
+		if (!(str in PostVars_AsBase64)) PostVars_AsBase64[str] <- DTFunc3_Rs(1504, 0, 0, str, filename);
+		if (PostVars_AsBase64[str] == "") return default_val;
+		return PostVars_AsBase64[str];
+	}
+
+	function GetPostVar_FileType(str, default_val = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1602, 0, 0.0, str); /* without cache */
+		if (!(str in PostVars_FileType)) PostVars_FileType[str] <- DTFunc_Rs(1602, 0, 0.0, str);
+		if (PostVars_FileType[str] == "") return default_val;
+		return PostVars_FileType[str];
+	}
+
+	function GetPostVar_FileName(str, default_val = "")
+	{
+		if (str == "") return "";
+		//return DTFunc_Rs(1603, 0, 0.0, str); /* without cache */
+		if (!(str in PostVars_FileName)) PostVars_FileName[str] <- DTFunc_Rs(1603, 0, 0.0, str);
+		if (PostVars_FileName[str] == "") return default_val;
+		return PostVars_FileName[str];
+	}
+
+	function ToHTML(s, flags = 0) { return ::ToHTML(s, flags); }
+	function ToUTF8(n) { return ::ToUTF8(n); }
+
+	/* cookie_action: 0 = don't set cookie, 1 = set guid as cookie (default), 2 = destroy all cookies, 3 = set test cookie, 4 = set cookie_data as cookie */
+	function SetCookie(cookie_action = 1, cookie_data = "") { return DTFunc_Rn(94, cookie_action, 0.0, cookie_data); }
+	function SetCompression(compression) { return DTFunc_Rn(86, compression); }
+	function SetHeaders(headers, compression = DV_COMPRESS_CONFIG) { return DTFunc_Rn(91, compression, 0.0, headers); }
+	function ShowDebug(level = 1) { return DTFunc(90, level); }
+	function Write(filename, flags = 0) { return DTFunc_Rn(89, flags, 0.0, ::GlobalWorkingDir + filename); }
+	function Email(flags, body, subject, smtp_host, user_auth, from_addr, to_addr, cc_addr = "", bcc_addr = "", from_name = "", to_name = "", cc_name = "", bcc_name = "") { return DTFunc2_Rn(88, flags, 0.0, body, subject, smtp_host, user_auth, from_addr, to_addr, cc_addr, bcc_addr, from_name, to_name, cc_name, bcc_name); }
+	function CmdLine(flags, cmdline, sep = ' ') { return DTFunc2_Rn(87, flags, sep, cmdline); }
+	function StdOut(flags) { return DTFunc_Rs(1505, flags); }
+
+	/* shortcuts */
+	function SetUserCookie(cookie_data) { return SetCookie(4, cookie_data); }
+	function SetAuthCookie(auth_class = 1) { return SetUserCookie(AuthTokenGenerate(auth_class)); }
+	function GetAuthCookie() { return GetOtherVar("cookie"); }
+	function VerifyAuthCookie(invalidate = false) { return AuthTokenVerify(GetAuthCookie(), invalidate); }
+	function InvalidateAuthCookie() { return VerifyAuthCookie(true); }
+	function DestroyAllCookies() { return SetCookie(2); }
+
+	/* Class properties can have their initial values set using an initializer. The initializer is evaluated only once, and that one value is assigned to all instances. So using an array or table initializer, including [] and {}, results in all instances being initialized with references to the same shared array or table. This is not usually what is intended, so instead use the initializer = null for array and table properties, and then set them up as needed in the constructor() function. This ensures that class properties are not immediately shared between instances. */
+
+	QueryVars = {}; /* shared between instances */
+	OtherVars = {}; /* shared between instances */
+	PostVars = {}; /* shared between instances */
+	PostVars_AsBase64 = {}; /* shared between instances */
+	PostVars_FileType = {}; /* shared between instances */
+	PostVars_FileName = {}; /* shared between instances */
+}
+
+
+/* ----------------------------------- */
+
+
+class CDTEngine
+{
+	Obj = null;
+	Bitmap = -1;
+	Font = 0;
+	SizeH = 100;
+	SizeV = 100;
+	SkewH = 0;
+	SkewV = 0;
+	Rotation = 0;
+	Thickness = 0;
+	Segment = 0;
+	DashSize = 0;
+	Hinting = DV_HINTING_ENGINE_DEFAULT_A;
+	Positioning = DV_POSITIONING_ENGINE_DEFAULT_A;
+	R = 0;
+	G = 0;
+	B = 0;
+	T = 0;
+	E = DV_EFFECT_NONE;
+	P = 0;
+
+	constructor() { Obj = DTFunc(103); }
+
+	function FontGetCounter() { return DTMethodN01(Obj, 1301); }
+	function FontAdd(font_format_id, fuid, fcnr, cmap_id, caching, hinting, filename) { return DTMethodN05S02(Obj, 1302, font_format_id, fcnr, cmap_id, caching, hinting, fuid, ::GlobalWorkingDir + filename); }
+
+	function OutputMake(bitmap, w, h, format = DV_FORMAT_24, flags = 0, r = 255, g = 255, b = 255, t = 255) { return DTMethodN09(Obj, 1303, bitmap, w, h, format, flags, r, g, b, t); }
+	function OutputAdd(w, h, format = DV_FORMAT_24, flags = 0, r = 255, g = 255, b = 255, t = 255) { return DTMethodN09(Obj, 1303, PD_NEW, w, h, format, flags, r, g, b, t); }
+	function OutputClear(bitmap, r = 255, g = 255, b = 255, t = 255) { return DTMethodN05(Obj, 1304, bitmap, r, g, b, t); }
+	function OutputSet(bitmap) { Bitmap = bitmap; }
+
+	function ImageMake(image, bitmap, page, x, y, w, h, t = 0, quality = 0, alpha_treatment = 0) { return DTMethodN10(Obj, 1305, image, bitmap, page, x, y, w, h, t, quality, alpha_treatment); }
+	function ImageAdd(bitmap, page, x, y, w, h, t = 0, quality = 0, alpha_treatment = 0) { return DTMethodN10(Obj, 1305, PD_NEW, bitmap, page, x, y, w, h, t, quality, alpha_treatment); }
+
+	function StyleSet(r, g = 0, b = 0, t = 0, e = DV_EFFECT_NONE, p = 0) { R = r; G = g; B = b; T = t; E = e; P = p; }
+	function StyleSetRGBT(r, g = 0, b = 0, t = 0) { R = r; G = g; B = b; T = t; }
+	function StyleSetEffects(e, p = 0) { E = e; P = p; }
+
+	function TypeSet(font, size_h = 0, size_v = 0, skew_h = 0, skew_v = 0, rotation = 0, thickness = 0, segment = 0, dash_size = 0, hinting = DV_HINTING_ENGINE_DEFAULT_A, positioning = DV_POSITIONING_ENGINE_DEFAULT_A) { Font = font; SizeH = size_h; if (size_v == 0) SizeV = size_h; else SizeV = size_v; SkewH = skew_h; SkewV = skew_v; Rotation = rotation; Thickness = thickness; Segment = segment; DashSize = dash_size; Hinting = hinting; Positioning = positioning; }
+	function TypeSetFont(font) { Font = font; }
+	function TypeSetSize(size_h, size_v = 0) { SizeH = size_h; if (size_v == 0) SizeV = size_h; else SizeV = size_v; }
+	function TypeSetSkew(skew_h, skew_v = 0) { SkewH = skew_h; SkewV = skew_v; }
+	function TypeSetRotation(rotation) { Rotation = rotation; }
+	function TypeSetOutline(thickness, segment = 0, dash_size = 0) { Thickness = thickness; Segment = segment; DashSize = dash_size; }
+	function TypeSetHinting(hinting) { Hinting = hinting; }
+	function TypeSetPositioning(positioning) { Positioning = positioning; }
+
+	function CharOutput(char_code, x, y) { return DTMethodN12R09_N03(Obj, 1306, Bitmap, char_code, Font, Hinting, Positioning, R, G, B, T, E, P, DashSize, x, y, SizeH, SizeV, SkewH, SkewV, Rotation, Thickness, Segment); }
+}
+
+
+/* ----------------------------------- */
+
+
+class CDTDoc
+{
+	Obj = null;
+	FontmapChanged = false;
+
+	constructor(fontmap = null, construct_flags = 0, internal_flags = -1, auto_reflow = true)
+	{
+		Obj = NewObj(construct_flags);
+		SetInternalFlags(internal_flags);
+		SetFontmap(fontmap);
+		SetTextReflow(auto_reflow);
+	}
+
+	function NewObj(construct_flags = 0) { return DTFunc(104, construct_flags); }
+
+	function SetInternalFlags(internal_flags, obj = null) { if (internal_flags < 0) return; return DTMethod((obj == null ? Obj : obj), 1429, internal_flags); }
+	function SetFontmap(fontmap, obj = null) { if (fontmap == null /* do nothing */) return false; FontmapChanged = true; return DTMethod((obj == null ? Obj : obj), 1428, 0, 0.0, ::GlobalWorkingDir + fontmap); }
+	function SetTextReflow(auto_reflow, obj = null) { return DTMethodN01((obj == null ? Obj : obj), 1416, auto_reflow.tointeger()); }
+	function ResetFontmap(obj = null) { FontmapChanged = true; return DTMethod((obj == null ? Obj : obj), 1431); }
+
+	function Cleanup(cleanup_maxpass = 50, cleanup_flags = 3) { return DTMethodN02(Obj, 1410, cleanup_maxpass, cleanup_flags); }
+	function Erase() { return DTMethod(Obj, 1419); }
+
+	function ObjGetLast() { return DTMethod(Obj, 1417); }
+	function ImgGetLast() { return DTMethod(Obj, 1418); }
+
+	function ImgFind(name) { return DTMethodN01(Obj, 1407, name); }
+	function ImgGetX(img) { return DTMethodN01(Obj, 1402, img); }
+	function ImgGetY(img) { return DTMethodN01(Obj, 1403, img); }
+	function ImgSetX(img, x) { return DTMethodN03(Obj, 1401, img, x, ImgGetY(img)); }
+	function ImgSetY(img, y) { return DTMethodN03(Obj, 1401, img, ImgGetX(img), y); }
+	function ImgSetXY(img, x, y) { return DTMethodN03(Obj, 1401, img, x, y); }
+	function ImgGetObj(img) { return DTMethodN01(Obj, 1404, img); }
+	function ImgGetPage(img) { return DTMethodN01(Obj, 1426, img); }
+	function ImgSetTransform(img, t = null)
+	{
+		local n = 0; if (t != null) n = t.len();
+
+		     if (n == 9) return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 1, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8]);
+		else if (n == 8) return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 1, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7],  1.0);
+		else if (n == 4) return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 1, t[0], t[1],  0.0, t[2], t[3],  0.0,  0.0,  0.0,  1.0);
+		else if (n == 2) return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 1, t[0],  0.0,  0.0,  0.0, t[1],  0.0,  0.0,  0.0,  1.0);
+		else if (n == 1) return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 1, t[0],  0.0,  0.0,  0.0, t[0],  0.0,  0.0,  0.0,  1.0);
+		else             return DTMethodN09R09(Obj, 1405, img, 0, 0, 0, 0, 0, 0, 0, 0,  1.0,  0.0,  0.0,  0.0,  1.0,  0.0,  0.0,  0.0,  1.0);
+	}
+	function ObjFind(name, flag = 0, desc = "") { if (flag == 0) return DTMethod(Obj, 1408, name); else return DTMethod(Obj, 1409, name, 0.0, desc); }
+	function PropApply(obj, name, value = "", len = PD_OTHER, flags = PD_APPLY_STANDARD) { if (len == PD_OTHER) len = value.len(); return DTMethodN04S01(Obj, 1406, obj, name, len, flags, value); }
+	function PropDel(obj, name) { return DTMethodN02(Obj, 1432, obj, name); }
+	//function GetMDC(obj);
+
+	/* new */
+	function Transfer(doc, page = 0, x = 0, y = 0, erase = false) { return DTMethodN04B(Obj, doc.Obj, 1421, page, x, y, (erase ? 1 : 0)); }
+	function TransferWithCleanup(src_doc, cleanup_flags = 0, erase = false) { return DTMethodN04B(Obj, src_doc.Obj, 1422, cleanup_flags, (erase ? 1 : 0)); }
+	function TransferObjWithCleanup(src_obj, cleanup_flags = 0, erase = false) { return DTMethodN04B(Obj, src_obj, 1422, cleanup_flags, (erase ? 1 : 0)); }
+	function Append(filename, page = 0, x = 0, y = 0, group = false, deselect = false, select = false) { return DTMethodN06S01(Obj, 1411, page, x, y, (group ? 1 : 0), (deselect ? 1 : 0), (select ? 1 : 0), ::GlobalWorkingDir + filename); }
+	function Save(filename, save_mode = 0, cleanup_maxpass = 50, cleanup_flags = 3) { return DTMethodN03S01(Obj, 1424, save_mode, cleanup_maxpass, cleanup_flags, ::GlobalWorkingDir + filename); }
+	function ObjAdd(name = 0, desc = "", size = 0) { return DTMethodN02S01(Obj, 1412, name, size, desc); }
+	function LinkApply(obj, name, link, flags = PD_APPLY_STANDARD) { return DTMethodN04(Obj, 1413, obj, name, link, flags); }
+	function PropApplyAsRef(obj, name, ref_obj, ref_name, flags = PD_APPLY_STANDARD) { return DTMethodN05(Obj, 1430, obj, name, ref_obj, ref_name, flags); }
+	function PropApplyAsSLong(obj, name, value, default_value = 0, flags = PD_APPLY_STANDARD) { return DTMethodN05(Obj, 1414, obj, name, value, default_value, flags); }
+	function PropGetAsSLong(obj, name, default_value = 0) { return DTMethodN03(Obj, 1427, obj, name, default_value); }
+	function ImgAdd(obj, page, x, y, status, attribs, mask, fn_draw, t = null)
+	{
+		local n = 0; if (t != null) n = t.len();
+
+		     if (n == 9) return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 1, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8]);
+		else if (n == 8) return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 1, t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7],  1.0);
+		else if (n == 4) return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 1, t[0], t[1],  0.0, t[2], t[3],  0.0,  0.0,  0.0,  1.0);
+		else if (n == 2) return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 1, t[0],  0.0,  0.0,  0.0, t[1],  0.0,  0.0,  0.0,  1.0);
+		else if (n == 1) return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 1, t[0],  0.0,  0.0,  0.0, t[0],  0.0,  0.0,  0.0,  1.0);
+		else             return DTMethodN09R09(Obj, 1415, obj, page, x, y, status, attribs, mask, fn_draw, 0,  1.0,  0.0,  0.0,  0.0,  1.0,  0.0,  0.0,  0.0,  1.0);
+	}
+
+	function Lookup_CharIndexToPage(img, obj_parent, char_index) { return DTMethodN03(Obj, 1420, img, obj_parent, char_index); }
+
+	function PagesInsert(start_page, n = 1) { return DTMethodN02(Obj, 1423, start_page, n); }
+	function ImgAllDeleteOnPageRange(page_from, page_to) { return DTMethodN02(Obj, 1425, page_from, page_to); }
+	function ImgAllDeleteOnPage(page) { return DTMethodN02(Obj, 1425, page, page); }
+}
+
+
+/* ----------------------------------- */
+
+
+my <-
+{
+	dispatcher = CDTDispatcher(),
+	editor = CDTEditor(),
+	app = CDTApp(),
+	engine = CDTEngine(),
+	doc = CDTDoc(),
+
+	include = @(filename) ::Cmd_Include(filename),
+	execute = @(subdir, filename = "", flags = 0, permanent = true) ::Cmd_Execute(subdir, filename, flags, permanent)
+}
+
+
+/* ----------------------------------- */
+
+
+class CDTField
+{
+	ValueB = "";
+	ValueI = 0;
+	Name = 0;
+	Name2 = -1;
+	Len = 0;
+}
+
+
+class CDTObj
+{
+	constructor(doc = null, obj_desc = "", obj_name = 0, obj_size = 0) { if (doc == null) Doc = ::my.doc; else Doc = doc; ObjId = Doc.ObjAdd(obj_name, obj_desc, obj_size); }
+
+	function Del(name)
+	{
+		Doc.PropDel(ObjId, name);
+		return this;
+	}
+
+	function Apply(field)
+	{
+		if (field.Len == PD_LINK)
+		{
+			if (field.Name2 < 0) Doc.LinkApply(ObjId, field.Name, field.ValueI); else Doc.PropApplyAsRef(ObjId, field.Name, field.ValueI, field.Name2);
+		}
+		else if (field.Len == PD_OTHER) Doc.PropApplyAsSLong(ObjId, field.Name, field.ValueI);
+		else if (field.Len != 0)        Doc.PropApply(ObjId, field.Name, field.ValueB, field.Len);
+
+		return this;
+	}
+
+	function Pin(page, x, y, fn_draw, status = 0, attribs = 0, mask = 0, t = null)
+	{
+		return Doc.ImgAdd(ObjId, page, x, y, status, attribs, mask, fn_draw, t);
+	}
+
+	function _typeof() { return "CDTObj"; }
+
+	function _add(field) { return Apply(field); } /* operator + */
+	function _sub(name) { return Del(name); } /* operator - */
+
+	Doc = null;
+	ObjId = 0;
+}
+
+
+class CDTLink extends CDTField
+{
+	constructor(name, obj) { if (typeof obj == "CDTObj") ValueI = obj.ObjId; else ValueI = obj; Name = name; Name2 = -1; Len = PD_LINK; }
+}
+
+
+class CDTProp extends CDTField
+{
+	constructor(name, value, len = PD_DEFAULT)
+	{
+		if (typeof value == "CDTObj") { Name = name; Name2 = -1; ValueI = value.ObjId; Len = PD_LINK; }
+		else                          { Name = name; Name2 = -1; ValueB = value.tostring(); Len = len; }
+	}
+}
+
+
+class CDTPropRef extends CDTField
+{
+	constructor(name, obj, name2) { if (typeof obj == "CDTObj") ValueI = obj.ObjId; else ValueI = obj; Name = name; Name2 = name2; Len = PD_LINK; }
+}
+
+
+class CDTPropInt extends CDTField
+{
+	constructor(name, value_int = 0) { Name = name; Name2 = -1; ValueI = value_int; Len = PD_OTHER; }
+}
+
+
+class CDTPropStr extends CDTField
+{
+	constructor(name, value_str = "", len = PD_DEFAULT) { Name = name; Name2 = -1; ValueB = value_str; Len = len; }
+}
+
+
+/* ----------------------------------- */
+
+
+class CDTMarker
+{
+	FlowIndex = 0;
+	Pos = 0;
+
+	//constructor(pos = 0) { Pos = pos; /*print("CDTMarker constructor\n");*/ }
+	function SetPos(flow_index, pos, t) { FlowIndex = flow_index; Pos = pos; }
+	function _typeof() { return "CDTMarker"; }
+}
+
+
+class CDTMarkerObj extends CDTMarker
+{
+	function _typeof() { return "CDTMarkerObj"; }
+	function GetObj() { return null; }
+}
+
+
+class CDTMarkerPlus_Open extends CDTMarker
+{
+	Formats = null;
+	FIPositions = null;
+	ExtA = 0;
+	ExtB = 0;
+
+	constructor(formats = null, ext_a = 0, ext_b = 0) { if (formats == null) Formats = []; else Formats = formats; FIPositions = []; ExtA = ext_a; ExtB = ext_b; }
+	function SetPos(flow_index, pos, t) { /*print("flow_index=" + flow_index + ", pos=" + pos + "\n");*/ if (pos < 0) return; FIPositions.append([flow_index, pos + 1]); }
+	function SetPos_Close(flow_index, pos, t) { if (pos < 0) return; FIPositions.append([flow_index, -(pos + 1)]); }
+	function Reset() { FIPositions.clear(); }
+	//function GetFormats() { return Formats; }
+	function Format(t)
+	{
+		local p = [];
+		foreach (fi_pos in FIPositions)
+		{
+			local flow_index = fi_pos[0], pos = fi_pos[1]; if (flow_index != t.FlowIndex) continue;
+			if (pos > 0) { p.append(pos); continue; } else if (p.len() < 1) continue;
+			//print("ExtA=" + ExtA + ", ExtB=" + ExtB + "\n");
+			local ppos = p.pop(); foreach (format in Formats) t.Format(format[0], format[1], ppos - 1 + ExtA, -pos - 1 + ExtB);
+		}
+	}
+
+	function CompareArrays(a, b)
+	{
+		local l = a.len(); if (b.len() != l) return false;
+		for (local i = 0; i < l; i++) if (b[i] != a[i]) return false;
+		return true;
+	}
+
+	function Replace_Internal(id, s)
+	{
+		local n = 0;
+
+		if (typeof id == "array") foreach (f in Formats)
+		{
+			if (typeof f[0] != "array") continue;
+			if (!CompareArrays(f[0], id)) continue;
+			f[1] = s; n++;
+		}
+		else foreach (f in Formats)
+		{
+			if (typeof f[0] == "array") continue;
+			if (f[0] != id) continue;
+			f[1] = s; n++;
+		}
+
+		return n;
+	}
+
+	function Add(id, s) { Formats.append([id, s]); return this; }
+	function Replace(id, s) { Replace_Internal(id, s); return this; }
+	function Apply(id, s) { if (Replace_Internal(id, s) < 1) Add(id, s); return this; }
+
+	//function AddArr(formats) { Formats.extend(formats); return this; }
+	function AddSet(formats) { if (formats == null) return this; foreach(format in formats) Add(format[0], format[1]); return this; }
+	function ReplaceSet(formats) { if (formats == null) return this; foreach(format in formats) Replace(format[0], format[1]); return this; }
+	function ApplySet(formats) { if (formats == null) return this; foreach(format in formats) Apply(format[0], format[1]); return this; }
+
+	function GrowBefore(ext_a) { ExtA = ext_a; return this; }
+	function GrowAfter(ext_b) { ExtB = ext_b; return this; }
+	function Grow(ext_a, ext_b) { ExtA = ext_a; ExtB = ext_b; return this; }
+
+	function GetFormats() { return Formats; }
+
+	//function _typeof() { return "CDTMarkerPlus_Open"; }
+}
+
+
+class CDTMarkerPlus_Close extends CDTMarker
+{
+	Opener = null;
+	constructor(o) { Opener = o; }
+	function SetPos(flow_index, pos, t) { Opener.SetPos_Close(flow_index, pos, t); }
+}
+
+
+class CDTMarkerPlus_Autoformat extends CDTMarker
+{
+	Autoformat = null;
+	CleanupAndReset = false;
+
+	constructor(autoformat, cleanup_and_reset) { Autoformat = autoformat; CleanupAndReset = cleanup_and_reset; }
+	function SetPos(flow_index, pos, t)
+	{
+		/*print("DO flow_index=" + flow_index + ", pos=" + pos + "\n");*/
+		Autoformat.Format(t, CleanupAndReset);
+		//if (CleanupAndReset) t.Doc.Cleanup(); /* not needed */
+	}
+}
+
+
+class CDTAutoformat
+{
+	Doc = null;
+	MarkersPlus_Open = null;
+	DO = null;
+	END = null;
+
+	function Reset() { foreach (mp in MarkersPlus_Open) mp.Reset(); }
+	function Format(t, reset = true) { /*print("**Format flow index " + t.FlowIndex + "\n");*/ foreach (mp in MarkersPlus_Open) mp.Format(t); if (reset) Reset(); }
+	function MakeOpen(id, s, ext_a = 0, ext_b = 0) { local mp = CDTMarkerPlus_Open(null, ext_a, ext_b); mp.Add(id, s); MarkersPlus_Open.append(mp); return mp; }
+	//function MakeOpenSet(formats, ext_a = 0, ext_b = 0) { local mp = CDTMarkerPlus_Open(formats, ext_a, ext_b); MarkersPlus_Open.append(mp); return mp; }
+	function MakeOpenSet(formats, ext_a = 0, ext_b = 0) { local mp = CDTMarkerPlus_Open(null, ext_a, ext_b); mp.AddSet(formats); MarkersPlus_Open.append(mp); return mp; }
+	function MakeClose(o) { return CDTMarkerPlus_Close(o); }
+	function Make(id, s, ext_a = 0, ext_b = 0) { return MakeClose(MakeOpen(id, s, ext_a, ext_b)); }
+	function MakeSet(formats = null, ext_a = 0, ext_b = 0) { return MakeClose(MakeOpenSet(formats, ext_a, ext_b)); }
+	function Do(cleanup_and_reset = false) { return CDTMarkerPlus_Autoformat(this, cleanup_and_reset); }
+	function SetDoc(doc) { Doc = doc; }
+
+	constructor()
+	{
+		MarkersPlus_Open = [];
+		DO = Do(false);
+		END = Do(true);
+	}
+
+	//function _typeof() { return "CDTAutoformat"; }
+}
+
+
+class CDTAttribs
+{
+	Atb = null;
+	function _typeof() { return "CDTAttribs"; }
+}
+
+
+class CDTFormatter
+{
+	//Table = {};
+	Table = null;
+	constructor() { Table = {}; }
+	function Format(id, s, first_char = -1, last_char = -1) { if (typeof id == "array") foreach (id_key, id_value in id) Table[id_value] <- s; else Table[id] <- s; return this; }
+	function Reset() { Table = {}; }
+	function _typeof() { return "CDTFormatter"; }
+}
+
+
+class CDTBuilder extends CDTFormatter
+{
+	Bld = null;
+	Doc = null;
+	function _typeof() { return "CDTBuilder"; }
+
+	function IsUTF8() { return false; }
+	//function GetMarker(x) { x.SetPos(FlowIndex, DTMethod(Bld, 200_), this); return this; } /* not yet possible, maybe in the future */
+	function GetPos(x) { /*if (typeof x == "CDTMarker") return x.Pos;*/ return x; }
+
+	// Formatters
+	function Format(id, s, first_char = -1, last_char = -1)
+	{
+		if (typeof id == "CDTFormatter") foreach (id_key, id_value in id.Table) DTMethodN03S01(Bld, 2005, id_key, GetPos(first_char), GetPos(last_char), id_value.tostring());
+		else if (typeof id == "array") foreach (id_key, id_value in id) DTMethodN03S01(Bld, 2005, id_value, GetPos(first_char), GetPos(last_char), s.tostring());
+		else DTMethodN03S01(Bld, 2005, id, GetPos(first_char), GetPos(last_char), s.tostring());
+		return this;
+	}
+	function FormatSet(formats, first_char = -1, last_char = -1)
+	{
+		if (typeof formats == "CDTMarker" /* CDTMarkerPlus_Open */) { local format = formats.GetFormats(); foreach (f in format) Format(f[0], f[1], first_char, last_char); }
+		else if (typeof formats == "array") foreach (format in formats) Format(format[0], format[1], first_char, last_char);
+		return this;
+	}
+	//function Format_Auto(autoformat, first_char = -1, last_char = -1) { if (autoformat == null) return this; local format = autoformat.GetFormats(); foreach (f in format) Format(f[0], f[1], first_char, last_char); return this; }
+	function Format_FontSize(font_w, font_h = 0, first_char = -1, last_char = -1) { DTMethodN04(Bld, 2006, font_w, font_h, GetPos(first_char), GetPos(last_char)); return this; }
+	//function F(f, cleanup = false, reset = true) { f.Format(this, reset); if (cleanup) Doc.Cleanup(); return this; }
+	//function F(f, cleanup_and_reset = false) { f.Format(this, cleanup_and_reset); if (cleanup_and_reset) Doc.Cleanup(); return this; }
+
+	// Adders
+	//function AddRun(s) { DTMethod(Bld, 2003, 0, 0.0, s); return this; }
+	//function AddObj(obj2, flags = 0) { DTMethod2(Bld, obj2.Bld, 2004, flags); return this; }
+	function AddRun(s, flags = 0) { if (typeof s == "CDTBuilder") DTMethod2(Bld, s.Bld, 2004, flags); else DTMethod(Bld, 2003, 0, 0.0, s.tostring()); return this; }
+
+	/* not really used */
+	//function AddOne(s) { if (typeof s == "CDTMarkerObj") { GetMarker(s); s = s.GetObj(); return AddRun(s); } else if (typeof s == "CDTMarker") return GetMarker(s); else return AddRun(s); } /* operator + */
+	function AddOne(s) { return AddRun(s); }
+
+	// Operators
+	function _tostring(bad_num_of_args_so_func_fails) {}
+	//function _add(s) { /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ return AddRun(s); } /* operator + */
+	function _add(s) { if (typeof s == "array") foreach (e in s) AddOne(e); else AddOne(s); return this; } /* operator + */
+
+	//function _sub(f) { return F(f); } /* operator - */
+}
+
+
+GlobalFlowIndex <- 0;
+
+function DTMethod2Text(doc, bld, attr)
+{
+	local img0 = doc.ImgGetLast() + 1;
+	local ret = DTMethod2(bld, attr.Atb, 2301);
+	local count = attr.AdjustmentsArr.len();
+
+	for (local i = 0; i < count; i++)
+	{
+		local flags = attr.AdjustmentsArr[i][0];
+		local dx = attr.AdjustmentsArr[i][1];
+		local dy = attr.AdjustmentsArr[i][2];
+		local img1 = img0 + attr.AdjustmentsArr[i][3];
+		local img2 = img0 + attr.AdjustmentsArr[i][4];
+
+		for (local img = img1; img < img2; img++)
+		{
+			local o = doc.ImgGetObj(img);
+			local x = doc.ImgGetX(img);
+			local y = doc.ImgGetY(img);
+			local w = doc.PropGetAsSLong(o, pdTextAreaDw);
+			local h = doc.PropGetAsSLong(o, pdTextAreaDh);
+
+			if (flags & 1) doc.PropApplyAsSLong(o, pdTextAreaDw, w - dx);
+			if (flags & 2) doc.ImgSetX(img, x + dx);
+			if (flags & 4) doc.PropApplyAsSLong(o, pdTextAreaDh, h - dy);
+			if (flags & 8) doc.ImgSetY(img, y + dy);
+		}
+	}
+
+	return ret;
+}
+
+class CDTAttribsText extends CDTAttribs
+{
+	AdjustmentsArr = null;
+
+	//constructor(atb) { Atb = atb; }
+	constructor(atb = null) { AdjustmentsArr = []; if (atb != null) Atb = atb; else Atb = DTFunc(303); }
+
+	// Attribs
+	function X(n) { DTMethod(Atb, 3301, n); return this; }
+	function Y(n) { DTMethod(Atb, 3302, n); return this; }
+	function W(n) { DTMethod(Atb, 3303, n); return this; }
+	function H(n) { DTMethod(Atb, 3304, n); return this; }
+	function Page(n) { DTMethod(Atb, 3305, n); return this; }
+	function PageCount(n) { DTMethod(Atb, 3306, n); return this; }
+	function RowType(n) { DTMethod(Atb, 3307, n); return this; }
+	function VAlign(n) { DTMethod(Atb, 3308, n); return this; }
+	function StrUTF8(s) { DTMethod(Atb, 3309, 0, 0.0, s); return this; }
+	function ColumnCount(n) { DTMethod(Atb, 3310, n); return this; }
+	function ColumnDist(n) { DTMethod(Atb, 3311, n); return this; }
+	function VAlignEnd(n) { DTMethod(Atb, 3312, n); return this; }
+	function FontW(n) { DTMethod(Atb, 3313, n); return this; }
+	function FontH(n) { DTMethod(Atb, 3314, n); return this; }
+	function FontSize(n) { DTMethod(Atb, 3315, n); return this; }
+	function ExistingImg(n) { DTMethod(Atb, 3316, n); return this; }
+	function LayoutType(n) { DTMethod(Atb, 3317, n); return this; }
+	function Align(n) { DTMethod(Atb, 3318, n); return this; }
+	function AlignEnd(n) { DTMethod(Atb, 3319, n); return this; }
+	function AreaType(n) { DTMethod(Atb, 3320, n); return this; }
+	function ShiftHor(dx, img_idx, img_n = 1) { AdjustmentsArr.append([2, dx, 0, img_idx, img_n]); return this; }
+	function ShiftVer(dy, img_idx, img_n = 1) { AdjustmentsArr.append([8, 0, dy, img_idx, img_n]); return this; }
+	function ResizeFromRight(dx, img_idx, img_n = 1) { AdjustmentsArr.append([1, dx, 0, img_idx, img_n]); return this; }
+	function ResizeFromLeft(dx, img_idx, img_n = 1) { AdjustmentsArr.append([3, dx, 0, img_idx, img_n]); return this; }
+	function ResizeFromBottom(dy, img_idx, img_n = 1) { AdjustmentsArr.append([4, 0, dy, img_idx, img_n]); return this; }
+	function ResizeFromTop(dy, img_idx, img_n = 1) { AdjustmentsArr.append([12, 0, dy, img_idx, img_n]); return this; }
+	function Adjust(flags, dx, dy, img_idx, img_n = 1) { AdjustmentsArr.append([flags, dx, dy, img_idx, img_n]); return this; }
+}
+
+
+class CDTBuilderText extends CDTBuilder
+{
+	FlowIndex = null;
+
+	constructor(doc = null, x = 0, flow_index = 0) { FlowIndex = flow_index; if (doc == null) Doc = ::my.doc; else Doc = doc; if (x == 0) Bld = DTMethod_Rp(Doc.Obj, 203); else Bld = x; return this; }
+	function Attr(x = 0) { return ((x == 0) ? CDTAttribsText(DTMethod_Rp(Doc.Obj, 303)) : x); }
+	function Reset() { DTMethod(Bld, 2300); }
+	function _call(inst, x = null) { return Attr(); }
+
+	// Getters
+	function GetMarker(x) { x.SetPos(FlowIndex, DTMethod(Bld, 2307), this); return this; }
+	function GetPos(x) { if (typeof x == "CDTMarker") return x.Pos; return x; }
+
+	// Builders
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2(Bld, Attr(x).Atb, 2301), ::GlobalFlowIndex); }
+	function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2Text(Doc, Bld, Attr(x)), ::GlobalFlowIndex); }
+
+	// Formatters
+	function Format(id, s, first_char = -1, last_char = -1)
+	{
+		if (typeof id == "CDTFormatter") foreach (id_key, id_value in id.Table) DTMethodN03S01(Bld, 2305, id_key, GetPos(first_char), GetPos(last_char), id_value.tostring());
+		else if (typeof id == "array") foreach (id_key, id_value in id) DTMethodN03S01(Bld, 2305, id_value, GetPos(first_char), GetPos(last_char), s.tostring());
+		else DTMethodN03S01(Bld, 2305, id, GetPos(first_char), GetPos(last_char), s.tostring());
+		return this;
+	}
+	function FormatSet(formats, first_char = -1, last_char = -1)
+	{
+		if (typeof formats == "CDTMarker" /* CDTMarkerPlus_Open */) { local format = formats.GetFormats(); foreach (f in format) Format(f[0], f[1], first_char, last_char); }
+		else if (typeof formats == "array") foreach (format in formats) Format(format[0], format[1], first_char, last_char);
+		return this;
+	}
+	//function Format_Auto(autoformat, first_char = -1, last_char = -1) { if (autoformat == null) return this; local format = autoformat.GetFormats(); foreach (f in format) Format(f[0], f[1], first_char, last_char); return this; }
+	function Format_FontSize(font_w, font_h = 0, first_char = -1, last_char = -1) { DTMethodN04(Bld, 2306, font_w, font_h, GetPos(first_char), GetPos(last_char)); return this; }
+	function Reflow() { DTMethod(Bld, 2308); return this; }
+
+	// Adders
+	//function AddRun(s) { DTMethod(Bld, 2302, 0, 0.0, s); return this; }
+	//function AddObj(obj2, flags = 0) { DTMethod2(Bld, obj2.Bld, 2303, flags); return this; }
+	function AddRun(s, flags = 0) { if (typeof s == "CDTBuilder") DTMethod2(Bld, s.Bld, 2303, flags); else DTMethod(Bld, 2302, 0, 0.0, s.tostring()); return this; }
+
+	//function AddOne(x) { if (typeof x == "CDTMarkerObj") { GetMarker(x); x = x.GetObj(); if (typeof x == "CDTBuilder") return AddObj(x); else return AddRun(x.tostring()); } else if (typeof x == "CDTMarker") return GetMarker(x); else if (typeof x == "CDTBuilder") return AddObj(x); else return AddRun(x.tostring()); } /* operator + */
+
+	function AddOne(s) { if (typeof s == "CDTMarkerObj") { GetMarker(s); s = s.GetObj(); return AddRun(s); } else if (typeof s == "CDTMarker") return GetMarker(s); else return AddRun(s); } /* operator + */
+
+	// Operators
+	function _tostring(bad_num_of_args_so_func_fails) {}
+	function _add(s) { if (typeof s == "array") foreach (e in s) AddOne(e); else AddOne(s); return this; } /* operator + */
+
+	function _unm() { DTMethod(Bld, 2309); return this; } /* operator ~ */
+	function ToObj() { DTMethod(Bld, 2309); return this; } /* operator ~ */
+}
+
+
+class CDTAttribsCtrl extends CDTAttribs
+{
+	//constructor(atb) { Atb = atb; }
+	constructor(atb = null) { if (atb != null) Atb = atb; else Atb = DTFunc(301); }
+
+	// Attribs
+	function Spacing(n) { DTMethod(Atb, 3101, n); return this; }
+	function Bullet(n) { DTMethod(Atb, 3102, n); return this; }
+	function MarginL(n) { DTMethod(Atb, 3103, n); return this; }
+	function MarginR(n) { DTMethod(Atb, 3104, n); return this; }
+	function Rule(n) { DTMethod(Atb, 3105, n); return this; }
+	function FontW(n) { DTMethod(Atb, 3106, n); return this; }
+	function FontH(n) { DTMethod(Atb, 3107, n); return this; }
+	function FontSize(n) { DTMethod(Atb, 3108, n); return this; }
+	function TablePreset(n) { DTMethod(Atb, 3109, n); return this; }
+	function X(n) { DTMethod(Atb, 3110, n); return this; }
+	function Y(n) { DTMethod(Atb, 3111, n); return this; }
+	function Page(n) { DTMethod(Atb, 3112, n); return this; }
+	function Direction(n) { DTMethod(Atb, 3113, n); return this; }
+}
+
+
+class CDTAttribsTableColumn_Width
+{
+	W = 0;
+	constructor(w) { W = w; }
+	function _typeof() { return "CDTAttribsTableColumn_Width"; }
+}
+
+
+class CDTAttribsTableColumn_RGBT
+{
+	RGBT = null;
+	constructor(rgbt) { RGBT = rgbt; }
+	function _typeof() { return "CDTAttribsTableColumn_RGBT"; }
+}
+
+
+class CDTBuilderCtrl extends CDTBuilder
+{
+	constructor(doc = null, x = 0) { if (doc == null) Doc = ::my.doc; else Doc = doc; if (x == 0) Bld = DTMethod_Rp(Doc.Obj, 201); else Bld = x; return this; }
+	function Attr(x = 0) { return ((x == 0) ? CDTAttribsCtrl(DTMethod_Rp(Doc.Obj, 301)) : x); }
+	function AttrText(x = 0) { return ((x == 0) ? CDTAttribsText(DTMethod_Rp(Doc.Obj, 303)) : x); }
+	function Reset() { DTMethod(Bld, 2100); }
+	function _call(inst, x = null) { return Attr(); }
+
+	// Symbols
+
+	Nil = "\x08";
+	NewCol = "\x0C";
+	NewLine = "\x0A";
+
+	// Builders
+
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2(Bld, AttrText(x).Atb, 2301), ::GlobalFlowIndex); }
+	function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2Text(Doc, Bld, AttrText(x)), ::GlobalFlowIndex); }
+
+	//function Base(x = 0) { return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(x).Atb, 2101)); }
+	function Base(s_or_x = null, x = 0)
+	{
+		local only_x = false; if (s_or_x == null) { only_x = true; s_or_x = 0; } else if (typeof s_or_x == "CDTAttribs") only_x = true;
+
+		if (only_x) return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(s_or_x).Atb, 2101));
+		else if (typeof s_or_x == "CDTBuilder") return CDTBuilderCtrl(Doc, DTMethod3(Bld, Attr(x).Atb, s_or_x.Bld, 2108));
+		return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(x).Atb, 2108, 0, 0.0, s_or_x.tostring()));
+	}
+	function Br(x = 0) { return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(x).Atb, 2102)); }
+	function Blank(x = 0) { return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(x).Atb, 2103)); }
+	function Table(x = 0) { return CDTBuilderCtrl(Doc, DTMethod2(Bld, Attr(x).Atb, 2104)); }
+
+	// Table column attributes
+	function Width(x) { return CDTAttribsTableColumn_Width(x); }
+
+	// Putters
+	function PutRun(s, n = -1) { DTMethod(Bld, 2105, n, 0.0, s); return this; }
+	function PutObj(obj2, n = -1) { DTMethod2(Bld, obj2.Bld, 2106, n); return this; }
+
+	// Setters
+	function SetWidth(w, n = -1) { DTMethodN02(Bld, 2107, w, n); return this; }
+
+	// Operators
+	function _div(x) { /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ if (typeof x == "CDTBuilder") return PutObj(x, -1); else return PutRun(x.tostring(), -1); } /* operator / */
+	function _modulo(x) { /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ if (typeof x == "CDTBuilder") return PutObj(x, -2); else return PutRun(x.tostring(), -2); } /* operator % */
+	function _mul(x) /* operator * */
+	{
+		     if (typeof x == "CDTAttribsTableColumn_Width") SetWidth(x.W, -1);
+		else if (typeof x == "CDTAttribsTableColumn_RGBT") {}
+		else SetWidth(x, -1);
+		return this;
+	}
+	//function _mul(x) { /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ if (typeof x == "CDTBuilder") return PutObj(x, -3); else return PutRun(x.tostring(), -3); } /* operator / */
+}
+
+
+class CDTAttribsMath extends CDTAttribs
+{
+	StyleID = 0;
+
+	//constructor(atb) { Atb = atb; }
+	constructor(atb = null) { if (atb != null) Atb = atb; else Atb = DTFunc(304); /*Magnitude(1024);*/ }
+
+	// Attribs
+	function X(n) { DTMethod(Atb, 3401, n); return this; }
+	function Y(n) { DTMethod(Atb, 3402, n); return this; }
+	function Page(n) { DTMethod(Atb, 3405, n); return this; }
+	function StyleID(n) { DTMethod(Atb, 3406, n); StyleID = n; return this; }
+	function Magnitude(n) { DTMethod(Atb, 3407, n); return this; }
+}
+
+class CDTBuilderMath extends CDTBuilder
+{
+	// Overrides
+
+	M1Fn = null;
+	M2Fn = null;
+	function AutoM1_Default(s, align = DE_ALIGN_LEFT) { return s; }
+	function AutoM2_Default(s, align = DE_ALIGN_LEFT) { return s; }
+	function SetAutoMath(m1, m2) { M1Fn = m1; M2Fn = m2; }
+
+	constructor(doc = null, x = 0, m1_fn = null, m2_fn = null) { SetAutoMath(m1_fn == null ? AutoM1_Default : m1_fn, m2_fn == null ? AutoM2_Default : m2_fn); if (doc == null) Doc = ::my.doc; else Doc = doc; if (x == 0) Bld = DTMethod_Rp(Doc.Obj, 204); else Bld = x; return this; }
+	function Attr(x = 0) { return ((x == 0) ? CDTAttribsMath(DTMethod_Rp(Doc.Obj, 304)) : x); }
+	function AttrText(x = 0) { return ((x == 0) ? CDTAttribsText(DTMethod_Rp(Doc.Obj, 303)) : x); }
+	function Reset() { DTMethod(Bld, 2400); }
+	function _call(inst, x = null) { return Attr(); }
+
+	// Symbols
+
+	Nil = "\x08";
+	Sp = "\x20"; //" ";
+	ThinSp = "\xE2\x80\x89"; //" ";
+	Pi = "\xCF\x80"; //"π";
+	Lambda = "\xCE\xBB"; //"λ";
+	Sigma = "\xCE\xA3"; //"Σ";
+	Inf = "\xE2\x88\x9E"; //"∞";
+	Ellipsis = "\xE2\x80\xA6"; //"…";
+	Integers = "\xE2\x84\x95"; //"ℕ";
+	Reals = "\xE2\x84\x9D"; //"ℝ";
+	OneQuarter = "\xC2\xBC"; //"¼";
+	OneHalf = "\xC2\xBD"; //"½";
+	ThreeQuarters = "\xC2\xBE"; //"¾";
+	ParallelTo = "\xE2\x88\xA5"; //"∥";
+	PartialDifferential = "\xE2\x88\x82"; //"∂";
+	PartialDifferentialItalic = "\xF0\x9D\x9C\x95"; //"𝜕";
+
+	Prime = "\xE2\x80\xB2"; //"′";
+	DoublePrime = "\xE2\x80\xB3"; //"″";
+	TriplePrime = "\xE2\x80\xB4"; //"‴";
+	QuadruplePrime = "\xE2\x81\x97"; //"⁗";
+	ReversedPrime = "\xE2\x80\xB5"; //"‵";
+	ReversedDoublePrime = "\xE2\x80\xB6"; //"‶";
+	ReversedTriplePrime = "\xE2\x80\xB7"; //"‷";
+
+	// Binary operators
+
+	Element = "\x20\xE2\x88\x88\x20"; //" ∈ ";
+	And = "\x20\xE2\x8B\x80\x20"; //" ⋀ ";
+	Or = "\x20\xE2\x8B\x81\x20"; //" ⋁ ";
+	Eq = "\x20\x3D\x20"; //" = ";
+	LT = "\x20\x3C\x20"; //" < ";
+	GT = "\x20\x3E\x20"; //" > ";
+	LTEq = "\x20\xE2\x89\xA4\x20"; //" ≤ ";
+	GTEq = "\x20\xE2\x89\xA5\x20"; //" ≥ ";
+	Sum = "\x20\x2B\x20"; //" + ";
+	Mul = "\xE2\x80\x89"; //" ";
+	Mul2 = "\x20\xC2\xB7\x20"; //" · ";
+	MulX = "\x20\xC3\x97\x20"; //" × ";
+	Div = "\x20\x2F\x20"; //" / ";
+	Diff = "\x20\xE2\x80\x93\x20"; //" – ";
+	ArrL = "\x20\xE2\x86\x90\x20"; //" ← ";
+	ArrR = "\x20\xE2\x86\x92\x20"; //" → ";
+
+	// Builders
+
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2(Bld, AttrText(x).Atb, 2301), ::GlobalFlowIndex); }
+	function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2Text(Doc, Bld, AttrText(x)), ::GlobalFlowIndex); }
+	function Matrix(x = 0) { return CDTBuilderMath(Doc, DTMethod2(Bld, Attr(x).Atb, 2446), M1Fn, M2Fn); }
+
+	/* Native One */
+
+	function _CallArg1(id, s0 = "", x = 0)
+	{
+		if (typeof s0 == "CDTBuilder") return CDTBuilderMath(Doc, DTMethod3(Bld, Attr(x).Atb, s0.Bld, id));
+		return CDTBuilderMath(Doc, DTMethod2(Bld, Attr(x).Atb, id, 0, 0.0, s0.tostring()));
+	}
+	function VBar(s0 = "", x = 0) { return _CallArg1(2403, M1Fn(s0), x); }
+	function Cross(s0 = "", x = 0) { return _CallArg1(2404, M1Fn(s0), x); }
+	function Brack(s0 = "", x = 0) { return _CallArg1(2405, M1Fn(s0), x); }
+	function Diag(s0 = "", x = 0) { return _CallArg1(2419, M1Fn(s0), x); }
+	function VBarTight(s0 = "", x = 0) { return _CallArg1(2420, M1Fn(s0), x); }
+	function VBarLoose(s0 = "", x = 0) { return _CallArg1(2421, M1Fn(s0), x); }
+	function Up(s0 = "", x = 0) { return _CallArg1(2424, M1Fn(s0), x); }
+	function Down(s0 = "", x = 0) { return _CallArg1(2425, M1Fn(s0), x); }
+
+	/* Native Two */
+
+	function _CallArg2(id, s0 = "", s1 = "", x = 0)
+	{
+		//     if ((typeof s0 == "CDTBuilder") && (typeof s1 == "CDTBuilder")) return CDTBuilderMath(Doc, DTMethod4(Bld, Attr(x).Atb, s0.Bld, s1.Bld, id));
+		//else if (typeof s0 == "CDTBuilder") return CDTBuilderMath(Doc, DTMethod3(Bld, Attr(x).Atb, s0.Bld, id, 1, 0.0, s1.tostring()));
+		//else if (typeof s1 == "CDTBuilder") return CDTBuilderMath(Doc, DTMethod3(Bld, Attr(x).Atb, s1.Bld, id, 2, 0.0, s0.tostring()));
+		//return CDTBuilderMath(Doc, DTMethod2(Bld, Attr(x).Atb, id, 0, 0.0, s0.tostring(), s1.tostring()));
+
+		local mask = 0;
+		local v0 = "", v1 = "";
+		local o0 = Bld, o1 = Bld; /* we can't use null so let's use Bld */
+		if (typeof s0 == "CDTBuilder") { o0 = s0.Bld; mask += 1; } else v0 = s0.tostring();
+		if (typeof s1 == "CDTBuilder") { o1 = s1.Bld; mask += 2; } else v1 = s1.tostring();
+		return CDTBuilderMath(Doc, DTMethod4(Bld, Attr(x).Atb, o0, o1, id, mask, 0.0, v0, v1));
+	}
+	function Root(s0 = "", s1 = "", x = 0) { return _CallArg2(2401, M2Fn(s0), M1Fn(s1), x); }
+	function Frac(s0 = "", s1 = "", x = 0) { return _CallArg2(2402, M1Fn(s0), M1Fn(s1), x); }
+	function Sup(s0 = "", s1 = "", x = 0) { return _CallArg2(2406, M1Fn(s0), M2Fn(s1), x); }
+	function Sub(s0 = "", s1 = "", x = 0) { return _CallArg2(2407, M1Fn(s0), M2Fn(s1), x); }
+	function Above(s0 = "", s1 = "", x = 0) { return _CallArg2(2408, M1Fn(s0), M2Fn(s1), x); }
+	function Below(s0 = "", s1 = "", x = 0) { return _CallArg2(2409, M1Fn(s0), M2Fn(s1), x); }
+
+	/* Shortcuts Two */
+
+	function Sqrt(s1 = "", x = 0) { return Root("", s1, x); }
+	function Limit(s1 = "", x = 0) { return Below(Text() + "lim", s1, x); }
+	function LimitInf(s1 = "", x = 0) { return Limit(s1 + ArrR + Inf, x); }
+
+	/* Native Three */
+
+	function _CallArg3(id, s0 = "", s1 = "", s2 = "", x = 0)
+	{
+		local mask = 0;
+		local v0 = "", v1 = "", v2 = "";
+		local o0 = Bld, o1 = Bld, o2 = Bld; /* we can't use null so let's use Bld */
+		if (typeof s0 == "CDTBuilder") { o0 = s0.Bld; mask += 1; } else v0 = s0.tostring();
+		if (typeof s1 == "CDTBuilder") { o1 = s1.Bld; mask += 2; } else v1 = s1.tostring();
+		if (typeof s2 == "CDTBuilder") { o2 = s2.Bld; mask += 4; } else v2 = s2.tostring();
+		return CDTBuilderMath(Doc, DTMethod5(Bld, Attr(x).Atb, o0, o1, o2, id, mask, 0.0, v0, v1, v2));
+	}
+
+	function Summation(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2412, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function Product(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2413, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function Coproduct(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2414, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function Union(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2415, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function Intersect(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2416, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function LogicalOr(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2417, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function LogicalAnd(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2418, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function SupSub(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2422, M1Fn(s0), M2Fn(s1), M2Fn(s2), x); }
+	function SubSup(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2423, M1Fn(s0), M2Fn(s1), M2Fn(s2), x); }
+	function Integral(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2426, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2427, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralCW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2428, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralCCW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2444, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralACW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2444, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralCWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2429, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralCCWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2430, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralACWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2430, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralDouble(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2431, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralSurface(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2432, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralTriple(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2433, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralVolume(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2434, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUpright(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2435, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2436, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightCW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2437, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightCCW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2445, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightACW(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2445, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightCWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2438, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightCCWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2439, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightACWCont(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2439, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightDouble(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2440, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightSurface(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2441, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightTriple(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2442, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+	function IntegralUprightVolume(s0 = "", s1 = "", s2 = "", x = 0) { return _CallArg3(2443, M2Fn(s0), M2Fn(s1), M1Fn(s2), x); }
+
+	/* Derived */
+	function Vector(s0 = "") { return Up(s0); }
+	function Tilde(s0 = "") { return Up(s0, CDTAttribsMath().StyleID(8)); }
+	function TildeDown(s0 = "") { return Down(s0, CDTAttribsMath().StyleID(8)); }
+	function BrackRound(s0 = "") { return Brack(s0); }
+	function BrackSquare(s0 = "") { return Brack(s0, CDTAttribsMath().StyleID(1)); }
+	function BrackCurly(s0 = "") { return Brack(s0, CDTAttribsMath().StyleID(2)); }
+	function Abs(s0 = "") { return Brack(s0, CDTAttribsMath().StyleID(18)); }
+	function Norm(s0 = "") { return Brack(s0, CDTAttribsMath().StyleID(19)); }
+
+	function GetStyleID(x) { return (x == 0) ? 0 : x.StyleID; }
+
+	function EvalBarA(s0 = "", s1 = "", x = 0) { return Sup(VBarLoose(s0, CDTAttribsMath().StyleID((GetStyleID(x) > 0) ? 2 : 4)), s1, x); }
+	function EvalBarB(s0 = "", s1 = "", x = 0) { return Sub(VBarLoose(s0, CDTAttribsMath().StyleID((GetStyleID(x) > 0) ? 2 : 4)), s1, x); }
+	function EvalBarAB(s0 = "", s1 = "", s2 = "", x = 0) { return SupSub(VBarLoose(s0, CDTAttribsMath().StyleID((GetStyleID(x) > 0) ? 2 : 4)), s1, s2, x); }
+	function EvalBarBA(s0 = "", s1 = "", s2 = "", x = 0) { return SubSup(VBarLoose(s0, CDTAttribsMath().StyleID((GetStyleID(x) > 0) ? 2 : 4)), s1, s2, x); }
+
+	// Putters
+	function PutRun(s, n = -1) { DTMethod(Bld, 2410, n, 0.0, s); return this; }
+	function PutObj(obj2, n = -1) { DTMethod2(Bld, obj2.Bld, 2411, n); return this; }
+
+	// Operators
+	function _div(x) { x = M1Fn(x); /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ if (typeof x == "CDTBuilder") return PutObj(x, -1); else return PutRun(x.tostring(), -1); } /* operator / */
+	function _modulo(x) { x = M1Fn(x); /*if (typeof x == "CDTMarker") return GetMarker(x); else*/ if (typeof x == "CDTBuilder") return PutObj(x, -2); else return PutRun(x.tostring(), -2); } /* operator % */
+}
+
+
+//function CDTBuilderMath::AutoMathTextSpan(s, a, b, c)
+//{
+//	if (a < b) { printf("Format italic from " + a + " to " + b + " (\"" + s.slice(a, b) + "\")\n"); }
+//	if (b < c) { printf("Format normal from " + b + " to " + c + " (\"" + s.slice(b, c) + "\")\n"); }
+//}
+
+function CDTBuilderMath::AutoMathText(s, align = DE_ALIGN_LEFT, f_letter_closer = null, f_other_closer = null)
+{
+	local len = s.len(); if (len < 1) return s; // s is a string
+	local last = 0;
+	local position = 0;
+	local expression = regexp("\\a"); // find individual latin letters (uppercase or lowercase) -- we should proably include greek letters too
+	local captures = expression.capture(s); // find the first match
+
+	//if (captures == null) return s;
+
+	local builder_text = CDTBuilderText(Doc);
+	local t = builder_text.Text(builder_text.Attr().Align(align).AlignEnd(align));
+	local f_letter_opener = ""; if (f_letter_closer) f_letter_opener = f_letter_closer.Opener; else f_letter_closer = "";
+	local f_other_opener = ""; if (f_other_closer) f_other_opener = f_other_closer.Opener; else f_other_closer = "";
+
+	//print(s + "\n");
+
+	while (captures != null)
+	{
+		//foreach (i, capture in captures) /* should always be one result since we are searching for individual letters */
+		if (captures.len() == 1)
+		{
+			local capture = captures[0];
+			local bgn = capture.begin, end = capture.end;
+
+			if (bgn > position)
+			{
+				if (last < position) t + f_letter_opener + s.slice(last, position) + f_letter_closer;
+				if (position < bgn) t + f_other_opener + s.slice(position, bgn) + f_other_closer;
+				//AutoMathTextSpan(s, last, position, bgn);
+				last = bgn;
+			}
+
+			//print(format("     match number %02d [%02d - %02d] '%s'\n", i, bgn, end, s.slice(bgn, end)));
+			position = end;
+		}
+
+		captures = expression.capture(s, position); /* find the next match */
+	}
+
+	/* last match */
+	if (last < position) t + f_letter_opener + s.slice(last, position) + f_letter_closer;
+	if (position < len) t + f_other_opener + s.slice(position, len) + f_other_closer;
+	//AutoMathTextSpan(s, last, position, len);
+
+	//t + f.DO;
+	return t;
+}
+
+
+class CDTAttribsRast extends CDTAttribs
+{
+	//constructor(atb) { Atb = atb; }
+	constructor(atb = null) { if (atb != null) Atb = atb; else Atb = DTFunc(302); }
+
+	// Attribs
+	function SizeScale(n) { DTMethod(Atb, 3201, n); return this; }
+	function BaseAlign(n) { DTMethod(Atb, 3202, n); return this; }
+	function Src(s) { DTMethod(Atb, 3203, 0, 0.0, ::GlobalWorkingDir + s); return this; }
+	function X(n) { DTMethod(Atb, 3204, n); return this; }
+	function Y(n) { DTMethod(Atb, 3205, n); return this; }
+	function Page(n) { DTMethod(Atb, 3206, n); return this; }
+	function Size(w, h = 0) { DTMethodN02(Atb, 3207, w, h); return this; }
+	function FontW(n) { DTMethod(Atb, 3208, n); return this; }
+	function FontH(n) { DTMethod(Atb, 3209, n); return this; }
+	function FontSize(n) { DTMethod(Atb, 3210, n); return this; }
+	function Quality(n) { DTMethod(Atb, 3211, n); return this; }
+}
+
+class CDTBuilderRast extends CDTBuilder
+{
+	constructor(doc = null, x = 0) { if (doc == null) Doc = ::my.doc; else Doc = doc; if (x == 0) Bld = DTMethod_Rp(Doc.Obj, 202); else Bld = x; return this; }
+	function Attr(x = 0) { return ((x == 0) ? CDTAttribsRast(DTMethod_Rp(Doc.Obj, 302)) : x); }
+	//function AttrText(x = 0) { return ((x == 0) ? CDTAttribsText(DTMethod_Rp(Doc.Obj, 303)) : x); }
+	function Reset() { DTMethod(Bld, 2200); }
+	function _call(inst, x = null) { return Attr(); }
+
+	// Builders
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2(Bld, AttrText(x).Atb, 2301), ::GlobalFlowIndex); }
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2Text(Doc, Bld, AttrText(x)), ::GlobalFlowIndex); }
+	function Img(x = 0) { return CDTBuilderRast(Doc, DTMethod2(Bld, Attr(x).Atb, 2201)); }
+}
+
+class CDTAttribsBase extends CDTAttribs
+{
+	//constructor(atb) { Atb = atb; }
+	constructor(atb = null) { if (atb != null) Atb = atb; else Atb = DTFunc(300); }
+
+	// Attribs
+	function X(n) { DTMethod(Atb, 3001, n); return this; }
+	function Y(n) { DTMethod(Atb, 3002, n); return this; }
+	function Page(n) { DTMethod(Atb, 3003, n); return this; }
+}
+
+class CDTBuilderBase extends CDTBuilder
+{
+	constructor(doc = null, x = 0) { if (doc == null) Doc = ::my.doc; else Doc = doc; if (x == 0) Bld = DTMethod_Rp(Doc.Obj, 200); else Bld = x; return this; }
+	function Attr(x = 0) { return ((x == 0) ? CDTAttribsBase(DTMethod_Rp(Doc.Obj, 300)) : x); }
+	//function AttrText(x = 0) { return ((x == 0) ? CDTAttribsText(DTMethod_Rp(Doc.Obj, 303)) : x); }
+	function Reset() { DTMethod(Bld, 2050); }
+	function _call(inst, x = null) { return Attr(); }
+
+	// Builders
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2(Bld, AttrText(x).Atb, 2301), ::GlobalFlowIndex); }
+	//function Text(x = 0) { ::GlobalFlowIndex++; return CDTBuilderText(Doc, DTMethod2Text(Doc, Bld, AttrText(x)), ::GlobalFlowIndex); }
+	function VCopy(x, b) { DTMethod3(Bld, Attr(x).Atb, b.Bld, 2051); }
+}
+
+/* ----------------------------------- */
+
+
+function Handler_Animation_Reset() {}
+function Handler_Animation_Play(t, d, t2, d2, c) {}
+

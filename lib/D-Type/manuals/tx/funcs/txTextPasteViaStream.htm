@@ -1,0 +1,133 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextPasteViaStream</h2><div class="box_prototype"><strong>
+DT_SLONG txTextPasteViaStream(DT_TXDOC text_doc, DT_ID_UBYTE paste_command, DT_ID_UBYTE text_type, const DT_STREAM_DESC* text_sd, DT_SWORD unicode_flags, const DT_STREAM_DESC* fontmap_sd)</strong></div><br /><strong>Short Description:</strong> <em>Paste text into current text selection - via stream</em><br /><br />
+
+<p>This function pastes text (i.e. a sequence of Unicode characters) into the active selection of the text document specified by <em>text_doc</em>, replacing any currently selected text.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>paste_command</em></p>
+</td><td>
+<p>Paste command. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_PASTE_TEXT               0    <span class="codecomment">/* Paste text */</span>&nbsp;
+TX_PASTE_BACKSPACE          1    <span class="codecomment">/* Paste the BAKSPACE key */</span>&nbsp;
+TX_PASTE_DELETE             2    <span class="codecomment">/* Paste the DELETE key */</span>&nbsp;
+TX_PASTE_TEXT_REFORMAT      128  <span class="codecomment">/* Paste text and reformat the paragraph */</span>&nbsp;
+TX_PASTE_BACKSPACE_REFORMAT 129  <span class="codecomment">/* Paste the BAKSPACE key and reformat the paragraph */</span>&nbsp;
+TX_PASTE_DELETE_REFORMAT    130  <span class="codecomment">/* Paste the DELETE key and reformat the paragraph */</span>&nbsp;
+</pre></div>
+<p>These values have the following meaning:</p>
+<ul>
+<li><p>TX_PASTE_TEXT indicates that the text should be inserted into the active selection of the text document, replacing any currently selected text. Does not subsequently run Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+<li><p>TX_PASTE_BACKSPACE indicates that the BACKSPACE key command should be applied to the active selection of the text document. In this case, <em>buffer</em> should be set to DV_NULL, <em>nr_of_chars</em> to 0 and <em>buffer_format</em> to 0. Does not subsequently run Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+<li><p>TX_PASTE_DELETE indicates that the DELETE key command should be applied to the active selection of the text document. In this case, <em>buffer</em> should be set to DV_NULL, <em>nr_of_chars</em> to 0 and <em>buffer_format</em> to 0. Does not subsequently run Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+<li><p>TX_PASTE_TEXT_REFORMAT is the same as TX_PASTE_TEXT but subsequently runs Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+<li><p>TX_PASTE_BACKSPACE_REFORMAT is the same as TX_PASTE_BACKSPACE but subsequently runs Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+<li><p>TX_PASTE_DELETE_REFORMAT is the same as TX_PASTE_DELETE but subsequently runs Unicode's implicit bidirectional reordering algorithm on the affected paragraph(s).</p></li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>text_type</em></p>
+</td><td>
+<p>Encoding of the text to be pasted. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_AUTO     0  <span class="codecomment">/* Auto-detect */</span>&nbsp;
+TX_ANSI     1  <span class="codecomment">/* ANSI */</span>&nbsp;
+TX_UCS2_LE  2  <span class="codecomment">/* UCS-2 Little Endian */</span>&nbsp;
+TX_UCS2_BE  3  <span class="codecomment">/* UCS-2 Big Endian */</span>&nbsp;
+TX_UTF8     4  <span class="codecomment">/* UTF-8 */</span>&nbsp;
+TX_UCS4_LE  5  <span class="codecomment">/* UCS-4 Little Endian */</span>&nbsp;
+TX_UCS4_BE  6  <span class="codecomment">/* UCS-4 Big Endian */</span>&nbsp;
+TX_UTF16_LE 7  <span class="codecomment">/* UTF-16 Little Endian */</span>&nbsp;
+TX_UTF16_BE 8  <span class="codecomment">/* UTF-16 Big Endian */</span>&nbsp;
+TX_UTF32_LE 9  <span class="codecomment">/* UTF-32 Little Endian */</span>&nbsp;
+TX_UTF32_BE 10 <span class="codecomment">/* UTF-32 Big Endian */</span>&nbsp;
+</pre></div>
+<p>When <em>text_type</em> = TX_AUTO, the function attempts to detect the encoding of the text that is pasted based on its first few bytes. When the first two bytes are 0xFEFF, the text is assumed to be UTF-16 Big Endian. When the first two bytes are 0xFFFE, the text is assumed to be UTF-16 Little Endian. When the first three bytes are 0xEFBBBF, the text is assumed to be UTF-8. If none of the above bytes sequences are present at the beginning of the file, the text is assumed to be ANSI.</p>
+<p>When <em>text_type</em> is set to TX_ANSI, TX_UCS2_LE, TX_UCS2_BE, TX_UTF8, TX_UCS4_LE, TX_UCS4_BE, TX_UTF16_LE, TX_UTF16_BE, TX_UTF32_LE or TX_UTF32_BE, the encoding is known and, therefore, no special bytes sequences should be present at the beginning of the text. As indicated above, TX_ANSI is used for ANSI, TX_UCS2_LE for UCS-2 Little Endian, TX_UCS2_BE for UCS-2 Big Endian, TX_UTF8 for UTF-8, TX_UCS4_LE for UCS-4 Little Endian, TX_UCS4_BE for UCS-4 Big Endian, TX_UTF16_LE for UTF-16 Little Endian, TX_UTF16_BE for UTF-16 Big Endian, TX_UTF32_LE for UTF-32 Little Endian and TX_UTF32_BE for UTF-32 Big Endian encoding.</p>
+</td></tr>
+
+<tr><td>
+<p><em>text_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the text that is being pasted (e.g. disk, memory, a remote server).</p>
+</td></tr>
+
+<tr><td>
+<p><em>unicode_flags</em></p>
+</td><td>
+<p>Unicode flags to specify how to process the text. Can be a combination of the following values:</p>
+<div class="box_field"><pre>
+TX_IMPORT_UNICODE_BIDI      1  <span class="codecomment">/* Apply Unicode Bidirectional Algorithm */</span>&nbsp;
+TX_IMPORT_UNICODE_SCRIPT    2  <span class="codecomment">/* Auto-detect Unicode scripts and use complex shapings */</span>&nbsp;
+TX_IMPORT_OPENTYPE_CJK_VALT 4  <span class="codecomment">/* Assume text is used in vertical layout and apply vertical OpenType
+                                  glyph forms to 'hani' and 'kana' scripts (when available in font) */</span>&nbsp;
+TX_IMPORT_UNICODE_OPTIMIZE  16 <span class="codecomment">/* Optimize Unicode text */</span>&nbsp;
+TX_IMPORT_UNICODE_COMPRESS  32 <span class="codecomment">/* Compress Unicode text */</span>&nbsp;
+</pre></div>
+<p>Note that <em>unicode_flags</em> is a bitmask. Use the OR ("|") operator to combine several bit values. Alternatively, use one of the following predefined values:</p>
+
+<div class="box_field"><pre>
+TX_IMPORT_BASIC             0  <span class="codecomment">/* No special processing */</span>&nbsp;
+TX_IMPORT_FULL              3  <span class="codecomment">/* Same as (TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT) */</span>&nbsp;
+TX_IMPORT_FULL_COMPACT      51 <span class="codecomment">/* Same as (TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT | TX_IMPORT_UNICODE_OPTIMIZE | TX_IMPORT_UNICODE_COMPRESS) */</span>&nbsp;
+</pre></div>
+
+<p>Additionally, when calling this function <em>unicode_flags</em> can be set to -1. This instructs the function to use the same Unicode flags that were used when the text document was created by calling <a href="txTextIniViaStream.htm">txTextIniViaStream</a>, <a href="txTextIniViaBuffer.htm">txTextIniViaBuffer</a>, <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a> or <a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>fontmap_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the font map file. The font map file tells the function what fonts to use for different Unicode scripts. Typically, this is <em><a href="../manual/fontmap.htm">fontmap.inf</a></em>. When appropriate, your application can provide its own (i.e. altered) version of the fontmap.inf file.</p>
+<p>Additionally, your application can create a cached font map file using the <a href="txEngineMakeCachedFontmap.htm">txEngineMakeCachedFontmap</a> function and pass it here. This will make the txTextPasteViaStream function run noticeably faster. For details, see the <a href="txEngineMakeCachedFontmap.htm">txEngineMakeCachedFontmap</a> function.</p>
+<p>For best performance, the font map file should reside in memory. The <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure then describes a memory based stream. Memory based streams can be processed more quickly than file based streams. See the <a href="../../dt/manual/structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a> macro and the <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> section for more information on memory based streams.</p>
+<p>Finally, when calling this function <em>fontmap_sd</em> can be set to DV_NULL. This instructs the function to use the same font map that was used when the text document was created by calling <a href="txTextIniViaStream.htm">txTextIniViaStream</a> or <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>. This is the fastest method of invoking this function.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value will be the number of pasted characters. Otherwise, the function returns -1. The function will also return -1 if there are multiple (non-contiguous) or block (rectangular) active selections in the text document.</p>
+
+
+<h3>Comments</h3>
+<p>The txTextPasteViaStream function makes it possible to paste Unicode text (i.e. a sequence of Unicode characters) into the active selection of the current text document. See the <a href="txTextSetSelect.htm">txTextSetSelect</a> function for information on how to set the boundaries of the active text selection.</p>
+<p>The styling/formatting attributes of the text pasted using this function will be inherited from the context (i.e. neighbouring characters).</p>
+<p>In order to view the modified text document it is necessary to subsequently call the <a href="txTextDraw.htm">txTextDraw</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

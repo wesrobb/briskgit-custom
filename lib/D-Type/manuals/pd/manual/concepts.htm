@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Basic Concepts</h1>
+
+
+<p>A typical Power Engine document consists of one or more <em>pages</em>. The term page is very generic and, depending on the application, can have different meanings: a page in a book, a layer, a worksheet, a computer screen or any other 2D surface.</p>
+
+<p>Each page consists of one or more PowerDoc <em>images</em>. By definition, images are visual representations of PowerDoc <em>objects</em>. Typical PowerDoc objects include characters, text lines, text areas, rectangles, circles, custom shapes, gradients, tables and other primitives. Before a PowerDoc object can be drawn, an image specifying its position on the page must be created. Later, images can be moved, copied to another page, multiplied etc. However, not all PowerDoc objects have images. For example, some objects simply hold data and have no visual representation.</p>
+
+<p class="center"><img src="../images/api/ApiOverview.gif" width="580" height="606" alt="API Overview" /></p>
+
+<p>Every PowerDoc object has one or more <em>properties</em>. For example, color and transparency (<em>pdRGBT</em>) are the properties of the <em><a href="../objects/001.htm">Surface</a></em> object, while font (<em>pdFontIndex</em>) and font size (<em>pdFontDw</em> and <em>pdFontDh</em>) are the properties of the <em><a href="../objects/004.htm">Typography</a></em> object.</p>
+
+<p class="center"><img src="../images/api/BasicConcepts.gif" width="580" height="310" alt="Basic Concepts" /></p>
+
+<p>More complex objects are built on simpler ones. This is achieved by <em>linking</em>. For example, the <em><a href="../objects/002.htm">Shadow</a></em> object is built by linking to the <em><a href="../objects/001.htm">Surface</a></em> object and supplying two additional properties: <em>pdShadowDx</em> and <em>pdShadowDy</em>. Similarly, the <em><a href="../objects/108.htm">Character</a></em> object is built by linking to the <em><a href="../objects/004.htm">Typography</a></em> object and supplying an additional <em>pdID</em> property. In this way, an object <em>hierarchy</em> is established.</p>
+
+<p>Once all the properties are set and the object hierarchy established, a Power Engine document can be drawn or stored on disk for later use. This is achieved by a single call to the appropriate function.</p>
+
+<p>D-Type Power Engine API also allows applications to create and embed <em>custom objects</em> into Power Engine documents. Since these documents can be permanently saved on disk, an application can use the Power Engine file format to store its own data.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

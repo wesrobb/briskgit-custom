@@ -1,0 +1,28 @@
+This objects represents a polyline. In Power Engine API, polylines consist of any number of connected straight and/or curved line segments.
+
+While constructing the Polyline object, an optional shadow may be specified. Also, depending on the pdLinePtr link, polylines can be drawn solid or dashed, while their ends can be styled (flat, rounded, peak).
+
+{strong}Designated Rendering Function:{/strong} pdDrawPolyline (24)
+
+Note 1: pdPolyArrX_08, pdPolyArrX_16, pdPolyArrX_24 and pdPolyArrX_32 cannot be used at the same time. pdPolyArrX_32 takes precedence over pdPolyArrX_24. pdPolyArrX_24 takes precedence over pdPolyArrX_16. Finally, pdPolyArrX_16 takes precedence over pdPolyArrX_08.
+
+Note 2: pdPolyArrY_08, pdPolyArrY_16, pdPolyArrY_24 and pdPolyArrY_32 cannot be used at the same time. pdPolyArrY_32 takes precedence over pdPolyArrY_24. pdPolyArrY_24 takes precedence over pdPolyArrY_16. Finally, pdPolyArrY_16 takes precedence over pdPolyArrY_08.
+
+The following table illustrates how the elements of the pdPolyArrI, pdPolyArrX_32 and pdPolyArrI arrays must be synchronized in order to properly define a straight or curved segment. It is important to note that in order to define a Bezier curve, three consecutive elements in the pdPolyArrI, pdPolyArrX_32 and pdPolyArrY_32 array are required. Similarly, in order to define a Quadratic B-Spline curve, two consecutive elements in the pdPolyArrI, pdPolyArrX_32 and pdPolyArrY_32 array are required.
+
+{dl}{dd}{pre}                         {strong}pdPolyArrI  pdPolyArrX_32  pdPolyArrY_32{/strong}
+____________________________________________________________
+{strong}New Closed Contour{/strong}            16           X           Y
+____________________________________________________________
+{strong}New Open Contour{/strong}              17           X           Y
+____________________________________________________________
+{strong}Line{/strong}                          20           X           Y
+____________________________________________________________
+{strong}Bezier Curve{/strong}                  24          X1          Y1
+                               n          X2          Y2
+                               0          X3          Y3
+____________________________________________________________
+{strong}Quadratic B-Spline Curve{/strong}      25          X1          Y1
+                               n          X2          Y2
+____________________________________________________________
+n = suggested number of segments; zero means auto-calculation{/pre}{/dd}{/dl}

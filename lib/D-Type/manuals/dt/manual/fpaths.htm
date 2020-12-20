@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>File Based Streams</h1>
+
+<strong>Note: File based streams can be supplied to various D-Type Engne's functions using the <a href="structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure or they may exist within D-Type's initialization files (e.g. <em><a href="inifiles.htm#inf">dtype.inf</a></em> or <em><a href="inifiles.htm#fls">dtype.fls</a></em>). Applications can use the <a href="structs.htm#DT_STREAM_FILE">DT_STREAM_FILE</a> macro to initialize the members of the <a href="structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure.</strong>
+
+<p>When using file based streams, extra caution should be taken when some of the referenced files are specified using relative paths as in the following example:</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_FILE(sd, "dtype.inf");
+dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL)
+</pre>
+</div>
+
+<p>or</p>
+
+<div class="box_field">
+<pre>
+DT_STREAM_FILE(sd, "fonts/Andes.ttf");
+dtFontAddViaStream(engine, font_format_id, fuid, fcnr, cmap_id, caching, hinting, &amp;sd);
+</pre>
+</div>
+
+<p>Although relative paths can in certain situations provide more flexibility than absolute (i.e. fully qualified) paths, they might become a potential source of problems because they are <strong>relative to the current working directory</strong>. Consider, for example, what happens if D-Type Engine is initialized using <em>dtype.inf</em> that contains relative file paths:</p>
+
+
+<ul>
+
+<li><p>If your application changes the current working directory (for example, using the Windows <em>SetCurrentDirectory</em> function) <strong>before</strong> initializing D-Type Engine, and you pass to <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) a relative path to <em>dtype.inf</em>, your initialization will almost certainly fail.</p></li>
+
+<li><p>If your application changes the current working directory (for example, using the Windows <em>SetCurrentDirectory</em> function) <strong>after</strong> initializing D-Type Engine, your will likely make the <em>Temporary Folder</em> and/or <em>Char Translation and Alignment</em> (<em>.ccv</em>) files inaccessible to D-Type Engine. As a result, you might experience various problems later during the execution of your application &mdash; typically this will cause D-Type Engine to use more RAM than necessary (since it will not be able to store its temporary resources in the <em>Temporary Folder</em>) and/or it will fail to perform proper character translation and alignment when opening fonts (since it will not be able to access the <em>Char Translation and Alignment</em> files).</p></li>
+
+<li><p>If the current working directory is not set correctly or is arbitrary (for example, when runing a program from a command line), your initialization will likely fail.</p></li>
+
+</ul>
+
+<p>In this case, please consider the following solutions:</p>
+
+
+<ol>
+
+<li><p>Ensure that the file based stream descriptor that is passed to <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) contains an absolute (i.e. fully qualified) file name and use only absolute paths in the <em>dtype.inf</em> and <em>dtype.fls</em> files.</p>
+<p>For example, if your application ships with its own installer, you could create the <em>dtype.inf</em> file (and <em>dtype.fls</em> if necessary) during the
+setup phase. All the paths in those files must be absolute and point to the folder in which your application is installed. Then, when you call
+<a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>), you only need to ensure that <em>file_name</em> is absolute and properly points to your <em>dtype.inf</em> file.</p></li>
+
+<li><p>Alternatively, create your own <em>dtype.inf</em> file (and <em>dtype.fls</em> if necessary) on disk every time before your application initializes D-Type Engine. Again, all the paths in those files must be absolute. Then pass the fully qualified file name of this dynamically created file to <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>).</p></li>
+
+<li><p>A very similar but a little bit more efficient method is to create the <em>dtype.inf</em> initialization file in memory rather than on disk. Again, all the paths in this memory file must be absolute. Then pass this dynamically created memory file to <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>). See below for an example.</p></li>
+
+<li><p>Another good method is to correctly set your current working directory using the Windows <em>SetCurrentDirectory</em> (or equivalnet) function as soon as your application starts (and make sure you do not change it later). Then you can call <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) and all your paths can be relative to the current working directory.</p></li>
+
+</ol>
+
+
+<p><strong>Once again, please note that relative paths are relative. They are relative to your current working directory. Therefore, if the current working directory changes before or after calling <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a>, <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a>, <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>, <a href="../funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a> or <a href="../funcs/dtFontAddViaStreams.htm">dtFontAddViaStreams</a>, your paths may become invalid.</strong></p>
+
+
+<h2>Example</h2>
+
+<p>The following code snippet illustrates one way to initialize D-Type Engine without using any relative paths. In this example we use a template to create the main initialization file in memory, while all the referenced secondary initialization files remain in a file based system (but are accessed using absolute paths).</p>
+
+<div class="box_field">
+<pre>
+<a href="types.htm#DT_CHAR">DT_CHAR</a>* ini_template =
+   "# OPTIONAL SECONDARY INITIALIZATION FILES\r\n" \
+   "{\r\n" \
+   "-1,NONE\r\n" \
+   "0,%ssystem\\ini\\dtype.pat\r\n" \
+   "0,%ssystem\\ini\\gs256.gsl\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# PARAMETERS FOR D-TYPE RASTERIZER\r\n" \
+   "{\r\n" \
+   "1200\r\n" \
+   "1000\r\n" \
+   "8\r\n" \
+   "0\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# PARAMETERS FOR D-TYPE FONT ENGINE\r\n" \
+   "{\r\n" \
+   "2650000\r\n" \
+   "8000\r\n" \
+   "5000\r\n" \
+   "0\r\n" \
+   "6\r\n" \
+   "2\r\n" \
+   "1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# TEMPORARY FOLDER\r\n" \
+   "{\r\n" \
+   "%ssystem\\tmp\\\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# FONT FACTORIES\r\n" \
+   "\r\n" \
+   "# CDTFontDType\r\n" \
+   "{\r\n" \
+   "0,0,DV_NULL\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# CDTFontOpenTypeTtf\r\n" \
+   "{\r\n" \
+   "1,0,0,%ssystem\\ccv\\ot-mac-ascii.ccv,DV_NULL\r\n" \
+   "3,4,0,%ssystem\\ccv\\ot-win-unicode.ccv,DV_NULL\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# CDTFontOpenTypeCff\r\n" \
+   "{\r\n" \
+   "6,0,0,%ssystem\\ccv\\ot-mac-ascii.ccv,DV_NULL\r\n" \
+   "5,4,0,%ssystem\\ccv\\ot-win-unicode.ccv,DV_NULL\r\n" \
+   "14,0,0,%ssystem\\ccv\\t1-adobe-std.ccv,INTERPRET_AS_BARE_CFF\r\n" \
+   "15,1,0,%ssystem\\ccv\\t1-iso-latin.ccv,INTERPRET_AS_BARE_CFF\r\n" \
+   "16,1,0,%ssystem\\ccv\\t1-win-unicode.ccv,INTERPRET_AS_BARE_CFF\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# CDTFontType1\r\n" \
+   "{\r\n" \
+   "2,0,0,%ssystem\\ccv\\t1-adobe-std.ccv,DV_NULL\r\n" \
+   "7,1,0,%ssystem\\ccv\\t1-iso-latin.ccv,DV_NULL\r\n" \
+   "8,1,0,%ssystem\\ccv\\t1-win-unicode.ccv,DV_NULL\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# CDTFontType3\r\n" \
+   "{\r\n" \
+   "11,1,0,%ssystem\\ccv\\t1-iso-latin.ccv,DV_NULL\r\n" \
+   "12,1,0,%ssystem\\ccv\\t1-win-unicode.ccv,DV_NULL\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# LIST OF ADDITIONAL PARAMETERS\r\n" \
+   "{\r\n" \
+   "6291456\r\n" \
+   "1000\r\n" \
+   "-1\r\n" \
+   "}\r\n" \
+   "\r\n" \
+   "# LIST OF ADDITIONAL FILES\r\n" \
+   "{\r\n" \
+   "0,%ssystem\\misc\\map_thai.dat\r\n" \
+   "0,%ssystem\\misc\\en.hyp\r\n" \
+   "0,%ssystem\\misc\\fr.hyp\r\n" \
+   "0,%ssystem\\misc\\de.hyp\r\n" \
+   "0,%ssystem\\misc\\es.hyp\r\n" \
+   "-1\r\n" \
+   "}\r\n";
+
+<a href="types.htm#DT_CHAR">DT_CHAR</a> ini_path[1024];
+<a href="types.htm#DT_CHAR">DT_CHAR</a> mem_buffer[4096];
+<a href="types.htm#DT_SLONG">DT_SLONG</a> mem_len;
+
+<span class="codecomment">/* This path can be obtained dynamically during run time if necessary */</span>&nbsp;
+strcpy(ini_path, "C:\\Program Files\\My Application\\");
+
+<span class="codecomment">/* Check the size of initialization string to ensure spritnf doesn't cause buffer overrun */</span>&nbsp;
+if (strlen(ini_template) + 20 * strlen(ini_path) &gt;= 4096)
+{
+   <span class="codecomment">/* size of string is too large */</span>&nbsp;
+   return 0;
+}
+
+<span class="codecomment">/* Make initialization string in memory from template */</span>&nbsp;
+sprintf(mem_buffer, ini_template,
+                    ini_path, ini_path,                                <span class="codecomment">/* dtype.pat and gs256.gsl */</span>&nbsp;
+                    ini_path,                                          <span class="codecomment">/* temp folder */</span>&nbsp;
+                    ini_path, ini_path,                                <span class="codecomment">/* CDTFontOpenTypeTtf */</span>&nbsp;
+                    ini_path, ini_path, ini_path, ini_path, ini_path   <span class="codecomment">/* CDTFontOpenTypeCff */</span>&nbsp;
+                    ini_path, ini_path, ini_path,                      <span class="codecomment">/* CDTFontType1 */</span>&nbsp;
+                    ini_path, ini_path,                                <span class="codecomment">/* CDTFontType3 */</span>&nbsp;
+                    ini_path, ini_path, ini_path, ini_path, ini_path); <span class="codecomment">/* list of additional files */</span>&nbsp;
+
+mem_len = strlen(mem_buffer);
+
+
+<span class="codecomment">/* Initialize D-Type engine */</span>&nbsp;
+
+DT_STREAM_MEMORY(sd, (<a href="types.htm#DT_UBYTE">DT_UBYTE</a>*)mem_buffer, mem_len);
+
+return dtEngineIniViaStream(&amp;engine, &amp;sd, DV_NULL);
+</pre>
+</div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

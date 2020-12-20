@@ -1,0 +1,1 @@
+An ID used to establish a connection between several independent form controls. Controls with the same fcConnectionID are connected.

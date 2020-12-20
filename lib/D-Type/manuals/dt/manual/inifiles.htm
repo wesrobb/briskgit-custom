@@ -1,0 +1,775 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Initialization Files</h1>
+
+
+<h2>Structure of D-Type Initialization Files</h2>
+
+<p>D-Type Engine is typically initialized using a set of external initialization files. All D-Type initialization files, except the <a href="inifiles.htm#pat">pattern catalog</a>, are standard UTF-8 text files that can be modified using a standard text editor. These text files can use CR (e.g. Mac OS), LF (Unix-like systems) or CR+LF (Microsoft Windows, DOS) as the newline character. Any characters with the corresponding ASCII value less than 32 (i.e. control characters) are ignored. The null character (ASCII value 0) is invalid but is treated the same way as a delimiter of initialization parameters.</p>
+
+<p>Each initialization file consists of one or more <em>initialization sections</em>. Initialization sections are enclosed by curly brackets and contain one or more initialization parameters. A single opening curly bracket on its own line signals the start of a new section. A single closing curly bracket on its own line signals the end of a section. Initialization parameters within sections are delimited by either a newline character or a single comma. Consequently, the initialization parameters themselves cannot contain the CR, LF or comma characters or the opening/closing curly brackets. However, starting with D-Type 5.0.3.1, the caret character (^) can be used as the escape character so that any byte value can be encoded. The caret character must be followed by precisely two more characters that represent two hexadecimal digits. Thus, each of these characters must be either a digit ('0' - '9') or a letter in the 'a' - 'f' (or 'A' - 'F') range. These two digits make up a single hexadecimal value in the 0 - 255 range, which is the encoded byte value. For example, the sequence ^4B encodes the byte value 75 (or ASCII character 'K') and the sequence ^2C encodes the byte value 44 (or ASCII character ','). If one of the characters that follow the caret is not a hexadecimal digit, the entire escape sequence is considered invalid (as soon as the first bad digit is encountered) and the normal processing of the text file resumes.</p>
+
+<p>The order of the initialization sections, as well as the order of the initialization parameters in each section is predetermined and must not be changed in any way.</p>
+
+<p>Any text outside the curly brackets represents <em>comments</em>. Comments are optional but useful. In this document they explain D-Type's various initialization sections. To make it more clear that a text line is a comment, we recommend placing a single # character at its beginning. However, this is only a convention (i.e. a commenting style). In all cases comments are completely ignored when the initialization files are processed by D-Type Engine.</p>
+
+
+<h2><a name="inf">dtype.inf</a></h2>
+
+<p>By default the main D-Type initialization file is called <strong>dtype.inf</strong>. This file is processed when a new D-Type Engine Instance is created using the <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function. </p>
+
+<p>Application developers are free to rename this file if this is more appropriate for their task and/or modify its contents if they wish to change the default initialization parameters. Note that this file (or any other D-Type file) does not have to be physically located on disk; it can also reside in memory or on a remote server. For details, see the <em>Streams</em> section below.</p>
+
+<p>The dtype.inf file supplied with the D-Type library is already preconfigured for the optimum performance and its structure is shown below. Thus, in most cases application developers do not need to modify the contents of this file.</p>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment"># *** D-TYPE MAIN INITIALIZATION FILE VERSION 8.0 OR HIGHER ***
+
+# A) OPTIONAL SECONDARY INITIALIZATION FILES
+
+# 1. Stream descriptor for the initial font list
+#    (Use the 'NONE' stream if the initial font list is not needed)
+#
+# 2. Stream descriptor for the pattern catalog
+#    (Use the 'NONE' stream if the pattern catalog is not needed)
+#
+# 3. Stream descriptor for the custom gray-scale table
+#    (Use the 'NONE' stream for the default 256 levels of gray)
+#
+# Notes:
+#
+# * All stream descriptors must be specified as [Stream ID],[Stream Locator]
+#   (See the manual for a list of stream descriptors)
+#
+# * Any non-existent or inaccessible streams (e.g. due to lack of adequate
+#   read permissions) will be interpreted as 'NONE' streams.</span>
+
+{
+0,system/ini/dtype.fls
+0,system/ini/dtype.pat
+0,system/ini/gs256.gsl
+}
+
+
+<span class="codecomment"># B) PARAMETERS FOR D-TYPE RASTERIZER
+
+# 1. Maximum width to render in a single pass, in pixels
+#    (Must be a multiple of 4)
+#
+# 2. Maximum height to render in a single pass, in pixels
+#
+# 3. Initial number of intersection points in each scan-line
+#
+# 4. Rasterizer to utilize: 0=Ultra-Fast Grayscale Rasterizer
+#                           1=Perfect Grayscale Rasterizer
+#                           2=Universal Rasterizer - Grayscale
+#                           3=Universal Rasterizer - Black &amp; White
+#                           4=Extreme Grayscale Rasterizer
+#
+# Notes:
+#
+# * Shapes wider than B1 pixels or higher than B2 pixels will be rendered
+#   using multi-pass rendering techniques.
+#
+# * Parameter B3 is only an initial value. If the number of intersection
+#   points in any scan-line at any point in time exceeds this initial value,
+#   the scan-line will be reallocated.</span>
+
+{
+1200
+1000
+8
+1
+}
+
+
+<span class="codecomment"># C) PARAMETERS FOR D-TYPE FONT ENGINE
+
+# 1. Size of the bitmap cache in RAM, in bytes
+#    (Must be greater than parameter B1 * B2)
+#
+# 2. Maximum number of bitmaps to store in the bitmap cache
+#
+# 3. Maximum number of transformations to store in the transformation cache
+#
+# 4. Bitmap cache compression: 0=Disable Compression, 1=Enable Compression
+#
+# 5. Quality:  0=Medium, 1=High, 2=Very High
+#              3=Dispersion Filter 1, 4=Dispersion Filter 2
+#              5=Hint Filter 1, 6=Hint Filter 2, 7=Hint Filter 3, 8=Hint Filter 4
+#              9=LCD_RGB_SUB_1, 10=LCD_RGB_INT_1, 11=LCD_BGR_SUB_1, 12=LCD_BGR_INT_1
+#             13=LCD_RGB_SUB_2, 14=LCD_RGB_INT_2, 15=LCD_BGR_SUB_2, 16=LCD_BGR_INT_2
+#             17=LCD_RGB_SUB_3, 18=LCD_RGB_INT_3, 19=LCD_BGR_SUB_3, 20=LCD_BGR_INT_3
+#             21=LCD2_RGB_SUB_1, 22=LCD2_RGB_INT_1, 23=LCD2_BGR_SUB_1, 24=LCD2_BGR_INT_1
+#             25=LCD2_RGB_SUB_2, 26=LCD2_RGB_INT_2, 27=LCD2_BGR_SUB_2, 28=LCD2_BGR_INT_2
+#
+# 6. Glyph hint+align algorithms: 0=Old, 1=Reserved, 2=New, 130=Enhanced, 512=CJK,
+#                                 514=CJK+New, 642=CJK+Enhanced
+#
+# 7. Font size subscale for fractional sizing, both horizontal and vertical.
+#
+# 8. Different fonts can share the same .ccv file: 0=No, 1=Yes
+#
+# 9. Maximum size of font cache, in bytes
+#    (Value 0 means no limit)
+#
+# Notes:
+#
+# * Larger cache means better performance but higher consumption of RAM.
+#
+# * Bitmap cache compression is extremely fast and effective. If enabled, bitmaps
+#   will be stored in a compressed format and will consume 3-10 times less space
+#   in the bitmap cache than non-compressed bitmaps. This is highly recommended when
+#   the size of the bitmap cache is small (e.g. in memory constrained environments).</span>
+
+{
+2650000
+8000
+5000
+1
+6
+642
+1
+1
+0
+}
+
+
+<span class="codecomment"># D) LIST OF ADDITIONAL FONT ENGINE PARAMETERS
+
+# 1. Temporary Folder:
+#
+# * This folder will serve as a storage place for any temporary objects that might
+#   be created at run-time. Consequently, this folder must be configured to allow
+#   D-Type Font Engine to read/write/modify/delete files in it.
+#
+# * If the temporary folder is non-existent or inaccessible (e.g. due to lack of
+#   adequate read/write permissions), RAM will serve as a storage place for any
+#   temporary resources.
+#
+# * If this parameter is specified as DV_NULL, RAM will serve as a storage place
+#   for any temporary resources.
+#
+# 2. Default Font Format Detection Order</span>
+
+{
+system/tmp/
+3;1;5;6;0;8;7;2;16;15;14;12;11
+}
+
+
+<span class="codecomment"># E) FONT FACTORIES
+
+# 1. CDTFontDType Font Factory List
+#
+# Notes:
+#
+# * Each line specifies [Font Format ID],0,DV_NULL</span>
+
+{
+0,0,DV_NULL
+}
+
+<span class="codecomment"># 2. CDTFontOpenTypeTtf Font Factory List
+#
+# Notes:
+#
+# * Each line specifies [Font Format ID],[CMap ID],[Stream ID],[Stream Locator],[Flags]</span>
+
+{
+1,0,0,system/ccv/ot-mac-ascii.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+ENABLE_LSB_METRICS
+3,142,0,system/ccv/ot-win-unicode.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+ENABLE_LSB_METRICS
+73,4,0,system/ccv/ot-win-unicode.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+PATENT_WORKAROUND_WIN+ENABLE_LSB_METRICS
+81,4,0,system/ccv/ot-win-symbol.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+ENABLE_LSB_METRICS
+}
+
+<span class="codecomment"># 3. CDTFontOpenTypeCff Font Factory List
+#
+# Notes:
+#
+# * Each line specifies [Font Format ID],[CMap ID],[Stream ID],[Stream Locator],[Flags]</span>
+
+{
+6,0,0,system/ccv/ot-mac-ascii.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+USE_OT_GLYPH_METRICS
+5,142,0,system/ccv/ot-win-unicode.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+USE_OT_GLYPH_METRICS
+14,0,0,system/ccv/t1-adobe-std.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+INTERPRET_AS_BARE_CFF
+15,1,0,system/ccv/t1-iso-latin.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+INTERPRET_AS_BARE_CFF
+16,1,0,system/ccv/t1-win-unicode.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+INTERPRET_AS_BARE_CFF
+82,4,0,system/ccv/ot-win-symbol.ccv,ACCEPT_WOFF_PACKAGING+ACCEPT_MALFORMED_FONT+USE_OT_GLYPH_METRICS
+}
+
+<span class="codecomment"># 4. CDTFontType1 Font Factory List
+#
+# Notes:
+#
+# * Each line specifies [Font Format ID],[CMap ID],[Stream ID],[Stream Locator],DV_NULL</span>
+
+{
+2,0,0,system/ccv/t1-adobe-std.ccv,DV_NULL
+7,1,0,system/ccv/t1-iso-latin.ccv,DV_NULL
+8,1,0,system/ccv/t1-win-unicode.ccv,DV_NULL
+}
+
+<span class="codecomment"># 5. CDTFontType3 Font Factory List
+#
+# Notes:
+#
+# * Each line specifies [Font Format ID],[CMap ID],[Stream ID],[Stream Locator],DV_NULL
+# * CDTFontType3 Font Factory supports only those Type 3 PostScript fonts that obey
+#   D-Type's strict parsing rules. See the manual for details.</span>
+
+{
+11,1,0,system/ccv/t1-iso-latin.ccv,DV_NULL
+12,1,0,system/ccv/t1-win-unicode.ccv,DV_NULL
+}
+
+
+<span class="codecomment"># F) LIST OF ADDITIONAL PARAMETERS
+
+#  1. Maximum size of D-Type Power Engine's caching subsystem in RAM, in bytes
+#  2. Maximum number of items to store in D-Type Power Engine's caching subsystem
+#  3. DrawCallback level: 0=generate DrawCallback for visible user-defined objects
+#                         1=generate DrawCallback for visible user-defined and built-in objects
+#                         2=generate DrawCallback for all user-defined objects
+#                         3=generate DrawCallback for all user-defined and built-in objects
+#  4. Algorithm for storing text formatting/styling attributes: 0=CPU independent but slower, 1=fast but CPU dependent
+#  5. LayoutEngine tweak flags (reserved for future use)
+#  6. Power Engine's object expand strategy: 0=exact, 1=predictive, 2=extra predictive
+#  7. Power Engine's object shrink strategy: 0=always, 1=only when there is too much unused space, 2=never
+#  8. Maximum number of auxiliary worker threads for D-Type Power Engine to execute asynchronous routines
+#  9. Power Engine XL: 0=don't use XL coordinates for vector objects, 1=use XL coordinates for vector objects
+# 10. Power Engine's font display mode for color glyph layers: 0=Don't show color layers, 1=Show color layers
+# 11. Power Engine's font display mode for bitmap glyph images: 0=Don't show bitmaps
+#                                                               1=Show bitmaps: Low Quality
+#                                                               2=Show bitmaps: High Quality
+#                                                               3=Show bitmaps: Very High Quality
+#                                                               4=Show bitmaps: Very High Quality (More Blur)</span>
+
+{
+6291456
+1000
+3
+0
+1
+2
+2
+2
+0
+1
+3
+}
+
+
+<span class="codecomment"># G) LIST OF ADDITIONAL FILES
+
+# 11000..11026: Hyphenation data file - English, French, German, Spanish, Russian etc.
+# 10000: Thai line breaking data file
+# 10100: Vector definition data file
+# 10200: Bitmap definition data file</span>
+
+{
+11000,None,0,NONE
+11001,English,0,../../files/hyphendict/en.hyp
+11002,French,0,../../files/hyphendict/fr.hyp
+11003,German,0,../../files/hyphendict/de.hyp
+11004,Spanish,0,../../files/hyphendict/es.hyp
+11005,Russian,0,../../files/hyphendict/ru.hyp
+11006,Bulgarian,0,../../files/hyphendict/bg.hyp
+11007,Czech,0,../../files/hyphendict/cs.hyp
+11008,Croatian,0,../../files/hyphendict/hr.hyp
+11009,Danish,0,../../files/hyphendict/da.hyp
+11010,Dutch,0,../../files/hyphendict/nl.hyp
+11011,Greek (Monotonic),0,../../files/hyphendict/el-monoton.hyp
+11012,Greek (Polytonic),0,../../files/hyphendict/el-polyton.hyp
+11013,Finnish,0,../../files/hyphendict/fi.hyp
+11014,Hungarian,0,../../files/hyphendict/hu.hyp
+11015,Italian,0,../../files/hyphendict/it.hyp
+11016,Norwegian (Bokmal),0,../../files/hyphendict/nb.hyp
+11017,Norwegian (Nynorsk),0,../../files/hyphendict/nn.hyp
+11018,Polish,0,../../files/hyphendict/pl.hyp
+11019,Portuguese,0,../../files/hyphendict/pt.hyp
+11020,Romanian,0,../../files/hyphendict/ro.hyp
+11021,Slovak,0,../../files/hyphendict/sk.hyp
+11022,Slovenian,0,../../files/hyphendict/sl.hyp
+11023,Serbian (Cyrillic),0,../../files/hyphendict/sr-cyrl.hyp
+11024,Swedish,0,../../files/hyphendict/sv.hyp
+11025,Turkish,0,../../files/hyphendict/tr.hyp
+11026,Ukrainian,0,../../files/hyphendict/uk.hyp
+10000,Thai,0,system/misc/map_thai.dat
+10100,Vector,0,system/misc/pdvector.dat
+10200,Bitmap,0,system/misc/pdbitmap.dat
+}
+
+<span class="codecomment"># END OF FILE</span>
+</pre>
+</div>
+
+<p>As it can be seen above, the main initialization file may point to several other secondary initialization files (<strong>dtype.fls</strong>, <strong>dtype.pat</strong>, <strong>gs256.gsl</strong> and various <em>Char Translation and Alignment</em> or <strong>.ccv</strong> files used by font factories). When used, those optional secondary initialization files provide additional initialization parameters.</p>
+
+<h3>Streams</h3>
+
+<p>At present, initialization files and fonts can be accessed via streams that represent files on disk, files in memory (RAM) or files on a local or remote server. To identify the stream and specify its location, D-Type Engine uses two parameters:  <em>Stream ID</em> and <em>Stream Locator</em>. The fist parameter, <em>Stream ID</em>, describes the stream type and tells D-Type Engine how to interpret the second parameter, <em>Stream Locator</em>. <em>Stream Locator</em> then supplies the actual location of the stream. At present, <em>Stream ID</em> can have one of the following values:</p>
+
+<ul>
+
+<li><p><em>Stream ID</em> = -1 &mdash; <strong>NONE Stream</strong>. In this case <em>Stream Locator</em> is ignored and should be set to NONE. This is a simple way to tell D-Type Engine not to read any file.</p></li>
+
+
+<li><p><em>Stream ID</em> = 0 &mdash; <strong>Default Stream Type</strong>. Same as <em>Stream ID</em> = 1.</p></li>
+
+<li><p><em>Stream ID</em> = 1 &mdash; <strong>File Stream</strong>. In this case <em>Stream Locator</em> represents a standard ANSI C/C++ file path of the file on disk (UTF-8 encoding is supported).</p></li>
+
+<li><p><em>Stream ID</em> = 2 &mdash; <strong>Memory Stream</strong>. In this case <em>Stream Locator</em> represents a location and size of the memory file in RAM. This information is specified in one of the following two formats:</p>
+
+<ul>
+
+<li>
+<p><strong>Decimal Format (designed to work on 32-bit systems only; does not work on 64-bit systems)</strong></p>
+<p>This format looks as follows:</p>
+
+<p class="center"><em>mem_addr</em>#<em>mem_len</em></p>
+
+<p>where <em>mem_addr</em> is the memory address (within the application's local address space) at which the file begins and <em>mem_len</em> is the size of the file, in bytes. Both <em>mem_addr</em> and <em>mem_len</em> are in the form of a standard 32-bit decimal integer. Because this format forces your application to convert memory addresses to 32-bit decimal integers, it works reliably only on 32-bit systems.</p>
+</li>
+
+<li>
+<p><strong>Pointer Format (designed to work on any system but is platform and compiler dependent)</strong></p>
+<p>This format looks as follows:</p>
+
+<p class="center"><em>mem_ptr</em>*<em>mem_len</em></p>
+
+<p>where <em>mem_ptr</em> is the memory address (within the application's local address space) at which the file begins in "pointer format" and <em>mem_len</em> is the size of the file in the form of a standard decimal integer. The "*" character is an indication to D-Type that the address is in pointer format and not in the form of a standard decimal integer.</p>
+
+<p>A memory address can be expressed in pointer format using the %p format specifier of the ANSI sprintf function. This format is platform and compiler dependent. For example, on some systems a memory address in pointer format may look like 0x0040A8 while on others it may look like B800:0000. However, since this format does not force your application to convert memory addresses to 32-bit decimal integers, it works reliably on both 32-bit and 64-bit systems.</p>
+
+<p>Your application should always use the C/C++ <em>sprintf</em> function and its %p format specifier to convert, at run-time, the address of a file in memory to pointer format. This will ensure the address can be properly read by D-Type Font Engine on that same platform. The following example demonstrates this:</p>
+
+<div class="box_field">
+<pre>
+const char* file_addr = "my memory based file ...... ";
+int file_len = strlen(file_addr);
+sprintf(temp_string, "%p*%d", file_addr, file_len);
+</pre>
+</div>
+
+<p>
+For additional details see the description of the %p format specifier in the description of the ANSI printf and sprintf functions.
+</p>
+
+</li>
+
+</ul>
+
+
+<p>When using memory streams, your application must ensure that the referenced memory files are located at the address specified by <em>Stream Locator</em>. For example, if you intend to initialize D-Type Engine using memory files, you should 1) create any necessary initialization files in memory, 2) dynamically create the main initialization file to reference those secondary initialization files and 3) call the initialization function (i.e. <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a>).</p>
+
+<p><strong>Note:</strong> Memory streams are intended primarily for advanced developers who wish to use D-Type Engine on computer systems without any disk drives (e.g. certain types of embedded systems). Whenever a disk based file system is available, developers are encouraged to use file streams.</p>
+</li>
+
+
+<li><p><em>Stream ID</em> = 3 &mdash; <strong>URL Stream</strong>. In this case <em>Stream Locator</em> represents the URL (Uniform Resource Locator) of the file on a local or remote server (e.g. a Web server on the Internet or local network).</p>
+
+<p>URL Stream is a new stream type; it was first introduced in D-Type Engine 4.0.4.5. This stream type is only available on platforms that support Berkeley sockets (e.g. Linux, Mac OS X, Windows).</p>
+
+<p>At present, <em>Stream Locator</em> can be used to identify a single transport protocol: the HTTP protocol version 1.1. As a result, the first seven characters in <em>Stream Locator</em> must be "<em>http://</em>". Additionally, the Web server on which the referenced file resides must support partial content delivery via the HTTP 1.1 protocol (e.g. Microsoft Internet Information Server or Apache Server). This protocol provides truly random access to files (e.g. initialization files and/or fonts) over the Internet or local network (LAN). The older HTTP 1.0 protocol is not suitable for random file access and, therefore, not supported. Also, authenticated HTTP access and HTTP redirects are presently not supported.</p>
+
+<p><strong>Important Note:</strong> Care must be taken when using this stream type. Accessing initialization files and/or fonts that reside on a non-trusted server can have a negative or even damaging effect on your application. Also, this is inherently a slow access method. Accessing files from disk or memory is usually noticeably faster. Ideally, use the URL stream only on a local network (LAN) and in a trusted environment.</p>
+</li>
+
+<li><p><em>Stream ID</em> = 5 &mdash; <strong>FURL Stream</strong> (also called <strong>File-Backed URL Stream</strong>). Same as the URL Stream (<em>Stream ID</em> = 3), except that the entire remote file is first downloaded to local disk, and then read from there. This is a noticeably faster way to read a remote file compared to the URL Stream.</p>
+
+<p>The <em>url</em> member is a valid pointer to the standard ANSI C/C++ string which contains the path prefix for the local file to be created (relative to the current working directory), followed by the '~' character, followed by the location (URL) of the file on a local or remote server (e.g. a Web server on the Internet or local network). For example:</p>
+<p>system/tmp/www_~http://www.remotefontserver.com/config/dtype.inf</p>
+</li>
+
+<li><p><em>Stream ID</em> = 6 &mdash; <strong>MURL Stream</strong> (also called <strong>Memory-Backed URL Stream</strong>). Same as the URL Stream (<em>Stream ID</em> = 3), except that the entire remote file is first downloaded to memory, and then read from there. This is the fastest way to read a remote file, however it requires the most memory.</p>
+
+<p>The <em>url</em> member is a valid pointer to the standard ANSI C/C++ string which contains the location (URL) of the file on a local or remote server (e.g. a Web server on the Internet or local network). The first seven characters of the string pointed by <em>url</em> must be "<em>http://</em>".</p>
+</li>
+</ul>
+
+<p>The following table shows a few sample <em>Stream Locators</em> for each of the supported stream types:</p>
+
+<table class="table_data">
+
+<tr>
+<th><em>Stream ID</em></th>
+<th><em>Stream Locator</em></th>
+<th>Comment</th>
+</tr>
+
+<tr><td>-1</td><td>NONE</td><td>NONE stream</td></tr>
+<tr><td>0</td><td>system\ini\dtype.pat</td><td>File on disk</td></tr>
+<tr><td>0</td><td>C:\Program Files\Alpha View\system\ini\dtype.fls</td><td>File on disk</td></tr>
+<tr><td>1</td><td>system\ini\dtype.fls</td><td>File on disk</td></tr>
+<tr><td>1</td><td>system/ini/dtype.fls</td><td>File on disk</td></tr>
+<tr><td>1</td><td>C:\Fonts\Hydrogen.ttf</td><td>File on disk</td></tr>
+<tr><td>2</td><td>500128#3064</td><td>File in memory (Decimal Format)</td></tr>
+<tr><td>2</td><td>4200160#226512</td><td>File in memory (Decimal Format)</td></tr>
+<tr><td>2</td><td>0x0040A8*3064</td><td>File in memory (Pointer Format)</td></tr>
+<tr><td>2</td><td>B800:0000*226512</td><td>File in memory (Pointer Format)</td></tr>
+<tr><td>3</td><td>http://localhost:80/Simple.dtf</td><td>File on a Web server - slow</td></tr>
+<tr><td>3</td><td>http://www.remotefontserver.com/fonts/FreeSansBold.otf</td><td>File on a Web server - slow</td></tr>
+<tr><td>3</td><td>http://169.254.245.201:8080/config/dtype.fls</td><td>File on a Web server - slow</td></tr>
+<tr><td>5</td><td>system/tmp/www_~http://localhost:80/Simple.dtf</td><td>File on a Web server (FURL) - fast</td></tr>
+<tr><td>5</td><td>system/tmp/www_~http://www.remotefontserver.com/fonts/FreeSansBold.otf</td><td>File on a Web server (FURL) - fast</td></tr>
+<tr><td>5</td><td>system/tmp/www_~http://169.254.245.201:8080/config/dtype.fls</td><td>File on a Web server (FURL) - fast</td></tr>
+<tr><td>6</td><td>http://localhost:80/Simple.dtf</td><td>File on a Web server (MURL) - very fast</td></tr>
+<tr><td>6</td><td>http://www.remotefontserver.com/fonts/FreeSansBold.otf</td><td>File on a Web server (MURL) - very fast</td></tr>
+<tr><td>6</td><td>http://169.254.245.201:8080/config/dtype.fls</td><td>File on a Web server (MURL) - very fast</td></tr>
+
+</table>
+
+
+<p>If used, secondary initialization files must remain at their specified location until D-Type Engine has been deinitialized. This is especially important for memory files (since invalid memory pointers can cause access violations).</p>
+
+
+<h3>Temporary Folder</h3>
+
+<p>The temporary folder is used as a storage area for any temporary resources (e.g. font cache) that might be created by D-Type Engine. Consequently, this folder must be configured to allow D-Type Engine to create, read, write, modify and delete files in it.</p>
+
+<p>If the temporary folder does not exist or is inaccessible for whatever reason (e.g. an incorrect path or insufficient access permissions), D-Type Font Engine will use RAM for its temporary resources. This means that font caching will also be done in memory. Consequently, the more glyphs and font tables D-Type Engine caches, the more RAM will be consumed. For example, a 10 MB Chinese font may initially take less than a few kilobytes of memory in RAM. However, if your application needs to access, process or render all of its glyphs, you should expect that memory requirements for this font at one point will reach 10 MB.</p>
+
+<p>One way to limit RAM consumption is to completely disable font caching. This can be done for all or some of the fonts in the Font Catalog. However, this extreme measure is not recommended because without font caching your application's performance will be degraded. Remember that outline fonts require lots of processing and computations to take place before they can be displayed as bitmaps. Font caching is very useful because the results of most time consuming computations (e.g. processing and hinting glyph outlines) can be stored in the font cache for later use.</p>
+
+<p>Another slightly better way to reduce RAM consumption is to make some or all fonts inactive after their use (e.g. after rendering), by calling the <a href="../funcs/dtFontMakeInactive.htm">dtFontMakeInactive</a> function. However, even this method will reduce the overall effectiveness of the font caching system and degrade your application's performance.</p>
+
+<p>The most effective approach is to have a folder for temporary font resources available on disk and allow D-Type Engine to use this folder rather than RAM. Most today's computers have storage devices (solid state disks, hard disk, flash drives) whose capacity largely exceeds the capacity of their RAM. And even if your application uses only small font files, the presence of the temporary folder is not harmful. In the past, the temporary folder was also very useful on older operating systems such as Mac OS 8/9 which imposed a fixed limit on the amount of memory (RAM) an application is allowed to use.</p>
+
+<p>In conclusion, we recommend that the temporary folder always be present in the specified location so that D-Type Engine can read, write, modify and delete files in it. The temporary folder should be disabled only on computer systems that have no disk based file system available (e.g. certain types of embedded systems) and when RAM is the only available option.</p>
+
+
+<h3>Default Font Format Detection Order</h3>
+
+<p>When adding fonts to the Font Catalog, it is possible to instruct D-Type Font Engine to automatically detect the font's format by inspecting the corresponding font file/stream. This can be very useful when the font's format is not known in advance or the application doesn't care what format the font is in. See the <a href="inifiles.htm#fls">dtype.fls</a> section and the description of the <a href="inifiles.htm#font_format_id"><em>font_format_id</em></a> parameter below for more information on how to instruct D-Type Font Engine to automatically detect the font format when loading the fonts.</p>
+
+<p>In order to help the Engine perform this font format detection in a more intelligent and efficient manner, the dtype.inf file contains one line that specifies the order in which the font format IDs will be tested. This is the <em>Default Font Format Detection Order</em> parameter. The default value of this parameter is:</p>
+
+<div class="box_field">
+<pre>3;1;5;6;0;8;7;2;16;15;14;12;11</pre>
+</div>
+
+<p>This value means that when font format detection is performed, D-Type Font Engine will first test if the font format is 3 (DV_FONT_OPENTYPE_TTF_WINUNICODE); if not it will try font format 1 (DV_FONT_OPENTYPE_TTF_MACASCII); if not it will try font format 5 (DV_FONT_OPENTYPE_CFF_WINUNICODE) and so on for all the remaining font format IDs on this line.</p>
+
+
+<h3>Font Factories</h3>
+
+<p>There are five sections in the main initialization file called <em>font factories</em>. Currently, D-Type Engine has five base font driver classes: <strong>CDTFontDType</strong>, <strong>CDTFontOpenTypeTtf</strong>, <strong>CDTFontOpenTypeCff</strong>, <strong>CDTFontType1</strong> and <strong>CDTFontType3</strong>. These base classes handle the corresponding font formats as described in the <a href="fclasses.htm">D-Type Font Driver Classes</a> section of this document. The base font driver classes are part of D-Type's internal C++ API and are not meant to be accessed directly by applications.</p>
+
+<p>Font Factories are designed to allow applications to create useful font format instances from the above five base font driver classes. Each font factory corresponds to exactly one font driver class and can derive many font format instances of that class. Each font format instance is then identified by a unique <em>font_format_id</em>. This identifier is known to applications, allowing them to uniquely specify the font format when adding new fonts to the Font Catalog. By default, the main initialization file instructs Font Factories to create a set of thirteen standard font format instances (identified by <em>font_format_id</em> 0, 1, 3, 6, 5, 2, 7, 8, 11, 12, 14, 15 and 16). This set is also known as the <em>Legacy Font Factory</em> configuration and is described in more detail in the <a href="factories.htm">Predefined Font Factory Configurations</a> section of this manual.</p>
+
+<p>In addition to the Legacy Font Factory configuration, the main initialization file may instruct Font Factories to create some additional, non-standard and usually platform specific font format instances. For example, font format instances 81 and 82 (or any other instances that use the ot-win-symbol.ccv Char Translation and Alignment file) allow applications to open so-called Symbol fonts in a manner that is consistent with the Windows operating system but not compliant with the Unicode standard. In most situations, however, applications will not need to make use of these additional font format instances.</p>
+
+<p>Future versions of D-Type Font Engine may introduce additional font format identifiers and/or create additional, completely new base font driver classes and/or font format instances.</p>
+
+
+<p><em>Note</em>: <em>Char Translation and Alignment</em> files (the <em>.ccv</em> files) that are present in these sections are highly recommended
+because they allow your application to create custom character encodings and, additionally, contain instruction designed to improve font rendering. Therefore, we recommend you use them as shown above. You should ensure they remain accessible to D-Type Engine at <u>all times</u>.</p>
+
+
+<h2><a name="fls">dtype.fls</a></h2>
+
+
+<p><strong>dtype.fls</strong> is an optional secondary initialization file which contains a list of fonts that D-Type Engine will automatically add to its Font Catalog when a new D-Type Engine Instance is created using the <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function. Therefore, this list is called the <em>Initial Font List</em>. Typically, this list is used to add application's core fonts (e.g. Times, Helvetica) or fonts that are critical for your application to function properly (e.g. fonts used to produce notes, mathematical equations, icons etc).</p>
+
+
+<p>This initialization file is set up as a list. The following two requirements apply to all D-Type lists:</p>
+
+<ol>
+
+<li><p>Individual parameters within each row of the list (if any) must be separated <u>only</u> by a single comma.</p></li>
+
+<li><p>List rows are separated by the newline character.</p></li>
+
+<li><p>Value -1 is an &quot;End-Of-List&quot; marker and can be used at the end of the list. However, starting with D-Type 5.0.3.1, this is entirely optional and no longer a requirement.</p></li>
+
+</ol>
+
+
+<p>A sample dtype.fls file is shown below. Applications that make a use of this file will most likely want to create their own font list.</p>
+
+
+<div class="box_field">
+<pre>
+<span class="codecomment"># *** D-TYPE INITIAL FONT LIST V7.5 ***
+#
+# This file contains a list of fonts that will be added to D-Type Engine's Font Catalog as
+# soon as the corresponding D-Type Engine instance is initialized. Each row in this list
+# consists of the following parameters:
+#
+# * font_format_id - Font Format ID. This is an ID that specifies the font format:
+#
+#     0 : D-Type font (.dtf)
+#     3 : OpenType font (.ttf or .otf) and font collections (.ttc) with TrueType outlines
+#     5 : OpenType font (.otf) and font collections (.ttc) with CFF outlines
+#     8 : Adobe Type 1 font (.pfb or .pfa)
+#    12 : Adobe Type 3 PostScript font (.ps)
+#    16 : Bare CFF font (.cff)
+#
+#   Other values are also supported. See the manual for details.
+#
+# * fuid - Unique Font Identifier
+#
+#   This is an optional but recommended string that uniquely identifies the font.
+#   If not needed, set to DV_NULL. Otherwise, the string must consist of precisely
+#   16 ASCII characters.
+#
+# * fcnr - Font Collection Number
+#
+#   When the font file is a font collection, this is the index of a font in that
+#   collection. Set to 0 to add the first font in the collection or if the font file
+#   is not a collection.
+#
+# * cmap_id - Reserved for future. Must be set to -1.
+#
+# * caching - Font Access and Caching. The following values are recommended:
+#
+#     0 : legacy method
+#   128 : standard method
+#
+# * hinting - Font Hinting. This parameter can have one of the following values:
+#
+#     0 : disable hinting
+#     1 : use native hinting when available; auto-hinting otherwise
+#     2 : use auto-hinting exclusively
+#     3 : use native hinting when available; compact auto-hinting otherwise
+#     4 : use compact auto-hinting exclusively
+#
+# * nr_of_streams - Number of streams that will supply the font data.
+#
+#   Most font formats contain all font data in a single stream (file). Therefore, this
+#   parameter is typically 1. Some font formats (e.g. Type 1) may supply additional
+#   font data via additional streams. In this case nr_of_streams will be greater than 1.
+#   See the manual for details on how those font formats utilize the additional streams.
+#
+# * stream_sequence - A sequence of nr_of_streams stream descriptors that supply font data.
+#
+#   Each stream descriptor consists of the following two parameters:
+#
+#     * stream_id - identifies the stream type:
+#
+#         0 : Default Stream Type. Same as File Stream.
+#         1 : File Stream
+#         2 : Memory Stream
+#         3 : URL Stream
+#         5 : FURL Stream (File-Backed URL Stream)
+#         6 : MURL Stream (Memory-Backed URL Stream)
+#
+#     * stream_locator - stream type specific locator (e.g. file path or URL).
+#
+#   Regardless of the font format, the first stream descriptor in the array always
+#   supplies vital font data.
+#
+# * reserved  - Reserved for future. Must be set to DV_NULL.
+#
+# The parameters in each row must be separated by a single comma and specified in precisely
+# the same order as listed above.</span>
+
+{
+3,F0014_ANDES__SS0,0,-1,0,1,1,0,fonts\Andes.ttf,DV_NULL
+0,F0010_HSANSM_@@0,0,-1,0,1,1,0,fonts\HSansMM.dtf,DV_NULL
+5,F0010_FSANS__cS0,0,-1,0,1,1,0,fonts\FreeSansBold.otf,DV_NULL
+2,F0014_MUSIC__SS0,0,-1,0,1,1,0,fonts\music.pfb,DV_NULL
+8,F0010_ANTIQ__cS0,0,-1,0,1,2,3,http://localhost/fonts/aqr.pfb,0,D:\fonts\aqr.afm,DV_NULL
+8,F0010_UTOPB__cS0,0,-1,0,1,1,0,fonts\utopia_b.pfa,DV_NULL
+3,F0010_ARIAL__NS0,0,-1,0,1,1,0,D:\WINNT\Fonts\Arial.ttf,DV_NULL
+3,F0011_TIMES__NS0,0,-1,0,1,1,0,D:\WINNT\Fonts\Times.ttf,DV_NULL
+}
+
+<span class="codecomment"># END OF FILE</span>
+</pre>
+</div>
+
+
+<p>As it can be seen, each row in this list contains the following key parameters:</p>
+
+
+<table class="table_data">
+
+<tr>
+<th>Parameter</th>
+<th colspan="2">Description</th>
+</tr>
+
+<tr>
+<td>
+<p><em id="font_format_id">font_format_id</em></p>
+</td>
+<td colspan="2">
+<p>An ID that uniquely identifies the font format (e.g. D-Type, TrueType, OpenType, Type 1, PostScript Type 3, bare CFF) optionally in conjunction with a desired character encoding. This ID depends on the active font factory configuration, which is a font factory configuration that is specified during the initialization of D-Type Engine. If one of the predefined font factory configurations is used (e.g. Legacy Font Factory), see <a href="factories.htm">Appendix &mdash; Predefined Font Factories</a> for a list of supported values.</p>
+
+<p>Regardless of the active font factory configuration, this parameter must match the actual format of the font that is being added to the Font Catalog. If this is not the case, the newly added font will not be usable.</p>
+
+<p>As Unicode has become a globally adopted standard, it is no longer recommended that applications support non-Unicode based character encoding schemes (e.g. Mac ASCII or ISO Latin) when adding fonts to the Font Catalog. With this in mind, D-Type Font Engine's default font factory configuration includes the following 6 font format identifiers that assume Unicode as the standard character encoding scheme. These <em>font_format_id</em> values should be used by all modern applications:</p>
+
+<ul>
+<li>0 (DV_FONT_DTYPE) &mdash; for D-Type fonts (.dtf)</li>
+<li>3 (DV_FONT_OPENTYPE_TTF) &mdash; for TrueType/OpenType fonts (.ttf/.otf) and font collections (.ttc) with TrueType outlines</li>
+<li>5 (DV_FONT_OPENTYPE_CFF) &mdash; for OpenType (.otf) fonts and font collections (.ttc) with Type 2/CFF outlines</li>
+<li>8 (DV_FONT_TYPE1) &mdash; for Adobe Type 1 fonts (.pfb or .pfa)</li>
+<li>12 (DV_FONT_PSTYPE3) &mdash; for Adobe Type 3 PostScript fonts (.ps)</li>
+<li>16 (DV_FONT_BARECFF) &mdash; for Bare CFF fonts (.cff)</li>
+</ul>
+
+<p>In addition to an ID that specifies a font format (for example the 6 font format identifiers listed above), <em>font_format_id</em> can also be set to -1 (DV_FONT_FORMAT_AUTO1) or -2 (DV_FONT_FORMAT_AUTO2). These special values do not specify any particular font format but tell D-Type Font Engine to automatically detect the font's format by inspecting the corresponding font file/stream. This can be very useful when the font's format is not known in advance or the application doesn't care what format the font is in. However, this way of adding the fonts to the Font Catalog is slower, since the corresponding file/stream first needs to be opened and then its contents must be inspected. More precisely, this contents inspection is internally done by repeatedly calling the <a href="../funcs/dtFontMakeActive.htm">dtFontMakeActive</a> function for a number of font formats in a specific order. If for a tested font format the <a href="../funcs/dtFontMakeActive.htm">dtFontMakeActive</a> call succeeds, then it is assumed that this is the right font format for the supplied file/stream and the font is added to the Font Catalog using that format<sup>*</sup>. The only difference between the value -1 (DV_FONT_FORMAT_AUTO1) and -2 (DV_FONT_FORMAT_AUTO2) is that DV_FONT_FORMAT_AUTO1 tries to activate the font to level 1 (Basic Activation), while DV_FONT_FORMAT_AUTO2 tries to activate it to level 2 (Full Activation). Thus, DV_FONT_FORMAT_AUTO2 is more thorough (but slower) and its key advantage over DV_FONT_FORMAT_AUTO1 is that it can be used to perform a better validation of the font. Consequently, if the font has some major problems or defects, there is more chance that DV_FONT_FORMAT_AUTO2 will detect it at this early stage. In the other hand, DV_FONT_FORMAT_AUTO1 is quicker and less thorough so it will likely detect fewer font problems, which in turn can result in potentially more broken fonts being added to the Font Catalog.</p>
+
+<p>Keep in mind that even with the Full Activation, there is still some chance that the supplied font could have problems or defects that can only be discovered at later stages. Therefore, for most applications the choice of whether to use DV_FONT_FORMAT_AUTO1 or DV_FONT_FORMAT_AUTO2 will depend on the trade-off between the font processing speed and the thoroughness of early font validation. Either way, a font that cannot be activated to the specified activation level will not be added to the Font Catalog. At the same time, having a defective font in the Font Catalog is not some alarming or unusual situation by itself. Also, remember that when the <em>font_format_id</em> specifies a particular font format, the font is added to the Font Catalog without making an attempt to activate/validate it.</p>
+
+<p><sup>*</sup><strong>Note:</strong> If the application wants to know what font format was chosen when the font was added to the Font Catalog using the DV_FONT_FORMAT_AUTO1 or DV_FONT_FORMAT_AUTO2 identifiers, it can later call the <a href="../funcs/dtFontGetSysStatus.htm">dtFontGetSysStatus</a> function.</p>
+</td></tr>
+
+
+<tr>
+<td>
+<p><em>fuid</em></p>
+</td>
+<td colspan="2">
+<p>Any string selected by your application that will uniquely identify the newly added font. This value is optional. If your application will not make use of this string, set <em>fuid</em> to DV_NULL. Otherwise, this must be a string consisting of precisely 16 ASCII characters.</p>
+</td></tr>
+
+
+<tr>
+<td>
+<p><em>fcnr</em></p>
+</td>
+<td colspan="2">
+<p>Some font files are font collections, which means they contain more than a single font. The <em>fcnr</em> parameter, or font collection number, is the index of a font in that collection. Set the font collection number to 0 to open the first font in the collection or if the font file is not a collection.</p>
+<p>If <em>fcnr</em> exceeds the total number of fonts in the collection, the newly added font will not be usable.</p>
+</td></tr>
+
+
+<tr>
+<td>
+<p><em>cmap_id</em></p>
+</td>
+<td colspan="2">
+<p>Reserved for future use. Must be set to -1.</p>
+</td></tr>
+
+
+<tr>
+<td>
+<p><em>caching</em></p>
+</td>
+<td colspan="2">
+<p>Tells the engine how to access and cache the font. This parameter will be described more thoroughly in the future. For now, only values 0 and 128 are documented.</p>
+<ul>
+<li><p><em>caching</em> = 0 &mdash; identifies the legacy access/caching method. This method ensures good performance with all supported font formats. However it may somewhat slow down applications that have inaccessible fonts in the Font Catalog. See below for details.</p></li>
+<li><p><em>caching</em> = 128 &mdash; Same as <em>caching</em> = 0 but any font that cannot be opened on first attempt will be marked as "dead" and D-Type Engine will not attempt to open it again. See below for details.</p></li>
+</ul>
+<p>When an application makes an attempt to access a font, D-Type Engine obtains its file location from the Font Catalog and attempts to open the corresponding file/stream. If this file/stream is inaccessible (due to an invalid file name/file path, lack of adequate read permissions, invalid font format, corrupt file or any other reason), the actual attempt to open this font will cause a small performance penalty. This is usually not noticeable, if done only once. However, when many attempts to access such fonts are made in a short period of time, the performance penalty may become noticeable.</p>
+<p>When <em>caching</em> = 128, any font that cannot be opened on first attempt will be marked as "dead" and D-Type Engine will not make further attempts to open it later, even though it is theoretically possible that the corresponding file/stream could become valid at some point. When <em>caching</em> = 0, D-Type Engine will attempt to open the requested font each time such a request is made; in other words the font is not considered "dead" just because the first attempt to open it failed.</p>
+<p>Application developers need to choose which of the above access/caching methods works best in their specific application.</p>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<p><em>hinting</em></p>
+</td>
+<td colspan="2">
+<p>Tells the engine whether to apply hinting to the font. Hinted fonts usually produce better looking and crisper output (especially at smaller font sizes), however they are somewhat slower to process than non-hinted fonts (especially if they contain many complex glyphs such as in Chinese/Japanese/Korean fonts).</p>
+<p>Currently, this parameter can have one of the following values:</p>
+<ul>
+<li><em>hinting</em> = 0 &mdash; add the font as non-hinted</li>
+<li><em>hinting</em> = 1 &mdash; add the font as hinted; use native hinting when available and auto-hinting otherwise.</li>
+<li><em>hinting</em> = 2 &mdash; add the font as hinted; use auto-hinting exclusively.</li>
+<li><em>hinting</em> = 3 &mdash; add the font as hinted; use native hinting when available and compact auto-hinting otherwise.</li>
+<li><em>hinting</em> = 4 &mdash; add the font as hinted; use compact auto-hinting exclusively.</li>
+</ul>
+
+<p>The first option, <em>hinting</em> = 0, should be used when crisp font output is not needed or desired (an example would be applications that render on TV). However, if crisp font output is imperative, the second option, <em>hinting</em> = 1, is typically the best choice. The third option, <em>hinting</em> = 2, can be used when the corresponding font is poorly hinted or is not hinted at all (an example would be the Moto.pfb Type 1 font that comes with D-Type Engine). In that case, D-Type's auto-hinting will produce better looking output then the font's native hinting.</p>
+
+<p>The last two options, <em>hinting</em> = 3 and <em>hinting</em> = 4, are identical to the previous two, <em>hinting</em> = 1 and <em>hinting</em> = 2, but employ a compact auto-hinting scheme. This new auto-hinting scheme was introduced in D-Type Engine 4.0.4.3. Fonts that use compact auto-hinting look and behave the same as fonts that use regular auto-hinting but have somewhat reduced storage requirements.</p>
+
+
+</td>
+</tr>
+
+
+<tr>
+<td>
+<p><em>nr_of_streams</em></p>
+</td>
+<td colspan="2">
+<p>Most font formats contain all vital font data in a single stream (file). Therefore, this parameter is typically 1. Some font formats (e.g. Type 1) may supply additional font data via additional streams. In this case <em>nr_of_streams</em> will be greater than 1.</p>
+<p>Regardless of how many streams you specify, the first input stream always supplies vital font data and is called the <em>main input file</em>; any additional input streams (if applicable) are format specific and must follow in a predetermined order. See <a href="fclasses.htm">D-Type Font Driver Classes</a> for details.</p>
+</td>
+</tr>
+
+
+<tr>
+
+<td>
+<p><em>stream_id</em></p>
+</td>
+<td>
+<p>Describes the stream type and tells D-Type Engine how to interpret <em>Stream Locator</em>. See the <em>Streams</em> section above for details.</p>
+</td>
+
+<td rowspan="2" align="center" valign="middle"><strong>these two<br />parameters<br />must repeat<br /><em>nr_of_streams</em><br />times</strong></td>
+
+</tr>
+
+<tr>
+<td>
+<p><em>stream_locator</em></p>
+</td>
+<td>
+<p>Supplies the actual location of the font file. For details, see the description of the <em>Stream Locator</em> parameter in the <em>Streams</em> section above.</p>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<p><em>reserved</em></p>
+</td>
+<td colspan="2">
+<p>Reserved for future use. Must be set to DV_NULL.</p>
+</td></tr>
+
+
+</table>
+
+
+<p>If used, font files set up through the Initial Font List must remain at their specified location at least until they are permanently removed from the Font Catalog. This is especially important for memory files (since invalid memory pointers can cause access violations).</p>
+
+<p>Application can add additional fonts to the Font Catalog at run-time by calling the <a href="../funcs/dtFontAddViaStream.htm">dtFontAddViaStream</a> or <a href="../funcs/dtFontAddViaStreams.htm">dtFontAddViaStreams</a> functions. Please review these functions for more information.</p>
+
+
+<h2><a name="pat">dtype.pat</a></h2>
+
+<p><strong>dtype.pat</strong> is an optional secondary initialization file which contains pattern fill definitions that D-Type Engine will add to its Pattern Catalog when a new D-Type Engine Instance is created using the <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function. This is a binary file and its structure will not be discussed in this document. Technical information about the structure of this file is available to customers with a support contract. The available pattern fill definitions are listed in <a href="patterns.htm">Appendix &mdash; Pattern Fills</a>. Functions such as <a href="../funcs/dtPatternGetNrOfGroups.htm">dtPatternGetNrOfGroups</a>, <a href="../funcs/dtPatternGetGroupCount.htm">dtPatternGetGroupCount</a> and <a href="../funcs/dtPatternGetBitmap.htm">dtPatternGetBitmap</a> provide the necessary information about the pattern fills in the Pattern Catalog.</p>
+
+<p>When rendering text and shapes to the Output, application developers can select a pattern definition from the Pattern Catalog by calling the <a href="../funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> function.</p>
+
+
+<h2><a name="gsl">gs256.gsl</a></h2>
+
+<p><strong>gs256.gsl</strong> (or any other .gsl file) is an optional secondary initialization file which contains an array of gray values (also called alpha-levels) that D-Type Engine will supply to D-Type Rasterizer when a new D-Type Engine Instance is created using the <a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a> (or <a href="../../pd/funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a> or <a href="../../tx/funcs/txEngineIniViaStream.htm">txEngineIniViaStream</a>) function. This plain text file represents a simple list. The list contains exactly 256 elements and is set up according to the specifications of the <a href="../funcs/dtRasterizerSetGrayscale.htm">dtRasterizerSetGrayscale</a> function.</p>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,7 @@
+Bounding box in document units (4 elements, each element is 4 bytes long). The elements represent XMin, YMin, XMax and YMax coordinates of the bounding box.
+
+Exception: The bounding box associated with a PowerFont is flipped in the Y direction. This means its coordinates are actually (XMin, -YMax, XMax, -YMin).
+
+{strong}Sample values:{/strong}
+
+"-50, -50, 350, 350"

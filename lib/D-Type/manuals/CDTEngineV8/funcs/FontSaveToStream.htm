@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTEngineV8</h1>
+
+<div class="box_prototype"><strong>FontSaveToStream</strong></div><br />
+
+<p>The  function saves the specified font in the Font Catalog to a font file, in D-Type (.dtf) format. Optionally, this function can be used to subset the specified font i.e. store only a subset of its glyphs in the output D-Type font. Subsetted D-Type fonts are almost always smaller in size than the original input fonts (since they contain fewer glyphs) and, therefore, very suitable for embedding in electronic documents.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Index of the font to be saved in D-Type font format.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the output font file to be created. If the specified output file already exists, it will be overwritten.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_subset_func</em></p>
+</td><td>
+<p>This parameter must be either DV_NULL or a valid pointer to your own callback function declared as follows:</p>
+
+<p class="center"><em><a href="../../dt/manual/types.htm#DT_SWORD ">DT_SWORD </a> your_font_subset_func(<a href="../../dt/manual/types.htm#DT_ID_ULONG ">DT_ID_ULONG </a> glyph_index, void* user_param)</em></p>
+
+<p>where <em>your_font_subset_func</em> is the name of your own C function, <em>glyph_index</em>
+an index of the glyph in the specified font and <em>user_param</em> a pointer to your own data type that you will receive during the callback.</p>
+
+<p>Your function is called <u>for every</u> glyph in the specified font. Therefore, there will be as many callbacks as there are glyphs in the specified font. Every time you receive a callback, <em>glyph_index</em> will indicate which glyph the callback is for.</p>
+
+<p>The purpose of these callbacks is twofold:</p>
+
+<ul>
+<li>to inform you about the general progress of the function</li>
+<li>to allow you to exclude certain glyphs from the output D-Type font, (i.e. perform glyph subsetting)</li>
+</ul>
+
+<p>Depending on the <em>glyph_index</em>, your callback function should return 1 if that glyph is to be included in the output D-Type font or 0 otherwise. Thus, if your function returns 0, then the glyph for which the callback was initiated (<em>glyph_index</em>) will be excluded from the output D-Type font. If your function returns 1, then that glyph will be included in the output D-Type font.</p>
+
+<p>To disable all callbacks (i.e. glyph subsetting), simply set <em>font_subset_func</em> to DV_NULL. In this case all glyphs in the specified font will be saved in the output D-Type font.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>user_param</em></p>
+</td><td>
+<p>A void pointer to your own data type that you will receive during the callback. This pointer is passed back to your function during the callback to help you track the state of execution, identify the font being saved or provide other information useful to your application. This pointer is not accessed or modified by D-Type Engine in any way; it is simply sent back to your function as supplied. You can set this parameter to DV_NULL if you have no need for it.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns a negative number.</p>
+
+
+<h3>Comments</h3>
+
+<p>Applications can use <a href="FontSaveToStream.htm">FontSaveToStream</a> to save fonts in D-Type format. Please note, however, that existing TrueType, OpenType, Type 1, Type 3 and CFF fonts may be protected under copyright law. The unauthorized use or distribution of those files, whether in their native or D-Type format, could be a violation of the rights of the author. Be sure you obtain any permission required from such authors.</p>
+
+<p>The <a href="FontSaveToStream.htm">FontSaveToStream</a> function also gives you full control over the glyph subsetting process. This, for example, allows you to save in the output D-Type font only those glyphs that are actually used in your document. If you wish to exclude certain <u>characters</u> from the output D-Type font, then you must convert your character codes to glyph indices using the <a href="FontGetGlyphIndex.htm">FontGetGlyphIndex</a> before calling <a href="FontSaveToStream.htm">FontSaveToStream</a>. You can use the <em>user_param</em> variable to store information important to your application between the callbacks.</p>
+
+
+<h3>Note 1</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/intro.htm">Introduction</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dt/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dt/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_basic_animation">example_basic_animation</a></li>
+<li><a href="../../..//examples-cpp/example_basic_output">example_basic_output</a></li>
+<li><a href="../../..//examples-cpp/example_font_converter">example_font_converter</a></li>
+<li><a href="../../..//examples-cpp/example_layout_extension">example_layout_extension</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/fclasses.htm">Font Driver Classes</a></li>
+<li><a href="../../dt/manual/psfonts.htm">Strict Parsing Rules For Type 3 PostScript Fonts</a></li>
+<li><a href="../../dt/manual/ph.htm">Positioning And Hinting</a></li>
+<li><a href="../../dt/manual/ttembed.htm">TrueType Embedding</a></li>
+<li><a href="../../dt/manual/cpages.htm">Code Pages</a></li>
+<li><a href="../../dt/manual/factories.htm">Predefined Font Factories</a></li>
+<!--<li><a href="../../dt/manual/configs.htm">Predefined Initialization Configurations</a> (Obsolete)</li>-->
+<li><a href="../../dt/manual/atstructs.htm">Advanced Typography Structures</a> (Obsolete)</li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

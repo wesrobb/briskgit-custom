@@ -1,0 +1,25 @@
+An array that specifies the order of the bytes (color channels) in each pixel in a bitmap image. This property works with all supported bitmap image formats that have at least 2 bytes (color channels) per pixel: pdImageDataGrayAlpha, pdImageDataRGB and pdImageDataRGBAlpha. It makes it possible to pass to D-Type Power Engine bitmap images in which individual pixels are stored using a pattern of GA, RGB or RGBA bytes in any order.
+
+The number of elements in the array must equal bytes_per_pixel, where bytes_per_pixel is 2 for pdImageDataGrayAlpha, 3 for pdImageDataRGB and 4 for pdImageDataRGBAlpha. The value of each element is the index of the corresponding color channel in each pixel and must not be smaller than 0 or greater than bytes_per_pixel - 1.
+
+If the size of the pdOrderingArr is not properly defined, D-Type Power Engine will not be able to display the bitmap image. It the value of some of the elements is out of range, D-Type Power Engine will display the image but will use the modulo bytes_per_pixel arithmetic to index the channels.
+
+{strong}Sample values for pdImageDataGrayAlpha bitmap images:{/strong}
+
+0, 1 = G channel's index is 0, A channel's index is 1
+1, 0 = G channel's index is 1, A channel's index is 0
+
+{strong}Sample values for pdImageDataRGB bitmap images:{/strong}
+
+0, 1, 2 = R channel's index is 0, G channel's index is 1, B channel's index is 2
+2, 1, 0 = R channel's index is 2, G channel's index is 1, B channel's index is 0
+1, 2, 0 = R channel's index is 1, G channel's index is 2, B channel's index is 0
+0, 2, 2 = R channel's index is 0, G channel's index is 2, B channel's index is 2 (in other words G and B color channels map to the same value)
+1, 1, 1 = R channel's index is 1, G channel's index is 1, B channel's index is 1 (in other words all color channels map to the same value, resulting in grayscale output)
+
+{strong}Sample values for pdImageDataRGBA bitmap images:{/strong}
+
+0, 1, 2, 3 = R channel's index is 0, G channel's index is 1, B channel's index is 2, A channel's index is 3
+2, 1, 0, 3 = R channel's index is 2, G channel's index is 1, B channel's index is 0, A channel's index is 3
+1, 2, 3, 0 = R channel's index is 1, G channel's index is 2, B channel's index is 3, A channel's index is 0
+3, 2, 1, 0 = R channel's index is 3, G channel's index is 2, B channel's index is 1, A channel's index is 0

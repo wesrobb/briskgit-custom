@@ -1,0 +1,78 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Introduction</h1>
+
+
+<p>This document provides technical information about D-Type Power Engine and describes its Application Programming Interface (API) on Windows 95/98/NT/2000, Unix and Mac OS platforms.</p>
+
+
+<p>This section outlines the key concepts and features of D-Type Power Engine.</p>
+
+
+<h2>What is D-Type Power Engine?</h2>
+
+<h3>Document Construction and Rendering Technology</h3>
+
+<p>D-Type Power Engine is a powerful, portable, high-quality and high-performance resolution independent document construction and rendering engine. Its primary purpose is to create and render entire pages and documents in a device, resolution and platform independent manner. This includes e-books, large amounts of text, forms, charts, maps, CD and multi-media presentations, splash pages, user interface and all types of similar electronic "documents".</p>
+
+<h3>High-Level Scalable Graphics Library</h3>
+
+<p>D-Type Power Engine is a high-level scalable graphics library featuring a rich set of 2D graphics primitives. The term scalable means that all graphics primitives (e.g. text, shapes, bitmap images) are interpreted as vectors rather than bitmaps. This allows applications to scale the output to virtually any desired size without compromising the quality. Additionally, this approach makes it possible to apply various mathematical transformations to any rendered objects, including compression, expansion, rotation, skew, perspective or any combination. Finally, the term high-level indicates that D-Type Power Engine is not just a collection of routines for drawing graphics primitives, but a technology for creating and rendering entire pages and documents in an object oriented manner.</p>
+
+<h3>Portable Document and Rendering Technology</h3>
+
+<p>Documents created by D-Type Power Engine can be stored on disk for later use or appended to another Power Engine document in order to create more complex documents. Documents stored on disk in D-Type Power Engine format are device, resolution and platform independent and fully portable across applications and different platforms (e.g. Windows, Mac OS, Linux). D-Type Power Engine API is also fully cross platform which means that applications that utilize D-Type Power Engine are usually cross platform too &mdash; they are typically written once and compiled on many different platforms without any modifications. Therefore, D-Type Power Engine is a portable document and rendering technology.</p>
+
+
+<h2>What is Not D-Type Power Engine?</h2>
+
+<p>D-Type Power Engine is not a vector based drawing application or a desktop publishing application. However, D-Type Power Engine is very useful as the rendering engine in these types of applications. This is because D-Type Power Engine provides all the infrastructure necessary to build complex text and graphical objects that are typically used in vector based drawing programs and desktop publishing applications.</p>
+
+<p>Also, D-Type Power Engine is not a language or technology for describing the logical structure of documents. In other words, D-Type Power Engine is not designed to directly process structural content in documents (e.g. chapters, headings, subheadings, paragraphs, lists, data tables, table of contents etc). The representation and handling of structural content, when desired, is the responsibility of your application. But once again, D-Type Power Engine provides all the infrastructure necessary to render complex structured documents quickly and efficiently and can be very suitable as the primary rendering engine in applications that process and manipulate structured documents.</p>
+
+
+<h2>Key Features</h2>
+
+<h3>Consistent Object Oriented Rendering Model</h3>
+
+<p>D-Type Power Engine unifies text, vector and bitmap graphics in its clean, intuitive and advanced object oriented rendering model. With D-Type Power Engine documents are constructed using PowerDoc objects. PowerDoc objects are the building blocks of any document, regardless of how complex it is.</p>
+
+
+<h3>Advanced Graphics Capabilities</h3>
+
+<p>D-Type Power Engine provides applications with advanced graphics capabilities, including high quality, true color 24-bpp anti-aliased rendering with 8-bpp alpha channels, alpha-masking and blending and high quality bitmap resampling filters. D-Type Power Engine renders vector and bitmap graphics equally well.</p>
+
+<h3>Advanced Text Layout and Rendering Capabilities</h3>
+
+<p>D-Type Power Engine provides text layout and text rendering capabilities that few other products can offer. Bidirectional text with arbitrary nesting depths, support for complex scripts such as Arabic, Indic or Thai, horizontal and vertical writing direction, inline objects that can be anchored anywhere in text, advanced typographical properties and incredible text processing and rendering speed are just some of the features that D-Type Power Engine is known for.</p>
+
+
+<h3>Live Text Editing</h3>
+
+<p>D-Type Power Engine provides built-in infrastructure for &quot;live&quot; text editing. This means that D-Type Power Engine applications can easily get precise information about the position and extent of each glyph rendered on the screen, obtain an index that maps that glyph back into the input text and get some other useful information about the result of text layout operations. This then allows Power Engine applications to very easily support highlighting blocks of selected text, implement cursor movement, hit testing etc. All this functionality is made possible through the use of Frames, which are special Power Engine objects representing arbitrary quadrilaterals (i.e. 4-point polygons) enclosing every glyph rendered on the screen. Frames are described more thoroughly later in this document. The great thing about Frames is that they work reliably regardless of how complex the text is, whether it is unidirectional or bidirectional, whether it is rendered horizontally, vertically, transformed, in perspective etc.</p>
+
+
+<h3>Affine and 2D Perspective Transformations</h3>
+
+<p>Affine and 2D perspective transformations (i.e. a full 3x3 transform matrix) can be applied to any PowerDoc object, whether text, bitmap or vector based. This allows D-Type Power Engine applications to easily transform objects (e.g. stretch, rotate, skew) and even render them in perspective, much like 2D objects are rendered in 3D space. Of course, the text remains fully editable (via Frames) even when rendered in perspective.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

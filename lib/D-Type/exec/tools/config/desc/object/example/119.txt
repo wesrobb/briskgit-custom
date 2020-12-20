@@ -1,0 +1,37 @@
+DT_ID_SLONG obj[6];
+
+obj[0] = pdObjAdd(pd, 0, "Poly Outline Style");
+obj[1] = pdObjAdd(pd, 0, "Poly Body Style");
+obj[2] = pdObjAdd(pd, 0, "Poly Shadow Style");
+obj[3] = pdObjAdd(pd, 0, "Poly Outline");
+obj[4] = pdObjAdd(pd, 0, "Poly Shadow");
+{strong}obj[5] = pdObjAdd(pd, 0, "Poly");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);
+
+/* Properties for object 1 */
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);
+
+/* Properties for object 2 */
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);
+
+/* Properties for object 3 */
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[3], pdLineThickness, "240", PD_WORD_SIGNED);
+
+/* Properties for object 4 */
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);
+
+/* Properties for object 5 */
+{strong}pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);
+pdPropAdd(pd, obj[5], pdPolyArrI, "16, 20, 25, 20, 20", PD_ARR_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[5], pdPolyArrX_32, "0, 400, 300, 200, -60", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[5], pdPolyArrY_32, "0, 100, 350, 200, 100", PD_ARR_LONG_SIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[5], 0, 100, 100, 0, 0, 0, pdDrawPoly, DV_NULL);{/strong}

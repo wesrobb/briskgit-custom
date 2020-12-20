@@ -1,0 +1,8 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Grayscale Image Data");{/strong}
+
+/* Properties for object 0 */
+{strong}pdPropAdd(pd, obj[0], pdNw, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdNh, "4", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[0], pdImageDataGray, "88880000 88880000 00008888 00008888", PD_HEX);{/strong}

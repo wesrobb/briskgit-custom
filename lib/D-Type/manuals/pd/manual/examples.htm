@@ -1,0 +1,109 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>Examples</h1>
+
+<h2 id="E1">Example 1: From Design To Code</h2>
+
+
+<h3>Step 1: Start with a design and identify which PowerDoc objects are needed</h3>
+
+<p class="center"><img src="../images/api/BasicConcepts.gif" width="580" height="310" alt="Basic Concepts" /></p>
+
+<br />
+<br />
+
+<h3>Step 2: Assign values to all object properties and links</h3>
+
+<p class="center"><img src="../images/api/BasicExample1.gif" width="580" height="310" alt="Basic Example 1" /></p>
+
+<br />
+<br />
+
+<h3>Step 3: Position visual objects on the page and assign them a rendering function</h3>
+
+<p class="center"><img src="../images/api/BasicExample2.gif" width="580" height="310" alt="Basic Example 2" /></p>
+
+<br />
+<br />
+
+<h3>Step 4: Convert design specifications to code</h3>
+
+<div class="box_field">
+<pre>
+int MyPowerDocMake(DT_PDDOC power_doc)
+{
+    <span class="codecomment">/* PART 1: Defining objects and their properties */</span>&nbsp;
+    <span class="codecomment">/* 6 PowerDoc Object(s) */</span>&nbsp;
+    <a href="../../dt/manual/types.htm#DT_ID_SLONG">DT_ID_SLONG</a> obj[6];
+
+    obj[0] = pdObjAdd(power_doc, 0, "Surface Definition");
+    obj[1] = pdObjAdd(power_doc, 0, "Line Definition");
+    obj[2] = pdObjAdd(power_doc, 0, "Circle, Big - Smiley's Head");
+    obj[3] = pdObjAdd(power_doc, 0, "Circle, Filled - Smiley's Eye");
+    obj[4] = pdObjAdd(power_doc, 0, "Ellipse - Smiley's Nose");
+    obj[5] = pdObjAdd(power_doc, 0, "Arc - Smiley's Mouth");
+
+    <span class="codecomment">/* Properties for object 0 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[0], pdRGBT, (DT_UBYTE*)"50 64 14 00", PD_DEFAULT);
+
+    <span class="codecomment">/* Properties for object 1 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[1], pdLineThickness, (DT_UBYTE*)"400", PD_DEFAULT);
+    pdLinkAdd(power_doc, obj[1], pdStylePtr, obj[0]);
+
+    <span class="codecomment">/* Properties for object 2 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[2], pdRadiusHor, (DT_UBYTE*)"150", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[2], pdRadiusVer, (DT_UBYTE*)"150", PD_DEFAULT);
+    pdLinkAdd(power_doc, obj[2], pdOutlinePtr, obj[1]);
+
+    <span class="codecomment">/* Properties for object 3 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[3], pdRadiusHor, (DT_UBYTE*)"15", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[3], pdRadiusVer, (DT_UBYTE*)"15", PD_DEFAULT);
+    pdLinkAdd(power_doc, obj[3], pdBodyPtr, obj[0]);
+
+    <span class="codecomment">/* Properties for object 4 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[4], pdRadiusHor, (DT_UBYTE*)"30", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[4], pdRadiusVer, (DT_UBYTE*)"15", PD_DEFAULT);
+    pdLinkAdd(power_doc, obj[4], pdOutlinePtr, obj[1]);
+
+    <span class="codecomment">/* Properties for object 5 */</span>&nbsp;
+    pdPropAdd(power_doc, obj[5], pdRadiusHor, (DT_UBYTE*)"90", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[5], pdRadiusVer, (DT_UBYTE*)"90", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[5], pdAngleAlpha, (DT_UBYTE*)"30", PD_DEFAULT);
+    pdPropAdd(power_doc, obj[5], pdAngleTheta, (DT_UBYTE*)"120", PD_DEFAULT);
+    pdLinkAdd(power_doc, obj[5], pdLinePtr, obj[1]);
+
+
+    <span class="codecomment">/* PART 2: Image placement */</span>&nbsp;
+    <span class="codecomment">/* 5 PowerDoc Image(s) */</span>&nbsp;
+    pdImgAdd(power_doc, obj[2], 0, 250, 350, 0, 0, 0, pdDrawTrueEllipse, DV_NULL);
+    pdImgAdd(power_doc, obj[3], 0, 200, 300, 0, 0, 0, pdDrawTrueEllipse, DV_NULL);
+    pdImgAdd(power_doc, obj[3], 0, 300, 300, 0, 0, 0, pdDrawTrueEllipse, DV_NULL);
+    pdImgAdd(power_doc, obj[4], 0, 250, 350, 0, 0, 0, pdDrawTrueEllipse, DV_NULL);
+    pdImgAdd(power_doc, obj[5], 0, 250, 370, 0, 0, 0, pdDrawArc, DV_NULL);
+
+    return 1;
+}
+</pre>
+</div>
+
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,1 @@
+Image data in grayscale format (variable length, 1 byte per pixel).

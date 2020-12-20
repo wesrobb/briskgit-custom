@@ -1,0 +1,27 @@
+DT_ID_SLONG obj[3];
+
+obj[0] = pdObjAdd(pd, 0, "Line Style");
+obj[1] = pdObjAdd(pd, 0, "Line Definition");
+{strong}obj[2] = pdObjAdd(pd, 0, "Line");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);
+
+/* Properties for object 1 */
+pdLinkAdd(pd, obj[1], pdStylePtr, obj[0]);
+pdPropAdd(pd, obj[1], pdLineThickness, "1500", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[1], pdLineSegment, "10", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineStart, "100", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineEnd, "100", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineStartSize, "10", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineStartTheta, "40", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineEndSize, "20", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], pdLineEndTheta, "165", PD_BYTE_UNSIGNED);
+
+/* Properties for object 2 */
+{strong}pdLinkAdd(pd, obj[2], pdLinePtr, obj[1]);
+pdPropAdd(pd, obj[2], pdDw, "600", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[2], pdDh, "250", PD_LONG_SIGNED);{/strong}
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[2], 0, 50, 50, 0, 0, 0, pdDrawLine, DV_NULL);{/strong}

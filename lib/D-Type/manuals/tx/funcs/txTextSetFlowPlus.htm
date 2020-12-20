@@ -1,0 +1,78 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextSetFlowPlus</h2><div class="box_prototype"><strong>
+DT_SWORD txTextSetFlowPlus(DT_TXDOC text_doc, DT_SLONG nr_of_areas, const DT_TX_TEXTFLOW_AREA areas[], const DT_SLONG pages[], DT_SWORD reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set textflow areas for the text document (enhanced)</em><br /><br />
+
+<p>This function establishes an automatic text flow across linked textflow areas. The flow of text from one area to another is then handled automatically by D-Type Text Engine.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>nr_of_areas</em></p>
+</td><td>
+<p>Number of linked textflow areas supplied via the <em>areas</em> array.</p>
+</td></tr>
+
+<tr><td>
+<p><em>areas</em></p>
+</td><td>
+<p>An array of <a href="../manual/txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structures. Each structure represents one textflow area. The size of this array must be <em>nr_of_areas</em> elements.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>pages</em></p>
+</td><td>
+<p>The corresponding array of page indexes. This array must be the same in size as the <em>areas</em> array. Each element of the <em>pages</em> array represents the page number that will hold the corresponding textflow area in the <em>areas</em> array.</p>
+<p>Alternatively, <em>pages</em> can be set to DV_NULL. This indicates that each texflow area is to be placed on its own page in the text document. The first textflow area (area with index 0) will be placed on the first page (page with index 0), the second textflow area (area with index 1) will be placed on the second page (page with index 1), the third textflow area (area with index 2) will be placed on the third page (page with index 2) etc.</p>
+
+</td></tr>
+
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+<h3>Comments</h3>
+<p>A single text document may span multiple textflow areas. The flow of text from one area to another is handled automatically by D-Type Text Engine. Each textflow area can have its own independent position, size, 2D perspective transformation matrix and other parameters as defined by the <a href="../manual/txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure.</p>
+<p>This is an optional function because not all types of applications need to use more than a single textflow area and/or more than a single page of text.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

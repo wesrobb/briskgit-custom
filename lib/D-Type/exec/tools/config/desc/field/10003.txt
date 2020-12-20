@@ -1,0 +1,7 @@
+A flag indicating the state of a control.
+
+{strong}Supported values:{/strong}
+
+0 = Normal
+1 = Pushed
+2 = Selected

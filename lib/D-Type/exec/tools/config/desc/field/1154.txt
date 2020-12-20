@@ -1,0 +1,12 @@
+Rasterizer.
+
+{strong}Supported values:{/strong}
+
+0 = Default Grayscale Rasterizer
+
+When pdPolyArrC is used:
+
+0 = Ultra-Fast RGBA Rasterizer
+1 = No-Overlap RGBA Rasterizer
+2 = Reference RGBA Rasterizer
+3 = Alpha-Blend RGBA Rasterizer

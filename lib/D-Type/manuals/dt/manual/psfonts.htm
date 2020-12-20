@@ -1,0 +1,202 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type's Strict Parsing Rules For Type 3 PostScript Fonts</h1>
+
+
+<h2>Overview</h2>
+
+<p>Type 3 fonts are PostScript programs intended to render glyphs on PostScript printers. These fonts define glyphs using ordinary PostScript procedures and conform to the rules and syntax of the PostScript language.</p>
+
+<p>D-Type Font Engine does not include a full blown PostScript interpreter and, therefore, does not provide full support for Type 3 fonts. <strong>Only Type 3 fonts that are generated in accordance with D-Type's strict parsing rules can work properly with D-Type Font Engine</strong>. In other words, D-Type Font Engine supports only those Type 3 fonts that adhere to D-Type's strict parsing rules.</p>
+
+<p>This document describes how Type 3 fonts must be generated in order to work with D-Type Font Engine. Type 3 fonts that are generated in accordance with these rules should work properly with both D-Type Font Engine and PostScript interpreters. Fonts that do not adhere to these rules will almost certainly not work with D-Type Font Engine, even though they may be valid PostScript programs and render properly on PostScript printers.</p>
+
+<p>The main idea behind D-Type's limited Type 3 font support is to allow developers to easily generate outline fonts on the fly using simple PostScript path operators (<em>moveto</em>, <em>rmoveto</em>, <em>lineto</em>, <em>rlineto</em>, <em>curveto</em>, <em>rcurveto</em>, <em>closepath</em>) and render them using D-Type Font Engine. Although Type 3 fonts do not include any hints, D-Type's auto-hinting mechanism can generate them automatically.<sup>*</sup> As a result, Type 3 fonts can be added to the Font Catalog (as hinted or non-hinted) and rendered with high quality using D-Type Font Engine. Also, once they are added to the Font Catalog, Type 3 fonts can be optimized and converted to D-Type font format.</p>
+
+<p><sup>*</sup><em>Note:</em> High quality hints are guaranteed as long as glyph outlines are well constructed. See <em>Chapter 3: Character Outline Considerations</em> and <em>Chapter 4: Technical Design Considerations</em> in <em>Adobe Type 1 Font Format Book, Version 1.1</em> for information on how to construct well formed Type 1 and Type 3 glyph outlines.</p>
+
+<h2>Type 3 Font Example</h2>
+<p>The PostScript program code that follows is an example of a Type 3 font that works with both D-Type Font Engine and PostScript. Code portions that are required by D-Type Font Engine are shown using <tt><strong>bold</strong></tt> type. Code portions that are ignored or not understood by D-Type Font Engine (but still required by PostScript) are shown in <tt><em>italic</em></tt>. If your font is to be used only with D-Type Font Engine, then those code portions can be safely omitted. Finally, code portions that are optional but recommended and/or supported are shown using <tt>regular</tt> type. Repetitive code sequences that were omitted from this example are indicated with three dots.</p>
+
+<div class="box_field">
+<pre><em>/MayaRegular 13 dict dup begin</em>
+/FontType 3 def
+/PaintType 0 def
+<em>/FontInfo 5 dict dup begin</em>
+    /FullName (Maya Regular) def
+    /FamilyName (Maya) def
+    /Weight (Regular) def
+    /Notice (Copyright 1995-2000 XYZ Group. All Rights Reserved.) def
+    /version (1.01) def
+<em>end def</em>
+/FontName /Maya-Regular def
+/UniqueID 32102 def
+<strong>/FontMatrix [.001 0 0 .001 0 0] def</strong>
+<strong>/FontBBox [-62 -250 1006 749] def</strong>
+<strong>/Encoding [</strong>
+<strong>    /.notdef</strong>
+<strong>    /char1</strong>
+<strong>    /char2</strong>
+<strong>    /char3</strong>
+    ...
+<strong>    /char125</strong>
+<strong>    /char126</strong>
+<strong>    /char127</strong>
+<strong>    /.notdef</strong>
+<strong>    /.notdef</strong>
+<strong>    /.notdef</strong>
+    ...
+<strong>    /.notdef</strong>
+<strong>    /.notdef</strong>
+<strong>    /.notdef</strong>
+<strong>] def</strong>
+<strong>/Metrics 128 dict dup begin</strong>
+<strong>    /.notdef 0 def</strong>
+<strong>    /char1 304 def</strong>
+<strong>    /char2 542 def</strong>
+<strong>    /char3 830 def</strong>
+    ...
+<strong>    /char125 499 def</strong>
+<strong>    /char126 499 def</strong>
+<strong>    /char127 499 def</strong>
+<strong>end def</strong>
+<em>/BBox 128 dict dup begin
+    /.notdef [0 0 0 0] def
+    /char1 [48 0 780 691] def
+    /char2 [55 -7 719 692] def
+    /char3 [33 0 662 691] def
+    ...
+    /char125 [117 513 423 708] def
+    /char126 [84 584 412 691] def
+    /char127 [81 548 416 695] def
+end def</em>
+<strong>/CharProcs 128 dict dup begin
+    /.notdef {} def
+    /char1 {
+        396 691 moveto
+        376 686 328 578 316 554 curveto
+        226 374 138 193 48 14 curveto
+        ...
+        569 120 lineto
+        500 256 433 394 364 530 curveto
+        362 530 lineto
+        closepath
+    } def
+    /char2 {
+        355 691 moveto
+        182 680 61 543 55 364 curveto
+        48 134 178 -14 408 -7 curveto
+        ...
+        521 249 lineto
+        521 436 lineto
+        472 436 lineto
+        closepath
+    } def
+    /char3 {
+        331 691 moveto
+        313 687 291 607 285 585 curveto
+        232 408 166 235 112 57 curveto
+        ...
+        533 226 466 400 412 578 curveto
+        405 603 384 686 362 691 curveto
+        331 691 lineto
+        closepath
+    } def
+    ...
+    /char127 {
+        331 693 moveto
+        237 672 267 535 355 549 curveto
+        435 563 435 678 357 693 curveto
+        ...
+        139 693 moveto
+        38 674 80 521 175 552 curveto
+        258 579 224 710 139 693 curveto
+        closepath
+    } def
+end def</strong>
+<em>/BuildChar {
+    0 begin
+        /char exch def
+        /fontdict exch def
+        /charname fontdict /Encoding get char get def
+        fontdict begin
+            Metrics charname get 0
+            BBox charname get aload pop
+                setcachedevice
+            CharProcs charname get exec
+            fill
+        end
+    end
+} def
+/BuildChar load 0 3 dict put        % local storage
+end definefont pop</em></pre>
+</div>
+
+
+<p>To ensure PostScript compatibility, the /Encoding array shown above should be 256 elements long. However, D-Type Font Engine can easily support /Encoding arrays that are up to 65,536 elements long.</p>
+
+<p>In addition to the /Encoding format shown above, the following compact format is also supported by D-Type Font Engine:</p>
+
+<div class="box_field">
+<pre><strong>/Encoding 127 dict dup begin</strong>
+<strong>  /char1 1 def</strong>
+<strong>  /char2 2 def</strong>
+<strong>  /char3 3 def</strong>
+  ...
+<strong>  /char125 125 def</strong>
+<strong>  /char126 126 def</strong>
+<strong>  /char127 127 def</strong>
+<strong>end def</strong></pre>
+</div>
+
+<p>With this compact format, only the encodings actually used need to be specified; the remaining unused entries are automatically initialized to the .notdef glyph by D-Type Font Engine.</p>
+
+
+<h2>D-Type's Strict Parsing Rules</h2>
+
+<p>Type 3 fonts to be used with D-Type Font Engine should be valid Type 3 PostScript programs. Additionally, Type 3 fonts to be used with D-Type Font Engine must adhere to the following rules:</p>
+
+<ul>
+
+<li><p>Type 3 PostScript code must be formatted precisely as shown in the above example. No extra spaces, tabs, carriage returns or other white characters should be used. Entries shown in bold are required. Entries shown in regular type are optional but recommended. Entries shown in italic are ignored by D-Type Font Engine but recommended for PostScript compatibility.</p></li>
+
+<li><p>The tokens dict, dup, begin, end and def must be used precisely as shown in the above example.</p></li>
+
+<li><p>The only supported form of the /Metrics dictionary is the one shown in the above example. Type 3 fonts to be used with D-Type Font Engine must utilize this format.</p></li>
+
+<li><p>All glyphs must be defined within a dictionary called /CharProcs (alternatively, you may use one of the following names: /CharDefs, /CharacterProcs, /CharacterDefs)</p></li>
+
+<li><p>The /CharProcs dictionary must be defined before /BuildChar but after all other dictionaries.</p></li>
+
+<li><p>While the choice of glyph names is up to the font developer, all fonts should define the .notdef glyph.</p></li>
+
+<li><p>When defining glyph outlines, only <em>moveto</em>, <em>rmoveto</em>, <em>lineto</em>, <em>rlineto</em>, <em>curveto</em>, <em>rcurveto</em> and <em>closepath</em> PostScript operators can be used.</p></li>
+
+<li><p>All glyph outlines must be defined with the <em>Nonzero Winding Number</em> fill rule in mind and rendered using the <em>fill</em> PostScript operator.</p></li>
+
+<li><p>All glyph coordinates must be integers in the [-32000..+32000] range.</p></li>
+
+<li><p>All glyph and font metrics must be integers in the [-32000..+32000] range.</p></li>
+
+</ul>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

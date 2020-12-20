@@ -1,0 +1,164 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>dtFontGetMMInstData</h2><div class="box_prototype"><strong>
+DT_SWORD dtFontGetMMInstData(DT_DTENGINE engine, DT_ID_SWORD font_index, DT_SLONG inst_data[], DT_SWORD reserved)</strong></div><br /><strong>Short Description:</strong> <em>Get default axis values for all named font instances in font</em><br /><br />
+
+<p>This function returns the default axis values for all named font instances in a font (assuming that named font instances are stored in the font file).</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>font_index</em></p>
+</td><td>
+<p>Font index of an existing Multiple-Master font or Multiple-Master font instance in the Font Catalog.</p>
+
+<tr><td>
+<p><em>inst_data</em></p>
+</td><td>
+<p>An array that will store the default axis values. This array must be large enough to hold <em>inst_count</em> * <em>font_axes</em> elements, where <em>inst_count</em> is the number of Multiple-Master design instances in the font referenced by <em>font_index</em> and <em>font_axes</em> is the number of Multiple-Master design axes in the font referenced by <em>font_index</em>. Both of these values can be obtained by calling the <a href="dtFontGetMMAxisInfo.htm">dtFontGetMMAxisInfo</a> function.</p>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be 0.</p>
+
+</td></tr>
+
+</table>
+
+
+
+<h3>Example</h3>
+
+<p>This example shows how to get named font instance names in a font and, for each instance, get its default axis values. The default axis values are shown as factors in the [0..1] range.</p>
+
+
+<div class="box_field">
+<pre>
+/*
+
+Globals used in this example:
+
+* DTypeEngInst - A valid D-Type Font Engine Instance Handle
+* FontIndex - A valid D-Type index of the MM or variable font in question
+
+Note that in a real program these would not be globals.
+
+*/
+
+// Two helper functions (GetStringId and GetFontString)
+
+inline DT_ID_SWORD GetStringId(DT_SWORD start_mm_id, DT_SLONG mm_axis) const
+{
+    return static_cast&lt;DT_ID_SWORD&gt;(start_mm_id + mm_axis);
+}
+
+void GetFontString(DT_SWORD font_index, DT_ID_SWORD string_id_asc, DT_ID_SWORD string_id_uni, DT_UBYTE* buffer, DT_SLONG max_string_len) const
+{
+    if (buffer == DV_NULL) return;
+
+    buffer[0] = 0;
+
+    if (font_index &lt; 0 || max_string_len &lt; 4) return;
+
+    max_string_len--; /* because we need one extra element at the end for 0 */
+
+    DT_SLONG i, j, len;
+
+    /* First try to get ASCII string */
+
+    if (string_id_asc != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_asc, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+        if (len &gt; 0) { buffer[len] = 0; return; }
+    }
+
+    /* If not found, try Unicode */
+
+    if (string_id_uni != 0)
+    {
+        len = dtFontGetStringValue(DTypeEngInst, font_index, string_id_uni, buffer, max_string_len);
+        if (len &gt; max_string_len) len = max_string_len;
+
+        /* Convert Unicode to ASCII */
+
+        for (i = j = 0; i &lt; len; i += 2, j++)
+        {
+            DT_UBYTE b = buffer[i]; buffer[i] = buffer[i + 1]; buffer[i + 1] = b; /* BE -&gt; LE swap */
+            DT_UWORD char_code = DF_READ_UWORD_LE(buffer + i); if (char_code &gt; 255) char_code = '?';
+            buffer[j] = static_cast&lt;DT_UBYTE&gt;(char_code);
+        }
+
+        buffer[j] = 0;
+    }
+}
+
+// Get named font instance names and for each instance get its default axis values
+
+const DT_FLOAT one_over_65536 = 0.0000152587890625;
+DT_SLONG i, j, k = 0;
+DT_SLONG inst_count = 0;
+DT_SLONG* inst_data = DV_NULL;
+DT_SWORD font_dim /*unused*/, font_axes = dtFontGetMMAxisInfo(DTypeEngInst, FontIndex, &amp;font_dim, &amp;inst_count);
+DT_CHAR font_buffer[1024];
+
+if (inst_count &gt; 0 &amp;&amp; font_axes &gt; 0)
+{
+    inst_data = static_cast&lt;DT_SLONG*&gt;(malloc(sizeof(DT_SLONG) * inst_count * font_axes));
+    if (inst_data == DV_NULL) { printf("malloc failed\r"); exit(0); }
+
+    dtFontGetMMInstData(DTypeEngInst, FontIndex, inst_data, 0); /* get all default axis values in one shot */
+}
+
+for (i = 0; i &lt; inst_count; i++)
+{
+    /* copy font instance names to font_buffer */
+    GetFontString(FontIndex, GetStringId(DV_SVAL_ASC_MMINSTANCE_NAME_000, i), GetStringId(DV_SVAL_UNI_MMINSTANCE_NAME_000, i), (DT_UBYTE*)font_buffer, 1024);
+
+    if (font_buffer[0] == 0) break; /* unexpected (bad font?) */
+
+    printf("Instance #%ld: Name = %s\r", i, font_buffer);
+
+    /* get names and default values for each axis */
+    for (j = 0; j &lt; font_axes; j++, k++)
+    {
+        GetFontString(FontIndex, GetStringId(DV_SVAL_ASC_MMAXIS_NAME_000, j), GetStringId(DV_SVAL_UNI_MMAXIS_NAME_000, j), (DT_UBYTE*)(font_buffer), 1024);
+        printf("  Axis Name = %s : Default Value = %.2f\r", font_buffer, inst_data[k] * one_over_65536);
+    }
+
+    printf("\r\r");
+}
+</pre>
+</div>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

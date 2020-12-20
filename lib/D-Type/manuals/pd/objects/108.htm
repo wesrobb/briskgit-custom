@@ -1,0 +1,146 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Char</h2>
+<h3 id="overview">Overview</h3>
+This object represents a single character. In Power Engine API, a character is simply an encoded glyph (or a glyph with a universal and font independent code).<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawChar (16)<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTypographyPtr"><em><span class="field">pdTypographyPtr</span> (1018)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTypographyPtr">Text Fragment</a>, <a href="101.htm#pdTypographyPtr">Text Line</a>, <a href="102.htm#pdTypographyPtr">Text Arc</a>, <a href="103.htm#pdTypographyPtr">Text Area</a>, <a href="127.htm#pdTypographyPtr">Text Design</a>, <a href="107.htm#pdTypographyPtr">Glyph</a>, <a href="109.htm#pdTypographyPtr">PowerGlyph</a>, <a href="130.htm#pdTypographyPtr">Text Path</a></small></p>
+<p>
+Link to the Typography object. When standard glyphs or characters are used, this should be a link to the <a href="004.htm">Typography (For Outline Fonts)</a> object. When PowerGlyphs (or PowerChars in the future) are used, this should be a link to the <a href="014.htm">Typography (For PowerFonts)</a> object.<br />
+<br />
+In either case, this link supplies typographic parameters.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdID"><em><span class="field">pdID</span> (1017)</em> &nbsp; <small class="label">PD_LONG_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="107.htm#pdID">Glyph</a>, <a href="109.htm#pdID">PowerGlyph</a>, <a href="129.htm#pdID">Library Polyline</a>, <a href="110.htm#pdID">Library Shape</a>, <a href="132.htm#pdID">Library Bitmap Image</a></small></p>
+<p>
+A unique identifier that, depending on the context, represent one of the following:<br />
+<br />
+a) code of a character (or PowerChar);<br />
+b) index of a glyph (or PowerGlyph);<br />
+c) index of a library shape or library polyline (see the Library of Shapes and Polylines section in the manual for details)<br />
+d) index of a library bitmap image<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[7];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Char Outline Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Char Body Style");<br />
+obj[2] = pdObjAdd(pd, 0, "Char Shadow Style");<br />
+obj[3] = pdObjAdd(pd, 0, "Char Outline");<br />
+obj[4] = pdObjAdd(pd, 0, "Char Shadow");<br />
+obj[5] = pdObjAdd(pd, 0, "Char Typography");<br />
+<strong>obj[6] = pdObjAdd(pd, 0, "Char");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "B4961400", PD_HEX);<br />
+pdPropAdd(pd, obj[1], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdRGBT, "80808078", PD_HEX);<br />
+pdPropAdd(pd, obj[2], pdEP, "030A", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[3], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+pdLinkAdd(pd, obj[4], pdStylePtr, obj[2]);<br />
+pdPropAdd(pd, obj[4], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 5 */</span><br />
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[5], pdShadowPtr, obj[4]);<br />
+pdLinkAdd(pd, obj[5], pdOutlinePtr, obj[3]);<br />
+pdPropAdd(pd, obj[5], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDw, "190", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[5], pdFontDh, "190", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 6 */</span><br />
+<strong>pdLinkAdd(pd, obj[6], pdTypographyPtr, obj[5]);<br />
+pdPropAdd(pd, obj[6], pdID, "66", PD_WORD_UNSIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[6], 0, 50, 250, 0, 0, 0, pdDrawChar, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Char Outline Style");<br />
+local obj_1 = o("Char Body Style");<br />
+local obj_2 = o("Char Shadow Style");<br />
+local obj_3 = o("Char Outline");<br />
+local obj_4 = o("Char Shadow");<br />
+local obj_5 = o("Char Typography");<br />
+local obj_6 = o("Char");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "B4961400");<br />
+obj_1 + s(pdEP, "030A");<br />
+<br />
+obj_2 + s(pdRGBT, "80808078");<br />
+obj_2 + s(pdEP, "030A");<br />
+<br />
+obj_3 + l(pdStylePtr, obj_0);<br />
+obj_3 + i(pdLineThickness, 240);<br />
+<br />
+obj_4 + l(pdStylePtr, obj_2);<br />
+obj_4 + i(pdShadowDx, 5);<br />
+obj_4 + i(pdShadowDy, 5);<br />
+<br />
+obj_5 + l(pdBodyPtr, obj_1);<br />
+obj_5 + l(pdShadowPtr, obj_4);<br />
+obj_5 + l(pdOutlinePtr, obj_3);<br />
+obj_5 + i(pdFontIndex, 0);<br />
+obj_5 + i(pdFontDw, 190);<br />
+obj_5 + i(pdFontDh, 190);<br />
+<br />
+obj_6 + l(pdTypographyPtr, obj_5);<br />
+obj_6 + i(pdID, 'B');<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_6.Pin(0, 50, 250, pdDrawChar);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

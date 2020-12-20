@@ -1,0 +1,1 @@
+Radius in document units. When used to build the Text Arc or Rich Text Arc object, this value can be negative. This indicates that the text should be drawn on the arc's inner edge (and oriented counter-clockwise) rather than on the arc's outer edge (and oriented clockwise).

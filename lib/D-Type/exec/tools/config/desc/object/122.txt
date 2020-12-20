@@ -1,0 +1,3 @@
+The Generic Object is a special object that can be used to represent any other visual PowerDoc object (i.e. an object with a designated FnDraw rendering function).
+
+{strong}Designated Rendering Function:{/strong} pdDrawGenericObject (21)

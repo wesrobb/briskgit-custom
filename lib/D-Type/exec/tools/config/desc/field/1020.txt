@@ -1,0 +1,6 @@
+Text kerning.
+
+{strong}Supported values:{/strong}
+
+0 = Disable Kerning
+1 = Enable Standard Kerning

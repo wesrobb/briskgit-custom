@@ -1,0 +1,14 @@
+A value consisting of 4 independent bits. Each bit indicates whether a certain typographic feature for a script is enabled or disabled. This makes it possible to fine tune the text shaping process.
+
+{strong}Supported values:{/strong}
+
+1 (bit 0 set) = Disable kerning
+2 (bit 1 set) = Disable optional ligatures
+131072 (bit 17 set) = Enable discretionary ligatures
+262144 (bit 18 set) = Enable historical ligatures
+
+{strong}Sample values:{/strong}
+
+3 = Disable kerning and optional ligatures
+131074 = Enable discretionary ligatures and disable optional ligatures
+393216 = Enable discretionary and historical ligatures

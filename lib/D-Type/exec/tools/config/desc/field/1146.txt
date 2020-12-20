@@ -1,0 +1,6 @@
+An array containing RGBT values of each contour (variable length, 4 bytes per contour). This property should be used when each contour in the polygon has a different RGBA value (colour and/or transparency). Additionally, the presence of this array is a signal to D-Type Power Engine to render the body of the polygon using D-Type Direct Color RGBA Rasterizer. This ensures the best possible output quality.
+
+{strong}Sample values:{/strong}
+
+"255, 128, 140, 0"
+"255, 128, 140, 0, 145, 185, 64, 128"

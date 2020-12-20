@@ -1,0 +1,6 @@
+Fill rule (for polygons and shapes)
+
+{strong}Supported values:{/strong}
+
+0 = Odd-Even Rule
+1 = Nonzero Winding Number Rule

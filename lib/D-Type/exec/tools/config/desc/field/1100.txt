@@ -1,0 +1,31 @@
+Sets one of the hinting modes. The hinting mode tells the Typesetter how to interact with the pixel grid when rendering glyphs. See D-Type Standard Engine Manual for details.
+
+{strong}Supported values:{/strong}
+
+0 = Engine Default A (same as 8)
+
+1 = Engine Default B (same as 9)
+
+2 = User Default A (same as 4)
+
+3 = User Default B (same as 6)
+
+4 = X On, Y On
+Both X and Y edges are snapped to the pixel grid. As a result, both X and Y edges look reasonably sharp.
+
+5 = X On, Y Off
+Only X edges are snapped to the pixel grid. As a result, X edges look reasonably sharp, while Y edges look somewhat blurry.
+
+6 = X Off, Y On
+Only Y edges are snapped to the pixel grid. As a result, X edges look somewhat blurry, while Y edges look reasonably sharp.
+
+7 = X Off, Y Off
+Neither X nor Y edges are snapped to the pixel grid. As a result, both X and Y edges look somewhat blurry.
+
+8 = Auto A
+Same as 4 for standard font sizes, but disables hinting in the X and/or Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.
+
+9 = Auto B
+Same as 6 for standard font sizes, but disables hinting in the Y direction for very small and very big font sizes. This is done in order to improve speed when rendering using very small and very big font sizes. This is a useful and recommended mode since hinting is not really necessary at those sizes.
+
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.

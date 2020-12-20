@@ -1,0 +1,161 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdDocSetInvert</h2><div class="box_prototype"><strong>
+DT_SWORD pdDocSetInvert(DT_PDDOC power_doc, const DT_UBYTE invert_blend_arr[], DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Set the parameters of the inversion effect</em><br /><br />
+
+<p>This function sets the blend mode and color of the inversion effect rendered by the <a href="pdDocInvertLine.htm">pdDocInvertLine</a>, <a href="pdDocInvertBox.htm">pdDocInvertBox</a> and <a href="pdDocInvertFrames.htm">pdDocInvertFrames</a> functions.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>power_doc</em></p>
+</td><td>
+<p>Handle of the associated Power Engine document.</p>
+</td></tr>
+
+<tr><td>
+<p><em>invert_blend_arr</em></p>
+</td><td>
+<p>An array of five bytes (BM, C1, C2, C3 and C4) specifying the blend mode and color of the inversion effect. The first byte, blend mode (BM), defines how the inversion surface will interact with the background. This byte can have the following values:</p>
+<div class="box_field"><pre>
+PD_BLEND_INVERT      0   <span class="codecomment">/* Invert background */</span>&nbsp;
+PD_BLEND_HIGHLIGHT_1 1   <span class="codecomment">/* Highlight over light background */</span>&nbsp;
+PD_BLEND_HIGHLIGHT_2 2   <span class="codecomment">/* Highlight over dark background */</span>&nbsp;
+PD_BLEND_RENDER      255 <span class="codecomment">/* Standard rendering */</span>&nbsp;
+</pre></div>
+<p>The remaining four bytes, C1, C2, C3 and C4, define the color of the inversion surface. The interpretation is specific to the blend mode specified. For details, see the comments below.</p>
+<p><em>invert_blend_arr</em> can be passed as DV_NULL. This has the same effect as supplying an array in which all five bytes are set to 0. This is the default setting when the Power Engine document is initialized.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>Reserved for future use. Must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If successful, the return value is 1. If the function was not successful (e.g. invalid input parameters), the return value is 0.</p>
+
+<h3>Related Functions</h3>
+<p><a href="pdDocGetInvert.htm">pdDocGetInvert</a></p>
+
+
+<h3>Comments</h3>
+
+
+<p>PD_BLEND_INVERT indicates that the background underneath the surface will be inverted. This means that pixels underneath the surface are typically still visible, but displayed using a different color. This color is computed using a formula that takes into account both the original color of the covered pixels and the color of the covering surface.</p>
+
+<table class="table_data">
+<tr>
+<th width="50%">PD_BLEND_INVERT Examples</th><th width="50%">Parameters</th>
+</tr>
+<tr style="background: #ffffff;">
+<td rowspan="4" style="text-align: center;"><img src="../../common/images/blend/blend_0.png" alt="PD_BLEND_INVERT" /></td>
+<td>BM = PD_BLEND_INVERT, C1 = 255, C2 = 255, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_INVERT, C1 = 102, C2 = 204, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_INVERT, C1 = 180, C2 = 150, C3 = 20, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_INVERT, C1 = 0, C2 = 0, C3 = 0, C4 = 0</td>
+</tr>
+</table>
+
+<p>PD_BLEND_HIGHLIGHT_1 and PD_BLEND_HIGHLIGHT_2 indicate that the background underneath the surface will be highlighted. The effect is similar to  the one produced when a highlighter is used to mark something on a sheet of paper. With both highlight modes the pixels underneath the surface are typically still visible. PD_BLEND_HIGHLIGHT_1 is suitable for light backgrounds (e.g. white) on which dark text (e.g. black) is displayed. This highlight mode "removes" light from the background. Thus, the more times the same background is highlighted, the darker it gets. PD_BLEND_HIGHLIGHT_2 works the opposite way and is suitable for dark backgrounds (e.g. black) on which light text (e.g. white) is displayed. This highlight mode "adds" light to the background. Thus, the more times the same background is highlighted, the lighter it gets.</p>
+
+<table class="table_data">
+<tr>
+<th width="50%">PD_BLEND_HIGHLIGHT_1 Examples</th><th width="50%">Parameters</th>
+</tr>
+<tr style="background: #ffffff;">
+<td rowspan="4" style="text-align: center;"><img src="../../common/images/blend/blend_1.png" alt="PD_BLEND_HIGHLIGHT_1" /></td>
+<td>BM = PD_BLEND_HIGHLIGHT_1, C1 = 255, C2 = 255, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_1, C1 = 102, C2 = 204, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_1, C1 = 180, C2 = 150, C3 = 20, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_1, C1 = 0, C2 = 0, C3 = 0, C4 = 0</td>
+</tr>
+</table>
+
+<br />
+
+<table class="table_data">
+<tr>
+<th width="50%">PD_BLEND_HIGHLIGHT_2 Examples</th><th width="50%">Parameters</th>
+</tr>
+<tr style="background: #ffffff;">
+<td rowspan="4" style="text-align: center;"><img src="../../common/images/blend/blend_2.png" alt="PD_BLEND_HIGHLIGHT_2" /></td>
+<td>BM = PD_BLEND_HIGHLIGHT_2, C1 = 255, C2 = 255, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_2, C1 = 102, C2 = 204, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_2, C1 = 180, C2 = 150, C3 = 20, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_HIGHLIGHT_2, C1 = 0, C2 = 0, C3 = 0, C4 = 0</td>
+</tr>
+</table>
+
+<p>PD_BLEND_RENDER indicates that the surface will be rendered on top of the background using the standard RGBT rendering technique. This means that pixels underneath the surface will not be visible unless the surface is at least partially transparent (i.e. T&nbsp;>&nbsp;0).</p>
+
+<table class="table_data">
+<tr>
+<th width="50%">PD_BLEND_RENDER Examples</th><th width="50%">Parameters</th>
+</tr>
+<tr style="background: #ffffff;">
+<td rowspan="4" style="text-align: center;"><img src="../../common/images/blend/blend_255.png" alt="PD_BLEND_RENDER" /></td>
+<td>BM = PD_BLEND_RENDER, C1 = 255, C2 = 255, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_RENDER, C1 = 102, C2 = 204, C3 = 255, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_RENDER, C1 = 180, C2 = 150, C3 = 20, C4 = 0</td>
+</tr>
+<tr style="background: #ffffff;">
+<td>BM = PD_BLEND_RENDER, C1 = 0, C2 = 0, C3 = 0, C4 = 0</td>
+</tr>
+</table>
+
+<p>Regardless of the blend mode, C1, C2, C3 and C4 define the color of the surface. However, the actual interpretation of these bytes differs somewhat between PD_BLEND_RENDER and all other blend modes. When blend mode is PD_BLEND_RENDER, C1, C2 and C3 represent the red (R), green (G) and blue (B) components of the surface's color, while C4 is the transparency (T). See the <a href="../../dt/manual/structs.htm#DT_STYLE_ATTRIBS">DT_STYLE_ATTRIBS</a> structure and the <a href="../../dt/funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> function for the description of the R, G, B and T parameters. When blend mode is PD_BLEND_INVERT, PD_BLEND_HIGHLIGHT_1 or PD_BLEND_HIGHLIGHT_2, the C1, C2, C3 and C4 bytes are the color values in the corresponding 8-bpp, 24-bpp or 32-bpp memory surface to which the final output is rendered. The number of bytes that are interpreted as color values equals to the number of bytes-per-pixel in the corresponding memory surface. For example, for an 8-bpp memory surface, only the C1 byte is interpreted as a color value (A); all other bytes are ignored and should be set to 0. Similarly, for a 24-bpp memory surface, the C1, C2 and C3 bytes are interpreted as color values (R, G, B) while the C4 byte is ignored and should be set to 0. See the <a href="../../dt/funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a> function for more information on the 8-bpp, 24-bpp and 32-bpp memory surfaces.</p>
+
+<p>All color values supplied via the C1, C2, C3 and C4 bytes are in the [0..255] range. The value 0 means minimum intensity; the value 255 means maximum intensity.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

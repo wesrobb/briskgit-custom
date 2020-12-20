@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Polyline (also Bezier and B-Spline curve)</h2>
+<h3 id="overview">Overview</h3>
+This objects represents a polyline. In Power Engine API, polylines consist of any number of connected straight and/or curved line segments.<br />
+<br />
+While constructing the Polyline object, an optional shadow may be specified. Also, depending on the pdLinePtr link, polylines can be drawn solid or dashed, while their ends can be styled (flat, rounded, peak).<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawPolyline (24)<br />
+<br />
+Note 1: pdPolyArrX_08, pdPolyArrX_16, pdPolyArrX_24 and pdPolyArrX_32 cannot be used at the same time. pdPolyArrX_32 takes precedence over pdPolyArrX_24. pdPolyArrX_24 takes precedence over pdPolyArrX_16. Finally, pdPolyArrX_16 takes precedence over pdPolyArrX_08.<br />
+<br />
+Note 2: pdPolyArrY_08, pdPolyArrY_16, pdPolyArrY_24 and pdPolyArrY_32 cannot be used at the same time. pdPolyArrY_32 takes precedence over pdPolyArrY_24. pdPolyArrY_24 takes precedence over pdPolyArrY_16. Finally, pdPolyArrY_16 takes precedence over pdPolyArrY_08.<br />
+<br />
+The following table illustrates how the elements of the pdPolyArrI, pdPolyArrX_32 and pdPolyArrI arrays must be synchronized in order to properly define a straight or curved segment. It is important to note that in order to define a Bezier curve, three consecutive elements in the pdPolyArrI, pdPolyArrX_32 and pdPolyArrY_32 array are required. Similarly, in order to define a Quadratic B-Spline curve, two consecutive elements in the pdPolyArrI, pdPolyArrX_32 and pdPolyArrY_32 array are required.<br />
+<br />
+<dl><dd><pre>                         <strong>pdPolyArrI  pdPolyArrX_32  pdPolyArrY_32</strong><br />
+____________________________________________________________<br />
+<strong>New Closed Contour</strong>            16           X           Y<br />
+____________________________________________________________<br />
+<strong>New Open Contour</strong>              17           X           Y<br />
+____________________________________________________________<br />
+<strong>Line</strong>                          20           X           Y<br />
+____________________________________________________________<br />
+<strong>Bezier Curve</strong>                  24          X1          Y1<br />
+                               n          X2          Y2<br />
+                               0          X3          Y3<br />
+____________________________________________________________<br />
+<strong>Quadratic B-Spline Curve</strong>      25          X1          Y1<br />
+                               n          X2          Y2<br />
+____________________________________________________________<br />
+n = suggested number of segments; zero means auto-calculation</pre></dd></dl><br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdLinePtr"><em><span class="field">pdLinePtr</span> (1015)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="020.htm#pdLinePtr">Baseline</a>, <a href="129.htm#pdLinePtr">Library Polyline</a>, <a href="111.htm#pdLinePtr">Line</a>, <a href="116.htm#pdLinePtr">Arc</a>, <a href="118.htm#pdLinePtr">Grid</a></small></p>
+<p>
+Link to the <a href="003.htm">Line Definition (Full)</a> or <a href="015.htm">Line Definition (Standard)</a> object.<br />
+<br />
+This link supplies parameters necessary to render the body of a line. In the context of the Grid object, this link supplies the parameters necessary to render the grid lines.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdShadowPtr"><em><span class="field">pdShadowPtr</span> (1016)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="004.htm#pdShadowPtr">Typography (For Outline Fonts)</a>, <a href="020.htm#pdShadowPtr">Baseline</a>, <a href="021.htm#pdShadowPtr">Row Boundary</a>, <a href="023.htm#pdShadowPtr">Typographic Frame</a>, <a href="129.htm#pdShadowPtr">Library Polyline</a>, <a href="110.htm#pdShadowPtr">Library Shape</a>, <a href="111.htm#pdShadowPtr">Line</a>, <a href="112.htm#pdShadowPtr">Rectangle</a>, <a href="113.htm#pdShadowPtr">Circle/Ellipse</a>, <a href="114.htm#pdShadowPtr">True Circle/Ellipse</a>, <a href="115.htm#pdShadowPtr">Slice</a>, <a href="116.htm#pdShadowPtr">Arc</a>, <a href="118.htm#pdShadowPtr">Grid</a>, <a href="119.htm#pdShadowPtr">Custom Shape or Polygon</a></small></p>
+<p>
+Link to the <a href="002.htm">Shadow Definition</a> object.<br />
+<br />
+Used to render the shadow of a line, shape or some other object.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrI"><em><span class="field">pdPolyArrI</span> (1041)</em> &nbsp; <small class="label">PD_ARR_BYTE_UNSIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_012">012</a>, <a href="intro.htm#method_015">015</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrI">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrI">Text Path</a>, <a href="131.htm#pdPolyArrI">Rich Text Path</a></small></p>
+<p>
+Instructions for PolyArrX and PolyArrY (variable length, 1 byte per instruction).<br />
+<br />
+pdPolyArrI is an array containing instructions that describe the corresponding pair of coordinates in the pdPolyArrX_... and pdPolyArrY_... arrays. Possible values for pdPolyArrI are:<br />
+<br />
+<strong>A. Standard segment construction instructions:</strong><br />
+<br />
+ <strong>16</strong> = New closed contour<br />
+ <strong>17</strong> = New open contour<br />
+ <strong>20</strong> = Line<br />
+ <strong>24</strong> = Bezier curve. Must be followed by n and 0 (see below).<br />
+ <strong>25</strong> = Quadratic B-Spline curve. Must be followed by n (see below).<br />
+<br />
+<strong>B. Instructions that can only follow 24 or 25:</strong><br />
+<br />
+ <strong>n</strong> = A positive number or zero. Used only when the preceding instruction is 24 (Bezier curve) or 25 (Quadratic B-Spline curve). A positive number represents the suggested number of line segments that the curve will be approximated with. Zero means that the rendering engine should automatically calculate the optimum number of line segments when rendering the curve.<br />
+<br />
+ <strong>0</strong> = Reserved. Used only when the first instruction in a segment is 24.<br />
+<br />
+<strong>C. Special "one byte does it all" instructions:</strong><br />
+<br />
+ <strong>254</strong> = Open Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are not automatically closed.<br />
+<br />
+ <strong>255</strong> = Closed Polyline/Polygon - All coordinates in the corresponding pdPolyArrX_... and pdPolyArrY_... arrays are interpreted as Polyline/Polygon vertices connected using straight line segments. There can be no curved segments in this case. As such, no other instructions in pdPolyArrI are needed. Polylines constructed using this method are automatically closed.<br />
+<br />
+The instruction 254 and 255 are special. Only one of them can be used per single Polyline/Polygon. When specified, this instruction must be the only instruction in the pdPolyArrI array. In other words, pdPolyArrI must be a single element array, containing only the instruction 254 or 255.<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"16, 20, 20, 20"<br />
+"16, 20, 25, 0, 20"<br />
+"16, 20, 20, 24, 0, 0, 20, 25, 10, 20, 20"<br />
+"254"<br />
+"255"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_32"><em><span class="field">pdPolyArrX_32</span> (1042)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_32">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrX_32">Text Path</a>, <a href="131.htm#pdPolyArrX_32">Rich Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 4 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_24"><em><span class="field">pdPolyArrX_24</span> (1140)</em> &nbsp; <small class="label">PD_ARR_TRIO_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_24">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrX_24">Text Path</a>, <a href="131.htm#pdPolyArrX_24">Rich Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 3 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_16"><em><span class="field">pdPolyArrX_16</span> (1141)</em> &nbsp; <small class="label">PD_ARR_WORD_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_16">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrX_16">Text Path</a>, <a href="131.htm#pdPolyArrX_16">Rich Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 2 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 400, 300, 200"<br />
+"100, 200, -100, -200, -250"<br />
+"50, 100, 120, 80, 120, 95, 130, 40, 80, 100, 190"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrX_08"><em><span class="field">pdPolyArrX_08</span> (1142)</em> &nbsp; <small class="label">PD_ARR_BYTE_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrX_08">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrX_08">Text Path</a>, <a href="131.htm#pdPolyArrX_08">Rich Text Path</a></small></p>
+<p>
+An array containing X coordinates of segment's control points (variable length, 1 byte per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 40, 30, 20"<br />
+"10, 20, -10, -20, -25"<br />
+"5, 10, 12, 8, 12, 9, 13, 4, 8, 10, 19"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_32"><em><span class="field">pdPolyArrY_32</span> (1043)</em> &nbsp; <small class="label">PD_ARR_LONG_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_32">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrY_32">Text Path</a>, <a href="131.htm#pdPolyArrY_32">Rich Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 4 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_24"><em><span class="field">pdPolyArrY_24</span> (1143)</em> &nbsp; <small class="label">PD_ARR_TRIO_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_24">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrY_24">Text Path</a>, <a href="131.htm#pdPolyArrY_24">Rich Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 3 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_16"><em><span class="field">pdPolyArrY_16</span> (1144)</em> &nbsp; <small class="label">PD_ARR_WORD_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_16">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrY_16">Text Path</a>, <a href="131.htm#pdPolyArrY_16">Rich Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 2 bytes per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 100, 350, 200"<br />
+"200, 200, -200, -200, 100"<br />
+"-50, -90, -20, -80, -120, 10, 30, 20, -20, 10, 50"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdPolyArrY_08"><em><span class="field">pdPolyArrY_08</span> (1145)</em> &nbsp; <small class="label">PD_ARR_BYTE_SIGNED</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="119.htm#pdPolyArrY_08">Custom Shape or Polygon</a>, <a href="130.htm#pdPolyArrY_08">Text Path</a>, <a href="131.htm#pdPolyArrY_08">Rich Text Path</a></small></p>
+<p>
+An array containing Y coordinates of segment's control points (variable length, 1 byte per coordinate).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"0, 10, 35, 20"<br />
+"20, 20, -20, -20, 10"<br />
+"-5, -9, -2, -8, -12, 1, 3, 2, -2, 1, 5"<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[5];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "Polyline Line Style");<br />
+obj[1] = pdObjAdd(pd, 0, "Polyline Shadow Style");<br />
+obj[2] = pdObjAdd(pd, 0, "Polyline Line");<br />
+obj[3] = pdObjAdd(pd, 0, "Polyline Shadow");<br />
+<strong>obj[4] = pdObjAdd(pd, 0, "Polyline");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "50641400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdPropAdd(pd, obj[1], pdRGBT, "80808078", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdLinkAdd(pd, obj[2], pdStylePtr, obj[0]);<br />
+pdPropAdd(pd, obj[2], pdLineThickness, "240", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[1]);<br />
+pdPropAdd(pd, obj[3], pdShadowDx, "5", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[3], pdShadowDy, "5", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 4 */</span><br />
+<strong>pdLinkAdd(pd, obj[4], pdLinePtr, obj[2]);<br />
+pdLinkAdd(pd, obj[4], pdShadowPtr, obj[3]);<br />
+pdPropAdd(pd, obj[4], pdPolyArrI, "17, 20, 25, 20, 20", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[4], pdPolyArrX_32, "0, 400, 300, 200, -60", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[4], pdPolyArrY_32, "0, 100, 350, 200, 100", PD_ARR_LONG_SIGNED);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[4], 0, 100, 100, 0, 0, 0, pdDrawPolyline, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("Polyline Line Style");<br />
+local obj_1 = o("Polyline Shadow Style");<br />
+local obj_2 = o("Polyline Line");<br />
+local obj_3 = o("Polyline Shadow");<br />
+local obj_4 = o("Polyline");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "50641400");<br />
+<br />
+obj_1 + s(pdRGBT, "80808078");<br />
+<br />
+obj_2 + l(pdStylePtr, obj_0);<br />
+obj_2 + i(pdLineThickness, 240);<br />
+<br />
+obj_3 + l(pdStylePtr, obj_1);<br />
+obj_3 + i(pdShadowDx, 5);<br />
+obj_3 + i(pdShadowDy, 5);<br />
+<br />
+obj_4 + l(pdLinePtr, obj_2);<br />
+obj_4 + l(pdShadowPtr, obj_3);<br />
+obj_4 + p(pdPolyArrI, "17, 20, 25, 20, 20");<br />
+obj_4 + p(pdPolyArrX_32, "0, 400, 300, 200, -60");<br />
+obj_4 + p(pdPolyArrY_32, "0, 100, 350, 200, 100");<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_4.Pin(0, 100, 100, pdDrawPolyline);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

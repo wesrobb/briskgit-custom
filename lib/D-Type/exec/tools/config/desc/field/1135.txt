@@ -1,0 +1,76 @@
+Language of the text. Although optional and rarely used, this value is primarily a hint needed to influence the text shaping process with certain Unicode scripts.
+
+{strong}Supported values:{/strong}
+
+0 = None
+1 = araLanguageCode = Arabic
+2 = asmLanguageCode = Assamese
+3 = benLanguageCode = Bengali
+4 = farLanguageCode = Farsi
+5 = gujLanguageCode = Gujarati
+6 = hinLanguageCode = Hindi
+7 = iwrLanguageCode = Hebrew
+8 = jiiLanguageCode = Yiddish
+9 = janLanguageCode = Japanese
+10 = kanLanguageCode = Kannada
+11 = kokLanguageCode = Konkani
+12 = korLanguageCode = Korean
+13 = kshLanguageCode = Kashmiri
+14 = malLanguageCode = Malayalam Traditional
+15 = marLanguageCode = Marathi
+16 = mlrLanguageCode = Malayalam Reformed
+17 = mniLanguageCode = Manipuri
+18 = oriLanguageCode = Oriya
+19 = sanLanguageCode = Sanskrit
+20 = sndLanguageCode = Sindhi
+21 = snhLanguageCode = Sinhalese
+22 = syrLanguageCode = Syriac
+23 = tamLanguageCode = Tamil
+24 = telLanguageCode = Telugu
+25 = thaLanguageCode = Thai
+26 = urdLanguageCode = Urdu
+27 = zhpLanguageCode = Chinese Phonetic
+28 = zhsLanguageCode = Chinese Simplified
+29 = zhtLanguageCode = Chinese Traditional
+30 = afkLanguageCode = Afrikaans
+31 = belLanguageCode = Belarussian
+32 = bgrLanguageCode = Bulgarian
+33 = catLanguageCode = Catalan
+34 = cheLanguageCode = Chechen
+35 = copLanguageCode = Coptic
+36 = csyLanguageCode = Czech
+37 = danLanguageCode = Danish
+38 = deuLanguageCode = German
+39 = dznLanguageCode = Dzongkha
+40 = ellLanguageCode = Greek
+41 = engLanguageCode = English
+42 = espLanguageCode = Spanish
+43 = etiLanguageCode = Estonian
+44 = euqLanguageCode = Basque
+45 = finLanguageCode = Finnish
+46 = fraLanguageCode = French
+47 = gaeLanguageCode = Gaelic
+48 = hauLanguageCode = Hausa
+49 = hrvLanguageCode = Croatian
+50 = hunLanguageCode = Hungarian
+51 = hyeLanguageCode = Armenian
+52 = indLanguageCode = Indonesian
+53 = itaLanguageCode = Italian
+54 = khmLanguageCode = Khmer
+55 = mngLanguageCode = Mongolian
+56 = mtsLanguageCode = Maltese
+57 = nepLanguageCode = Nepali
+58 = nldLanguageCode = Dutch
+59 = pasLanguageCode = Pashto
+60 = plkLanguageCode = Polish
+61 = ptgLanguageCode = Portuguese
+62 = romLanguageCode = Romanian
+63 = rusLanguageCode = Russian
+64 = skyLanguageCode = Slovak
+65 = slvLanguageCode = Slovenian
+66 = sqiLanguageCode = Albanian
+67 = srbLanguageCode = Serbian
+68 = sveLanguageCode = Swedish
+69 = tibLanguageCode = Tibetan
+70 = trkLanguageCode = Turkish
+71 = welLanguageCode = Welsh

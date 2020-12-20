@@ -1,0 +1,3 @@
+Just like a regular outline font is a collection of glyph shapes, a PowerFont is a collection of PowerGlyph designs. In this collection, each PowerGlyph design is represented by exactly one {a href="../objects/009.htm"}PowerFont Record{/a} object. The index of the specified PowerRecord is also the index of the corresponding PowerGlyph design.
+
+{strong}Designated Rendering Function:{/strong} NONE

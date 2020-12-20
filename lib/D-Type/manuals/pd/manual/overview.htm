@@ -1,0 +1,166 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Power Engine Overview</h1>
+
+
+<h2>Life Cycle</h2>
+
+
+<p>A typical lifecycle of an application using D-Type Power Engine is briefly
+summarized below:</p>
+
+<h3>Scenario 1 &mdash; Create document from scratch, then render</h3>
+
+<table class="table_data">
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+<tr>
+<td>
+1. Initialize Power Engine</td>
+<td><a href="../funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a></td>
+</tr>
+<tr>
+<td>2. Create a new empty Power Engine document</td>
+<td><a href="../funcs/pdDocIni.htm">pdDocIni</a></td>
+</tr>
+<tr>
+<td>3. Create a new PowerDoc object</td>
+<td><a href="../funcs/pdObjAdd.htm">pdObjAdd</a></td>
+</tr>
+<tr>
+<td>4. Supply the object with applicable properties and/or links to other objects
+in the document</td>
+<td><a href="../funcs/pdPropAdd.htm">pdPropAdd</a><br />
+<a href="../funcs/pdLinkAdd.htm">pdLinkAdd</a></td>
+</tr>
+<tr>
+<td>5. Repeat steps 3-4 until all objects have been defined</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>6. Place PowerDoc images of the above PowerDoc objects on the page</td>
+<td><a href="../funcs/pdImgAddPlus.htm">pdImgAdd</a>, <a href="../funcs/pdImgAddPlus.htm">pdImgAddPlus</a></td>
+</tr>
+<tr>
+<td>7. Render PowerDoc pages or save the entire document for future use</td>
+<td><a href="../funcs/pdDocDraw.htm">pdDocDraw</a><br /><a href="../funcs/pdDocSaveToStream.htm">pdDocSaveToStream</a></td>
+</tr>
+<tr>
+<td>8. Destroy Power Engine document</td>
+<td><a href="../funcs/pdDocExt.htm">pdDocExt</a></td>
+</tr>
+<tr>
+<td>9. Deinitialize Power Engine</td>
+<td><a href="../funcs/pdEngineExt.htm">pdEngineExt</a></td>
+</tr>
+</table>
+
+
+<h3>Scenario 2 &mdash; Load existing document, then render</h3>
+
+<table class="table_data">
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+<tr>
+<td>1. Initialize Power Engine</td>
+<td><a href="../funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a></td>
+</tr>
+<tr>
+<td>2. Create a new empty Power Engine document</td>
+<td><a href="../funcs/pdDocIni.htm">pdDocIni</a></td>
+</tr>
+<tr>
+<td>3. Append an existing Power Engine document from disk or memory</td>
+<td><a href="../funcs/pdDocAppendFromStream.htm">pdDocAppendFromStream</a></td>
+</tr>
+<tr>
+<td>4. Render PowerDoc pages or save the entire document for future use</td>
+<td><a href="../funcs/pdDocDraw.htm">pdDocDraw</a><br /><a href="../funcs/pdDocSaveToStream.htm">pdDocSaveToStream</a></td>
+</tr>
+<tr>
+<td>5. Destroy Power Engine document</td>
+<td><a href="../funcs/pdDocExt.htm">pdDocExt</a></td>
+</tr>
+<tr>
+<td>6. Deinitialize Power Engine</td>
+<td><a href="../funcs/pdEngineExt.htm">pdEngineExt</a></td>
+</tr>
+</table>
+
+
+<h3>Scenario 3 &mdash; Combined Method</h3>
+
+<table class="table_data">
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+<tr>
+<td>
+1. Initialize Power Engine</td>
+<td><a href="../funcs/pdEngineIniViaStream.htm">pdEngineIniViaStream</a></td>
+</tr>
+<tr>
+<td>2. Create a new empty Power Engine document</td>
+<td><a href="../funcs/pdDocIni.htm">pdDocIni</a></td>
+</tr>
+<tr>
+<td>3. Append an existing Power Engine document from disk or memory</td>
+<td><a href="../funcs/pdDocAppendFromStream.htm">pdDocAppendFromStream</a></td>
+</tr>
+<tr>
+<td>4. Create an additional PowerDoc object</td>
+<td><a href="../funcs/pdObjAdd.htm">pdObjAdd</a></td>
+</tr>
+<tr>
+<td>5. Supply the object with applicable properties and/or links to other existing objects
+in the document</td>
+<td><a href="../funcs/pdPropAdd.htm">pdPropAdd</a><br />
+<a href="../funcs/pdLinkAdd.htm">pdLinkAdd</a></td>
+</tr>
+<tr>
+<td>6. Repeat steps 4-5 until all objects have been defined</td>
+<td></td>
+</tr>
+<tr>
+<td>7. Place PowerDoc images of the additional PowerDoc objects on the page</td>
+<td><a href="../funcs/pdImgAddPlus.htm">pdImgAdd</a>, <a href="../funcs/pdImgAddPlus.htm">pdImgAddPlus</a></td>
+</tr>
+<tr>
+<td>8. Render PowerDoc pages or save the entire document for future use</td>
+<td><a href="../funcs/pdDocDraw.htm">pdDocDraw</a><br /><a href="../funcs/pdDocSaveToStream.htm">pdDocSaveToStream</a></td>
+</tr>
+<tr>
+<td>9. Destroy Power Engine document</td>
+<td><a href="../funcs/pdDocExt.htm">pdDocExt</a></td>
+</tr>
+<tr>
+<td>10. Deinitialize Power Engine</td>
+<td><a href="../funcs/pdEngineExt.htm">pdEngineExt</a></td>
+</tr>
+</table>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

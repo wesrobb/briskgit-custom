@@ -1,0 +1,130 @@
+# D-Type Font and Attribute Mapping Table for Unicode Scripts
+#
+# This font and attribute mapping table is used when D-Type Text Engine
+# reads and processes plain Unicode text. The purpose of this table is
+# to assign suitable fonts and appropriate attributes to various Unicode
+# scripts defined within the Unicode Standard.
+#
+# The mapping table consists of three pipe separated columns:
+#
+# * 1st column - Unicode script
+# * 2nd column - Associated attribute set
+# * 3rd column - Associated font
+#
+# Each Unicode script may have one or more associated attribute sets
+# and fonts. If a Unicode script has more than one associated attribute
+# set and/or font, it will have multiple rows in the mapping table.
+# Only one attribute set and font combination per row can be specified.
+# Attribute sets and fonts are listed in the order of preference.
+#
+# Within the first column, the SCRIPTCODE: instruction specifies a
+# Unicode script using a 4 character script code (e.g. latn, cyrl,
+# arab, kana etc). See ISO 15924 Code Lists for a list of available
+# codes. Script code '0000' is a special code which means any script.
+# Fonts associated with this code are usually fallback fonts, i.e.
+# fonts that are used in the absence of a more suitable alternative.
+# For this reason, fonts associated with script code '0000' should be
+# listed at the very end of the mapping table. Ideally, fallback fonts
+# should be large Unicode fonts such as Arial Unicode MS or Code2000
+# so they can be used to represent as many Unicode characters and
+# scrips as possible.
+#
+# Within the second column, the ATTRIBS: instruction is used to specify
+# the associated attribute set. This set is a comma separated list of
+# attribute keyword/value pairs. Currently two attribute keywords are
+# supported: ro (relative orientation) and ts (text shaping). The ro
+# attribute keyword corresponds to the TX_ATTR_ORIENTATION attribute
+# identifier in D-Type Text Engine and pdRelativeAttribute property in
+# D-Type Power Engine. This attribute allows applications to set the
+# most appropriate relative text orientation (portrait/landscape) and
+# baseline (e.g. default, shifted) when the corresponding script and
+# font are used in horizontal and/or vertical layout. The ts attribute
+# keyword corresponds to the TX_ATTR_SHAPING attribute identifier in
+# D-Type Text Engine and pdTextShaping property in D-Type Power Engine.
+# When required, this attribute allows applications to explicitly set
+# the text shaping method for the corresponding script and font. If
+# this attribute is not specified, the shaping method will be set
+# automatically based on the Unicode script.
+#
+# Example:
+#
+#   ATTRIBS:ro=8,ts=10025
+#
+# Within the third column, the associated font can be identified by name
+# (DV_SVAL_ASC_FONTNAME) or D-Type's Unique Font Identifier (fuid).
+# To do so, use one of the following four instructions:
+#
+# * FONTFUID: - To identify the font by D-Type's Unique Font Identifier
+#               (fuid). This instruction also performs a basic validity
+#               check on the font file and attempts to activate it.
+#               As a result, non-accessible, invalid and/or corrupt
+#               fonts are skipped.
+#
+# * FASTFUID: - Same as FONTFUID but noticeably faster since it does not
+#               perform any validity check on the font file and does not
+#               attempt to activate it. As a result, non-accessible,
+#               invalid and/or corrupt fonts are not skipped.
+#
+# * FONTNAME: - To identify the font by name. This instruction also
+#               performs a basic validity check on the font file and
+#               attempts to activate it. As a result, non-accessible,
+#               invalid and/or corrupt fonts are skipped.
+#               This instruction is slower than FONTFUID and FASTFUID
+#               since it must access the font file and parse its header
+#               to extract the font name.
+#
+# * FASTNAME: - Same as FONTNAME but does not perform any validity check
+#               on the font and does not attempt to activate it. As a
+#               result, non-accessible, invalid and/or corrupt fonts are
+#               not skipped.
+#
+# Additional notes:
+#
+# * It is your responsibility to ensure that the fonts listed in this
+#   mapping table have a sufficient number of glyphs to adequately
+#   represent all of the Unicode scripts they are associated with.
+#   Do not associate fonts with the Unicode scripts they are not
+#   designed to support.
+#
+# * For more information on Unicode Scripts and script codes, see
+#   D-Type Text Layout Extension Manual.
+#
+# * For more information on D-Type's Unique Font Identifiers (fuid),
+#   font names and other font topics, see D-Type Standard Engine Manual.
+#
+# * For more information on relative orientation and text shaping,
+#   see D-Type Power Engine Manual and D-Type Text Engine Manual.
+#
+
+{
+SCRIPTCODE:zzzz|ATTRIBS:ts=0|FASTFUID:F0011_STIX1__NS0
+SCRIPTCODE:zyyy|ATTRIBS:ro=8|FASTFUID:F0011_STIX1__NS0
+SCRIPTCODE:latn|ATTRIBS:ro=8|FASTFUID:F0011_STIX1__NS0
+SCRIPTCODE:cyrl|ATTRIBS:ro=8|FASTFUID:F0011_STIX1__NS0
+SCRIPTCODE:grek|ATTRIBS:ro=8|FASTFUID:F0011_STIX1__NS0
+SCRIPTCODE:hani|ATTRIBS:ro=2|FASTFUID:F0010_ARIUNI_NS0
+SCRIPTCODE:hani|ATTRIBS:ro=2|FASTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:hani|ATTRIBS:ro=2|FASTFUID:F0011_CODE2K_SS0
+SCRIPTCODE:hira|ATTRIBS:ro=2|FASTFUID:F0010_ARIUNI_NS0
+SCRIPTCODE:hira|ATTRIBS:ro=2|FASTFUID:F0011_CODE2K_SS0
+SCRIPTCODE:hira|ATTRIBS:ro=2|FASTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:kana|ATTRIBS:ro=2|FASTFUID:F0010_ARIUNI_NS0
+SCRIPTCODE:kana|ATTRIBS:ro=2|FASTFUID:F0011_CODE2K_SS0
+SCRIPTCODE:kana|ATTRIBS:ro=2|FASTFUID:F0011_ARPLSH_NS0
+SCRIPTCODE:hang|ATTRIBS:ro=8|FASTFUID:F0010_ARIUNI_NS0
+SCRIPTCODE:hang|ATTRIBS:ro=8|FASTFUID:F0011_CODE2K_SS0
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FASTFUID:F0010_DEJAVU_NS0
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FASTFUID:F0010_ARIAL__NS0
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FASTFUID:F0010_TAHOMA_NS0
+SCRIPTCODE:hebr|ATTRIBS:ro=8|FASTFUID:F0011_TIMES__NS0
+SCRIPTCODE:arab|ATTRIBS:ro=8|FASTFUID:F0010_ARIAL__NS0
+SCRIPTCODE:arab|ATTRIBS:ro=8|FASTFUID:F0010_TAHOMA_NS0
+SCRIPTCODE:arab|ATTRIBS:ro=8|FASTFUID:F0011_TIMES__NS0
+SCRIPTCODE:deva|ATTRIBS:ro=8|FASTFUID:F0010_THRAB__NS0
+SCRIPTCODE:thai|ATTRIBS:ro=8|FASTFUID:F0010_TAHOMA_NS0
+SCRIPTCODE:0000|ATTRIBS:ro=8|FASTFUID:F0010_ARIUNI_NS0
+SCRIPTCODE:0000|ATTRIBS:ro=8|FASTFUID:F0011_CODE2K_SS0
+SCRIPTCODE:0000|ATTRIBS:ro=8|FASTFUID:F0011_STIX1__NS0
+}
+
+# END OF FILE

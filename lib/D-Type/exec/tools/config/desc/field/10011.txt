@@ -1,0 +1,3 @@
+Link to the {a href="../objects/202.htm"}Listbox Column{/a} object.
+
+This link in used to establish a link to the next list box column.

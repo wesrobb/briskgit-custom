@@ -1,0 +1,97 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>fxImageRead</h2><div class="box_prototype"><strong>
+DT_SLONG fxImageRead(DT_AUX_INFO* info, DT_UBYTE** bitmap_ptr, DT_ID_SWORD* bitmap_format, DT_ID_SWORD* bitmap_subformat, DT_SLONG* width, DT_SLONG* height, DT_UWORD flags, const DT_AUX_GRAPHICS_ATTRIBS* gattribs, DT_AUX_USER_STREAM* user_stream)</strong></div><br /><strong>Short Description:</strong> <em>Read bitmap image from user stream</em><br /><br />
+
+<p>This function reads a compressed image from a user-defined stream and returns a plain bitmap stored in a memory buffer. The image compression format is specified by the <em>FileFormat</em> member variable of the <em>info</em> structure.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>info</em></p>
+</td><td>
+<p>Pointer to the <a href="../manual/fxstructs.htm#DT_AUX_INFO">DT_AUX_INFO</a> structure containing the applicable initialization parameters.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_ptr</em></p>
+</td><td>
+<p>A valid pointer to an address of a buffer that will hold the bitmap. This buffer is dynamically allocated and must be freed by calling <a href="../../dt/funcs/dtFree.htm">dtFree</a> when no longer needed.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_format</em></p>
+</td><td>
+<p>A valid pointer to a variable that will hold the format, or number of bits-per-pixel, of the bitmap. This value will be either 8, 16, 24 or 32.</p>
+</td></tr>
+
+<tr><td>
+<p><em>bitmap_subformat</em></p>
+</td><td>
+<p>A valid pointer to a variable that will hold the color configuration of the pixel. Presently the only supported value is 0.</p>
+</td></tr>
+
+<tr><td>
+<p><em>width</em></p>
+</td><td>
+<p>A valid pointer to a variable that will hold the width of the bitmap, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>height</em></p>
+</td><td>
+<p>A valid pointer to a variable that will hold the height of the bitmap, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>flags</em></p>
+</td><td>
+<p>A bitmask value.</p>
+<ul>
+<li>bit 0 (1) &mdash; Flip the bitmap vertically</li>
+</ul>
+</td></tr>
+
+<tr><td>
+<p><em>gattribs</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_GRAPHICS_ATTRIBS">DT_AUX_GRAPHICS_ATTRIBS</a>.</p>
+</td></tr>
+
+<tr><td>
+<p><em>user_stream</em></p>
+</td><td>
+<p>See <a href="../manual/fxstructs.htm#DT_AUX_USER_STREAM">DT_AUX_USER_STREAM</a>.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the function was successful, the return value is 1. Otherwise, the function returns 0.</p>
+
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

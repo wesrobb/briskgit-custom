@@ -1,0 +1,8 @@
+This property is used to subdivide lines and outlines into a number of smaller segments so that the line (or outline) appears dashed. The value of this property indicates the desired length of a single segment, in document units. Each segment then consists of a dash and a gap. The dash size can be specified via the pdLineDashSize property. If the dash size is not specified, then the default dash size will be used, which is approximately two thirds of the segment's length.
+
+This property should be set to zero if segments are not desired. In this case the line (or outline) will appear solid and continuous.
+
+{strong}Sample values:{/strong}
+
+30 = a segment that is 30 document units long
+0 = no segments (line/outline is solid and continuous)

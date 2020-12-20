@@ -1,0 +1,78 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+
+<h2>Introduction</h2>
+
+<p>This section explains how to build structurally valid Power Engine documents so they can be rendered by Power Engine. A structurally valid Power Engine document is a document in which the following two
+requirements are met:</p>
+
+<ol>
+<li><p>All PowerDoc objects are defined in accordance with D-Type's <a href="index.htm">Guidelines For Creating PowerDoc Objects</a>.</p></li>
+<li><p>All PowerDoc images are rendered by the designated rendering functions.</p></li>
+</ol>
+
+<p>D-Type's Guidelines For Creating PowerDoc Objects and organized as follows:</p>
+
+<ul>
+<li>
+<p>Each PowerDoc object is described and its rendering function identified. This is the <em>fn_draw</em> parameter that is passed to the <a href="../funcs/pdImgAddPlus.htm">pdImgAdd</a> or <a href="../funcs/pdImgAddPlus.htm">pdImgAddPlus</a> function (or <em>ImgAdd</em> in PowerDoc for ASP/.NET) when placing the object's PowerDoc image on a page. Objects without a visual representation do not have a rendering function and therefore do not have a PowerDoc image.</p>
+</li>
+
+<li>
+<p>Each object is described in terms of its key properties and/or links. The key properties and links typically represent the minimum set of properties and links
+that are required to construct an object. Unless otherwise stated, these properties/links should always be included in the object's description.</p>
+</li>
+
+<li>
+<p>In addition to the set of key properties and links, most objects include a set of optional properties and/or links. These properties and links should be supplied only if they are necessary to fully describe the object. Otherwise, they can be safely omitted.</p>
+</li>
+
+<li>
+<p>Each property can be referenced by its unique name and/or its unique numeric code. In addition, each property has a <a href="format.htm">standard format identifier</a> which indicates the property's default storage format. The storage format for a certain property is simply the format in which the property's value string must be stored in memory before it can be processed and rendered by Power Engine. Finally, each property has a description and, when applicable, a unit of measurement.</p>
+<p>A select set of properties support compression. This means their value can also be stored compressed in order to reduce storage requirements. Properties in this category are typically arrays and larger binary fields. There are currently 10 compression methods available. Their IDs and descriptions are shown below:</p>
+<ul>
+<li id="method_000">Compression Method 000 &mdash; <em>Generic Array Compression - Long</em> (used when each element is 4 bytes in size)</li>
+<li id="method_002">Compression Method 002 &mdash; <em>Generic Array Compression - Trio</em> (used when each element is 3 bytes in size)</li>
+<li id="method_004">Compression Method 004 &mdash; <em>Generic Array Compression - Word</em> (used when each element is 2 bytes in size)</li>
+<li id="method_006">Compression Method 006 &mdash; <em>Generic Array Compression - Byte</em> (used when each element is 1 byte in size)</li>
+<li id="method_008">Compression Method 008 &mdash; <em>Lossy Bitmap Compression - Long</em> (used when each pixel is 4 bytes in size)</li>
+<li id="method_009">Compression Method 009 &mdash; <em>Lossy Bitmap Compression - Trio</em> (used when each pixel is 3 bytes in size)</li>
+<li id="method_010">Compression Method 010 &mdash; <em>Lossy Bitmap Compression - Word</em> (used when each pixel is 2 bytes in size)</li>
+<li id="method_011">Compression Method 011 &mdash; <em>Lossy Bitmap Compression - Byte</em> (used when each pixel is 1 byte in size)</li>
+<li id="method_012">Compression Method 012 &mdash; <em>Polygon Instruction Array Compression With RLE</em></li>
+<li id="method_015">Compression Method 015 &mdash; <em>Polygon Instruction Array Compression Without RLE</em></li>
+</ul>
+<p>To compress a property value, applications can use one of the <a href="format_c.htm">format identifiers for compression</a>. In some cases more than one compression method can be used to effectively compress a property value.</p>
+<p>In D-Type's Guidelines For Creating PowerDoc Objects all this information is presented in the following format:</p>
+<div class="pdoc_obj_descr"><h4><em><span class="field">PropertyName</span></em> (NumericCode) &nbsp; <small class="label">DEFAULT FORMAT IDENTIFIER</small></h4><p><small><strong>Supported Compression Methods</strong> (if available, listed in order of expected effectiveness)</small></p><p>Description</p></div>
+<p>Properties that do not support compression do not have the "Supported Compression Methods" line.</p>
+</li>
+
+<li>
+<p>Each link includes a unique name, a unique numeric code, and a brief description.</p>
+<p>In D-Type's Guidelines For Creating PowerDoc Objects this information is presented in the following format:</p>
+<div class="pdoc_obj_descr"><h4><em><span class="field">LinkName</span></em> (NumericCode)</h4><p>Description</p></div>
+</li>
+
+</ul>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

@@ -1,0 +1,1 @@
+Configuration ID to represent a character box. Character boxes are used to construct text boxes and list boxes.

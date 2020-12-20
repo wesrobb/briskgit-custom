@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>PowerDoc Objects</h1>
+
+<h2>Text Design</h2>
+<h3 id="overview">Overview</h3>
+This objects represents a text design. In Power Engine API, a text design is an array of manually positioned characters or glyphs. As such, text designs are very suitable for drawing arbitrary text compositions (i.e. text compositions in which the (x, y) location of each glyph/character on the page is manually specified by the user rather than automatically calculated by the text layout engine).<br />
+<br />
+<strong>Designated Rendering Function:</strong> pdDrawTextDesign (26)<br />
+<br />
+Note: pdTextString_08, pdTextString_16, pdTextString_24 and pdTextString_32 cannot be used at the same time. pdTextString_32 takes precedence over pdTextString_24. pdTextString_24 takes precedence over pdTextString_16. Finally, pdTextString_16 takes precedence over pdTextString_08.<br />
+<h3 id="links">Links</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTypographyPtr"><em><span class="field">pdTypographyPtr</span> (1018)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTypographyPtr">Text Fragment</a>, <a href="101.htm#pdTypographyPtr">Text Line</a>, <a href="102.htm#pdTypographyPtr">Text Arc</a>, <a href="103.htm#pdTypographyPtr">Text Area</a>, <a href="107.htm#pdTypographyPtr">Glyph</a>, <a href="108.htm#pdTypographyPtr">Char</a>, <a href="109.htm#pdTypographyPtr">PowerGlyph</a>, <a href="130.htm#pdTypographyPtr">Text Path</a></small></p>
+<p>
+Link to the Typography object. When standard glyphs or characters are used, this should be a link to the <a href="004.htm">Typography (For Outline Fonts)</a> object. When PowerGlyphs (or PowerChars in the future) are used, this should be a link to the <a href="014.htm">Typography (For PowerFonts)</a> object.<br />
+<br />
+In either case, this link supplies typographic parameters.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextLayoutPtr"><em><span class="field">pdTextLayoutPtr</span> (1084)</em></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextLayoutPtr">Text Fragment</a>, <a href="101.htm#pdTextLayoutPtr">Text Line</a>, <a href="102.htm#pdTextLayoutPtr">Text Arc</a>, <a href="103.htm#pdTextLayoutPtr">Text Area</a>, <a href="130.htm#pdTextLayoutPtr">Text Path</a></small></p>
+<p>
+This link supplies text layout attributes. When building the Text Design or Rich Text Design object, this is a link to the <a href="016.htm">Text Layout (Manual)</a> object. When building any other text object, this is a link to the <a href="005.htm">Text Layout (Automatic)</a> object.<br />
+<br />
+Text Design and Rich Text Design utilize a manual text layout algorithm which means that the (x, y) position of each glyph/character must be supplied explicitly by the user. All other text objects utilize an automatic text layout algorithm which means that the position of their glyphs/characters is calculated automatically by the text layout engine while the user only supplies higher-level layout attributes such as direction, alignment, kerning, letter/row spacing etc.<br />
+</p>
+</div>
+<h3 id="props">Properties</h3>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_08"><em><span class="field">pdTextString_08</span> (1023)</em> &nbsp; <small class="label">PD_ASC</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_006">006</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_08">Text Fragment</a>, <a href="101.htm#pdTextString_08">Text Line</a>, <a href="102.htm#pdTextString_08">Text Arc</a>, <a href="103.htm#pdTextString_08">Text Area</a>, <a href="130.htm#pdTextString_08">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 1 byte per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"Test"<br />
+"D-Type"<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_16"><em><span class="field">pdTextString_16</span> (1024)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_004">004</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_16">Text Fragment</a>, <a href="101.htm#pdTextString_16">Text Line</a>, <a href="102.htm#pdTextString_16">Text Arc</a>, <a href="103.htm#pdTextString_16">Text Area</a>, <a href="130.htm#pdTextString_16">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 2 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 65 00 73 00 74 00" ('T', 'e', 's', 't')<br />
+"44 00 2D 00 54 00 79 00 70 00 65 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_24"><em><span class="field">pdTextString_24</span> (1118)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_002">002</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_24">Text Fragment</a>, <a href="101.htm#pdTextString_24">Text Line</a>, <a href="102.htm#pdTextString_24">Text Arc</a>, <a href="103.htm#pdTextString_24">Text Area</a>, <a href="130.htm#pdTextString_24">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 3 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 00 65 00 00 73 00 00 74 00 00" ('T', 'e', 's', 't')<br />
+"44 00 00 2D 00 00 54 00 00 79 00 00 70 00 00 65 00 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextString_32"><em><span class="field">pdTextString_32</span> (1119)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p><small><strong>Supported Compression Methods: <a href="intro.htm#method_000">000</a></strong></small></p>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextString_32">Text Fragment</a>, <a href="101.htm#pdTextString_32">Text Line</a>, <a href="102.htm#pdTextString_32">Text Arc</a>, <a href="103.htm#pdTextString_32">Text Area</a>, <a href="130.htm#pdTextString_32">Text Path</a></small></p>
+<p>
+Text string, i.e. an array of character or glyph codes (variable length, 4 bytes per code).<br />
+<br />
+<strong>Sample values:</strong><br />
+<br />
+"54 00 00 00 65 00 00 00 73 00 00 00 74 00 00 00" ('T', 'e', 's', 't')<br />
+"44 00 00 00 2D 00 00 00 54 00 00 00 79 00 00 00 70 00 00 00 65 00 00 00" ('D', '-', 'T', 'y', 'p', 'e')<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdUserSpecificContent"><em><span class="field">pdUserSpecificContent</span> (1120)</em> &nbsp; <small class="label">PD_HEX</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdUserSpecificContent">Text Fragment</a>, <a href="101.htm#pdUserSpecificContent">Text Line</a>, <a href="102.htm#pdUserSpecificContent">Text Arc</a>, <a href="103.htm#pdUserSpecificContent">Text Area</a>, <a href="130.htm#pdUserSpecificContent">Text Path</a></small></p>
+<p>
+User-specific content (variable length)<br />
+<br />
+This property allows end-user applications to store their own (i.e. user-specific) content with each text fragment. This property is suitable for user-specific content of variable length (e.g. strings, custom structures etc). D-Type Engine does not use or interpret this content in any way; the interpretation of the user-specific content is entirely up to the end-user application.<br />
+<br />
+Note: Additional technical information about this property is available to customers with a support contract.<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdTextEncoding"><em><span class="field">pdTextEncoding</span> (1079)</em> &nbsp; <small class="label">PD_BYTE_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="007.htm#pdTextEncoding">Text Fragment</a>, <a href="101.htm#pdTextEncoding">Text Line</a>, <a href="102.htm#pdTextEncoding">Text Arc</a>, <a href="103.htm#pdTextEncoding">Text Area</a>, <a href="130.htm#pdTextEncoding">Text Path</a></small></p>
+<p>
+Text encoding format. If this property is not specified, then the value 0 (Unicode character codes) is assumed.<br />
+<br />
+<strong>Supported values:</strong><br />
+<br />
+0 = Unicode character codes<br />
+1 = Glyph codes (font dependent)<br />
+2 = Unicode PowerChar codes - reserved for future use<br />
+3 = PowerGlyph codes (font dependent)<br />
+</p>
+</div>
+<div class="pdoc_obj_descr"><h4 id="pdAngleRotation"><em><span class="field">pdAngleRotation</span> (1034)</em> &nbsp; <small class="label">PD_WORD_UNSIGNED</small></h4>
+<p class="also_appears_in"><small>Also appears in: <a href="101.htm#pdAngleRotation">Text Line</a>, <a href="104.htm#pdAngleRotation">Rich Text Line</a>, <a href="128.htm#pdAngleRotation">Rich Text Design</a></small></p>
+<p>
+Angle in degrees. Must be between 0 and 360.<br />
+</p>
+</div>
+<h3 id="example">Example</h3>
+<p><strong>C/C++</strong></p>
+<div class="box_field"><tt>DT_ID_SLONG obj[4];<br />
+<br />
+obj[0] = pdObjAdd(pd, 0, "TextDesign Body Style");<br />
+obj[1] = pdObjAdd(pd, 0, "TextDesign Typography");<br />
+obj[2] = pdObjAdd(pd, 0, "TextDesign Layout");<br />
+<strong>obj[3] = pdObjAdd(pd, 0, "TextDesign");</strong><br />
+<br />
+<span class="codecomment">/* Properties for object 0 */</span><br />
+pdPropAdd(pd, obj[0], pdRGBT, "B4961400", PD_HEX);<br />
+<br />
+<span class="codecomment">/* Properties for object 1 */</span><br />
+pdLinkAdd(pd, obj[1], pdBodyPtr, obj[0]);<br />
+pdPropAdd(pd, obj[1], pdFontIndex, "0", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdFontDw, "90", PD_WORD_SIGNED);<br />
+pdPropAdd(pd, obj[1], pdFontDh, "90", PD_WORD_SIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 2 */</span><br />
+pdPropAdd(pd, obj[2], pdPosArrI, "0, 0, 0, 1, 0, 0, 0, 0, 7", PD_ARR_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[2], pdPosArrY_32, "0, 6400, -6400, 30600, 0, 0, 0, 0, 55600, 0, -1000, -1000, -1000, -1000, -3000, -5000, -11000, -14000, -15000", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdPosArrX_32, "2000, 21800, 15600, -16000, 15360, 15360, 5360, 9360, 1360, 15600, 22600, 18600, 15600, 10000, 11000, 8000, 10000, 4100, 3000", PD_ARR_LONG_SIGNED);<br />
+pdPropAdd(pd, obj[2], pdHinting, "1", PD_BYTE_UNSIGNED);<br />
+pdPropAdd(pd, obj[2], pdPositioning, "1", PD_BYTE_UNSIGNED);<br />
+<br />
+<span class="codecomment">/* Properties for object 3 */</span><br />
+<strong>pdLinkAdd(pd, obj[3], pdTypographyPtr, obj[1]);<br />
+pdLinkAdd(pd, obj[3], pdTextLayoutPtr, obj[2]);<br />
+pdPropAdd(pd, obj[3], pdTextString_08, "Manually Positioned", PD_ASC);</strong><br />
+<br />
+<span class="codecomment">/* Image placement */</span><br />
+<strong>pdImgAdd(pd, obj[3], 0, 41, 110, 0, 0, 0, pdDrawTextDesign, DV_NULL);</strong><br />
+</tt></div>
+<p><strong>INTEGRAL DSL</strong></p>
+<div class="box_field"><tt><span class="codecomment">/* Lambda shortcuts */</span><br />
+<br />
+local o = @(label = "") CDTObj(::my.doc, label); <span class="codecomment">/* to make object */</span><br />
+local p = @(id, str, len = PD_DEFAULT) CDTProp(id, str, len); <span class="codecomment">/* to add property - general */</span><br />
+local s = @(id, str) CDTPropStr(id, str); <span class="codecomment">/* to add property - string */</span><br />
+local i = @(id, num) CDTPropInt(id, num); <span class="codecomment">/* to add property - integer */</span><br />
+local l = @(id, obj) CDTLink(id, obj); <span class="codecomment">/* to add link */</span><br />
+<br />
+<span class="codecomment">/* Objects */</span><br />
+<br />
+local obj_0 = o("TextDesign Body Style");<br />
+local obj_1 = o("TextDesign Typography");<br />
+local obj_2 = o("TextDesign Layout");<br />
+local obj_3 = o("TextDesign");<br />
+<br />
+<span class="codecomment">/* Object Properties */</span><br />
+<br />
+obj_0 + s(pdRGBT, "B4961400");<br />
+<br />
+obj_1 + l(pdBodyPtr, obj_0);<br />
+obj_1 + i(pdFontIndex, 0);<br />
+obj_1 + i(pdFontDw, 90);<br />
+obj_1 + i(pdFontDh, 90);<br />
+<br />
+obj_2 + p(pdPosArrI, "0, 0, 0, 1, 0, 0, 0, 0, 7");<br />
+obj_2 + p(pdPosArrY_32, "0, 6400, -6400, 30600, 0, 0, 0, 0, 55600, 0, -1000, -1000, -1000, -1000, -3000, -5000, -11000, -14000, -15000");<br />
+obj_2 + p(pdPosArrX_32, "2000, 21800, 15600, -16000, 15360, 15360, 5360, 9360, 1360, 15600, 22600, 18600, 15600, 10000, 11000, 8000, 10000, 4100, 3000");<br />
+obj_2 + i(pdHinting, 1);<br />
+obj_2 + i(pdPositioning, 1);<br />
+<br />
+obj_3 + l(pdTypographyPtr, obj_1);<br />
+obj_3 + l(pdTextLayoutPtr, obj_2);<br />
+obj_3 + s(pdTextString_08, "Manually Positioned");<br />
+<br />
+<span class="codecomment">/* Image Pinning */</span><br />
+<br />
+obj_3.Pin(0, 41, 110, pdDrawTextDesign);<br />
+</tt></div>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

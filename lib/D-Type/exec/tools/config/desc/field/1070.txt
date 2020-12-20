@@ -1,0 +1,31 @@
+Font format.
+
+{strong}Supported values:{/strong}
+
+0 = D-Type Font Format (.dtf)
+
+1 = TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collection (.ttc) [Apple Mac ASCII Encoding]
+
+3 = TrueType or OpenType with TrueType outlines (.ttf) or TrueType Collection (.ttc) [Windows Unicode Encoding]
+
+6 = OpenType (.otf) containing Type 2/CFF outlines [Apple Mac ASCII Encoding]
+
+5 = OpenType (.otf) containing Type 2/CFF outlines [Windows Unicode Encoding]
+
+2 = Adobe Type 1 (.pfb or .pfa) [Adobe Standard Encoding]
+
+7 = Adobe Type 1 (.pfb or .pfa) [ISO Latin Encoding]
+
+8 = Adobe Type 1 (.pfb or .pfa) [Synthesized Windows Unicode Encoding]
+
+11 = Adobe Type 3 PostScript (.ps) [ISO Latin Encoding] - must obey D-Type's strict parsing rules
+
+12 = Adobe Type 3 PostScript (.ps) [Synthesized Windows Unicode Encoding] - must obey D-Type's strict parsing rules
+
+14 = Bare CFF (.cff) [Adobe Standard Encoding]
+
+15 = Bare CFF (.cff) [ISO Latin Encoding]
+
+16 = Bare CFF (.cff) [Synthesized Windows Unicode Encoding]
+
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.

@@ -1,0 +1,184 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>txTextMakeViaStream</h2><div class="box_prototype"><strong>
+DT_SLONG txTextMakeViaStream(DT_TXDOC text_doc, DT_TXENGINE engine, DT_ID_UBYTE text_type, const DT_STREAM_DESC* text_sd, DT_SWORD unicode_flags, const DT_TX_TEXTFLOW_AREA* area, const DT_TX_ATTRIBS text_attribs[], const DT_STREAM_DESC* fontmap_sd)</strong></div><br /><strong>Short Description:</strong> <em>Make text document - via stream</em><br /><br />
+
+<p>The txTextMakeViaStream function builds a Unicode text document by reading a plain text file stored in a stream. This function optionally performs Unicode's implicit bidirectional reordering algorithm (BiDi) and auto-detects Unicode scripts (such as Latin, Arabic, Thai etc.) so that complex scripts can be shaped properly.</p>
+
+<p>This function can only be called once in the specified text document instance, and only after a successful call to <a href="txTextIni.htm">txTextIni</a>. Applications that wish to rebuild their Unicode text using this function must first destroy the existing text document instance by calling <a href="txTextExt.htm">txTextExt</a> and then create a new one by calling <a href="txTextIni.htm">txTextIni</a>.</p>
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>text_doc</em></p>
+</td><td>
+<p>Handle of the associated text document instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Text Engine instance. See the <a href="txEngineIniViaStream.htm">txEngineIniViaStream</a> function for details on how to initialize D-Type Text Engine.</p>
+</td></tr>
+
+<tr><td>
+<p><em>text_type</em></p>
+</td><td>
+<p>Encoding of the plain text file. Can be one of the following:</p>
+<div class="box_field"><pre>
+TX_AUTO     0  <span class="codecomment">/* Auto-detect */</span>&nbsp;
+TX_ANSI     1  <span class="codecomment">/* ANSI */</span>&nbsp;
+TX_UCS2_LE  2  <span class="codecomment">/* UCS-2 Little Endian */</span>&nbsp;
+TX_UCS2_BE  3  <span class="codecomment">/* UCS-2 Big Endian */</span>&nbsp;
+TX_UTF8     4  <span class="codecomment">/* UTF-8 */</span>&nbsp;
+TX_UCS4_LE  5  <span class="codecomment">/* UCS-4 Little Endian */</span>&nbsp;
+TX_UCS4_BE  6  <span class="codecomment">/* UCS-4 Big Endian */</span>&nbsp;
+TX_UTF16_LE 7  <span class="codecomment">/* UTF-16 Little Endian */</span>&nbsp;
+TX_UTF16_BE 8  <span class="codecomment">/* UTF-16 Big Endian */</span>&nbsp;
+TX_UTF32_LE 9  <span class="codecomment">/* UTF-32 Little Endian */</span>&nbsp;
+TX_UTF32_BE 10 <span class="codecomment">/* UTF-32 Big Endian */</span>&nbsp;
+</pre></div>
+<p>When <em>text_type</em> = TX_AUTO, the function attempts to detect the encoding of the plain text file based on its first few bytes. When the first two bytes are 0xFEFF, the text file is assumed to be UTF-16 Big Endian. When the first two bytes are 0xFFFE, the text file is assumed to be UTF-16 Little Endian. When the first three bytes are 0xEFBBBF, the text file is assumed to be UTF-8. If none of the above bytes sequences are present at the beginning of the file, the text file is assumed to be ANSI.</p>
+<p>When <em>text_type</em> is set to TX_ANSI, TX_UCS2_LE, TX_UCS2_BE, TX_UTF8, TX_UCS4_LE, TX_UCS4_BE, TX_UTF16_LE, TX_UTF16_BE, TX_UTF32_LE or TX_UTF32_BE, the encoding is known and, therefore, no special bytes sequences should be present at the beginning of the plain text file. As indicated above, TX_ANSI is used for ANSI, TX_UCS2_LE for UCS-2 Little Endian, TX_UCS2_BE for UCS-2 Big Endian, TX_UTF8 for UTF-8, TX_UCS4_LE for UCS-4 Little Endian, TX_UCS4_BE for UCS-4 Big Endian, TX_UTF16_LE for UTF-16 Little Endian, TX_UTF16_BE for UTF-16 Big Endian, TX_UTF32_LE for UTF-32 Little Endian and TX_UTF32_BE for UTF-32 Big Endian encoding.</p>
+</td></tr>
+
+<tr><td>
+<p><em>text_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the plain text file that is being read (e.g. file on disk, file in memory, file on a remote server).</p>
+</td></tr>
+
+<tr><td>
+<p><em>unicode_flags</em></p>
+</td><td>
+<p>Unicode flags to specify how to process the text. Can be a combination of the following values:</p>
+<div class="box_field"><pre>
+TX_IMPORT_UNICODE_BIDI      1  <span class="codecomment">/* Apply Unicode Bidirectional Algorithm */</span>&nbsp;
+TX_IMPORT_UNICODE_SCRIPT    2  <span class="codecomment">/* Auto-detect Unicode scripts and use complex shapings */</span>&nbsp;
+TX_IMPORT_OPENTYPE_CJK_VALT 4  <span class="codecomment">/* Assume text is used in vertical layout and apply vertical OpenType
+                                  glyph forms to 'hani' and 'kana' scripts (when available in font) */</span>&nbsp;
+TX_IMPORT_UNICODE_OPTIMIZE  16 <span class="codecomment">/* Optimize Unicode text */</span>&nbsp;
+TX_IMPORT_UNICODE_COMPRESS  32 <span class="codecomment">/* Compress Unicode text */</span>&nbsp;
+</pre></div>
+<p>Note that <em>unicode_flags</em> is a bitmask. Use the OR ("|") operator to combine several bit values. Alternatively, use one of the following predefined values:</p>
+
+<div class="box_field"><pre>
+TX_IMPORT_BASIC             0  <span class="codecomment">/* No special processing */</span>&nbsp;
+TX_IMPORT_FULL              3  <span class="codecomment">/* Same as (TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT) */</span>&nbsp;
+TX_IMPORT_FULL_COMPACT      51 <span class="codecomment">/* Same as (TX_IMPORT_UNICODE_BIDI | TX_IMPORT_UNICODE_SCRIPT | TX_IMPORT_UNICODE_OPTIMIZE | TX_IMPORT_UNICODE_COMPRESS) */</span>&nbsp;
+</pre></div>
+
+</td></tr>
+
+<tr><td>
+<p><em>area</em></p>
+</td><td>
+<p>Either DV_NULL or a valid pointer to the <a href="../manual/txstructs1.htm#DT_TX_TEXTFLOW_AREA">DT_TX_TEXTFLOW_AREA</a> structure that supplies the attributes of the textflow area to hold the text. If DV_NULL, the following default textflow area will be used:</p>
+<div class="box_field"><pre>
+DT_TX_TEXTFLOW_AREA default_area;
+
+default_area.X = 0;
+default_area.Y = 0;
+default_area.W = 1000;
+default_area.H = 1000;
+default_area.Type = TX_RECT;
+default_area.RowType = TX_MATHROW;
+default_area.WrapType = 0;
+default_area.GlobalDirection = TX_DIR_ROW_LR_TB;
+default_area.TargetDeviceID = TX_LAY_DEVICE_B;
+default_area.TransformAndExtras = TX_TM_NULL;
+default_area.TransformArray = DV_NULL;
+</pre></div>
+
+<p>The texflow area created by this function is always placed on the first page (page with index 0) of the text document.</p>
+
+</td></tr>
+
+<tr><td>
+<p><em>text_attribs</em></p>
+</td><td>
+<p>Either DV_NULL or an array of <a href="../manual/txstructs1.htm#DT_TX_ATTRIBS">DT_TX_ATTRIBS</a> structures that supply initial text styling/formatting attributes. If DV_NULL, the following default array of styling/formatting attributes will be used:</p>
+<div class="box_field"><pre>
+const DT_TX_ATTRIBS default_attributes[] =
+{
+   {TX_ATTR_FONT_WIDTH,     "36" <span class="codecomment">/* in document units */</span>&nbsp; },
+   {TX_ATTR_FONT_HEIGHT,    "36" <span class="codecomment">/* in document units */</span>&nbsp; },
+   {TX_ATTR_SPACING_ROW,    "10" <span class="codecomment">/* in document units */</span>&nbsp; },
+   {TX_ATTR_SPACING_LETTER, "0"  <span class="codecomment">/* in document units */</span>&nbsp; },
+   {TX_ATTR_KERNING,        "1"  <span class="codecomment">/* kerning is on */</span>&nbsp; },
+   {TX_ATTR_ALING,          "0"  <span class="codecomment">/* left justified */</span>&nbsp; },
+   {TX_ATTR_ALIGNEND,       "0"  <span class="codecomment">/* left justified */</span>&nbsp; },
+   {TX_ATTR_BODY_RGBT,      "00000000"},
+   {TX_ATTR_END,            ""   <span class="codecomment">/* mandatory end-of-array */</span>&nbsp;}
+};
+</pre></div>
+</td></tr>
+
+<tr><td>
+<p><em>fontmap_sd</em></p>
+</td><td>
+<p>A valid pointer to the <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure which supplies the location of the font map file. The font map file tells the function what fonts to use for different Unicode scripts. Typically, this is <em><a href="../manual/fontmap.htm">fontmap.inf</a></em>. When appropriate, your application can provide its own (i.e. altered) version of the fontmap.inf file.</p>
+<p>Additionally, your application can create a cached font map file using the <a href="txEngineMakeCachedFontmap.htm">txEngineMakeCachedFontmap</a> function and pass it here. This will make the txTextMakeViaStream function run noticeably faster. For details, see the <a href="txEngineMakeCachedFontmap.htm">txEngineMakeCachedFontmap</a> function.</p>
+<p>For best performance, the font map file should reside in memory. The <a href="../../dt/manual/structs.htm#DT_STREAM_DESC">DT_STREAM_DESC</a> structure then describes a memory based stream. Memory based streams can be processed more quickly than file based streams. See the <a href="../../dt/manual/structs.htm#DT_STREAM_MEMORY">DT_STREAM_MEMORY</a> macro and the <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a> section for more information on memory based streams.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+<p>If the Unicode text document was built successfully, the return value will be the number of its characters. Otherwise, the function returns -1.</p>
+
+
+<h3>Comments</h3>
+<p>Before this function can be used it is necessary to initialize D-Type Text Engine engine by calling the <a href="txEngineIniViaStream.htm">txEngineIniViaStream</a> function. This is usually done only once, at the beginning of the application's initialization routine. For example:</p>
+<div class="box_field"><pre>
+DT_STREAM_FILE(sd, "dtype.inf");
+if (txEngineIni(&amp;Engine, &amp;sd, DV_NULL) != 1) return;
+</pre></div>
+<p>Consequently, most applications will use the same <em>engine</em> variable in every call to <a href="txTextMakeViaStream.htm">txTextMakeViaStream</a>. Exceptions are certain types of multi-threaded applications in which a number of text documents must be accessed and rendered simultaneously. In those cases, each thread could initialize its own <em>engine</em> instance. This approach allows multiple threads to use and access D-Type Text Engine's functions simultaneously (without using mutexes or other synchronization or blocking code). However, depending on the font cache, number of fonts and other resources in memory, a large number of <em>engine</em> instances may require a significant amount of RAM.</p>
+<p>Each <em>engine</em> instance is created dynamically and must be destroyed by calling the <a href="txEngineExt.htm">txEngineExt</a> function before the application terminates. The code snippet to do this is shown below:</p>
+<div class="box_field"><pre>
+txEngineExt(Engine);
+</pre></div>
+
+
+
+<h3>Note 1</h3>
+<p>See <a href="../../dt/manual/streams.htm">How To Use D-Type Streams And Stream Macros</a>.</p>
+
+<h3>Note 2</h3>
+<p>See our <a href="../../dt/manual/fpaths.htm">notes regarding file based streams</a>.</p>
+
+<h3>Note 3</h3>
+<p>See the <a href="txEngineMakeCachedFontmap.htm">txEngineMakeCachedFontmap</a> function.</p>
+
+
+<h3>Related Functions</h3>
+<p>
+<a href="txTextIniViaStream.htm">txTextIniViaStream</a><br />
+<a href="txTextMakeViaBuffer.htm">txTextMakeViaBuffer</a>, <a href="txTextMakeViaPowerDoc.htm">txTextMakeViaPowerDoc</a>
+</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

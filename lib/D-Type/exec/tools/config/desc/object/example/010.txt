@@ -1,0 +1,95 @@
+DT_ID_SLONG obj[15];
+
+obj[0] = pdObjAdd(pd, 0, "Surface Style");
+obj[1] = pdObjAdd(pd, 0, "Outline Style");
+obj[2] = pdObjAdd(pd, 0, "TextLine Body Style");
+obj[3] = pdObjAdd(pd, 0, "Line Definition");
+obj[4] = pdObjAdd(pd, 0, "LibShape");
+obj[5] = pdObjAdd(pd, 0, "LibShape");
+obj[6] = pdObjAdd(pd, 0, "TextLine Typography");
+obj[7] = pdObjAdd(pd, 0, "Text Layout");
+obj[8] = pdObjAdd(pd, 0, "TextLine");
+obj[9] = pdObjAdd(pd, 0, "Group Member #0");
+obj[10] = pdObjAdd(pd, 0, "Group Member #1");
+obj[11] = pdObjAdd(pd, 0, "Group Member #2");
+obj[12] = pdObjAdd(pd, 0, "Group");
+obj[13] = pdObjAdd(pd, 0, "PowerFont Record #0");
+{strong}obj[14] = pdObjAdd(pd, 0, "PowerFont");{/strong}
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], pdRGBT, "FF004000", PD_HEX);
+
+/* Properties for object 1 */
+pdPropAdd(pd, obj[1], pdRGBT, "00000000", PD_HEX);
+
+/* Properties for object 2 */
+pdPropAdd(pd, obj[2], pdRGBT, "FFFFFF00", PD_HEX);
+
+/* Properties for object 3 */
+pdLinkAdd(pd, obj[3], pdStylePtr, obj[1]);
+pdPropAdd(pd, obj[3], pdLineThickness, "400", PD_WORD_SIGNED);
+
+/* Properties for object 4 */
+pdLinkAdd(pd, obj[4], pdOutlinePtr, obj[3]);
+pdPropAdd(pd, obj[4], pdID, "56", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[4], pdDw, "300", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[4], pdDh, "300", PD_LONG_SIGNED);
+
+/* Properties for object 5 */
+pdLinkAdd(pd, obj[5], pdBodyPtr, obj[0]);
+pdPropAdd(pd, obj[5], pdID, "56", PD_WORD_UNSIGNED);
+pdPropAdd(pd, obj[5], pdDw, "270", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[5], pdDh, "270", PD_LONG_SIGNED);
+
+/* Properties for object 6 */
+pdLinkAdd(pd, obj[6], pdBodyPtr, obj[2]);
+pdPropAdd(pd, obj[6], pdFontIndex, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdFontDw, "95", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdFontDh, "130", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdSkewHor, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdSkewVer, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[6], pdRotation, "0", PD_WORD_SIGNED);
+
+/* Properties for object 7 */
+pdPropAdd(pd, obj[7], pdKerning, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[7], pdAlign, "0", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[7], pdAlignEnd, "0", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[7], pdRelativeDirection, "0", PD_BYTE_UNSIGNED);
+
+/* Properties for object 8 */
+pdLinkAdd(pd, obj[8], pdTypographyPtr, obj[6]);
+pdLinkAdd(pd, obj[8], pdTextLayoutPtr, obj[7]);
+pdPropAdd(pd, obj[8], pdTextString_08, "STOP", PD_ASC);
+
+/* Properties for object 9 */
+pdLinkAdd(pd, obj[9], pdGroupMemberPtr, obj[10]);
+pdLinkAdd(pd, obj[9], pdFnDrawObjectPtr, obj[4]);
+pdPropAdd(pd, obj[9], pdFnDraw, "18", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[9], pdDx, "0", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[9], pdDy, "-300", PD_LONG_SIGNED);
+
+/* Properties for object 10 */
+pdLinkAdd(pd, obj[10], pdGroupMemberPtr, obj[11]);
+pdLinkAdd(pd, obj[10], pdFnDrawObjectPtr, obj[5]);
+pdPropAdd(pd, obj[10], pdFnDraw, "18", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[10], pdDx, "15", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[10], pdDy, "-285", PD_LONG_SIGNED);
+
+/* Properties for object 11 */
+pdLinkAdd(pd, obj[11], pdFnDrawObjectPtr, obj[8]);
+pdPropAdd(pd, obj[11], pdFnDraw, "1", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[11], pdDx, "19", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[11], pdDy, "-102", PD_LONG_SIGNED);
+
+/* Properties for object 12 */
+pdLinkAdd(pd, obj[12], pdGroupMemberPtr, obj[9]);
+
+/* Properties for object 13 */
+pdLinkAdd(pd, obj[13], pdFnDrawObjectPtr, obj[12]);
+pdPropAdd(pd, obj[13], pdDw, "350", PD_LONG_SIGNED);
+
+/* Properties for object 14 */
+{strong}pdLinkAdd(pd, obj[14], pdPowerFontRecordPtr, obj[13]);
+pdPropAdd(pd, obj[14], pdBoundingBox, "-50, -50, 350, 350", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[14], pdDw, "300", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[14], pdDh, "300", PD_LONG_SIGNED);{/strong}

@@ -1,0 +1,644 @@
+function DebugInfo(s, show = false)
+{
+	if (show) print(s);
+}
+
+
+class CDTPageSize
+{
+	/* letter is default */
+	PageW = 5100; /* 612 pts x factor 8.3333 = 5100 */
+	PageH = 6600; /* 792 pts x factor 8.3333 = 6600 */
+
+	function GetWidth() { return PageW; }
+	function GetHeight() { return PageH; }
+
+	function GetBleedL() { return 80; }
+	function GetBleedR() { return 80; }
+	function GetBleedT() { return 80; }
+	function GetBleedB() { return 80; }
+
+	function GetMarginL() { return 220; }
+	function GetMarginR() { return 220; }
+	function GetMarginT() { return 220; }
+	function GetMarginB() { return 220; }
+
+	constructor(pagesize = "")
+	{
+		     if (pagesize == "legal")              { PageW =  5100; PageH =  8400; }
+		else if (pagesize == "ledger")             { PageW =  6600; PageH = 10200; }
+
+		else if (pagesize == "super_b/super_a3")   { PageW =  7800; PageH = 11408; }
+		else if (pagesize == "c")                  { PageW = 10200; PageH = 13200; }
+		else if (pagesize == "d")                  { PageW = 13200; PageH = 20400; }
+		else if (pagesize == "e")                  { PageW = 20400; PageH = 26400; }
+		else if (pagesize == "executive")          { PageW =  4350; PageH =  6300; }
+		else if (pagesize == "us4x6")              { PageW =  2400; PageH =  3600; }
+		else if (pagesize == "us4x8")              { PageW =  2400; PageH =  4800; }
+		else if (pagesize == "us5x7")              { PageW =  3000; PageH =  4200; }
+
+		else if (pagesize == "a5")                 { PageW =  3496; PageH =  4961; }
+		else if (pagesize == "a4")                 { PageW =  4961; PageH =  7016; }
+		else if (pagesize == "a3")                 { PageW =  7016; PageH =  9921; }
+		else if (pagesize == "a3+")                { PageW =  7772; PageH = 11409; }
+		else if (pagesize == "a2")                 { PageW =  9921; PageH = 14032; }
+		else if (pagesize == "a1")                 { PageW = 14032; PageH = 19866; }
+		else if (pagesize == "a0")                 { PageW = 19866; PageH = 28087; }
+		else if (pagesize == "b5")                 { PageW =  4157; PageH =  5906; }
+		else if (pagesize == "b4")                 { PageW =  5906; PageH =  8339; }
+
+		else if (pagesize == "iso_envelope_dl")    { PageW =  5197; PageH =  2598; }
+		else if (pagesize == "iso_envelope_c7/c6") { PageW =  3827; PageH =  1913; }
+		else if (pagesize == "iso_envelope_c6")    { PageW =  3827; PageH =  2693; }
+		else if (pagesize == "iso_envelope_c6/c5") { PageW =  5409; PageH =  2693; }
+		else if (pagesize == "iso_envelope_c5")    { PageW =  5409; PageH =  3827; }
+		else if (pagesize == "iso_envelope_c4")    { PageW =  7654; PageH =  5409; }
+		else if (pagesize == "iso_envelope_c3")    { PageW = 10819; PageH =  7654; }
+		else if (pagesize == "iso_envelope_b6")    { PageW =  4157; PageH =  2953; }
+		else if (pagesize == "iso_envelope_b5")    { PageW =  5906; PageH =  4157; }
+		else if (pagesize == "iso_envelope_b4")    { PageW =  8339; PageH =  5906; }
+		else if (pagesize == "iso_envelope_e4")    { PageW =  9449; PageH =  6614; }
+
+		else /*letter*/                            { PageW =  5100; PageH =  6600; }
+	}
+}
+
+
+class CDTIndex
+{
+	ModCounter = 0;
+	ImgCounter = 0;
+	RefCounter = 0;
+	Titles = null;
+	TempDoc = null;
+	Dictionary = null;
+
+	constructor(fontmap = null)
+	{
+		local construct_flags = 1; /* 1 = temporary document */
+		local internal_flags = 1; /* disable descriptions to reduce memory a bit */
+		TempDoc = CDTDoc(fontmap, construct_flags, internal_flags, false);
+		Titles = ["ROOT"];
+		Dictionary = {};
+	}
+
+	function SetDictionary(dictionary) { Dictionary = dictionary; }
+}
+
+
+class CDTEntry
+{
+	Title = "";
+	DestImg = 0;
+	DestPos = 0;
+	DestPage = 0;
+	Level = 0;
+	Ref = 0;
+}
+
+
+class CDTDocument extends CDTDoc
+{
+	CacheRead = true;
+	CacheWrite = true;
+	UnitCounter = 0;
+	UnitLastMod = "0000-00-00 00:00:00:000000"; /* very long time ago */
+	ArticlesMaxLastMod = "0000-00-00 00:00:00:000000"; /* very long time ago */
+	ContentCounter = 0;
+	ArticleCounter = 0;
+	UniqueCode = "001";
+	PageSize = null; //CDTPageSize();
+	Index_Contents = null;
+	Index_Endnotes = null;
+	Index_Acronyms = null;
+	ContentUnits = null; //[];
+	DisableIndexAdd = false;
+	FinalCleanup = false;
+	TempObj = null;
+	DocRoot = null;
+	DocDefaultFontmap = null;
+
+	constructor(fontmap = null, construct_flags = 0, internal_flags = 1, index_mask = 7, auto_reflow = false, final_cleanup = true)
+	{
+		base.constructor(fontmap, construct_flags, internal_flags, auto_reflow);
+
+		DocRoot = "";
+
+		TempObj = NewObj(1); /* 1 = temporary document */
+		SetInternalFlags(internal_flags, TempObj);
+		SetFontmap(fontmap, TempObj);
+		SetTextReflow(false, TempObj); /* for much faster formatting */
+
+		if (index_mask & 1) Index_Contents = CDTIndex(fontmap);
+		if (index_mask & 2) Index_Endnotes = CDTIndex(fontmap);
+		if (index_mask & 4) Index_Acronyms = CDTIndex(fontmap);
+
+		FinalCleanup = final_cleanup;
+		DocDefaultFontmap = fontmap;
+	}
+
+	function GetCacheDir(reserved = 0) { return "cache/"; }
+}
+
+/*
+CDTDocument.CacheRead <- true;
+CDTDocument.CacheWrite <- true;
+CDTDocument.UnitCounter <- 0;
+CDTDocument.UnitLastMod <- "0000-00-00 00:00:00::000000";
+CDTDocument.ArticlesMaxLastMod <- "0000-00-00 00:00:00::000000";
+CDTDocument.ContentCounter <- 0;
+CDTDocument.ArticleCounter <- 0;
+CDTDocument.UniqueCode <- 1;
+CDTDocument.PageSize <- null; //CDTPageSize();
+CDTDocument.Index_Contents <- null;
+CDTDocument.Index_Endnotes <- null;
+CDTDocument.Index_Acronyms <- null;
+CDTDocument.ContentUnits <- null; //[];
+*/
+
+
+function CDTDocument::Make()
+{
+	DebugInfo("CDTDocument::Make Start ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + ", clock=" + clock() + "\n", true);
+
+	local x = PageSize.GetBleedL() + PageSize.GetMarginL();
+	local y = PageSize.GetBleedT() + PageSize.GetMarginT();
+	local w = PageSize.GetWidth() - PageSize.GetBleedR() - PageSize.GetMarginR() - x;
+	local h = PageSize.GetHeight() - PageSize.GetBleedB() - PageSize.GetMarginB() - y;
+	local cache_file = GetCacheDir() + "p_" + Cmd_GetProcessId() + "-d_" + UniqueCode + "-idx_";
+
+	if (CacheRead)
+	{
+		if (Index_Contents) Index_Contents.TempDoc.Append(cache_file + "contents.tmp");
+		if (Index_Endnotes) Index_Endnotes.TempDoc.Append(cache_file + "endnotes.tmp");
+		if (Index_Acronyms) Index_Acronyms.TempDoc.Append(cache_file + "acronyms.tmp");
+	}
+
+	ArticlesMaxLastMod = "0000-00-00 00:00:00:000000"; /* very long time ago */
+
+	UnitCounter = 0;
+
+	local n = ContentUnits.len();
+
+	foreach (unit in ContentUnits)
+	{
+		UnitCounter++; if (!unit[0]) continue;
+		UnitLastMod = "0000-00-00 00:00:00:000000"; /* very long time ago */
+		DisableIndexAdd = false;
+
+		DebugInfo("Start Unit " + UnitCounter + "/" + n + " ("+ unit[2] + ") -> " + (100 * UnitCounter / n) + "%...\n", true);
+		DebugInfo("ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+
+		//try
+		{
+			local unit_path = DocRoot + unit[2];
+
+			Cmd_Include(unit_path);
+
+			if (unit[1] >= 0)
+			{
+				UnitLastMod = Cmd_GetFileInfo(unit_path);
+				ExecUnit(unit[1], x, y, w, h);
+			}
+		}
+		//catch (e)
+		//{
+		//	DebugInfo("ExecUnit failed\n");
+		//}
+
+		DebugInfo("ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+		DebugInfo("End Unit " + UnitCounter + " ("+ unit[2] + ")\n");
+	}
+
+	DebugInfo("CDTDocument::Make Before Cleanup ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+
+	if (FinalCleanup) Cleanup(); /* full final cleanup -- looks like it's no longer necessary */
+
+	if (CacheWrite)
+	{
+		if (Index_Contents && Index_Contents.ModCounter > 0) Index_Contents.TempDoc.Save(cache_file + "contents.tmp");
+		if (Index_Endnotes && Index_Endnotes.ModCounter > 0) Index_Endnotes.TempDoc.Save(cache_file + "endnotes.tmp");
+		if (Index_Acronyms && Index_Acronyms.ModCounter > 0) Index_Acronyms.TempDoc.Save(cache_file + "acronyms.tmp");
+	}
+
+	DebugInfo("CDTDocument::Make End ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + ", clock=" + clock() + "\n", true);
+}
+
+
+function CDTDocument::ClearIndexCacheForArticle(article_counter)
+{
+	if (Index_Contents) Index_Contents.ModCounter += Index_Contents.TempDoc.ImgAllDeleteOnPage(article_counter);
+	if (Index_Endnotes) Index_Endnotes.ModCounter += Index_Endnotes.TempDoc.ImgAllDeleteOnPage(article_counter);
+	if (Index_Acronyms) Index_Acronyms.ModCounter += Index_Acronyms.TempDoc.ImgAllDeleteOnPage(article_counter);
+
+	DebugInfo("*ClearIndexCacheForArticle " + article_counter + "\n");
+}
+
+
+function CDTDocument::MakeContent(content_type, content_func, content_label, textflow, entries = null)
+{
+	DebugInfo("S MakeContent------------\n");
+	DebugInfo("  MakeContent " + content_label + "\n");
+	DebugInfo("  MakeContent Start ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+
+	//ContentCounter++;
+	//DisableIndexAdd = false;
+
+	NewContent(content_type, content_label);
+
+	//local make_content = true;
+	local suffix = ((content_type == 0) ? ("-a_" + ArticleCounter) : "");
+	local cache_file = GetCacheDir() + "p_" + Cmd_GetProcessId() + "-d_" + UniqueCode + "-u_" + UnitCounter + "-c_" + ContentCounter + "-t_" + content_type + suffix + ".tmp";
+	local cache_read = CacheRead;
+	local cache_write = CacheWrite;
+
+	if (cache_read)
+	{
+		local cache_last_mod = Cmd_GetFileInfo(cache_file);
+		local cache_valid = (UnitLastMod < cache_last_mod);
+
+		DebugInfo("  unit was last modified on " + UnitLastMod + " while cache file " + cache_file + " was last modified on " + cache_last_mod + "\n");
+
+		if (content_type == 0) /* article */
+		{
+			if (ArticlesMaxLastMod == null) {}
+			else if (ArticlesMaxLastMod < cache_last_mod) ArticlesMaxLastMod = cache_last_mod;
+		}
+		else /* index */
+		{
+			DebugInfo("cache_valid=" + cache_valid + "\n");
+			if (ArticlesMaxLastMod == null) { cache_valid = false; /*DebugInfo("Z1\n");*/ }
+			else if (cache_valid) cache_valid = (ArticlesMaxLastMod < cache_last_mod);
+			DebugInfo("cache_valid=" + cache_valid + "\n");
+		}
+
+		if (cache_valid)
+		{
+			DebugInfo("  --> We can use cache -- all done\n");
+			Append(cache_file);
+			DisableIndexAdd = true;
+			return;
+
+			//make_content = false;
+			//cache_write = false;
+		}
+		else if (content_type == 0)
+		{
+			DebugInfo("  !!! We can't use cache\n");
+			ClearIndexCacheForArticle(ArticleCounter);
+			ArticlesMaxLastMod = null; /* just now */
+		}
+	}
+
+	//if (make_content)
+	//{
+		//ResetFontmap(TempObj);
+		local obj = Obj; Obj = TempObj; //SetTextReflow(false);
+		local t = null;
+		FontmapChanged = false;
+		if (content_type == 0) t = content_func(content_label, textflow); else t = content_func(content_label, textflow, entries);
+		if (FontmapChanged) SetFontmap(DocDefaultFontmap, TempObj); /* content_func has changed fontmap, so set it back to default */
+		if (t != null) t.Reflow();
+	//}
+
+	if (cache_write) Save(cache_file);
+
+	//if (!make_content) return;
+
+	//Cleanup(1, 0 /*cleanup_flags*/); /* quick cleanup before transfer */
+
+	DebugInfo("  TEMP DOC: MakeContent ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+
+	Obj = obj;
+
+	DebugInfo("  FULL DOC: MakeContent ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+
+	//TransferWithCleanup(content_doc, 0 /*cleanup_flags*/, true /*erase*/);
+	TransferObjWithCleanup(TempObj, 0 /*cleanup_flags*/, true /*erase*/);
+
+	//Transfer(content_doc, 0, 0, 0, true);
+	//Cleanup(1, 0 /*cleanup_flags*/); /* quick cleanup after transfer */
+
+	DebugInfo("  MakeContent End ObjGetLast=" + ObjGetLast() +", ImgGetLast=" + ImgGetLast() + "\n");
+	DebugInfo("E MakeContent------------\n\n");
+}
+
+
+function CDTDocument::MakeIndex(index, depth = 0, level_shift = 0, show_flags = 3)
+{
+	local entries = [];
+
+	if (index == null) return entries;
+
+	local last_img = index.TempDoc.ImgGetLast();
+	local ti = CDTBuilderText(index.TempDoc);
+
+	for (local i = 1; i <= ArticleCounter; i++)
+	{
+		if (level_shift == 0)
+		{
+			local entry = CDTEntry();
+			entry.DestImg = -1;
+			entry.DestPos = 0;
+			entry.DestPage = 0;
+			entry.Title = index.Titles[i];
+			entry.Ref = -1;
+			entry.Level = 0;
+			entries.append(entry);
+		}
+
+		for (local img = 0; img <= last_img; img++)
+		{
+			if (i != index.TempDoc.ImgGetPage(img)) continue;
+
+			local level = index.TempDoc.ImgGetX(img) / 100 - 1;
+			level += level_shift;
+
+			if (level < 0) continue;
+			if (depth > 0 && level >= depth) continue;
+
+			local entry = CDTEntry();
+			local entry_obj = index.TempDoc.ImgGetObj(img);
+			entry.DestImg = index.TempDoc.PropGetAsSLong(entry_obj, psImgID);
+			entry.DestPos = index.TempDoc.PropGetAsSLong(entry_obj, psCharPos);
+			entry.DestPage = Lookup_CharIndexToPage(entry.DestImg, -1, entry.DestPos);
+			entry.Title = ti.Text(ti.Attr().ExistingImg(img));
+			entry.Ref = index.TempDoc.ImgGetY(img) / 100 - 1;
+			entry.Level = level;
+
+			entries.append(entry);
+		}
+	}
+
+	return entries;
+}
+
+
+//function CDTDocument::AddToIndex_Filter(s) { s = ::StrReplace(s, "\\r", " "); return s; }
+
+function CDTDocument::AddToIndex(index, level, title, cpos = 0)
+{
+	if (index == null || DisableIndexAdd || level < 0) return;
+	else if (level <= 0) { index.Titles.append(title); return; }
+
+	//local is_utf8 = true; if (typeof title == "CDTBuilder") is_utf8 = title.IsUTF8();
+	//local title_copy = "";
+	//if (is_utf8) title_copy = title; else { title_copy = CDTBuilderText(TempDoc).Text(); title_copy.AddObj(title, 1); }
+	//if (is_utf8) title_copy = AddToIndex_Filter(title); else { title_copy = CDTBuilderText(TempDoc).Text() + title; }
+
+	local t = CDTBuilderText(index.TempDoc);
+	local p = ArticleCounter; //index.Entries.len();
+	local x = (level + 1) * 100;
+	local y = (index.RefCounter + 1) * 100;
+
+	//if (is_utf8) t.Text(t.Attr().Page(p).X(x).Y(y).W(0).H(0).StrUTF8(title)); else t.Text(t.Attr().Page(p).X(x).Y(y).W(0).H(0)) + title;
+	//t.Text(t.Attr().Page(p).X(x).Y(y).W(0).H(0)).AddRun(title, 2 /* use standard excludes (for TOC) */);
+
+	t.Text(t.Attr().Page(p).X(x).Y(y).W(0).H(0)) + title;
+
+	local img = index.TempDoc.ImgGetLast();
+	local obj = index.TempDoc.ImgGetObj(img);
+	index.TempDoc.PropApplyAsSLong(obj, psImgID, index.ImgCounter);
+	index.TempDoc.PropApplyAsSLong(obj, psCharPos, cpos);
+
+	index.ModCounter++;
+	index.RefCounter++;
+
+	//title_copy = t.Text() + title;
+	//local entry = [level, title_copy, index.ImgCounter, index.RefCounter, cpos];
+	//index.Entries.append(entry);
+}
+
+
+function CDTDocument::AddToTextAndIndex(index, level, title_text, title_index, cpos = 0)
+{
+	if (title_text == null) title_text = "";
+	if (index == null) return title_text;
+	if (title_index != null && level > 0) AddToIndex(index, level, title_index, cpos);
+	return title_text;
+}
+
+
+class CDTMarkerIndex extends CDTMarkerObj
+{
+	Book = null;
+	Index = 0;
+	Level = 0;
+	TitleText = "";
+	TitleIndex = "";
+
+	constructor(book, index, level, title_text, title_index)
+	{
+		//DebugInfo("CDTMarkerIndex constructor\n");
+		Book = book;
+		Index = index;
+		Level = level;
+		TitleText = title_text;
+		TitleIndex = title_index;
+	}
+
+	function GetObj()
+	{
+		//DebugInfo("CDTMarkerExtra::GetObj pos=" + Pos + "\n");
+		return Book.AddToTextAndIndex(Index, Level, TitleText, TitleIndex, Pos);
+	}
+}
+
+
+function CDTDocument::HeadIndex(level, s) { return CDTMarkerIndex(this, Index_Contents, level, s, s); }
+function CDTDocument::EndnoteIndex(s) { local ref_counter = (Index_Endnotes ? Index_Endnotes.RefCounter : 0); return CDTMarkerIndex(this, Index_Endnotes, 1, "[" + ref_counter + "]", s); }
+function CDTDocument::AbbrIndex(s, style_id = 0)
+{
+	if (Index_Acronyms == null) return s;
+	if (!(s in Index_Acronyms.Dictionary)) return s;
+	local def = Index_Acronyms.Dictionary[s];
+	local text = s; if (style_id > 2) text = def + " (" + s + ")"; else if (style_id > 1) text = s + " (" + def + ")"; else if (style_id > 0) text = def;
+	return CDTMarkerIndex(this, Index_Acronyms, 1, text, s + " = " + def);
+}
+
+
+function CDTDocument::NewContent(content_type, content_label)
+{
+	ContentCounter++;
+	if (content_type == 0) ArticleCounter++;
+
+	AddToIndex(Index_Contents, 0, content_label);
+	AddToIndex(Index_Endnotes, 0, content_label);
+	AddToIndex(Index_Acronyms, 0, content_label);
+
+	local img = ImgGetLast() + 1;
+
+	DebugInfo("===========img=" + img + "\n");
+
+	if (Index_Contents) { Index_Contents.RefCounter = 1; Index_Contents.ImgCounter = img; } //Index_Contents.RefCounter = -1;
+	if (Index_Endnotes) { Index_Endnotes.RefCounter = 1; Index_Endnotes.ImgCounter = img; } //Index_Endnotes.RefCounter = -1;
+	if (Index_Acronyms) { Index_Acronyms.RefCounter = 1; Index_Acronyms.ImgCounter = img; } //Index_Acronyms.RefCounter = -1;
+
+	//ContentCounter++;
+	//TempDoc.Erase();
+}
+
+
+function CDTDocument::ContentFunc_ArticleDefault(textflow)
+{
+	local t = CDTBuilderText(this); //, T = @() t.Attr();
+
+	t.Text(textflow);
+	return t;
+}
+
+
+function CDTDocument::ContentFunc_IndexDefault(textflow, title, entries)
+{
+	local c = CDTBuilderCtrl(this), C = @() c.Attr();
+	local t = CDTBuilderText(this); //, T = @() t.Attr();
+
+	t.Text(textflow);
+
+	t + c.Base() + title;
+
+	foreach (entry in entries)
+	{
+		t + c.Br(C().Spacing(256)) + c.Base(C().MarginL(80 + 140 * entry.Level).Bullet(DE_BULLET_CIRCSOLID)).AddRun(entry.Title, 2 /* use standard excludes (for TOC) */);
+		t + " ... " + entry.DestPage; // + " (" + entry.DestImg + ", " + entry.DestPos + ")";
+	}
+
+	t + c.Br();
+	return t;
+}
+
+
+function CDTDocument::ContentFunc_SequenceDefault(title, index, separator)
+{
+	return title + " (" + index + ")" + separator;
+}
+
+
+function CDTDocument::MakeArticle(content_func, content_label, textflow)
+{
+	if (content_func == null) content_func = ContentFunc_ArticleDefault;
+	DisableIndexAdd = false;
+	local t = MakeContent(0, content_func, content_label, textflow);
+	DisableIndexAdd = false;
+	return t;
+}
+
+function CDTDocument::MakeSequence(content_func, content_label, textflow, length = 1, formats = null, start = 0, step = 1)
+{
+	if (content_func == null) content_func = ContentFunc_SequenceDefault;
+	DisableIndexAdd = true;
+
+	local sep = "\x0C";
+	local t = CDTBuilderText(this); t.Text(textflow);
+
+	for (local i = 1, j = start; i <= length; i++, j += step)
+	{
+		local seq = content_func(content_label, j, i < length ? sep : "");
+		if (seq == null) t += sep; else t += seq;
+	}
+
+	t.FormatSet(formats);
+	t.Reflow();
+
+	DisableIndexAdd = false;
+	return t;
+}
+
+function CDTDocument::MakeTOC(content_func, content_label, textflow, depth = 0, level_shift = -1)
+{
+	if (content_func == null) content_func = ContentFunc_IndexDefault;
+	DisableIndexAdd = true;
+	//local t = content_func(textflow, content_label, MakeIndex(Index_Contents, depth, level_shift, 2)); t.Reflow(); /* no caching */
+	local t = MakeContent(1, content_func, content_label, textflow, MakeIndex(Index_Contents, depth, level_shift, 2));
+	DisableIndexAdd = false;
+	return t;
+}
+
+function CDTDocument::MakeEndnotes(content_func, content_label, textflow, depth = 0)
+{
+	if (content_func == null) content_func = ContentFunc_IndexDefault;
+	DisableIndexAdd = true;
+	//local t = content_func(textflow, content_label, MakeIndex(Index_Endnotes, depth, 0, 1)); t.Reflow(); /* no caching */
+	local t = MakeContent(2, content_func, content_label, textflow, MakeIndex(Index_Endnotes, depth, 0, 1));
+	DisableIndexAdd = false;
+	return t;
+}
+
+function CDTDocument::MakeAcronyms(content_func, content_label, textflow, depth = 0)
+{
+	if (content_func == null) content_func = ContentFunc_IndexDefault;
+	DisableIndexAdd = true;
+	//local t = content_func(textflow, content_label, MakeIndex(Index_Acronyms, depth, 0, 1)); t.Reflow(); /* no caching */
+	local t = MakeContent(3, content_func, content_label, textflow, MakeIndex(Index_Acronyms, depth, 0, 1));
+	DisableIndexAdd = false;
+	return t;
+}
+
+
+function Integral_LoadDoc(doc_root, doc_fname)
+{
+	local doc_path = doc_root + doc_fname;
+	Cmd_Include(doc_path);
+	return [doc_root, Cmd_GetFileInfo(doc_path)];
+}
+
+function Integral_MakeDoc(a, doc, auxcmd = "")
+{
+	local doc_root = a[0];
+	local doc_last_mod = a[1];
+
+	DebugInfo("Integral_MakeDoc Start\n");
+
+	//local doc = CMyDocument();
+	doc.DocRoot = doc_root;
+	local doc_cache = doc.GetCacheDir() + "p_" + Cmd_GetProcessId() + "-d_" + doc.UniqueCode + ".tmp";
+
+	local doc_cache_last_mod = Cmd_GetFileInfo(doc_cache);
+
+	DebugInfo("Doc Last Modified: " + doc_last_mod + "\n");
+	DebugInfo("Doc Cache Last Modified: " + doc_cache_last_mod + "\n");
+
+	if (doc_last_mod >= doc_cache_last_mod || auxcmd == "full")
+	{
+		//local cache_file = file(doc_cache, "wb+"); cache_file.close;
+		doc.Save(doc_cache);
+		doc.CacheRead = false;
+
+		DebugInfo("Must not read from cache because Doc changed.\n");
+	}
+
+	doc.Make();
+
+	//DebugInfo("Doc obj = " + doc.Obj + "\n");
+	//DebugInfo("Doc Cleanup Start\n");
+
+	doc.Cleanup();
+
+	//DebugInfo("Doc Cleanup End\n");
+
+	DebugInfo("Integral_MakeDoc End\n");
+
+	return doc;
+}
+
+function Integral_MakeMyDoc(doc_root, doc_fname, fontmap = null, auxcmd = "")
+{
+	if (fontmap == null) return Integral_MakeDoc(Integral_LoadDoc(doc_root, doc_fname), CMyDocument(), auxcmd);
+	return Integral_MakeDoc(Integral_LoadDoc(doc_root, doc_fname), CMyDocument(fontmap), auxcmd);
+}
+
+
+my.integral <-
+{
+	LoadDoc = @(doc_root, doc_fname) ::Integral_LoadDoc(doc_root, doc_fname),
+	MakeDoc = @(a, doc, auxcmd = "") ::Integral_MakeDoc(a, doc, auxcmd),
+	MakeMyDoc = @(doc_root, doc_fname, fontmap = null, auxcmd = "") ::Integral_MakeMyDoc(doc_root, doc_fname, fontmap, auxcmd)
+}
+
+/*
+B <- @() CDTAttribsBase();
+C <- @() CDTAttribsCtrl();
+R <- @() CDTAttribsRast();
+T <- @() CDTAttribsText();
+M <- @() CDTAttribsMath();
+*/

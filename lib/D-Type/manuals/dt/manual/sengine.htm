@@ -1,0 +1,91 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+
+<h1>D-Type Shape Engine Overview</h1>
+
+<p>D-Type Shape Engine is just one level above D-Type Rasterizer. Its function is to render custom vectorial shapes that are described using straight or curved segments to the output surface of the application's choice. In this process, colors and, optionally, advanced style effects are applied.</p>
+
+<p>D-Type Shape Engine consists of the following main components:</p>
+
+<ul>
+<li>Rasterizer</li>
+<li>Output</li>
+<li>Pattern Catalog</li>
+</ul>
+
+
+<h2>Life Cycle</h2>
+
+<p>A typical life cycle of an application that relies on D-Type Shape Engine is briefly summarized in the following table:</p>
+
+
+<table class="table_data">
+
+<tr>
+<th>Step</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td>1. Initialize D-Type Engine</td>
+<td><a href="../funcs/dtEngineIniViaStream.htm">dtEngineIniViaStream</a>
+</td>
+</tr>
+
+<tr>
+<td>2. Set destination surface (D-Type's Memory Surface or Windows Device Context) and its clipping region to the Output</td>
+<td><a href="../funcs/dtOutputSetAsMDC.htm">dtOutputSetAsMDC</a>, <a href="../funcs/dtOutputSetAsHDC.htm">dtOutputSetAsHDC</a></td>
+</tr>
+
+<tr>
+<td>3. Select a style to the Output.</td>
+<td><a href="../funcs/dtOutputSetStyleAttribs.htm">dtOutputSetStyleAttribs</a> or <a href="../funcs/dtOutputSetStyleEffects.htm">dtOutputSetStyleEffects</a></td>
+</tr>
+
+<tr>
+<td>4. Define and draw shapes</td>
+<td><a href="../funcs/dtShapesDoOutput.htm">dtShapesDoOutput</a></td>
+</tr>
+
+<tr>
+<td>5. Deinitialize D-Type Engine</td>
+<td><a href="../funcs/dtEngineExt.htm">dtEngineExt</a></td>
+</tr>
+
+</table>
+
+<p>Please note that the above table only identifies the most important steps and functions. Your application might need additional steps and/or functions.</p>
+
+
+<h2>How It Works</h2>
+
+<ul>
+
+<li><p>As mentioned earlier, D-Type Shape Engine relies on D-Type Rasterizer which utilizes a set of extremely fast routines for generating <em>8-bpp grayscale bitmaps</em> (256 levels of gray). When instructed, D-Type Shape Engine will draw a shape to a dynamically allocated 8-bpp memory buffer (off-surface) and then blend the resulting bitmap into the provided D-Type Memory Surface (MDC) or copy it to the Windows Device Context (HDC). In this process color, transparency and special effects (e.g. pattern fills, shadows, blur effects) are applied.</p></li>
+
+<li><p>If the width or height of the shape is very large, D-Type Shape Engine may need to re-use the same buffer a few times in order to render the entire shape. However, if the width and height of the shape does not exceed the <em>maximum width and height to render in a single pass</em> (set in <a href="inifiles.htm#inf">dtype.inf</a> or via <a href="../funcs/dtRasterizerRealloc.htm">dtRasterizerRealloc</a>), D-Type Shape Engine will be able to render the shape in a single pass and provide a pointer to this buffer via the <a href="structs.htm#DT_BMP">DT_BMP</a> structure. This is useful for applications that store or post-manipulate the bitmap's 8-bit grayscale data. Applications that do not require access to the bitmap's bytes can either free the bitmap themselves using the <a href="../funcs/dtBitmapFree.htm">dtBitmapFree</a> function or instruct D-Type Shape Engine not to return the bitmap in the first place. See the <a href="../funcs/dtShapeDoOutput.htm">dtShapeDoOutput</a> function for more details.</p></li>
+
+<li><p>When drawing to D-Type's Memory Surfaces (MDC), such as 8-bpp grayscale, 24-bpp and 32-bpp RGB memory surfaces, D-Type Shape Engine can render directly to the surface's memory (on-surface), without the need to use a dynamically allocated 8-bpp memory buffer. For this reason, drawing to D-Type's Memory Surfaces is extremely fast and by far superior compared to drawing to Windows Device Context (HDC). In fact, modern applications should draw to D-Type's Memory Surfaces exclusively. Support for Windows Device Context is available primarily for backward-compatibility reasons.</p></li>
+
+</ul>
+
+<p><em>Note:</em> The <em>maximum width and height to render in a single pass</em> can be set in the <a href="inifiles.htm#inf">dtype.inf</a> initialization file or by calling the <a href="../funcs/dtRasterizerRealloc.htm">dtRasterizerRealloc</a> function.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

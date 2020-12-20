@@ -1,0 +1,55 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>pdEngineGetDTypeEngInst</h2><div class="box_prototype"><strong>
+void pdEngineGetDTypeEngInst(DT_PDENGINE engine, DT_DTENGINE* dtype_engine)</strong></div><br /><strong>Short Description:</strong> <em>Get associated D-Type Standard Engine Instance</em><br /><br />
+
+<p>As mentioned earlier, each Power Engine has its own internal instance of D-Type Standard Engine. The pdEngineGetDTypeEngInst function allows applications to get a handle of this instance.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the previously created Power Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>dtype_engine</em></p>
+</td><td>
+<p>Pointer to the handle of the D-Type Standard Engine instance.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+<p>This function is useful for applications that need to access D-Type Standard Engine (D-Type Font Engine and D-Type Shape Engine) functions directly. For example, applications that render their own custom PowerDoc objects can call pdEngineGetDTypeEngInst to obtain the Standard Engine instance before rendering text or shapes using D-Type Standard Engine.</p>
+
+
+<h3>Related Functions</h3>
+<p>All D-Type Standard Engine functions. Please see D-Type Standard Engine Manual for more information.</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

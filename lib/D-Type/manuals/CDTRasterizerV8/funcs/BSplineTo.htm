@@ -1,0 +1,112 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTRasterizerV8</h1>
+
+<h2>BSplineTo, BSplineToFrac</h2>
+
+<div class="box_prototype"><strong>void BSplineTo(DT_FLOAT x1, DT_FLOAT y1, DT_FLOAT x2, DT_FLOAT y2, DT_SLONG seg = 0)</strong></div><br />
+<div class="box_prototype"><strong>void BSplineToFrac(DT_SFRAC x1, DT_SFRAC y1, DT_SFRAC x2, DT_SFRAC y2, DT_SLONG seg = 0)</strong></div><br />
+
+<h2>BSplineTo2, BSplineToFrac2</h2>
+
+<div class="box_prototype"><strong>void BSplineTo2(DT_FLOAT x1, DT_FLOAT y1, DT_FLOAT x2, DT_FLOAT y2, DT_SLONG seg = 0, const DT_UBYTE color1[] = DV_RGBT, const DT_UBYTE color2[] = DV_RGBT)</strong></div><br />
+<div class="box_prototype"><strong>void BSplineToFrac2(DT_SFRAC x1, DT_SFRAC y1, DT_SFRAC x2, DT_SFRAC y2, DT_SLONG seg = 0, const DT_UBYTE color1[] = DV_RGBT, const DT_UBYTE color2[] = DV_RGBT)</strong></div><br />
+
+<p>The BSplineTo, BSplineToFrac, BSplineTo2 and BSplineToFrac2 methods instruct CDTRasterizerV8 to add a new B-Spline curve segment to the current contour.</p>
+
+<p>BSplineToFrac is identical to BSplineTo except that its coordinates are 24.8 signed fractional values. For more details on fractional units, see the <a href="../../dc/manual/units.htm">D-Type Units</a> section of this document.</p>
+
+<p>BSplineTo2 is identical to BSplineTo except that it supports colour at the curve's control and end points (with certain D-Type Rasterizers only). BSplineToFrac2 is identical to BSplineToFrac except that it supports colour at the curve's control and end points (with certain D-Type Rasterizers only).</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>x1</em></p>
+</td><td>
+<p>X coordinate of the control point of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y1</em></p>
+</td><td>
+<p>Y coordinate of the control point of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>x2</em></p>
+</td><td>
+<p>End X coordinate of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>y2</em></p>
+</td><td>
+<p>End Y coordinate of the new B-Spline curve segment, in pixels.</p>
+</td></tr>
+
+<tr><td>
+<p><em>seg</em></p>
+</td><td>
+<p>Minimum number of curve subdivisions. Higher values will result in smoother looking curves but will take more time to compute. Set to 0 to automatically calculate the optimum value.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color1</em></p>
+</td><td>
+<p>Color/transparency of the curve's control point. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only. See <em>color</em> in <a href="LineTo.htm">LineTo2</a> or <a href="LineTo.htm">LineToFrac2</a> for details.</p>
+</td></tr>
+
+<tr><td>
+<p><em>color2</em></p>
+</td><td>
+<p>Color/transparency of the curve's end point. Supported by <a href="http://www.d-type.com/page/rasterizer_shading">D-Type Shading Rasterizer</a> only. See <em>color</em> in  <a href="LineTo.htm">LineTo2</a> or <a href="LineTo.htm">LineToFrac2</a> for details.</p>
+</td></tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../dt/manual/rengine.htm">D-Type Grayscale Rasterizer</a></li>
+<li><a href="../../dc/manual/intro.htm">D-Type Direct Color Rasterizer</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../dc/manual/structs.htm">Structure Types</a></li>
+<li><a href="../../dc/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_color_rasterizer">example_color_rasterizer</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

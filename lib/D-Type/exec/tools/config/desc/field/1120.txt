@@ -1,0 +1,5 @@
+User-specific content (variable length)
+
+This property allows end-user applications to store their own (i.e. user-specific) content with each text fragment. This property is suitable for user-specific content of variable length (e.g. strings, custom structures etc). D-Type Engine does not use or interpret this content in any way; the interpretation of the user-specific content is entirely up to the end-user application.
+
+Note: Additional technical information about this property is available to customers with a support contract.

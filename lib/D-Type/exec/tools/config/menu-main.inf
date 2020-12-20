@@ -1,0 +1,633 @@
+!GLOBAL_INVERT_MODE=1
+!GLOBAL_INVERT_C1=255
+!GLOBAL_INVERT_C2=192
+!GLOBAL_INVERT_C3=128
+!GLOBAL_INVERT_C4=0
+!GLOBAL_FADE_VALUE=202
+!GLOBAL_FADE_STEPS=0
+!GLOBAL_UI_SCALE=100
+!GLOBAL_TEXT_FONT_ID=-1
+!GLOBAL_TEXT_RGBT_ENABLED=00000000
+!GLOBAL_TEXT_RGBT_DISABLED=88888800
+
+!MENU_ORIENTATION=1
+!MENU_BODY_RGBT=FFFFF015
+!MENU_SHADOW_RGBT=FFFFFFFF
+!MENU_OUTLINE_RGBT=AA000000
+
+# --- Menu 0: Top Menu ---
+{
+1|000|File
+8|233|Mode
+2|001|Edit
+4|003|View
+5|004|Page
+3|002|Image
+9|001|Text
+6|005|Tools
+7|006|Help
+}
+
+!MENU_ORIENTATION=0
+!MENU_BODY_RGBT=FFFFFF15
+!MENU_SHADOW_RGBT=000000D0
+!MENU_OUTLINE_RGBT=00000000
+
+# --- Menu 1: File ---
+{
+0|007|New|n
+0|008|Open...|o
+0|273|Open As Read-Only...|O
+0|377|Open Without Auto-Program...
+28|028|Make
+0|009|Close
+0|010|
+0|011|Place PowerDoc...
+0|012|Place Template...
+#0|334|Place VersaWrite Object
+#0|333|Place VersaWrite Components
+0|013|
+0|014|Save As PowerDoc...|s
+0|015|Save As Compact PowerDoc...
+0|328|Save As Text...
+10|016|Save As C/C++ Source
+11|017|Save As C#
+30|339|Save As Java
+12|018|Save As VB
+13|019|Save As VB Script
+14|020|Save As JScript/Java Script
+31|342|Save As JSP Page
+15|021|Save As ASP Page
+16|022|Save As ASP.NET Page
+40|436|Save As INTEGRAL DSL
+41|439|Save As Modern C++
+0|023|
+17|024|Import
+18|025|Export
+0|026|
+0|029|Page Settings...
+0|027|Print...|p
+0|030|
+0|031|Exit
+}
+
+# --- Menu 2: Edit ---
+{
+0|032|Undo|z
+0|033|Redo|y
+0|034|
+0|035|Select All|a
+0|036|
+0|037|Cut|x
+0|038|Copy|c
+0|039|Paste|v
+0|040|Delete|~del
+0|041|Multiply...
+0|042|
+0|043|Cut Image(s)|X
+0|044|Copy Image(s)|C
+0|045|Paste Image(s)|V
+0|046|Delete Image(s)|~DEL
+0|047|Multiply Image(s)...
+0|048|
+0|052|Undo/Redo Settings...
+0|225|Refresh All Panels
+}
+
+# --- Menu 3: Image ---
+{
+0|053|Hide|i
+0|054|Unhide|u
+0|055|
+0|056|To Top|t
+0|057|To Bottom|b
+0|058|
+0|059|Align Left
+0|060|Align Right
+0|061|Align Top
+0|062|Align Bottom
+0|063|
+0|064|Move Left|~left
+0|065|Move Right|~right
+0|066|Move Up|~up
+0|067|Move Down|~down
+0|068|
+0|069|Transform...
+0|070|Reset Transform
+0|071|
+0|072|Make Group|g
+0|073|Destroy Group|d
+0|074|
+20|075|Move Group Origin
+}
+
+# --- Menu 4: View ---
+{
+0|232|Menubar
+0|076|Toolbar
+0|077|Status Bar
+0|372|Vertical Scroll Bars
+0|373|Horizontal Scroll Bars
+35|398|Active Panel
+32|355|Animation
+0|078|
+0|079|Settings...
+37|424|Text Layout Engine
+21|080|Text Quality
+23|082|Rasterizer
+0|083|
+#0|275|RGB+ Surface
+0|084|RGB Surface
+0|085|Alpha Channel Surface
+33|378|Grayscale Surface
+34|379|Dithered Surface
+0|086|
+0|087|Image Origins
+0|088|Image Boundaries
+0|089|Extent Box
+0|090|Grid
+0|091|
+0|310|Zoom Out|-
+0|311|Zoom In|+
+24|094|Custom Zoom
+0|095|
+0|096|Previous Page|~page_up
+0|097|Next Page|~page_down
+0|098|Go To Page...
+}
+
+# --- Menu 5: Page ---
+{
+0|099|Insert Page(s)...
+0|100|Remove Page(s)...
+0|101|
+0|102|Select Images By Page Range...
+}
+
+# --- Menu 6: Tools ---
+{
+0|104|Style Generator...
+0|105|
+0|405|Font Utility...
+0|106|Text Flow and Column Builder...
+0|107|PowerFont Builder...
+0|108|
+0|109|Document Optimizer...
+0|110|Property and Link Explorer...
+0|226|
+0|231|Application Settings...
+0|331|
+#0|332|VersaWrite Service
+#0|349|Execute Program 1
+#0|350|Execute Program 2
+#0|351|Execute Program 3
+0|354|Execute Program...
+0|353|Load and Execute Program...
+#0|352|Exit to Command Shell...
+0|224|Load and Execute PDScript...
+}
+
+# --- Menu 7: Help ---
+{
+0|111|About D-Type PowerDoc Editor...
+0|403|What's New
+0|404|Legal
+0|240|
+0|239|Windows Monitor...
+#0|400|Debug: Dump Text Flows
+#0|402|Debug: Force Exit
+}
+
+# --- Menu 8: Mode ---
+{
+0|234|Place Mode
+0|235|Select/Move Mode
+0|236|Object Edit Mode
+0|237|Text Edit Mode
+0|238|Form Play Mode
+}
+
+# --- Menu 9: Text ---
+{
+0|103|Format...|f
+0|220|Quick Format...|k
+0|268|User-Specific Format...|F
+38|427|Object Builder For
+0|266|
+0|152|Get Text Format|G
+0|153|Apply Text Format|A
+0|298|Apply Modified Text Format...|M
+0|151|
+27|0|Insert Special Character
+0|241|
+29|293|Insert Text Object
+26|265|Insert Form Control
+25|240|Insert Math Object
+0|259|Insert Math Formula...|m
+0|269|Insert User-Specific Text...|T
+#0|337|Insert VersaWrite Object
+0|345|Insert Table...
+0|288|
+0|290|Delete Matrix/Table Column
+0|289|Delete Matrix/Table Row
+0|292|Insert Matrix/Table Column - Before
+0|422|Insert Matrix/Table Column - After
+0|291|Insert Matrix/Table Row - Before
+0|421|Insert Matrix/Table Row - After
+0|423|Matrix/Table Settings...
+0|347|Column Settings...
+0|346|Row Settings...
+0|348|Cell Settings...
+39|428|Object Builder For
+0|151|
+0|267|Add Format To User Library...
+0|260|Add Text To User Library...
+0|258|
+19|049|Special Text Edit
+0|050|
+0|270|Text Edit Settings...
+0|051|Immediate Text Reflow
+}
+
+!MENU_BODY_RGBT=FAFAFA00
+!MENU_SHADOW_RGBT=00000088
+
+# --- Menu 10: Save As C/C++ Source ---
+{
+0|112|All code in C/C++...
+0|113|C/C++ with External PowerDoc file...
+}
+
+# --- Menu 11: Save As C# ---
+{
+0|114|All code in C#...
+0|115|C# with External PowerDoc file...
+}
+
+# --- Menu 12: Save As VB ---
+{
+0|116|All code in VB...
+0|117|VB with External PowerDoc file...
+}
+
+# --- Menu 13: Save As VB Script ---
+{
+0|118|All code in VB Script...
+0|119|VB Script with External PowerDoc file...
+}
+
+# --- Menu 14: Save As JScript/JavaScript ---
+{
+0|120|All code in JScript/JavaScript...
+0|121|JScript/JavaScript with External PowerDoc file...
+}
+
+# --- Menu 15: Save As ASP Page ---
+{
+0|122|All code in VB Script...
+0|123|VB Script + External PowerDoc file...
+0|124|
+0|125|All code in JScript/JavaScript...
+0|126|JScript/JavaScript + External PowerDoc file...
+}
+
+# --- Menu 16: Save As ASP.NET Page ---
+{
+0|127|All code in VB...
+0|128|VB + External PowerDoc file...
+0|129|
+0|130|All code in JScript...
+0|131|JScript + External PowerDoc file...
+0|132|
+0|133|All code in C#...
+0|134|C# + External PowerDoc file...
+}
+
+# --- Menu 17: Import ---
+{
+0|135|Simple Text Area...
+0|136|Text Flow...
+0|137|
+0|138|256-color or 24-bit Windows BMP Image...
+0|139|PNG Image...
+0|140|JPEG Image...
+0|141|
+0|142|Shape Definition Table...
+0|221|D-Type VIVO Scalable Vector Photo...
+0|448|SVG Native (Experimental)
+}
+
+# --- Menu 18: Export ---
+{
+0|285|Text Selection...
+0|286|
+0|143|Page As Windows BMP Image...
+0|446|Page As GIF Image...
+0|144|Page As PNG Image...
+0|145|Page As JPEG Image...
+0|146|Page As Raw 24-bpp Bitmap...
+22|081|Image Export Quality
+0|092|
+0|430|Page As SVG (Large)...
+0|443|Page As SVG (Small)...
+0|444|Page As SVG (Large and Modern)...
+0|445|Page As SVG (Small and Modern)...
+0|447|
+0|431|Page As PDF (Bitmap)...
+0|432|Page As PDF (Vector)...
+0|433|Page As PDF (Standard)...
+0|442|Page As PDF (Wireframe)...
+}
+
+# --- Menu 19: Special Text Edit ---
+{
+0|320|Select Word
+0|325|Select Words
+0|321|Select Line
+0|322|Select Paragraph
+0|326|Select Paragraphs
+#0|323|Select Area
+0|324|Select All
+0|327|
+0|147|Paste Object Clipboard
+0|148|Paste Image Clipboard
+0|149|
+0|150|Paste OS Clipboard (Plain Text)
+}
+
+# --- Menu 20: Move Group Origin ---
+{
+0|154|Left|~LEFT
+0|155|Right|~RIGHT
+0|156|Up|~UP
+0|157|Down|~DOWN
+}
+
+# --- Menu 21: Text Quality ---
+{
+0|158|Medium
+0|159|High
+0|160|Very High
+0|161|
+0|162|Dispersion Filter 1
+0|163|Dispersion Filter 2
+0|164|
+0|165|Hint Filter 1
+0|166|Hint Filter 2
+0|167|Hint Filter 3
+0|168|Hint Filter 4
+0|169|
+0|170|LCD-RGB-SUB 1
+0|171|LCD-RGB-INT 1
+0|172|LCD-BGR-SUB 1
+0|173|LCD-BGR-INT 1
+0|174|
+0|175|LCD-RGB-SUB 2
+0|176|LCD-RGB-INT 2
+0|177|LCD-BGR-SUB 2
+0|178|LCD-BGR-INT 2
+0|179|
+0|180|LCD-RGB-SUB 3
+0|181|LCD-RGB-INT 3
+0|182|LCD-BGR-SUB 3
+0|183|LCD-BGR-INT 3
+0|184|
+0|185|LCD2-RGB-SUB 1
+0|186|LCD2-RGB-INT 1
+0|187|LCD2-BGR-SUB 1
+0|188|LCD2-BGR-INT 1
+0|189|
+0|190|LCD2-RGB-SUB 2
+0|191|LCD2-RGB-INT 2
+0|192|LCD2-BGR-SUB 2
+0|193|LCD2-BGR-INT 2
+}
+
+# --- Menu 22: Output Quality ---
+{
+0|194|Traditional Grayscale
+0|195|
+0|196|LCD Enhanced A (RGB Sub-Pixel Order)...
+0|197|LCD Enhanced B (RGB Sub-Pixel Order)...
+0|198|LCD Enhanced C (RGB Sub-Pixel Order)...
+0|199|LCD Enhanced D (RGB Sub-Pixel Order)...
+0|200|
+0|201|LCD Enhanced A (BGR Sub-Pixel Order)...
+0|202|LCD Enhanced B (BGR Sub-Pixel Order)...
+0|203|LCD Enhanced C (BGR Sub-Pixel Order)...
+0|204|LCD Enhanced D (BGR Sub-Pixel Order)...
+0|205|
+0|206|LCD2 Enhanced A (RGB Sub-Pixel Order)...
+0|207|LCD2 Enhanced B (RGB Sub-Pixel Order)...
+0|208|LCD2 Enhanced C (RGB Sub-Pixel Order)...
+0|209|LCD2 Enhanced D (RGB Sub-Pixel Order)...
+0|210|
+0|211|LCD2 Enhanced A (BGR Sub-Pixel Order)...
+0|212|LCD2 Enhanced B (BGR Sub-Pixel Order)...
+0|213|LCD2 Enhanced C (BGR Sub-Pixel Order)...
+0|214|LCD2 Enhanced D (BGR Sub-Pixel Order)...
+}
+
+# --- Menu 23: Rasterizer ---
+{
+0|215|Ultra-Fast Grayscale Rasterizer|r
+0|216|Perfect Grayscale Rasterizer|R
+0|217|Universal Rasterizer - Grayscale
+0|218|Universal Rasterizer - Black and White
+0|219|Extreme Grayscale Rasterizer
+}
+
+# --- Menu 24: Custom Zoom ---
+{
+0|301|50%|1
+0|302|75%|2
+0|303|100%|3
+0|304|150%|4
+0|305|200%|5
+0|306|250%|6
+0|307|300%|7
+0|308|400%|8
+0|309|500%|9
+0|300|Set Zoom Factor...|0
+}
+
+# --- Menu 25: Insert Math Object ---
+{
+0|251|Vector...
+0|242|Fraction...
+0|243|Root...
+0|244|Sum / Product (Standard)...
+0|245|Sum / Product (Expanding)...
+0|246|Integral (Standard)...
+0|247|Integral (Expanding)...
+0|248|Brackets...
+0|287|Matrices...
+0|434|Superscript / Subscript...
+0|435|Vertical Bars...
+0|262|
+0|249|Other...
+}
+
+# --- Menu 26: Insert Form Control ---
+{
+0|250|Button / Rich Button...
+0|252|Radio Button...
+0|253|Check Box...
+0|254|Text Box / Rich Text Box...
+0|255|List Box...
+0|256|Horizontal Slider...
+0|257|Vertical Slider...
+0|263|
+0|258|Arrow Sets...
+#0|265|Other...
+}
+
+# --- Menu 27: Insert Special Character ---
+{
+0|227|Column Break
+0|276|
+0|277|Tab (U+0009)
+0|278|New Line (U+000D)
+0|279|No-Break Space (U+00A0)
+0|280|Zero Width Space (U+200B)
+0|281|Soft Hyphen (U+00AD)
+0|282|No-Break Hyphen (U+2011)
+0|283|
+0|284|Unicode Character(s)...
+}
+
+# --- Menu 28: New ---
+{
+#0|336|Document from VersaWrite Object
+#0|335|Document from VersaWrite Components
+#0|338|
+0|299|Empty Text Document...
+}
+
+# --- Menu 29: Insert Text Object ---
+{
+0|294|Bullet Point (Non-Editable)...
+0|295|Bullet Point (Editable)...
+0|296|
+0|297|Other...
+}
+
+# --- Menu 30: Save As Java ---
+{
+0|340|All code in Java...
+0|341|Java with External PowerDoc file...
+}
+
+# --- Menu 31: Save As JSP ---
+{
+0|343|All code in Java...
+0|344|Java + External PowerDoc file...
+}
+
+# --- Menu 32: Animation ---
+{
+0|356|Play
+0|357|Reset
+#0|264|Continue
+#0|228|Pause
+#0|274|End
+0|358|
+0|359|1 fps
+0|360|2 fps
+0|361|4 fps
+0|362|8 fps
+0|363|12 fps
+0|364|24 fps
+0|365|30 fps
+0|366|35 fps
+0|367|40 fps
+0|368|45 fps
+0|369|50 fps
+0|370|55 fps
+0|371|60 fps
+0|376|Other...
+0|222|
+0|223|Reduce Tearing
+}
+
+# --- Menu 33: Grayscale Surface ---
+{
+0|229|Color Averaging
+0|230|Normalized
+0|380|R Channel
+0|381|G Channel
+0|382|B Channel
+0|396|
+0|383|Inverted Color Averaging
+0|384|Inverted Normalized
+0|385|Inverted R Channel
+0|386|Inverted G Channel
+0|387|Inverted B Channel
+0|405|
+0|406|Y Channel
+0|407|U Channel
+0|408|V Channel
+}
+
+# --- Menu 34: Dithered Surface ---
+{
+0|329|Color Averaging
+0|330|Normalized
+0|388|R Channel
+0|389|G Channel
+0|390|B Channel
+0|397|
+0|391|Inverted Color Averaging
+0|392|Inverted Normalized
+0|393|Inverted R Channel
+0|394|Inverted G Channel
+0|395|Inverted B Channel
+0|410|
+36|411|Dithering Levels
+}
+
+# --- Menu 35: Active Panel ---
+{
+0|374|Show Focus Box
+0|375|Show Cursor and Text Selections
+}
+
+# --- Menu 36: Dithering Levels ---
+{
+0|412|2 Levels (B/W)
+0|413|3 Levels
+0|414|4 Levels
+0|415|5 Levels
+0|416|6 Levels
+0|417|7 Levels
+0|418|8 Levels
+}
+
+# --- Menu 37: Text Layout Engine ---
+{
+0|425|Primary
+0|426|Secondary
+}
+
+# --- Menu 38: Object Builder - Text Fragment ---
+{
+0|420|Text image that contains the cursor...
+0|429|Text fragment that contains the cursor...
+}
+
+# --- Menu 39: Object Builder - Table Cell ---
+{
+0|419|Cell that contains the cursor...
+}
+
+# --- Menu 40: Save As INTEGRAL DSL ---
+{
+0|437|All code in INTEGRAL...
+0|438|INTEGRAL with External PowerDoc file...
+}
+
+# --- Menu 41: Save As Modern C++ ---
+{
+0|440|All code in C++...
+0|441|C++ with External PowerDoc file...
+}

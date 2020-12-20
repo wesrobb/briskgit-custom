@@ -1,0 +1,13 @@
+Font Hinting.
+
+Tells the engine whether to apply hinting to the font. Hinted fonts typically produce better looking and sharper output, however they are somewhat slower to process than non-hinted fonts (especially if they contain many complex glyphs such as in Chinese/Japanese/Korean fonts).
+
+{strong}Supported values:{/strong}
+
+0 = don't apply hinting to the font
+1 = apply native hinting when available, otherwise apply auto-hinting to the font
+2 = apply auto-hinting to the font
+3 = apply native hinting when available, otherwise apply compact auto-hinting
+4 = apply compact auto-hinting exclusively
+
+All the above values are inherited from D-Type Standard Engine. See D-Type Standard Engine Manual for more details.

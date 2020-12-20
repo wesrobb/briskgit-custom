@@ -1,0 +1,3 @@
+This object represents an ordered list of pattern fill definitions.
+
+{strong}Designated Rendering Function:{/strong} NONE

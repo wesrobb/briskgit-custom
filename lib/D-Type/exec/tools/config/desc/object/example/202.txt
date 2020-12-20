@@ -1,0 +1,8 @@
+DT_ID_SLONG obj[1];
+
+{strong}obj[0] = pdObjAdd(pd, 0, "Listbox Column");{/strong}
+
+/* Properties for object 3 */
+{strong}pdPropAdd(pd, obj[0], fcListColOffset, "800", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[0], fcAlign, "2", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcValue_08, "$100.00\r$5,500.00\r$9,850.00\r$800.00\r$200.00\r$8,550.00", PD_ASC);{/strong}

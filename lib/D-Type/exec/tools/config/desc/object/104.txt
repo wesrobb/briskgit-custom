@@ -1,0 +1,3 @@
+This objects represents a rich text line. In Power Engine API, a rich text line is an array of text fragments formatted according to the specified parameters and drawn on an imaginary straight line. Functionally, the Rich Text Line object is similar to the {a href="../objects/101.htm"}Text Line{/a} object but is more complex. This is because a typical rich text line usually consists of many text fragments, while each fragment is formatted using a different set of typographic and layout attributes.
+
+{strong}Designated Rendering Function:{/strong} pdDrawRichTextLine (17)

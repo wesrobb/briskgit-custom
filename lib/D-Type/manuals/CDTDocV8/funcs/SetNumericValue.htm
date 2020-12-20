@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br /><h1>CDTDocV8</h1>
+
+<div class="box_prototype"><strong>SetNumericValue</strong></div><br />
+
+<p>This function sets the value of various numeric parameters defined in a Power Engine document. This can be used to configure certain Power Engine document features and algorithms.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>numeric_id</em></p>
+</td><td>
+<p>Identifies the numeric parameter. Can be one of the following:</p>
+<ul>
+<li><p>0 (PD_NVAL_THICKNESS_INVERT_LINE) &mdash; Line thickness of the cursor, in pixels.</p></li>
+<li><p>1 (PD_NVAL_THICKNESS_IMG_BOUNDARY) &mdash; Line thickness of image boundaries, in pixels.</p></li>
+<li><p>2 (PD_NVAL_THICKNESS_IMG_ORIGIN_VISIBLE) &mdash; Line thickness of visible image origins, in pixels.</p></li>
+<li><p>3 (PD_NVAL_THICKNESS_IMG_ORIGIN_HIDDEN) &mdash; Line thickness of hidden image origins, in pixels.</p></li>
+<li><p>4 (PD_NVAL_COLOR_IMG_ORIGIN_VISIBLE) &mdash; RGBT color value of visible image origins (expressed as a 32-bit integer calculated as <em>numeric_value</em> = (R &lt;&lt; 24) | (G &lt;&lt; 16) | (B &lt;&lt; 8) | T).</p></li>
+<li><p>5 (PD_NVAL_COLOR_IMG_ORIGIN_HIDDEN) &mdash; RGBT color value of hidden image origins (expressed as a 32-bit integer calculated as <em>numeric_value</em> = (R &lt;&lt; 24) | (G &lt;&lt; 16) | (B &lt;&lt; 8) | T).</p></li>
+<li><p>6 (PD_NVAL_COLOR_IMG_BOUNDARY) &mdash; RGBT color value of image boundaries (expressed as a 32-bit integer calculated as <em>numeric_value</em> = (R &lt;&lt; 24) | (G &lt;&lt; 16) | (B &lt;&lt; 8) | T).</p></li>
+<li><p>7 (PD_NVAL_COLOR_IMG_ORIGIN_FILL) &mdash; RGBT color value of image origin interiors (expressed as a 32-bit integer calculated as <em>numeric_value</em> = (R &lt;&lt; 24) | (G &lt;&lt; 16) | (B &lt;&lt; 8) | T).</p></li>
+<li><p>8 (PD_NVAL_TEXT_BLANKS_SIZE) &mdash; Internal use only.</p></li>
+<li><p>9 (PD_NVAL_TEXT_PRINT_MODE) &mdash; Internal use only.</p></li>
+<li><p>10 (PD_NVAL_FONT_DISPLAY_LAYERS_GLYPHS) &mdash; Font display mode for color glyph layers (0=don't show color layers, 1=show color layers).</p></li>
+<li><p>11 (PD_NVAL_FONT_DISPLAY_BIMAGE_GLYPHS) &mdash; Font display mode for bitmap glyph images (0=don't show bitmaps, 1=show bitmaps: low quality, 2=show bitmaps: high quality, 3=show bitmaps: very high quality, 4=show bitmaps: very high quality, more blur).</p></li>
+<li><p>12 (PD_NVAL_FONT_DISPLAY_SVGDOC_GLYPHS) &mdash; Font display mode for SVG glyphs (0=don't show SVG glyphs, 1=show SVG glyphs).</p></li>
+
+<li><p>13 (PD_NVAL_SELECT_EXTENSION) &mdash; Specifies how <a href="../../common/workshop/pd_frames.htm">frames</a> should be modified (usually extended but sometimes contracted) at the beginning and end of each text line, assuming the text is part of a <a href="../../pd/objects/103.htm">Text Area</a> or <a href="../../pd/objects/106.htm">Rich Text Area</a> object. This has a direct impact on text selection and hit testing behavior at the edges of each text line. The following values are supported:</p>
+<ul>
+<li><p>0 = Algorithm 0: Standard</p></li>
+<li><p>1 = Algorithm 1: Extend</p></li>
+<li><p>2 = Algorithm 2: Extend &amp; Clip</p></li>
+<li><p>3 = Algorithm 3: Fully Extend</p></li>
+<li><p>4 = Algorithm 4: Fully Extend &amp; Clip</p></li>
+</ul>
+<p>Currently, the default value is 0. See the Comments section below for more details and illustrations.</p>
+</li>
+
+<li><p>14 (PD_NVAL_SIZE_ORIGIN) &mdash; Size of the box representing origin points of non-selected PowerDoc images (small white square), in pixels. Must be positive. The default value is 4 pixels. If you wish to increase or decrease this value, change this value accordingly.</p></li>
+
+<li><p>15 (PD_NVAL_SIZE_SELECT) &mdash; Size of the box representing origin points of selected PowerDoc images (small black square), in pixels. Must be positive. The default value is 6 pixels. If you wish to increase or decrease this value, change this value accordingly.</p></li>
+
+<li><p>16 (PD_NVAL_SIZE_CLIP_EXTEND_X) &mdash; Clip extension size in horizontal direction, in pixels. The default value is 10 pixels.</p></li>
+
+<li><p>17 (PD_NVAL_SIZE_CLIP_EXTEND_Y) &mdash; Clip extension size in vertical direction, in pixels. The default value is 10 pixels.</p></li>
+
+<li><p>18 (PD_NVAL_CACHE_FLAG_FOR_MASKING) &mdash; specifies which alpha-masking algorithm to use for the specified Power Engine document. The following values are supported:</p>
+
+<ul>
+
+<li><p>0 = Algorithm 0: Use Power Engine's caching subsystem to buffer the entire visible area of the referenced masking pages. This algorithm is suitable when many objects on the rendered page are masked with various parts of the same masking page. However, this typically requires more space in the caching subsystem than with any other algorithm (especially if nested alpha-masking is used and the size of the visible page area is large). This was the default algorithm prior to D-Type Engine version 4.0.4.7.</p></li>
+
+<li><p>1 = Algorithm 1: An obsolete and low-performance algorithm. Should not be used.</p></li>
+
+<li><p>2 = Algorithm 2: Do not use Power Engine's caching subsystem to buffer entire masking pages. Instead, use a local buffer to store only the area of the page that is to be masked, and dispose it immediately after use. This new algorithm requires less memory and is particularly suitable when objects on the rendered page are masked mostly with different masking pages.</p></li>
+
+</ul>
+
+<p>Currently, value 2 is the default algorithm. However, this default may be changed in the future versions. If you wish to set the alpha-masking algorithm explicitly, change this value accordingly.</p>
+</li>
+
+<li><p>19 (PD_NVAL_CACHE_FLAG_FOR_GLYPHS) &mdash; Specifies which caching algorithm to use for the glyphs during text layout operations. The following values are supported:</p>
+
+<ul>
+
+<li><p>0 = Algorithm 0: Store in Power Engine's caching subsystem positional glyph data obtained from character codes during text layout operations and later reuse this data when rendering the same text.</p></li>
+
+<li><p>1 = Algorithm 1: Do not store in Power Engine's caching subsystem positional glyph data.</p></li>
+
+</ul>
+
+<p>Currently, value 0 is the default algorithm. However, this default may be changed in the future versions. If you wish to set the glyph caching algorithm explicitly, change this value accordingly.</p>
+</li>
+
+<li><p>20 (PD_NVAL_CONTROL_GLYPHS) &mdash; A set of bit values to enable or disable the display of missing (undefined) glyphs and control the behavior of the underline/strike-through effects when applied to the missing (undefined) glyphs and tabs.</p>
+
+<ul>
+<li><p>Bit 0: If unset (0), glyphs whose index is 0 (i.e. missing or undefined glyphs) will not be rendered. If set (1), glyphs whose index is 0 will be rendered (typically as a missing glyph box, provided that this glyph is defined in the font).</p></li>
+<li><p>Bit 1: If unset (0), glyphs whose index is 0 (i.e. missing or undefined glyphs) will not be affected by the underline and strike-through effects. If set (1), glyphs whose index is 0 will be affected by the underline and strike-through effects.</p></li>
+<li><p>Bit 2: If unset (0), tabs will not be affected by the underline and strike-through effects. If set (1), tabs will be affected by the underline and strike-through effects.</p></li>
+<li><p>All remaining bits are reserved for future use and must be set to 0.</p></li>
+</ul>
+
+<p>Currently, the default value is 0 (i.e. none of the bits are set).</p>
+</li>
+
+<li><p>21 (PD_NVAL_CONTROL_ALGORITHMS) &mdash; Miscellaneous bits as described below.</p>
+<ul>
+<li>
+<p>Bit 0 and 1: These two bits represent a single 2-bit value which identifies one of the 4 available <a href="../../common/workshop/pd_frames.htm">frames</a> generation algorithms. These algorithms are:</p>
+<p>00 (0) &mdash; Frames that are part of the same text flow are generated using a legacy algorithm that is designed to avoid, as much as possible, any overlaps between neighboring frames. This algorithm is fast, however, in some cases (e.g. when the value of the pdSpacingRow property is negative) generates frames that do not accurately represent the geometry of the glyphs they are supposed to enclose.</p>
+<p>01 (1) &mdash; Frames that are part of the same text flow are generated using a new algorithm that is designed to more accurately represent the geometry of the glyphs they enclose. Internally, the frames are generated using the glyphs' clip-boxes. However, this algorithm may generate frames that in some cases overlap (e.g. when the value of the pdSpacingRow property is negative).</p>
+<p>10 (2) &mdash; Similar to the algorithm defined by value 01 (1) but internally uses the glyphs' typo-boxes. This is the recommended algorithm since it minimizes the amount of overlap between neighboring frames while the frames themselves accurately represent the geometry of the glyphs they enclose.</p>
+<p>11 (3) &mdash; Similar to the algorithm defined by value 01 (1) but uses the glyphs' extent-boxes.</p>
+</li>
+<li>
+<p>Bit 2: An internal library parameter. Must be set to 1.</p>
+</li>
+<li>
+<p>Bit 3: Algorithm for calculating the glyph mid-x points in vertical text layout. This algorithm is utilized when the engine calculates the Default Baseline in Landscape Mode. If unset (0), the algorithm is "Glyph Width". With this algorithm the mid-x point is half way between the glyph's minimum and maximum x coordinate. If set (1), the algorithm is "Advance Width". With this algorithm the mid-x point is half way between the glyph's left and right side-bearing. Note that the left side-bearing coincides with the x coordinate 0 while the right side-bearing coincides with the glyph's advance width.</p>
+</li>
+<li>
+<p>Bit 4: This bit controls the direction of the line-break character (e.g. space or newline). If unset, the direction of the line-break character will be the same as the global text direction (pdGlobalDirection). If this bit is set, the direction of the line-break character will be resolved the same way as for other characters in text.</p>
+</li>
+<li><p>All remaining bits are reserved for future use and must be set to 0.</p></li>
+</ul>
+
+<p>Currently, the default value of this parameter is 0x1101 (13). This may change in the future.</p>
+</li>
+</ul>
+
+</td></tr>
+
+<tr><td>
+<p><em>numeric_value</em></p>
+</td><td>
+<p>The value of the numeric parameter.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Comments</h3>
+
+<p>The following table illustrates the effect of the PD_NVAL_SELECT_EXTENSION value on the text selection and hit testing behavior at the edges of text lines that are part of a rectangular <a href="../../pd/objects/103.htm">Text Area</a> or <a href="../../pd/objects/106.htm">Rich Text Area</a> object. In the following descriptions, the assumption is that hit testing (mouse clicks) are constrained to the text area's bounding rectangle. The illustrations show a single centered text paragraph.</p>
+
+<table class="table_data">
+<tr>
+<th>PD_NVAL_SELECT_EXTENSION<br />Value</th><th style="width: 40%;">Illustration</th><th>Description / Impact on text selection and hit testing</th>
+</tr>
+
+<tr>
+<td style="text-align: center; vertical-align: middle;"><strong>0<br /><br />Algorithm 0:<br />Standard (Default)</strong></td>
+<td style="text-align: center; vertical-align: middle;"><br/><img src="../images/frames_alg_00-b.gif" style="width: 100%;" alt="Algorithm 0" /><br/><br/><img src="../images/frames_alg_00-a.gif" style="width: 100%;" alt="Algorithm 0" /><br/>&nbsp;</td>
+<td>
+<ul>
+<li><p>All regular glyphs have frames that accurately describe their geometry. No frame is extended or modified in any way.</p></li>
+<li><p>If a text line ends with a regular line-break glyph (e.g. whitespace), its frame might be partially outside the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a synthesized glyph (e.g. hyphen or ellipsis), that glyph will not be covered by any frame.</p></li>
+<li><p>A mouse click to the left of the first glyph or a mouse click to the right of the last glyph, on any text line, will not fall within the bounds of any glyph frame. As a result, the hit testing algorithm will return the frame that is nearest (measured as the Euclidean distance) to the position of the click. Note that depending on the coordinates of the mouse click, the nearest glyph may or may not be on the same text line.</p></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td style="text-align: center; vertical-align: middle;"><strong>1<br /><br />Algorithm 1:<br />Extend</strong></td>
+<td style="text-align: center; vertical-align: middle;"><br/><img src="../images/frames_alg_01-b.gif" style="width: 100%;" alt="Algorithm 1" /><br/><br/><img src="../images/frames_alg_01-a.gif" style="width: 100%;" alt="Algorithm 1" /><br/>&nbsp;</td>
+<td>
+<ul>
+<li><p>All regular glyphs, with the possible exception of the first and last one on each text line, have frames that accurately describe their geometry. The first glyph on each text line, if regular, has its frame modified so the frame's left edge is aligned with the text area's left edge, as long as the frame is inside the text area's bounding rectangle (which means the frame can only be extended and never contracted). Similarly, the last glyph on each text line, if regular, has its frame modified so the frame's right edge is aligned with the text area's right edge, as long as the frame is inside the text area's bounding rectangle (which, again, means the frame can only be extended and never contracted).</p></li>
+<li><p>If a text line ends with a regular line-break glyph (e.g. whitespace), its frame might be partially outside the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a synthesized glyph (e.g. hyphen or ellipsis), that glyph will not be covered by any frame.</p></li>
+<li><p>A mouse click to the left of the first glyph, on any text line, will fall within the bounds of the first glyph frame, if that glyph is regular. A mouse click to the right of the last glyph, on any text line, will fall within the bounds of the last glyph frame, if that glyph is regular. Thus, if the glyph is regular and the click is within the left side of the bounding frame, the cursor will be positioned immediately before the chosen glyph; likewise if the glyph is regular and the click is within the right side of the bounding frame, the cursor will be positioned immediately after the chosen glyph. In all other situations (i.e. when the glyph is not regular), the cursor will behave the same as in Algorithm 0 described above.</p></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td style="text-align: center; vertical-align: middle;"><strong>2<br /><br />Algorithm 2:<br />Extend &amp; Clip</strong></td>
+<td style="text-align: center; vertical-align: middle;"><br/><img src="../images/frames_alg_02-b.gif" style="width: 100%;" alt="Algorithm 2" /><br/><br/><img src="../images/frames_alg_02-a.gif" style="width: 100%;" alt="Algorithm 2" /><br/>&nbsp;</td>
+<td>
+<ul>
+<li><p>All regular glyphs, except the first and last one on each text line, have frames that accurately describe their geometry. The first glyph on each text line, if regular, has its frame modified so the frame's left edge is always aligned with the text area's left edge. Because of this unconditional alignment requirement, the frame might be contracted (clipped) if it's partially outside the text area's bounding rectangle. Similarly, the last glyph on each text line, if regular, has its frame modified so the frame's right edge is always aligned with the text area's right edge. Again, because of this unconditional alignment requirement, the frame might be contracted (clipped) if it's partially outside the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a regular line-break glyph (e.g. whitespace), its frame might be clipped so its right edge is aligned with the right edge of the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a synthesized glyph (e.g. hyphen or ellipsis), that glyph will not be covered by any frame.</p></li>
+<li><p>A mouse click to the left of the first glyph, on any text line, will fall within the bounds of the first glyph frame, if that glyph is regular. A mouse click to the right of the last glyph, on any text line, will fall within the bounds of the last glyph frame, if that glyph is regular. Thus, if the glyph is regular and the click is within the left side of the bounding frame, the cursor will be positioned immediately before the chosen glyph; likewise if the glyph is regular and the click is within the right side of the bounding frame, the cursor will be positioned immediately after the chosen glyph. In all other situations (i.e. when the glyph is not regular), the cursor will behave the same as in Algorithm 0 described above.</p></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td style="text-align: center; vertical-align: middle;"><strong>3<br /><br />Algorithm 3:<br />Fully Extended</strong></td>
+<td style="text-align: center; vertical-align: middle;"><br/><img src="../images/frames_alg_03-b.gif" style="width: 100%;" alt="Algorithm 3" /><br/><br/><img src="../images/frames_alg_03-a.gif" style="width: 100%;" alt="Algorithm 3" /><br/>&nbsp;</td>
+<td>
+<ul>
+<li><p>All regular glyphs, with the possible exception of the first and last one on each text line, have frames that accurately describe their geometry. The first regular glyph on each text line has its frame modified so the frame's left edge is aligned with the text area's left edge, as long as the frame is inside the text area's bounding rectangle (which means the frame can only be extended and never contracted). Similarly, the last regular glyph on each text line has its frame modified so the frame's right edge is aligned with the text area's right edge, as long as the frame is inside the text area's bounding rectangle (which, again, means the frame can only be extended and never contracted).</p></li>
+<li><p>If a text line ends with a regular line-break glyph (e.g. whitespace), its frame might be partially outside the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a synthesized glyph (e.g. hyphen or ellipsis), that glyph will be covered by the extended frame of its neighboring regular glyph.</p></li>
+<li><p>A mouse click to the left of the first glyph, on any text line, will fall within the bounds of the first regular glyph frame. A mouse click to the right of the last glyph, on any text line, will fall within the bounds of the last regular glyph frame. Thus, if the click is within the left side of the bounding frame, the cursor will be positioned immediately before the chosen glyph; likewise if the click is within the right side of the bounding frame, the cursor will be positioned immediately after the chosen glyph.</p></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td style="text-align: center; vertical-align: middle;"><strong>4<br /><br />Algorithm 4:<br />Fully Extended &amp; Clip</strong></td>
+<td style="text-align: center; vertical-align: middle;"><br/><img src="../images/frames_alg_04-b.gif" style="width: 100%;" alt="Algorithm 4" /><br/><br/><img src="../images/frames_alg_04-a.gif" style="width: 100%;" alt="Algorithm 4" /><br/>&nbsp;</td>
+<td>
+<ul>
+<li><p>All regular glyphs, except the first and last one on each text line, have frames that accurately describe their geometry. The first regular glyph on each text line has its frame modified so the frame's left edge is always aligned with the text area's left edge. Because of this unconditional alignment requirement, the frame might be contracted (clipped) if it's partially outside the text area's bounding rectangle. Similarly, the last regular glyph on each text line has its frame modified so the frame's right edge is always aligned with the text area's right edge. Again, because of this unconditional alignment requirement, the frame might be contracted (clipped) if it's partially outside the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a regular line-break glyph (e.g. whitespace), its frame might be clipped so its right edge is aligned with the right edge of the text area's bounding rectangle.</p></li>
+<li><p>If a text line ends with a synthesized glyph (e.g. hyphen or ellipsis), that glyph will be covered by the modified frame of its neighboring regular glyph.</p></li>
+<li><p>A mouse click to the left of the first glyph, on any text line, will fall within the bounds of the first regular glyph frame. A mouse click to the right of the last glyph, on any text line, will fall within the bounds of the last regular glyph frame. Thus, if the click is within the left side of the bounding frame, the cursor will be positioned immediately before the chosen glyph; likewise if the click is within the right side of the bounding frame, the cursor will be positioned immediately after the chosen glyph.</p></li>
+</ul>
+</td>
+</tr>
+
+</table>
+
+
+<div class="aside">
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Related Pages</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/manual/intro.htm">Introduction</a></li>
+<li><a href="../../pd/manual/overview.htm">Overview</a></li>
+<li><a href="../../pd/manual/concepts.htm">Basic Concepts</a></li>
+<li><a href="../../pd/objects/intro.htm">PowerDoc Objects</a></li>
+<li><a href="../../dt/manual/types.htm">Basic Data Types</a></li>
+<li><a href="../../pd/manual/pdstructs.htm">Structure Types</a></li>
+<li><a href="../../pd/manual/units.htm">Units</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Examples</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../..//examples-cpp/example_powerdoc_frames">example_powerdoc_frames</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_output">example_powerdoc_output</a></li>
+<li><a href="../../..//examples-cpp/example_powerdoc_viewer">example_powerdoc_viewer</a></li>
+</ul>
+</div>
+</aside>
+
+<br />
+
+<aside>
+<div class="bar"><span class="close" onclick="this.parentElement.parentElement.style.display = 'none';">&times;</span> <strong>Appendix</strong></div>
+<div class="body">
+<ul>
+<li><a href="../../pd/index/index.htm">Index of Building Blocks</a></li>
+<li><a href="../../pd/manual/polylib.htm">Library of Shapes and Polylines</a></li>
+<li><a href="../../pd/manual/editor.htm">PowerDoc Editor</a></li>
+</ul>
+</div>
+</aside>
+</div>
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

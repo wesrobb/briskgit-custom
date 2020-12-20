@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+<title>D-Type Manual</title>
+<link rel="stylesheet" type="text/css" href="../../common/include/style_001.css" />
+</head>
+
+<body>
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />
+
+<h1>C/C++ Functions</h1>
+
+<h2>lxCacheIni</h2><div class="box_prototype"><strong>
+DT_SWORD lxCacheIni(DT_LXCACHE* layout_cache, DT_DTENGINE engine, DT_SLONG reserved)</strong></div><br /><strong>Short Description:</strong> <em>Initialize layout cache</em><br /><br />
+
+<p>This function creates a new instance of the layout cache.</p>
+
+
+<h3>Parameters</h3>
+
+<table class="table_data" summary="Description of function parameters">
+<tr><th>Parameter</th><th>Description</th></tr>
+
+<tr><td>
+<p><em>layout_cache</em></p>
+</td><td>
+<p>Pointer to the handle of the newly created layout cache instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>engine</em></p>
+</td><td>
+<p>Handle of the associated Standard Engine instance.</p>
+</td></tr>
+
+<tr><td>
+<p><em>reserved</em></p>
+</td><td>
+<p>This value is reserved for future use and must be set to 0.</p>
+</td></tr>
+
+</table>
+
+
+<h3>Return Value</h3>
+
+<p>If the initialization was successful, the return value is 1 and <em>layout_cache</em> holds a handle of the newly created layout cache instance. Otherwise, the function returns 0 and <em>layout_cache</em> holds DV_NULL.</p>
+
+
+<h3>Comments</h3>
+
+<p>Before a new layout cache instance can be created, applications must initialize D-Type Standard Engine (D-Type Font Engine and Rasterizer) and obtain its Standard Engine instance (<em>engine</em>).</p>
+
+
+
+&nbsp;
+<br />
+<br />
+<a href="../../common/manual/index.htm"><img src="../../common/images/index.gif" border="0" alt="Index" /></a><br />&nbsp;
+</body>
+</html>

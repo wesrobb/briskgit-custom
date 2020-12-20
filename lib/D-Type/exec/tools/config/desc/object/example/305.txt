@@ -1,0 +1,42 @@
+DT_ID_SLONG obj[3];
+
+obj[0] = pdObjAdd(pd, 0, "Form Configuration");
+{strong}obj[1] = pdObjAdd(pd, 0, "Form List Box");{/strong}
+obj[2] = pdObjAdd(pd, 0, "Form List Box - Second Column");
+
+/* Properties for object 0 */
+pdPropAdd(pd, obj[0], fcCnfLib, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCtrlStyleOnFocus, "0", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[0], fcCnfCharBox, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonNormal, "14", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfButtonPushed, "13", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderNormal, "2", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfSliderPushed, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonNormal, "6", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonPushed, "7", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfRadioButtonSelected, "8", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxNormal, "3", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxPushed, "4", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[0], fcCnfCheckBoxSelected, "5", PD_BYTE_UNSIGNED);
+
+/* Properties for object 1 */
+{strong}pdLinkAdd(pd, obj[1], fcConfigPtr, obj[0]);
+pdLinkAdd(pd, obj[1], fcColumnNextPtr, obj[2]);
+pdPropAdd(pd, obj[1], fcValue_08, "Item 0\015Item 1\015Item 2\015Item 3\015Item 4\015Item 5", PD_ASC);
+pdPropAdd(pd, obj[1], fcName, "IDLISTBOX", PD_ASC);
+pdPropAdd(pd, obj[1], fcDw, "800", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcDh, "500", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcListMultiSelect, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], fcItemFirst, "0", PD_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcListSelectedItems, "0, 2", PD_ARR_LONG_SIGNED);
+pdPropAdd(pd, obj[1], fcTabOrderID, "100", PD_WORD_SIGNED);
+pdPropAdd(pd, obj[1], fcOnCtrlChange, "1", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[1], fcOnCtrlScroll, "1", PD_BYTE_UNSIGNED);{/strong}
+
+/* Properties for object 2 */
+pdPropAdd(pd, obj[2], fcValue_08, "$100.00\015$5,500.00\015$9,850.00\015$800.00\015$200.00\015$8,550.00", PD_ASC);
+pdPropAdd(pd, obj[2], fcAlign, "2", PD_BYTE_UNSIGNED);
+pdPropAdd(pd, obj[2], fcListColOffset, "400", PD_LONG_SIGNED);
+
+/* Image placement */
+{strong}pdImgAdd(pd, obj[1], 0, 50, 50, 0, 0, 0, fcDrawListBox, DV_NULL);{/strong}

@@ -1,0 +1,3 @@
+##!/bin/csh
+cd "$(dirname "$0")"
+./powerdoc_editor_osx "^[FONT_UTILITY]"
