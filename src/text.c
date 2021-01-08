@@ -1,3 +1,5 @@
+#define USE_DTYPE 1
+
 #include "text.h"
 
 #include <assert.h>
@@ -5,6 +7,10 @@
 
 #include <CoreFoundation/CFNumber.h>
 #include <CoreText/CoreText.h>
+
+#if USE_DTYPE
+#include <dtype.h>
+#endif
 
 #include "eva/eva.h"
 
@@ -51,6 +57,10 @@ typedef struct text_ctx {
     // Text attribute free list.
     text_attr *free_list;
 
+#if USE_DTYPE
+    DT_PDENGINE engine;
+#endif
+
     bool initialized;
 } text_ctx;
 
@@ -75,6 +85,11 @@ void text_system_init()
         _ctx.attrs[i].next = &_ctx.attrs[i + 1];
     }
     _ctx.free_list = _ctx.attrs;
+
+#if USE_DTYPE
+    DT_STREAM_FILE(sd, "dtype.inf");
+    if (pdEngineIniViaStream(&_ctx.engine, &sd, NULL) == 0) return;
+#endif
 }
 
 text* text_create(void)
@@ -217,10 +232,14 @@ void text_extents(const text *t, vec2 *dst)
     }
     else {
 
+#if USE_DTYPE
+        text_extents_dtype(t, dst);
+#else
 #ifdef BG_MACOS
         text_extents_macos(t, dst);
 #elif BG_WINDOWS
         assert(false);
+#endif
 #endif
 
         // Const gets in the way of opaque caching systems.
