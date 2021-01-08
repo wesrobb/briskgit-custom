@@ -1,3 +1,9 @@
 [submodule "src/eva"]
 	path = src/eva
 	url = git@github.com:wesrobb/eva.git
+[submodule "lib/openwl"]
+	path = lib/openwl
+	url = https://github.com/dewf/openwl.git
+[submodule "lib/opendl"]
+	path = lib/opendl
+	url = https://github.com/dewf/opendl.git
