@@ -4,3 +4,7 @@ I've stopped working on this since developing a UI from scratch with full unicod
 
 # briskgit
 A fast, lightweight git GUI with a completely custom UI.
+
+## EVA
+
+This project relies on a custom platform layer developed for UI applications called [eva](https://github.com/wesrobb/eva).
