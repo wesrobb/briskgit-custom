@@ -5,3 +5,8 @@ I've stopped working on this since developing a UI from scratch with full unicod
 ## EVA
 
 This project relies on a custom platform layer developed for UI applications called [eva](https://github.com/wesrobb/eva).
+
+## Libraries
+
+- (Harfbuzz)[https://github.com/harfbuzz/harfbuzz]
+- (ICU)[https://unicode-org.github.io/icu/userguide/icu/]
