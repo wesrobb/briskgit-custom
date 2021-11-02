@@ -8,5 +8,5 @@ This project relies on a custom platform layer developed for UI applications cal
 
 ## Libraries
 
-- (Harfbuzz)[https://github.com/harfbuzz/harfbuzz]
-- (ICU)[https://unicode-org.github.io/icu/userguide/icu/]
+- [Harfbuzz](https://github.com/harfbuzz/harfbuzz)
+- [ICU](https://unicode-org.github.io/icu/userguide/icu)
